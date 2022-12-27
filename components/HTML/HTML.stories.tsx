@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import React from 'react'
 
 import HTML from './HTML'
@@ -6,10 +6,10 @@ import HTML from './HTML'
 export default {
     component: HTML,
     // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
-} as ComponentMeta<typeof HTML>
+} as Meta<typeof HTML>
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof HTML> = (args) => <HTML {...args} />
+const Template: StoryFn<typeof HTML> = (args) => <HTML {...args} />
 
 export const Primary = Template.bind({})
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
