@@ -1,0 +1,66 @@
+{
+    "name": "@rinzai/zenui",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "types": "./dist/index.d.ts",
+    "main": "./dist/zen-ui.umd.js",
+    "module": "./dist/zen-ui.es.js",
+    "exports": {
+        ".": {
+            "import": "./dist/zen-ui.es.js",
+            "require": "./dist/zen-ui.umd.js"
+        }
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+        "lint:fix": "eslint --fix 'src/**/*.{jsx,ts,tsx}'",
+        "format": "prettier --write src//**/*.{ts,tsx,css} --config ./.prettierrc",
+        "prepare": "husky install"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+        "@types/react": "^18.0.26",
+        "@types/react-dom": "^18.0.9",
+        "@typescript-eslint/eslint-plugin": "^5.47.1",
+        "@typescript-eslint/parser": "^5.47.1",
+        "@vitejs/plugin-react-swc": "^3.0.0",
+        "eslint": "^8.30.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-react": "^7.31.11",
+        "eslint-plugin-simple-import-sort": "^8.0.0",
+        "husky": "^8.0.2",
+        "prettier": "^2.8.1",
+        "react-hooks": "^1.0.1",
+        "rollup-plugin-typescript2": "^0.34.1",
+        "typescript": "^4.9.3",
+        "vite": "^4.0.0",
+        "vite-plugin-dts": "^1.7.1",
+        "vite-plugin-linter": "^2.0.2"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "peerDependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "lint-staged": {
+        "src/**/*.{js,jsx,ts,tsx}": [
+            "npx eslint",
+            "npm run format"
+        ]
+    }
+}
