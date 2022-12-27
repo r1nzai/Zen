@@ -1,12 +1,12 @@
 import React, { FC } from 'react'
 import IContainerProps from './Container.types'
-
+import HTML from '../HTML'
 const Container: FC<IContainerProps> = ({ ...props }) => {
-    let { children, testProp, ...rest } = props
+    let { children, ...rest } = props
     return (
-        <div data-test={testProp} {...rest}>
+        <HTML tag="div" {...rest}>
             {children}
-        </div>
+        </HTML>
     )
 }
 
