@@ -1,5 +1,6 @@
+import { ComponentMeta, ComponentStory } from '@storybook/react'
 import React from 'react'
-import { ComponentStory, ComponentMeta } from '@storybook/react'
+
 import HTML from './HTML'
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

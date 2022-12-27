@@ -31,6 +31,9 @@
         "react/no-unescaped-entities ": "off"
     },
     "settings": {
+        "react": {
+            "version": "detect"
+        },
         "import/resolver": {
             "typescript": {}
         }

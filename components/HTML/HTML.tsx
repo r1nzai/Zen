@@ -1,5 +1,7 @@
-import { forwardRef } from 'react'
 import './HTML.scss'
+
+import { forwardRef } from 'react'
+
 import { BaseProps, BaseRef, BaseType } from './HTML.types'
 const HTML: BaseType = forwardRef(
     <Tag extends React.ElementType = 'div'>(

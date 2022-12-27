@@ -4,10 +4,10 @@ type TagProp<Tag extends React.ElementType> = {
 
 type PropsToOmit<Tag extends React.ElementType, P> = keyof (TagProp<Tag> & P)
 
-type PolyMorphicProps<Tag extends React.ElementType, Props = {}> = React.PropsWithChildren<Props & TagProp<Tag>> &
+type PolyMorphicProps<Tag extends React.ElementType, Props = object> = React.PropsWithChildren<Props & TagProp<Tag>> &
     Omit<React.ComponentPropsWithoutRef<Tag>, PropsToOmit<Tag, Props>>
 
-type BasePropWithRef<Tag extends React.ElementType, Props = {}> = PolyMorphicProps<Tag, Props> & {
+type BasePropWithRef<Tag extends React.ElementType, Props = object> = PolyMorphicProps<Tag, Props> & {
     ref?: BaseRef<Tag>
 }
 
