@@ -20,4 +20,12 @@ Primary.args = {
     weight: 400,
     lineHeight: 1.5,
     color: 'black',
+    textAlign: 'left',
+    textDecoration: 'none',
+    textOverflow: 'clip',
+    textTransform: 'none',
+    whiteSpace: 'normal',
+    wordBreak: 'normal',
+    wordWrap: 'normal',
+    fontFamily: 'Proxima Nova',
 }
