@@ -1,4 +1,13 @@
-import { createColumnHelper, flexRender, getCoreRowModel, TableOptions, useReactTable } from '@tanstack/react-table'
+import {
+    createColumnHelper,
+    ExpandedState,
+    flexRender,
+    getCoreRowModel,
+    getExpandedRowModel,
+    TableOptions,
+    useReactTable,
+} from '@tanstack/react-table'
+import { useState } from 'react'
 
 import HTML from '../HTML'
 import ITableProps from './Table.types'
@@ -12,9 +21,38 @@ export default function Table<TableType, ValueType>(props: ITableProps<TableType
         data: data,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
+        getSubRows: (originalRow: TableType) => originalRow[subRowsKey!] as TableType[],
     }
+    const [expanded, setExpanded] = useState<ExpandedState>({})
     if (isTree) {
+        tableConfig.state = {}
+        tableConfig.state.expanded = expanded
+        tableConfig.onExpandedChange = setExpanded
         tableConfig.getSubRows = (originalRow: TableType) => originalRow[subRowsKey!] as TableType[]
+        tableConfig.getExpandedRowModel = getExpandedRowModel()
+        tableConfig.columns = [
+            {
+                id: 'expander',
+                accessorKey: '.',
+                header: '',
+                cell: ({ row }) => {
+                    if (!row.original?.[subRowsKey!] || (row.original?.[subRowsKey!] as TableType[])?.length === 0) {
+                        return null
+                    }
+                    return (
+                        <HTML
+                            tag="button"
+                            onClick={() => {
+                                row.toggleExpanded()
+                            }}
+                        >
+                            {row.getIsExpanded() ? '👇' : '👉'}
+                        </HTML>
+                    )
+                },
+            },
+            ...columns,
+        ]
     }
     const tableInstance = useReactTable<TableType>(tableConfig)
     return (

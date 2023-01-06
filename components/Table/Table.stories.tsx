@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 
 import Table, { createColumnHelper } from './Table'
 type TestData = {
+    subRows: TestData[]
     gender: string
     name: { title: string; first: string; last: string }
     location: {
@@ -50,7 +51,14 @@ const Template: StoryFn<typeof Table> = (args) => {
         fetch('https://randomuser.me/api/?results=10')
             .then((response) => response.json())
             .then((json) => {
-                setTableData(json.results as TestData[])
+                let data = json.results as TestData[]
+                data = data.map((item) => {
+                    return {
+                        ...item,
+                        subRows: [...data],
+                    }
+                })
+                setTableData(data)
             })
     }, [])
     const columnHelper = createColumnHelper<TestData>()
@@ -69,6 +77,8 @@ const Template: StoryFn<typeof Table> = (args) => {
                     cell: (instance) => new Date(instance.getValue()).toLocaleDateString(),
                 }),
             ]}
+            isTree
+            subRowsKey="subRows"
             data={tableData}
         />
     )
