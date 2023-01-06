@@ -18,15 +18,17 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "plugins": [
-        "react",
-        "@typescript-eslint",
-        "prettier",
-        "simple-import-sort"
-    ],
+    "plugins": ["react", "@typescript-eslint", "prettier", "simple-import-sort"],
     "rules": {
         "camelcase": "error",
+        "no-undef": "off",
+        "no-unused-vars": "off",
+        "no-use-before-define": "off",
+        "no-useless-constructor": "error",
+        "no-var": "error",
+        "prefer-const": "off",
         "no-duplicate-imports": "error",
+        "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "react/react-in-jsx-scope": "off",

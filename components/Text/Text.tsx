@@ -1,7 +1,8 @@
-import HTML from '../HTML'
-import React, { FC } from 'react'
-import ITextProps from './Text.types'
 import { css } from '@emotion/css'
+import React, { FC } from 'react'
+
+import HTML from '../HTML'
+import ITextProps from './Text.types'
 const Text: FC<ITextProps> = ({ ...props }) => {
     let {
         children,
@@ -21,6 +22,8 @@ const Text: FC<ITextProps> = ({ ...props }) => {
         fontFamily,
         ...rest
     } = props
+    className ??= ''
+    as ??= 'p'
     size ??= '1rem'
     weight ??= 400
     lineHeight ??= 1.5
