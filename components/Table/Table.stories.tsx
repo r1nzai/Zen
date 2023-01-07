@@ -55,9 +55,10 @@ const Template: StoryFn<typeof Table> = (args) => {
                 data = data.map((item) => {
                     return {
                         ...item,
-                        subRows: [...data],
+                        subRows: [...data.map((item) => ({ ...item, subRows: [...data] }))],
                     }
                 })
+
                 setTableData(data)
             })
     }, [])

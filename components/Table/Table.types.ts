@@ -1,4 +1,4 @@
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, Row } from '@tanstack/react-table'
 
 interface ITableProps<RowType = unknown, ValueType = unknown> {
     className?: string
@@ -6,5 +6,6 @@ interface ITableProps<RowType = unknown, ValueType = unknown> {
     data: RowType[]
     isTree?: boolean
     subRowsKey?: keyof RowType
+    onRowClick?: (row: Row<RowType>) => void
 }
 export default ITableProps
