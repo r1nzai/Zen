@@ -3,25 +3,24 @@
     "version": "0.0.5",
     "type": "module",
     "files": [
-        "dist"
+        "/dist",
+        "/dist/style.css"
     ],
     "types": "./dist/index.d.ts",
     "main": "./dist/zen.umd.js",
     "module": "./dist/zen.es.js",
-    "exports": {
-        ".": {
-            "import": "./dist/zen.es.js",
-            "require": "./dist/zen.umd.js"
-        }
-    },
     "scripts": {
-        "build": "tsc && vite build",
+        "build": "concurrently \"npm run build:css\" \"tsc  && vite build\"",
+        "build:css": "tailwindcss -m -i ./src/tailwind-entry.css -o ./dist/index.css",
         "lint": "eslint components/**/*.{ts,tsx}",
         "lint:fix": "eslint --fix components/**/*.{ts,tsx}",
         "format": "prettier --write components/**/*.{ts,tsx,css} --config ./.prettierrc",
         "prepare": "husky install",
-        "storybook": "storybook dev -p 6006",
-        "build-storybook": "storybook build"
+        "dev": "concurrently \"npm run watch:*\"",
+        "watch:storybook": "storybook dev -p 6006",
+        "watch:tailwind": "tailwindcss -w -i ./components/tailwind-entry.css -o ./components/index.css",
+        "build-storybook": "concurrently \"npm run build-storybook:css\" \"storybook build\"",
+        "build-storybook:css": "tailwindcss -m -i ./components/tailwind-entry.css -o ./components/index.css"
     },
     "dependencies": {
         "react": "^18.2.0",
@@ -46,6 +45,9 @@
         "@typescript-eslint/eslint-plugin": "^5.47.1",
         "@typescript-eslint/parser": "^5.47.1",
         "@vitejs/plugin-react-swc": "^3.0.0",
+        "autoprefixer": "^10.4.13",
+        "class-variance-authority": "^0.4.0",
+        "concurrently": "^7.6.0",
         "eslint": "^8.30.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-prettier": "^4.2.1",
@@ -53,15 +55,19 @@
         "eslint-plugin-simple-import-sort": "^8.0.0",
         "eslint-plugin-storybook": "^0.6.8",
         "husky": "^8.0.2",
+        "postcss": "^8.4.21",
         "prettier": "^2.8.1",
         "react-hooks": "^1.0.1",
         "rollup-plugin-typescript2": "^0.34.1",
         "sass": "^1.57.1",
         "storybook": "^7.0.0-beta.20",
+        "tailwindcss": "^3.2.4",
         "typescript": "^4.9.3",
         "vite": "^4.0.0",
+        "vite-plugin-css-injected-by-js": "^2.4.0",
         "vite-plugin-dts": "^1.7.1",
-        "vite-plugin-linter": "^2.0.2"
+        "vite-plugin-linter": "^2.0.2",
+        "vite-tsconfig-paths": "^4.0.3"
     },
     "husky": {
         "hooks": {

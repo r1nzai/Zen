@@ -43,8 +43,6 @@ export default {
     component: Table,
     // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
 } as Meta<typeof Table>
-
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template: StoryFn<typeof Table> = (args) => {
     const [tableData, setTableData] = React.useState<TestData[]>([])
     useEffect(() => {
