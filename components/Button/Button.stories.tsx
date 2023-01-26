@@ -16,4 +16,8 @@ export const Primary = Template.bind({})
 Primary.args = {
     children: 'Button',
     className: '',
+    textColor: 'slate-500',
+    background: 'amber-400',
+    hoverBG: 'amber-200',
+    hoverTextColor: 'blue-800',
 }
