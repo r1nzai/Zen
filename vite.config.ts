@@ -5,13 +5,11 @@ import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 import tsConfigPaths from 'vite-tsconfig-paths'
 import { peerDependencies } from './package.json'
-import cssInjectedByJs from 'vite-plugin-css-injected-by-js'
 import tailwindcss from "tailwindcss"
 export default defineConfig({
     plugins: [
         react(),
         tsConfigPaths(),
-        cssInjectedByJs(),
         dts({
             include: ['packages/'],
         }),

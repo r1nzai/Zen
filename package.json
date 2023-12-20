@@ -9,6 +9,13 @@
     "types": "./dist/index.d.ts",
     "main": "./dist/zen.umd.js",
     "module": "./dist/zen.es.js",
+    "exports": {
+        ".": {
+            "import": "./dist/zen.es.js",
+            "require": "./dist/zen.umd.js"
+        },
+        "./styles": "./dist/style.css"
+    },
     "scripts": {
         "build": "vite build",
         "lint": "eslint packages/**/*.{ts,tsx}",
@@ -51,7 +58,6 @@
         "tailwindcss": "^3.4.0",
         "typescript": "^5.3.3",
         "vite": "^5.0.10",
-        "vite-plugin-css-injected-by-js": "^3.3.1",
         "vite-plugin-dts": "^3.6.4",
         "vite-tsconfig-paths": "^4.2.2"
     },
