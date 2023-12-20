@@ -1,11 +1,9 @@
-import {BaseProps} from '@zen/component/component.types'
+import Component, {BaseProps} from '@zen/component'
 import React from 'react'
-
-import HTML from '../component'
 
 const Container = (props: BaseProps<'div'>) => {
     return (
-        <HTML tag="div" {...props}/>
+        <Component tag="div" {...props}/>
     )
 }
 export default Container

@@ -1,6 +1,6 @@
 import {forwardRef} from 'react'
 
-const HTML: BaseType = forwardRef(
+const Component = forwardRef(
     <Tag extends React.ElementType = 'div'>(
         {tag, children, visible = true, ...rest}: BaseProps<Tag>,
         ref: BaseRef<Tag>,
@@ -16,7 +16,7 @@ const HTML: BaseType = forwardRef(
         )
     },
 )
-export default HTML
+export default Component
 
 type TagProp<Tag extends React.ElementType> = {
     tag?: Tag
@@ -34,5 +34,3 @@ type BasePropWithRef<Tag extends React.ElementType, Props = object> = PolyMorphi
 export type BaseRef<Tag extends React.ElementType> = React.ComponentPropsWithRef<Tag>['ref']
 
 export type BaseProps<Tag extends React.ElementType> = BasePropWithRef<Tag, { visible?: boolean }>
-
-export type BaseType = <Tag extends React.ElementType = 'div'>(props: BaseProps<Tag>) => React.ReactElement | null

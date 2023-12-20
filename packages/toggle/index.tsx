@@ -1,16 +1,15 @@
 import {cx} from "@zen/utils/cx";
-import HTML from "packages/component";
-import {BaseProps} from "@zen/component/component.types";
+import Component, {BaseProps} from "@zen/component";
 import Container from "@zen/container";
 
-interface ToggleProps extends Omit<BaseProps<"input">, "onChange"> {
+export interface ToggleProps extends Omit<BaseProps<"input">, "onChange"> {
     onChange: (e: boolean) => void;
 }
 
 export default function Toggle(props: ToggleProps) {
     const {className, checked, onChange, ...rest} = props;
     return (
-        <HTML tag={"div"}
+        <Component tag={"div"}
             className={cx(
                 "rounded-full",
                 "w-10 h-5",
@@ -21,7 +20,7 @@ export default function Toggle(props: ToggleProps) {
                 onChange(!checked);
             }}
         >
-            <HTML tag={"input"}
+            <Component tag={"input"}
                 type="checkbox"
                 className={cx("hidden")}
                 checked={checked}
@@ -35,6 +34,6 @@ export default function Toggle(props: ToggleProps) {
                     checked ? "translate-x-5" : "translate-x-1",
                 )}
             />
-        </HTML>
+        </Component>
     );
 }

@@ -24,7 +24,7 @@ export default defineConfig({
 
     build: {
         lib: {
-            entry: resolve('components', 'index.tsx'),
+            entry: resolve('packages', 'index.ts'),
             name: 'Zen',
             formats: ['es', 'umd'],
             fileName: (format) => `zen.${format}.js`,

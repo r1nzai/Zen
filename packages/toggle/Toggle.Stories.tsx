@@ -5,7 +5,6 @@ import Toggle from './index'
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
     component: Toggle,
-    // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
 } as Meta<typeof Toggle>
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args

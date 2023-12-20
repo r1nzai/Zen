@@ -1,12 +1,12 @@
-import HTML, {BaseProps} from '@zen/component'
+import Component, {BaseProps} from '@zen/component'
 import {cva, VariantProps} from "@zen/utils/cva";
 
 const Button = (props: ButtonProps) => {
     let {children, className, variant = "primary",size="medium",rounded="md"} = props
     return (
-        <HTML tag="button" className={ButtonStyles({variant,size,rounded, className})}>
+        <Component tag="button" className={ButtonStyles({variant,size,rounded, className})}>
             {children}
-        </HTML>
+        </Component>
     )
 }
 const ButtonStyles = cva('zen__button inline-flex items-center justify-center transition font-semibold', {
