@@ -1,7 +1,0 @@
-export { default as Button } from './Button'
-export { default as Container } from './Container'
-export { default as HTML } from './HTML'
-export { default as Table } from './Table'
-export { default as Text } from './Text'
-export * from './utils/ColorHelper'
-export * from './utils/Commons'

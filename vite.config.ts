@@ -6,18 +6,25 @@ import dts from 'vite-plugin-dts'
 import tsConfigPaths from 'vite-tsconfig-paths'
 import { peerDependencies } from './package.json'
 import cssInjectedByJs from 'vite-plugin-css-injected-by-js'
+import tailwindcss from "tailwindcss"
 export default defineConfig({
     plugins: [
         react(),
         tsConfigPaths(),
         cssInjectedByJs(),
         dts({
-            include: ['components/'],
+            include: ['packages/'],
         }),
     ],
+    css: {
+        postcss: {
+            plugins: [tailwindcss],
+        },
+    },
+
     build: {
         lib: {
-            entry: resolve('components', 'index.ts'),
+            entry: resolve('components', 'index.tsx'),
             name: 'Zen',
             formats: ['es', 'umd'],
             fileName: (format) => `zen.${format}.js`,

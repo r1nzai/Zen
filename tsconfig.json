@@ -19,10 +19,14 @@
         "declarationMap": true,
         "baseUrl": ".",
         "paths": {
-            "zen-ui": ["components/index.ts"]
+            "@zen/*": ["packages/*"]
         },
-        "typeRoots": ["node_modules/@types", "components/index.d.ts"]
+        "typeRoots": ["node_modules/@types",
+            "packages/index.d.ts"
+        ]
     },
-    "include": ["components"],
+    "include": [
+        "packages"
+    ],
     "references": [{ "path": "./tsconfig.node.json" }]
 }

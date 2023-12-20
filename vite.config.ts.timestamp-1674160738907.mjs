@@ -19,12 +19,12 @@ var vite_config_default = defineConfig({
     tsConfigPaths(),
     cssInjectedByJs(),
     dts({
-      include: ["components/"]
+      include: ["packages/"]
     })
   ],
   build: {
     lib: {
-      entry: resolve("components", "index.ts"),
+      entry: resolve("components", "index.tsx"),
       name: "Zen",
       formats: ["es", "umd"],
       fileName: (format) => `zen.${format}.js`
