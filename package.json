@@ -1,6 +1,6 @@
 {
     "name": "@rinzai/zen",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "type": "module",
     "types": "./dist/index.d.ts",
     "main": "./dist/zen.umd.js",
