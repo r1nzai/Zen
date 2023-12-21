@@ -9,12 +9,18 @@
     "types": "./dist/index.d.ts",
     "main": "./dist/zen.umd.js",
     "module": "./dist/zen.es.js",
+
     "exports": {
-        ".": {
-            "import": "./dist/zen.es.js",
-            "require": "./dist/zen.umd.js"
+        "import": {
+            "default":"./dist/zen.es.js",
+            "types": "./dist/index.d.ts",
+            "styles": "./dist/style.css"
         },
-        "./styles": "./dist/style.css"
+        "default": {
+            "default": "./dist/zen.umd.js",
+            "types": "./dist/index.d.ts",
+            "styles": "./dist/style.css"
+        }
     },
     "scripts": {
         "build": "vite build",
