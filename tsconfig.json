@@ -21,9 +21,6 @@
         "paths": {
             "@zen/*": ["packages/*"]
         },
-        "typeRoots": ["node_modules/@types",
-            "packages/index.d.ts"
-        ]
     },
     "include": [
         "packages"

@@ -2,24 +2,19 @@
     "name": "@rinzai/zen",
     "version": "0.0.9",
     "type": "module",
-    "files": [
-        "/dist",
-        "/dist/style.css"
-    ],
     "types": "./dist/index.d.ts",
     "main": "./dist/zen.umd.js",
     "module": "./dist/zen.es.js",
+    "files": [
+        "dist"
+    ],
     "exports": {
-        "import": {
-            "default": "./dist/zen.es.js",
-            "types": "./dist/index.d.ts",
-            "styles": "./dist/style.css"
+        ".": {
+            "import": "./dist/zen.es.js",
+            "require": "./dist/zen.umd.js",
+            "types": "./dist/index.d.ts"
         },
-        "default": {
-            "default": "./dist/zen.umd.js",
-            "types": "./dist/index.d.ts",
-            "styles": "./dist/style.css"
-        }
+        "./dist/style.css": "./dist/style.css"
     },
     "scripts": {
         "build": "vite build",
