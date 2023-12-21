@@ -1,6 +1,6 @@
 {
     "name": "@rinzai/zen",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "type": "module",
     "files": [
         "/dist",
@@ -9,10 +9,9 @@
     "types": "./dist/index.d.ts",
     "main": "./dist/zen.umd.js",
     "module": "./dist/zen.es.js",
-
     "exports": {
         "import": {
-            "default":"./dist/zen.es.js",
+            "default": "./dist/zen.es.js",
             "types": "./dist/index.d.ts",
             "styles": "./dist/style.css"
         },
