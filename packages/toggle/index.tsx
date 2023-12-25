@@ -1,8 +1,8 @@
 import { cx } from '@zen/utils/cx';
-import Component, { BaseProps } from '@zen/component';
+import Component, { ComponentProps } from '@zen/component';
 import Container from '@zen/container';
 
-export interface ToggleProps extends Omit<BaseProps<'input'>, 'onChange'> {
+export interface ToggleProps extends Omit<ComponentProps<'input'>, 'onChange'> {
     onChange: (e: boolean) => void;
 }
 
@@ -22,14 +22,7 @@ export default function Toggle(props: ToggleProps) {
                 onChange(!checked);
             }}
         >
-            <Component
-                tag={'input'}
-                type="checkbox"
-                className={cx('hidden')}
-                checked={checked}
-                onChange={() => {}}
-                {...rest}
-            />
+            <Component tag={'input'} type="hidden" checked={checked} {...rest} />
             <Container
                 className={cx(
                     'h-4 w-4 rounded-full bg-primary transition',

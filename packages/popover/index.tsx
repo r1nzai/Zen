@@ -52,7 +52,7 @@ const Popover = (props: PopoverProps): JSX.Element => {
         placement,
     });
     const hover = useHover(context, { enabled: trigger === 'hover' && !disabled, move: false });
-    const click = useClick(context, { enabled: trigger === 'click' && !disabled });
+    const click = useClick(context, { enabled: trigger === 'click' && !disabled, keyboardHandlers: false });
     const dismiss = useDismiss(context);
     const roleInteraction = useRole(context, { role });
     const { getReferenceProps, getFloatingProps } = useInteractions([

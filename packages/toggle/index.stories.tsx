@@ -4,6 +4,7 @@ import React from 'react';
 import Toggle from './index';
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
+    title: 'Toggle',
     component: Toggle,
 } as Meta<typeof Toggle>;
 

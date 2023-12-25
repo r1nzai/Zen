@@ -6,10 +6,12 @@ import dts from 'vite-plugin-dts';
 import tsConfigPaths from 'vite-tsconfig-paths';
 import { peerDependencies } from './package.json';
 import tailwindcss from 'tailwindcss';
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 export default defineConfig({
     plugins: [
         react(),
         tsConfigPaths(),
+        cssInjectedByJsPlugin(),
         dts({
             include: ['packages/'],
         }),
