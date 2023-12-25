@@ -1,9 +1,7 @@
-import Component, {BaseProps} from '@zen/component'
-import React from 'react'
+import Component, { BaseProps } from '@zen/component';
+import React, { forwardRef } from 'react';
 
-const Container = (props: BaseProps<'div'>) => {
-    return (
-        <Component tag="div" {...props}/>
-    )
-}
-export default Container
+const Container = forwardRef<HTMLDivElement, BaseProps<'div'>>((props, ref) => {
+    return <Component tag="div" {...props} ref={ref} />;
+});
+export default Container;

@@ -1,8 +1,8 @@
-import "../packages/index.css";
-import { withThemeByClassName } from "@storybook/addon-styling";
+import '../packages/index.css';
+import { withThemeByClassName } from '@storybook/addon-styling';
 
 export const parameters = {
-    actions: { argTypesRegex: "^on[A-Z].*" },
+    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
         matchers: {
             color: /(background|color)$/i,
@@ -13,9 +13,9 @@ export const parameters = {
 export const decorators = [
     withThemeByClassName({
         themes: {
-            light: "",
-            dark: "dark",
+            light: '',
+            dark: 'dark',
         },
-        defaultTheme: "light",
+        defaultTheme: 'light',
     }),
 ];

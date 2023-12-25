@@ -20,10 +20,8 @@
         "baseUrl": ".",
         "paths": {
             "@zen/*": ["packages/*"]
-        },
+        }
     },
-    "include": [
-        "packages"
-    ],
+    "include": ["packages"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }
