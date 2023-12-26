@@ -14,7 +14,7 @@ import {
 import Component from '@zen/component';
 import Container from '@zen/container';
 import { cx } from '@zen/utils/cx';
-import { useState } from 'react';
+import { MutableRefObject, useId, useState } from 'react';
 
 const Popover = (props: PopoverProps): JSX.Element => {
     let {
@@ -60,33 +60,41 @@ const Popover = (props: PopoverProps): JSX.Element => {
         dismiss,
         roleInteraction,
     ]);
-
+    const rootId = useId();
     return (
         <>
-            <Component tag="a" className="z-auto block size-fit" ref={refs.setReference} {...getReferenceProps()}>
+            <Component
+                tag="a"
+                className="z-auto block min-w-max"
+                id={`zen__popover-${rootId}`}
+                ref={refs.setReference}
+                {...getReferenceProps()}
+            >
                 {children?.(getShow())}
             </Component>
-            <FloatingPortal>
-                <Container
-                    onClick={(e) => e.stopPropagation()}
-                    visible={getShow()}
-                    role="tooltip"
-                    className={cx(
-                        'zen__popover z-50 rounded border border-border bg-background shadow-secondary',
-                        className,
-                    )}
-                    ref={refs.setFloating}
-                    style={{
-                        position: strategy,
-                        top: y ?? 0,
-                        left: x ?? 0,
-                        width: 'max-content',
-                    }}
-                    {...getFloatingProps()}
-                >
-                    {content}
-                </Container>
-            </FloatingPortal>
+            {getShow() && (
+                <FloatingPortal root={refs.reference as MutableRefObject<HTMLElement>} preserveTabOrder>
+                    <Container
+                        onClick={(e) => e.stopPropagation()}
+                        visible={getShow()}
+                        role="tooltip"
+                        className={cx(
+                            'zen__popover z-50 w-full rounded border border-border bg-background shadow-secondary',
+                            className,
+                        )}
+                        ref={refs.setFloating}
+                        style={{
+                            position: strategy,
+                            top: y ?? 0,
+                            left: x ?? 0,
+                            width: (refs.reference?.current as HTMLElement)?.clientWidth ?? 0,
+                        }}
+                        {...getFloatingProps()}
+                    >
+                        {content}
+                    </Container>
+                </FloatingPortal>
+            )}
         </>
     );
 };

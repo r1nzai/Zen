@@ -5,150 +5,69 @@ import Popover from '@zen/popover';
 import { cx } from '@zen/utils/cx';
 import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import Container from '@zen/container';
-import { Badge, Collapse } from '..';
+import { Badge, Button, Collapse } from '..';
+import XMark from '@zen/icons/x-mark';
+import { useVirtualizer } from '@tanstack/react-virtual';
 export default function Dropdown(props: SingleSelectDropDownProps | MultiSelectDropDownProps) {
-    const {
-        items,
-        width = '215px',
-        height = '40px',
-        selected,
-        onChange,
-        disabled,
-        placeholder = 'Select an Item',
-        multiple,
-        ...rest
-    } = props;
-    const [search, setSearch] = useState('');
-    const selectedKeys = useMemo(() => {
-        if (multiple) {
-            return selected.map((item) => item.key);
-        }
-        return [selected.key];
-    }, [selected, multiple, items]);
-    console.log(selectedKeys);
+    const { items, selected, className, onChange, disabled, placeholder = 'Select an Item', multiple, ...rest } = props;
     const ref = useRef<HTMLDivElement>(null);
+
     return (
-        <Container>
-            <Popover
-                placement="bottom"
-                trigger="click"
-                role="combobox"
-                disabled={disabled}
-                content={
-                    <Container className="flex flex-col divide-y-2 overflow-hidden rounded border border-input bg-background">
-                        <Container className={cx('inline-flex grow items-center rounded px-3 py-2')}>
-                            <Search className="left-3 top-3 mr-2 size-4 text-muted-foreground" />
-                            <Component
-                                tag="input"
-                                className="inline-flex grow text-sm text-foreground outline-none"
-                                placeholder="Search"
-                                value={search}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
-                            />
-                        </Container>
-                        <Component
-                            tag="ul"
-                            className={cx('overflow-hidden shadow')}
-                            style={{
-                                width: width,
-                            }}
-                        >
-                            {items.reduce((acc, item, index, array) => {
-                                if (search.length ? item.text.toLowerCase().includes(search.toLowerCase()) : true) {
-                                    acc.push(
-                                        <Component
-                                            tag="li"
-                                            key={item.key}
-                                            className={cx(
-                                                'cursor-pointer px-3  py-2 text-sm text-foreground',
-                                                selectedKeys.includes(item.key)
-                                                    ? 'bg-primary/90 text-primary-foreground'
-                                                    : 'transition hover:bg-primary/60',
-                                            )}
-                                            onClick={() => {
-                                                if (multiple) {
-                                                    if (selectedKeys.includes(item.key)) {
-                                                        onChange(
-                                                            structuredClone(
-                                                                selected.filter(
-                                                                    (selectedItem) => selectedItem.key !== item.key,
-                                                                ),
-                                                            ),
-                                                        );
-                                                    } else {
-                                                        onChange(structuredClone([...selected, item]));
-                                                    }
-                                                } else {
-                                                    onChange(item);
-                                                }
-                                            }}
-                                        >
-                                            {item.text}
-                                        </Component>,
-                                    );
-                                }
-                                if (index === array.length - 1 && acc.length === 0) {
-                                    acc.push(
-                                        <Component
-                                            tag="li"
-                                            key={`${item.key}_${index}`}
-                                            className={cx('cursor-not-allowed px-3  py-2 text-sm text-foreground')}
-                                        >
-                                            No results found
-                                        </Component>,
-                                    );
-                                }
-                                return acc;
-                            }, [] as React.ReactNode[])}
-                        </Component>
-                    </Container>
-                }
-            >
-                {(open) => (
+        <Popover
+            placement="bottom"
+            trigger="click"
+            role="combobox"
+            disabled={disabled}
+            content={<DropdownItemList multiple={multiple} items={items} selected={selected} onChange={onChange} />}
+        >
+            {(open) => (
+                <Container
+                    className={cx(
+                        'inline-flex h-10 w-full grow items-center rounded border-2 border-input p-2 transition',
+                        disabled ? 'cursor-not-allowed bg-muted text-muted' : 'cursor-pointer',
+                        open && 'border-primary shadow-sm shadow-ring',
+                        className,
+                    )}
+                >
                     <Container
                         className={cx(
-                            'inline-flex grow  items-center rounded border-2 border-input p-2 transition',
-                            disabled ? 'cursor-not-allowed bg-muted text-muted' : 'cursor-pointer',
-                            open && 'border-primary shadow-sm shadow-ring',
+                            'flex grow gap-1 text-sm',
+                            disabled ? 'text-muted-foreground' : 'text-foreground',
                         )}
-                        style={{ width: width, height: height }}
+                        ref={ref}
                     >
                         {multiple ? (
-                            <Container
-                                className={cx(
-                                    'flex grow text-sm',
-                                    disabled ? 'text-muted-foreground' : 'text-foreground',
+                            <Collapse items={selected.map((item) => item.text)} data={selected} parentRef={ref}>
+                                {(item, index, data) => (
+                                    <Badge key={data?.key} className="flex h-6 min-w-min gap-2" variant={'secondary'}>
+                                        {item}
+                                        <Button
+                                            onClick={() => {
+                                                onChange(selected.filter((item) => item.key !== data?.key));
+                                            }}
+                                            variant={'icon'}
+                                            size={'icon'}
+                                            className="group bg-muted p-0.5 hover:bg-muted-foreground "
+                                        >
+                                            <XMark className="size-3 transition duration-300 group-hover:rotate-90  group-hover:text-muted" />
+                                        </Button>
+                                    </Badge>
                                 )}
-                            >
-                                <Collapse items={selected.map((item) => item.text)} data={selected} parentRef={ref}>
-                                    {(item, index, data) => (
-                                        <Badge key={data?.key} className="min-w-fit">
-                                            {item}
-                                        </Badge>
-                                    )}
-                                </Collapse>
-                            </Container>
+                            </Collapse>
                         ) : (
-                            <Container
-                                className={cx(
-                                    'flex grow text-sm',
-                                    disabled ? 'text-muted-foreground' : 'text-foreground',
-                                )}
-                            >
-                                {items.find((item) => item.key === selectedKeys[0])?.text ?? 'Select an item'}
-                            </Container>
+                            selected.text ?? 'Select an item'
                         )}
-                        <ChevronUp
-                            className={cx(
-                                'size-4 rounded-full bg-input p-0.5 transition-transform ease-in-out',
-                                open ? 'rotate-180' : 'rotate-0',
-                                disabled ? 'text-muted-foreground' : 'text-foreground',
-                            )}
-                        />
                     </Container>
-                )}
-            </Popover>
-        </Container>
+                    <ChevronUp
+                        className={cx(
+                            'size-4 rounded-full bg-input p-0.5 transition duration-300 ease-in-out',
+                            open ? 'rotate-180' : 'rotate-0',
+                            disabled ? 'text-muted-foreground' : 'text-foreground',
+                        )}
+                    />
+                </Container>
+            )}
+        </Popover>
     );
 }
 export interface SingleSelectDropDownProps extends DropdownProps {
@@ -163,10 +82,113 @@ export interface MultiSelectDropDownProps extends DropdownProps {
 }
 interface DropdownProps extends Omit<ComponentProps<'input'>, 'onChange'> {
     items: DropdownItem[];
-    width?: string;
-    height?: string;
 }
 type DropdownItem = {
     text: string;
     key: string;
+};
+interface DropdownItemListProps {
+    items: DropdownItem[];
+}
+interface SingleSelectDropdownItemListProps extends DropdownItemListProps {
+    multiple?: never;
+    selected: DropdownItem;
+    onChange: (key: DropdownItem) => void;
+}
+interface MultiSelectDropdownItemListProps extends DropdownItemListProps {
+    multiple: true;
+    selected: DropdownItem[];
+    onChange: (items: DropdownItem[]) => void;
+}
+const DropdownItemList = (props: SingleSelectDropdownItemListProps | MultiSelectDropdownItemListProps) => {
+    const { items, multiple, selected, onChange } = props;
+    const [search, setSearch] = useState('');
+    const virtualRef = useRef<HTMLUListElement>(null);
+    const filteredItems = useMemo(
+        () =>
+            items.reduce((acc, item, index, array) => {
+                if (search.length ? item.text.toLowerCase().includes(search.toLowerCase()) : true) {
+                    acc.push(item);
+                }
+                return acc;
+            }, [] as DropdownItem[]),
+        [items, search],
+    );
+    const rowVirtualizer = useVirtualizer({
+        count: filteredItems.length,
+        getScrollElement: () => virtualRef.current,
+        estimateSize: () => 35,
+    });
+    const selectedItems = selected instanceof Array ? selected : [selected];
+    return (
+        <Container className="flex w-full flex-col divide-y-2 overflow-hidden rounded border border-input bg-background">
+            <Container className={cx('inline-flex w-full grow items-center rounded px-3 py-2')}>
+                <Search className="left-3 top-3 mr-2 size-4 text-muted-foreground" />
+                <Component
+                    tag="input"
+                    className="inline-flex grow text-sm text-foreground outline-none"
+                    placeholder="Search"
+                    value={search}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
+                />
+            </Container>
+            <Component
+                tag="ul"
+                className={cx('max-h-60 w-full overflow-auto shadow', 'focus:outline-none focus:ring-0')}
+                ref={virtualRef}
+            >
+                <Container
+                    style={{
+                        height: `${rowVirtualizer.getTotalSize()}px`,
+                        width: '100%',
+                        position: 'relative',
+                    }}
+                >
+                    {rowVirtualizer.getVirtualItems().map((virtualItem) => (
+                        <Component
+                            tag="li"
+                            key={virtualItem.key}
+                            style={{
+                                height: `${virtualItem.size}px`,
+                                transform: `translateY(${virtualItem.start}px)`,
+                            }}
+                            className={cx(
+                                'absolute left-0 top-0 w-full cursor-pointer px-3 py-2 text-sm text-foreground',
+                                selectedItems.some((item) => item.key === filteredItems[virtualItem.index].key)
+                                    ? 'bg-primary/90 text-primary-foreground'
+                                    : 'transition hover:bg-primary/60',
+                            )}
+                            onClick={() => {
+                                if (multiple) {
+                                    if (
+                                        selectedItems.some((item) => item.key === filteredItems[virtualItem.index].key)
+                                    ) {
+                                        onChange(
+                                            structuredClone(
+                                                selected.filter(
+                                                    (selectedItem) =>
+                                                        selectedItem.key !== filteredItems[virtualItem.index].key,
+                                                ),
+                                            ),
+                                        );
+                                    } else {
+                                        onChange(structuredClone([...selected, filteredItems[virtualItem.index]]));
+                                    }
+                                } else {
+                                    onChange(filteredItems[virtualItem.index]);
+                                }
+                            }}
+                        >
+                            {filteredItems[virtualItem.index].text}
+                        </Component>
+                    ))}
+                    {filteredItems.length === 0 && (
+                        <Component tag="li" className={cx('cursor-not-allowed px-3  py-2 text-sm text-foreground')}>
+                            No results found
+                        </Component>
+                    )}
+                </Container>
+            </Component>
+        </Container>
+    );
 };

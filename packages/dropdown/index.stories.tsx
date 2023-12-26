@@ -2,6 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 import Dropdown from './index';
+import { Container } from '..';
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
     title: 'Dropdown',
@@ -15,11 +16,10 @@ export const SingleSelect: StoryFn<typeof Dropdown> = (args) => {
     return <Dropdown {...args} />;
 };
 SingleSelect.args = {
-    items: [
-        { text: 'Item 1', key: 'item1' },
-        { text: 'Item 2', key: 'item2' },
-        { text: 'Item 3', key: 'item3' },
-    ],
+    items: Array.from({ length: 100 }, (_, i) => ({
+        text: `Item ${i + 1}`,
+        key: `item${i + 1}`,
+    })),
     disabled: false,
 };
 export const MultiSelect: StoryFn<typeof Dropdown> = (args) => {
@@ -30,11 +30,10 @@ export const MultiSelect: StoryFn<typeof Dropdown> = (args) => {
 };
 
 MultiSelect.args = {
-    items: [
-        { text: 'Item 1', key: 'item1' },
-        { text: 'Item 2', key: 'item2' },
-        { text: 'Item 3', key: 'item3' },
-    ],
+    items: Array.from({ length: 100 }, (_, i) => ({
+        text: `Item ${i + 1}`,
+        key: `item${i + 1}`,
+    })),
     disabled: false,
     multiple: true,
 };

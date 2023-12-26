@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Container from '@zen/container';
 import Badge from '@zen/badge';
 import Popover from '@zen/popover';
-import Typography from '@zen/typography';
+import Component from '@zen/component';
 
 const Collapse = <TData,>(props: CollapseProps<TData>) => {
     const {
@@ -15,7 +15,6 @@ const Collapse = <TData,>(props: CollapseProps<TData>) => {
         estimator = (_, textWidth) => textWidth + 30,
         font = '12px Inter',
     } = props;
-
     const [renderItems, setRenderItems] = useState<{
         visible: string[];
         hidden: string[];
@@ -48,6 +47,7 @@ const Collapse = <TData,>(props: CollapseProps<TData>) => {
             }
             return acc + tabWidth;
         }, 0);
+
         setRenderItems({
             visible: visibleItems,
             hidden: hiddenItems,
@@ -91,7 +91,7 @@ const Collapse = <TData,>(props: CollapseProps<TData>) => {
                 >
                     {(show) => (
                         <Badge className="min-w-fit" key={'more_items_button'}>
-                            <Typography>{`+${renderItems.hidden.length} ${moreItemsLabel}`}</Typography>
+                            <Component tag="p">{`+${renderItems.hidden.length} ${moreItemsLabel}`}</Component>
                         </Badge>
                     )}
                 </Popover>
