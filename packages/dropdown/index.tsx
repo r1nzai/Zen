@@ -23,7 +23,7 @@ export default function Dropdown(props: SingleSelectDropDownProps | MultiSelectD
             {(open) => (
                 <Container
                     className={cx(
-                        'inline-flex h-10 w-full grow items-center rounded border-2 border-input p-2 transition',
+                        'inline-flex h-10 w-full grow items-center rounded border-2 border-input bg-background p-2 transition',
                         disabled ? 'cursor-not-allowed bg-muted text-muted' : 'cursor-pointer',
                         open && 'border-primary shadow-sm shadow-ring',
                         className,
@@ -39,7 +39,11 @@ export default function Dropdown(props: SingleSelectDropDownProps | MultiSelectD
                         {multiple ? (
                             <Collapse items={selected.map((item) => item.text)} data={selected} parentRef={ref}>
                                 {(item, index, data) => (
-                                    <Badge key={data?.key} className="flex h-6 min-w-min gap-2" variant={'secondary'}>
+                                    <Badge
+                                        key={data?.key}
+                                        className="flex h-6 min-w-min gap-2 !bg-input pr-1"
+                                        variant={'secondary'}
+                                    >
                                         {item}
                                         <Button
                                             onClick={() => {
@@ -121,12 +125,12 @@ const DropdownItemList = (props: SingleSelectDropdownItemListProps | MultiSelect
     });
     const selectedItems = selected instanceof Array ? selected : [selected];
     return (
-        <Container className="flex w-full flex-col divide-y-2 overflow-hidden rounded border border-input bg-background">
+        <Container className="flex w-full flex-col divide-y-2 divide-border overflow-hidden rounded border border-input bg-background">
             <Container className={cx('inline-flex w-full grow items-center rounded px-3 py-2')}>
                 <Search className="left-3 top-3 mr-2 size-4 text-muted-foreground" />
                 <Component
                     tag="input"
-                    className="inline-flex grow text-sm text-foreground outline-none"
+                    className="inline-flex grow bg-transparent text-sm text-foreground outline-none"
                     placeholder="Search"
                     value={search}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
