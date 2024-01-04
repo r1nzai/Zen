@@ -2,7 +2,6 @@ import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
 
 import Dropdown from './index';
-import { Container } from '..';
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
     title: 'Dropdown',
@@ -26,7 +25,7 @@ export const MultiSelect: StoryFn<typeof Dropdown> = (args) => {
     const [selected, setSelected] = React.useState(args.items.slice(0, 2));
     args.selected = selected;
     args.onChange = setSelected;
-    return <Dropdown {...args} />;
+    return <Dropdown {...args} width={500} />;
 };
 
 MultiSelect.args = {

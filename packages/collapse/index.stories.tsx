@@ -17,13 +17,10 @@ const Template: StoryFn<typeof Collapse> = (args) => {
     return (
         <Container ref={ref} className="flex w-full gap-1">
             <Collapse items={items} parentRef={ref}>
-                {(renderItems) => (
-                    <>
-                        {renderItems.visible.map((item) => (
-                            <Badge key={item}>{item}</Badge>
-                        ))}
-                        {renderItems.hidden.length > 0 && <Badge>+{renderItems.hidden.length}</Badge>}
-                    </>
+                {(item, index) => (
+                    <Badge key={index} className="flex h-6 min-w-min gap-2 !bg-input pr-1" variant={'secondary'}>
+                        {item}
+                    </Badge>
                 )}
             </Collapse>
         </Container>
@@ -31,7 +28,3 @@ const Template: StoryFn<typeof Collapse> = (args) => {
 };
 
 export const Primary = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-Primary.args = {
-    children: 'Text Component',
-};

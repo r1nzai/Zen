@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import Container from '@zen/container';
-import Badge from '@zen/badge';
+import Badge, { BadgeProps } from '@zen/badge';
 import Popover from '@zen/popover';
 import Component from '@zen/component';
 
@@ -14,6 +14,8 @@ const Collapse = <TData,>(props: CollapseProps<TData>) => {
         data,
         estimator = (_, textWidth) => textWidth + 30,
         font = '12px Inter',
+        badgeVariant = 'secondary',
+        badgeStyles,
     } = props;
     const [renderItems, setRenderItems] = useState<{
         visible: string[];
@@ -90,7 +92,7 @@ const Collapse = <TData,>(props: CollapseProps<TData>) => {
                     }
                 >
                     {(show) => (
-                        <Badge className="min-w-fit" key={'more_items_button'}>
+                        <Badge className={badgeStyles} key={'more_items_button'} variant={badgeVariant}>
                             <Component tag="p">{`+${renderItems.hidden.length} ${moreItemsLabel}`}</Component>
                         </Badge>
                     )}
@@ -109,4 +111,6 @@ export interface CollapseProps<TData> {
     parentRef?: React.RefObject<HTMLElement>;
     estimator?: (item: string, textWidth: number) => number;
     font?: string;
+    badgeVariant?: BadgeProps['variant'];
+    badgeStyles?: string;
 }

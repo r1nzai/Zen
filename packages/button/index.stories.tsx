@@ -13,4 +13,7 @@ Primary.args = {
     className: '',
     variant: 'default',
     size: 'default',
+    onClick: () => {
+        console.log('clicked');
+    },
 };

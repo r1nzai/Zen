@@ -8,8 +8,21 @@ import Container from '@zen/container';
 import { Badge, Button, Collapse } from '..';
 import XMark from '@zen/icons/x-mark';
 import { useVirtualizer } from '@tanstack/react-virtual';
-export default function Dropdown(props: SingleSelectDropDownProps | MultiSelectDropDownProps) {
-    const { items, selected, className, onChange, disabled, placeholder = 'Select an Item', multiple, ...rest } = props;
+export default function Dropdown(
+    props: (MultiSelectProps | SingleSelectProps) & DropdownProps & Omit<ComponentProps<'input'>, 'onChange'>,
+) {
+    const {
+        items,
+        selected,
+        className,
+        onChange,
+        disabled,
+        placeholder = 'Select an Item',
+        multiple,
+        width = '215px',
+        height = '40px',
+        ...rest
+    } = props;
     const ref = useRef<HTMLDivElement>(null);
 
     return (
@@ -18,26 +31,39 @@ export default function Dropdown(props: SingleSelectDropDownProps | MultiSelectD
             trigger="click"
             role="combobox"
             disabled={disabled}
-            content={<DropdownItemList multiple={multiple} items={items} selected={selected} onChange={onChange} />}
+            content={
+                multiple ? (
+                    <DropdownItemList multiple items={items} selected={selected} onChange={onChange} width={width} />
+                ) : (
+                    <DropdownItemList items={items} selected={selected} onChange={onChange} width={width} />
+                )
+            }
         >
             {(open) => (
                 <Container
+                    style={{ width, height }}
                     className={cx(
-                        'inline-flex h-10 w-full grow items-center rounded border-2 border-input bg-background p-2 transition',
+                        'inline-flex grow items-center justify-between rounded border-2 border-input bg-background p-2 transition',
                         disabled ? 'cursor-not-allowed bg-muted text-muted' : 'cursor-pointer',
-                        open && 'border-primary shadow-sm shadow-ring',
+                        // open && 'border-primary shadow-sm shadow-ring',
                         className,
                     )}
                 >
                     <Container
                         className={cx(
-                            'flex grow gap-1 text-sm',
+                            'flex max-w-[calc(100%-30px)] flex-none grow items-center gap-1 text-sm',
                             disabled ? 'text-muted-foreground' : 'text-foreground',
                         )}
                         ref={ref}
                     >
                         {multiple ? (
-                            <Collapse items={selected.map((item) => item.text)} data={selected} parentRef={ref}>
+                            <Collapse
+                                items={selected.map((item) => item.text)}
+                                data={selected}
+                                parentRef={ref}
+                                badgeVariant="secondary"
+                                badgeStyles="!bg-input h-6 min-w-min gap-2 !bg-input"
+                            >
                                 {(item, index, data) => (
                                     <Badge
                                         key={data?.key}
@@ -74,38 +100,28 @@ export default function Dropdown(props: SingleSelectDropDownProps | MultiSelectD
         </Popover>
     );
 }
-export interface SingleSelectDropDownProps extends DropdownProps {
+export interface SingleSelectProps {
     selected: DropdownItem;
     onChange: (key: DropdownItem) => void;
-    multiple?: never;
+    multiple?: false;
 }
-export interface MultiSelectDropDownProps extends DropdownProps {
+export interface MultiSelectProps {
     selected: DropdownItem[];
     onChange: (items: DropdownItem[]) => void;
     multiple: true;
 }
-interface DropdownProps extends Omit<ComponentProps<'input'>, 'onChange'> {
+export interface DropdownProps {
     items: DropdownItem[];
 }
-type DropdownItem = {
+export type DropdownItem = {
     text: string;
     key: string;
 };
-interface DropdownItemListProps {
-    items: DropdownItem[];
-}
-interface SingleSelectDropdownItemListProps extends DropdownItemListProps {
-    multiple?: never;
-    selected: DropdownItem;
-    onChange: (key: DropdownItem) => void;
-}
-interface MultiSelectDropdownItemListProps extends DropdownItemListProps {
-    multiple: true;
-    selected: DropdownItem[];
-    onChange: (items: DropdownItem[]) => void;
-}
-const DropdownItemList = (props: SingleSelectDropdownItemListProps | MultiSelectDropdownItemListProps) => {
-    const { items, multiple, selected, onChange } = props;
+
+const DropdownItemList = (
+    props: (MultiSelectProps | SingleSelectProps) & DropdownProps & { width: string | number },
+) => {
+    const { items, multiple, selected, onChange, width } = props;
     const [search, setSearch] = useState('');
     const virtualRef = useRef<HTMLUListElement>(null);
     const filteredItems = useMemo(
@@ -125,8 +141,11 @@ const DropdownItemList = (props: SingleSelectDropdownItemListProps | MultiSelect
     });
     const selectedItems = selected instanceof Array ? selected : [selected];
     return (
-        <Container className="flex w-full flex-col divide-y-2 divide-border overflow-hidden rounded border border-input bg-background">
-            <Container className={cx('inline-flex w-full grow items-center rounded px-3 py-2')}>
+        <Container
+            className="flex flex-col divide-y-2 divide-border overflow-hidden rounded border border-input bg-background"
+            style={{ width }}
+        >
+            <Container className={cx('inline-flex grow items-center rounded px-3 py-2')}>
                 <Search className="left-3 top-3 mr-2 size-4 text-muted-foreground" />
                 <Component
                     tag="input"
@@ -138,7 +157,7 @@ const DropdownItemList = (props: SingleSelectDropdownItemListProps | MultiSelect
             </Container>
             <Component
                 tag="ul"
-                className={cx('max-h-60 w-full overflow-auto shadow', 'focus:outline-none focus:ring-0')}
+                className={cx('max-h-60 grow overflow-auto shadow', 'focus:outline-none focus:ring-0')}
                 ref={virtualRef}
             >
                 <Container

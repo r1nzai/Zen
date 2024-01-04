@@ -64,22 +64,22 @@ const Popover = (props: PopoverProps): JSX.Element => {
     return (
         <>
             <Component
-                tag="a"
                 className="z-auto block min-w-max"
                 id={`zen__popover-${rootId}`}
                 ref={refs.setReference}
                 {...getReferenceProps()}
+                asChild
             >
                 {children?.(getShow())}
             </Component>
             {getShow() && (
-                <FloatingPortal root={refs.reference as MutableRefObject<HTMLElement>} preserveTabOrder>
+                <FloatingPortal preserveTabOrder>
                     <Container
                         onClick={(e) => e.stopPropagation()}
                         visible={getShow()}
                         role="tooltip"
                         className={cx(
-                            'zen__popover z-50 w-full rounded border border-border bg-background shadow-secondary',
+                            'zen__popover z-50 w-fit rounded border border-border bg-background shadow-secondary',
                             className,
                         )}
                         ref={refs.setFloating}
@@ -87,7 +87,6 @@ const Popover = (props: PopoverProps): JSX.Element => {
                             position: strategy,
                             top: y ?? 0,
                             left: x ?? 0,
-                            width: (refs.reference?.current as HTMLElement)?.clientWidth ?? 0,
                         }}
                         {...getFloatingProps()}
                     >
