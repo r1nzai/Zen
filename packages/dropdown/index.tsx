@@ -24,11 +24,13 @@ export default function Dropdown(
         ...rest
     } = props;
     const ref = useRef<HTMLDivElement>(null);
-
+    const [open, setOpen] = useState(false);
     return (
         <Popover
             placement="bottom"
             trigger="click"
+            show={open}
+            setShow={setOpen}
             role="combobox"
             disabled={disabled}
             content={
@@ -39,64 +41,62 @@ export default function Dropdown(
                 )
             }
         >
-            {(open) => (
+            <Container
+                style={{ width, height }}
+                className={cx(
+                    'inline-flex grow items-center justify-between rounded border-2 border-input bg-background p-2 transition',
+                    disabled ? 'cursor-not-allowed bg-muted text-muted' : 'cursor-pointer',
+                    open && 'border-primary shadow-sm shadow-ring',
+                    className,
+                )}
+            >
                 <Container
-                    style={{ width, height }}
                     className={cx(
-                        'inline-flex grow items-center justify-between rounded border-2 border-input bg-background p-2 transition',
-                        disabled ? 'cursor-not-allowed bg-muted text-muted' : 'cursor-pointer',
-                        // open && 'border-primary shadow-sm shadow-ring',
-                        className,
+                        'flex max-w-[calc(100%-30px)] flex-none grow items-center gap-1 text-sm',
+                        disabled ? 'text-muted-foreground' : 'text-foreground',
                     )}
+                    ref={ref}
                 >
-                    <Container
-                        className={cx(
-                            'flex max-w-[calc(100%-30px)] flex-none grow items-center gap-1 text-sm',
-                            disabled ? 'text-muted-foreground' : 'text-foreground',
-                        )}
-                        ref={ref}
-                    >
-                        {multiple ? (
-                            <Collapse
-                                items={selected.map((item) => item.text)}
-                                data={selected}
-                                parentRef={ref}
-                                badgeVariant="secondary"
-                                badgeStyles="!bg-input h-6 min-w-min gap-2 !bg-input"
-                            >
-                                {(item, index, data) => (
-                                    <Badge
-                                        key={data?.key}
-                                        className="flex h-6 min-w-min gap-2 !bg-input pr-1"
-                                        variant={'secondary'}
+                    {multiple ? (
+                        <Collapse
+                            items={selected.map((item) => item.text)}
+                            data={selected}
+                            parentRef={ref}
+                            badgeVariant="secondary"
+                            badgeStyles="!bg-input h-6 min-w-min gap-2 !bg-input"
+                        >
+                            {(item, index, data) => (
+                                <Badge
+                                    key={`collapsed_item_${index}`}
+                                    className="flex h-6 min-w-min gap-2 !bg-input pr-1"
+                                    variant={'secondary'}
+                                >
+                                    {item}
+                                    <Button
+                                        onClick={() => {
+                                            onChange(selected.filter((item) => item.key !== data?.key));
+                                        }}
+                                        variant={'icon'}
+                                        size={'icon'}
+                                        className="group bg-muted p-0.5 hover:bg-muted-foreground "
                                     >
-                                        {item}
-                                        <Button
-                                            onClick={() => {
-                                                onChange(selected.filter((item) => item.key !== data?.key));
-                                            }}
-                                            variant={'icon'}
-                                            size={'icon'}
-                                            className="group bg-muted p-0.5 hover:bg-muted-foreground "
-                                        >
-                                            <XMark className="size-3 transition duration-300 group-hover:rotate-90  group-hover:text-muted" />
-                                        </Button>
-                                    </Badge>
-                                )}
-                            </Collapse>
-                        ) : (
-                            selected.text ?? 'Select an item'
-                        )}
-                    </Container>
-                    <ChevronUp
-                        className={cx(
-                            'size-4 rounded-full bg-input p-0.5 transition duration-300 ease-in-out',
-                            open ? 'rotate-180' : 'rotate-0',
-                            disabled ? 'text-muted-foreground' : 'text-foreground',
-                        )}
-                    />
+                                        <XMark className="size-3 transition duration-300 group-hover:rotate-90  group-hover:text-muted" />
+                                    </Button>
+                                </Badge>
+                            )}
+                        </Collapse>
+                    ) : (
+                        selected.text ?? 'Select an item'
+                    )}
                 </Container>
-            )}
+                <ChevronUp
+                    className={cx(
+                        'size-4 rounded-full bg-input p-0.5 transition duration-300 ease-in-out',
+                        open ? 'rotate-180' : 'rotate-0',
+                        disabled ? 'text-muted-foreground' : 'text-foreground',
+                    )}
+                />
+            </Container>
         </Popover>
     );
 }

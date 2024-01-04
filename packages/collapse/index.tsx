@@ -91,11 +91,9 @@ const Collapse = <TData,>(props: CollapseProps<TData>) => {
                         </Container>
                     }
                 >
-                    {(show) => (
-                        <Badge className={badgeStyles} key={'more_items_button'} variant={badgeVariant}>
-                            <Component tag="p">{`+${renderItems.hidden.length} ${moreItemsLabel}`}</Component>
-                        </Badge>
-                    )}
+                    <Badge className={badgeStyles} key={'more_items_button'} variant={badgeVariant}>
+                        <Component tag="p">{`+${renderItems.hidden.length} ${moreItemsLabel}`}</Component>
+                    </Badge>
                 </Popover>
             )}
         </>

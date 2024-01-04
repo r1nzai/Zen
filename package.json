@@ -1,6 +1,5 @@
 {
-    "name": "zen",
-    "namespace": "@rinzai",
+    "name": "@rinzai/zen",
     "version": "0.0.11",
     "type": "module",
     "types": "./dist/index.d.ts",
@@ -11,10 +10,9 @@
     "exports": {
         ".": {
             "import": "./dist/zen.js",
-            "require": "./dist/zen.js"
-        },
-        "./dist/index.d.ts": "./dist/index.d.ts",
-        "./dist/style.css": "./dist/style.css"
+            "require": "./dist/zen.js",
+            "types": "./dist/index.d.ts"
+        }
     },
     "scripts": {
         "build": "vite build",
@@ -26,7 +24,7 @@
         "build-storybook": "storybook build"
     },
     "dependencies": {
-        "@floating-ui/react": "^0.26.4",
+        "@floating-ui/react-dom": "^2.0.4",
         "@tanstack/react-virtual": "^3.0.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"

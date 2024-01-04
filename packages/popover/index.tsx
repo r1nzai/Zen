@@ -1,20 +1,10 @@
-import {
-    FloatingPortal,
-    autoUpdate,
-    flip,
-    offset,
-    shift,
-    useClick,
-    useDismiss,
-    useFloating,
-    useHover,
-    useInteractions,
-    useRole,
-} from '@floating-ui/react';
+import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react-dom';
 import Component from '@zen/component';
 import Container from '@zen/container';
 import { cx } from '@zen/utils/cx';
-import { MutableRefObject, useId, useState } from 'react';
+import useClickOutside from '@zen/utils/useClickOutside';
+import { MouseEvent, useEffect, useId, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 const Popover = (props: PopoverProps): JSX.Element => {
     let {
@@ -37,43 +27,48 @@ const Popover = (props: PopoverProps): JSX.Element => {
     const getShowSetter = () => {
         return setShow !== undefined && show !== undefined ? setShow : __setInternalShow;
     };
-    const { x, y, strategy, refs, context } = useFloating({
+    const { x, y, strategy, refs } = useFloating({
         open: getShow(),
-        onOpenChange: (open) => {
-            getShowSetter()(open);
-            if (!open) {
-                onClose?.();
-            } else {
-                onOpen?.();
-            }
-        },
         middleware: [offset(4), flip(), shift()],
         whileElementsMounted: autoUpdate,
         placement,
     });
-    const hover = useHover(context, { enabled: trigger === 'hover' && !disabled, move: false });
-    const click = useClick(context, { enabled: trigger === 'click' && !disabled, keyboardHandlers: false });
-    const dismiss = useDismiss(context);
-    const roleInteraction = useRole(context, { role });
-    const { getReferenceProps, getFloatingProps } = useInteractions([
-        trigger === 'click' ? click : hover,
-        dismiss,
-        roleInteraction,
-    ]);
     const rootId = useId();
+    useEffect(() => {
+        return useClickOutside(refs.floating, (outside) => {
+            if (outside) {
+                getShowSetter()(false);
+            }
+        });
+    }, []);
     return (
         <>
             <Component
                 className="z-auto block min-w-max"
                 id={`zen__popover-${rootId}`}
                 ref={refs.setReference}
-                {...getReferenceProps()}
+                onClick={(e: MouseEvent<HTMLDivElement>) => {
+                    if (trigger === 'click') {
+                        if (disabled) {
+                            return;
+                        }
+                        if (getShow()) {
+                            getShowSetter()(false);
+                            onClose?.();
+                        } else {
+                            getShowSetter()(true);
+                            onOpen?.();
+                        }
+                    }
+                    e.stopPropagation();
+                }}
+                role={role}
                 asChild
             >
-                {children?.(getShow())}
+                {children}
             </Component>
-            {getShow() && (
-                <FloatingPortal preserveTabOrder>
+            {getShow() &&
+                createPortal(
                     <Container
                         onClick={(e) => e.stopPropagation()}
                         visible={getShow()}
@@ -88,12 +83,11 @@ const Popover = (props: PopoverProps): JSX.Element => {
                             top: y ?? 0,
                             left: x ?? 0,
                         }}
-                        {...getFloatingProps()}
                     >
                         {content}
-                    </Container>
-                </FloatingPortal>
-            )}
+                    </Container>,
+                    document.body,
+                )}
         </>
     );
 };
@@ -102,7 +96,7 @@ export default Popover;
 export interface PopoverProps {
     placement?: Placement;
     className?: string;
-    children?: (show: boolean) => React.ReactNode;
+    children?: React.ReactNode;
     trigger?: 'hover' | 'click';
     content?: React.ReactNode;
     onOpen?: () => void;
