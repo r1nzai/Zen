@@ -22,7 +22,7 @@ export default function Toggle(props: ToggleProps) {
                 onChange(!checked);
             }}
         >
-            <Component tag={'input'} type="hidden" checked={checked} {...rest} />
+            <Component tag={'input'} type="hidden" checked={checked} {...rest} onChange={() => {}} />
             <Container
                 className={cx(
                     'h-4 w-4 rounded-full bg-primary transition',
