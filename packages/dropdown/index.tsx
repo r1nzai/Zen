@@ -9,7 +9,10 @@ import { Badge, Button, Collapse } from '..';
 import XMark from '@zen/icons/x-mark';
 import { useVirtualizer } from '@tanstack/react-virtual';
 export default function Dropdown(
-    props: (MultiSelectProps | SingleSelectProps) & DropdownProps & Omit<ComponentProps<'input'>, 'onChange'>,
+    props: (MultiSelectProps | SingleSelectProps) &
+        (MutableDropdownProps | ImmutableDropdownProps) &
+        DropdownProps &
+        Omit<ComponentProps<'input'>, 'onChange'>,
 ) {
     const {
         items,
@@ -21,6 +24,8 @@ export default function Dropdown(
         multiple,
         width = '215px',
         height = '40px',
+        mutable,
+        onAdd,
         ...rest
     } = props;
     const ref = useRef<HTMLDivElement>(null);
@@ -34,11 +39,11 @@ export default function Dropdown(
             role="combobox"
             disabled={disabled}
             content={
-                multiple ? (
-                    <DropdownItemList multiple items={items} selected={selected} onChange={onChange} width={width} />
-                ) : (
-                    <DropdownItemList items={items} selected={selected} onChange={onChange} width={width} />
-                )
+                <DropdownItemList
+                    {...(mutable ? { mutable, onAdd } : { mutable })}
+                    {...(multiple ? { multiple, items, onChange, selected } : { items, onChange, selected })}
+                    width={width}
+                />
             }
         >
             <Container
@@ -113,15 +118,25 @@ export interface MultiSelectProps {
 export interface DropdownProps {
     items: DropdownItem[];
 }
+export interface MutableDropdownProps {
+    mutable: true;
+    onAdd: (item: DropdownItem) => void;
+}
+export interface ImmutableDropdownProps {
+    mutable?: never;
+    onAdd?: never;
+}
 export type DropdownItem = {
     text: string;
     key: string;
 };
 
 const DropdownItemList = (
-    props: (MultiSelectProps | SingleSelectProps) & DropdownProps & { width: string | number },
+    props: (MultiSelectProps | SingleSelectProps) &
+        (MutableDropdownProps | ImmutableDropdownProps) &
+        DropdownProps & { width: string | number },
 ) => {
-    const { items, multiple, selected, onChange, width } = props;
+    const { items, multiple, selected, onChange, width, mutable, onAdd } = props;
     const [search, setSearch] = useState('');
     const virtualRef = useRef<HTMLUListElement>(null);
     const filteredItems = useMemo(
@@ -205,12 +220,24 @@ const DropdownItemList = (
                             {filteredItems[virtualItem.index].text}
                         </Component>
                     ))}
-                    {filteredItems.length === 0 && (
+                </Container>
+                {filteredItems.length === 0 &&
+                    (mutable ? (
+                        <Component
+                            tag="li"
+                            className={cx('px-3  py-2 text-sm text-foreground')}
+                            onClick={() => {
+                                onAdd({ text: search, key: search });
+                                setSearch('');
+                            }}
+                        >
+                            Add {search}
+                        </Component>
+                    ) : (
                         <Component tag="li" className={cx('cursor-not-allowed px-3  py-2 text-sm text-foreground')}>
                             No results found
                         </Component>
-                    )}
-                </Container>
+                    ))}
             </Component>
         </Container>
     );
