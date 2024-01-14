@@ -12,6 +12,10 @@
             "import": "./dist/zen.js",
             "require": "./dist/zen.js",
             "types": "./dist/index.d.ts"
+        },
+        "./dist/style.css": {
+            "import": "./dist/style.css",
+            "require": "./dist/style.css"
         }
     },
     "scripts": {

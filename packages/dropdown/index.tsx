@@ -1,3 +1,4 @@
+'use client';
 import Component, { ComponentProps } from '@zen/component';
 import ChevronUp from '@zen/icons/chevron-up';
 import Search from '@zen/icons/search';
@@ -221,7 +222,8 @@ const DropdownItemList = (
                         </Component>
                     ))}
                 </Container>
-                {filteredItems.length === 0 &&
+                {search.length > 0 &&
+                    filteredItems.length === 0 &&
                     (mutable ? (
                         <Component
                             tag="li"
