@@ -3,7 +3,6 @@ import '../packages/index.css';
 import { withThemeByClassName } from '@storybook/addon-themes';
 
 export const parameters = {
-    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
         matchers: {
             color: /(background|color)$/i,
@@ -21,3 +20,4 @@ export const decorators = [
         defaultTheme: 'light',
     }),
 ];
+export const tags = ['autodocs'];

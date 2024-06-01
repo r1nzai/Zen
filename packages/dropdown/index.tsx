@@ -108,7 +108,7 @@ export default function Dropdown(
 }
 export interface SingleSelectProps {
     selected: DropdownItem;
-    onChange: (key: DropdownItem) => void;
+    onChange: (item: DropdownItem) => void;
     multiple?: false;
 }
 export interface MultiSelectProps {
