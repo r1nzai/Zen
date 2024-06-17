@@ -1,6 +1,5 @@
 import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react-dom';
-import Component from '@zen/component';
-import Container from '@zen/container';
+import zen from '@zen/zen';
 import { cx } from '@zen/utils/cx';
 import useClickOutside from '@zen/utils/useClickOutside';
 import { MouseEvent, useEffect, useId, useState } from 'react';
@@ -43,7 +42,7 @@ const Popover = (props: PopoverProps): JSX.Element => {
     }, []);
     return (
         <>
-            <Component
+            <zen.div
                 className="z-auto block min-w-max"
                 id={`zen__popover-${rootId}`}
                 ref={refs.setReference}
@@ -66,10 +65,10 @@ const Popover = (props: PopoverProps): JSX.Element => {
                 asChild
             >
                 {children}
-            </Component>
+            </zen.div>
             {getShow() &&
                 createPortal(
-                    <Container
+                    <zen.div
                         onClick={(e) => e.stopPropagation()}
                         visible={getShow()}
                         role="tooltip"
@@ -85,7 +84,7 @@ const Popover = (props: PopoverProps): JSX.Element => {
                         }}
                     >
                         {content}
-                    </Container>,
+                    </zen.div>,
                     document.body,
                 )}
         </>

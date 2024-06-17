@@ -2,7 +2,7 @@ import './index.css';
 export { default as Badge } from './badge';
 export { default as Button } from './button';
 export { default as Collapse } from './collapse';
-export { default as Component } from './component';
+export { default as Component } from './zen';
 export { default as Container } from './container';
 export { default as Dropdown } from './dropdown';
 export * from './icons';

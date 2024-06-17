@@ -1,12 +1,12 @@
-import Component, { ComponentProps } from '@zen/component';
+import zen, { ComponentProps } from '@zen/zen';
 import { cva, VariantProps } from '@zen/utils/cva';
 
 const Button = (props: ButtonProps) => {
     let { children, className, variant = 'default', size = 'default', ...rest } = props;
     return (
-        <Component tag="button" className={buttonVariants({ variant, size, className })} {...rest}>
+        <zen.button className={buttonVariants({ variant, size, className })} {...rest}>
             {children}
-        </Component>
+        </zen.button>
     );
 };
 const buttonVariants = cva(

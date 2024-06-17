@@ -1,4 +1,4 @@
-import { ReactElement, forwardRef } from 'react';
+import React, { ReactElement, createElement, forwardRef } from 'react';
 
 const Component: BaseType = forwardRef(
     <Tag extends React.ElementType = 'div'>(
@@ -24,8 +24,26 @@ const Component: BaseType = forwardRef(
         );
     },
 );
-export default Component;
-
+const isValidTag = <Tag extends React.ElementType>(tag: any): tag is Tag => {
+    return typeof tag === 'string';
+};
+const zen = new Proxy(
+    {} as {
+        [Tag in keyof JSX.IntrinsicElements]: React.ForwardRefExoticComponent<ComponentProps<Tag>>;
+    },
+    {
+        get: (target, tag) => {
+            let actualTag: React.ElementType = tag as React.ElementType;
+            if (!isValidTag(tag)) {
+                actualTag = 'div' as React.ElementType;
+            }
+            return forwardRef(function (props: ComponentProps<typeof actualTag>, ref: ComponentRef<typeof actualTag>) {
+                return <Component tag={actualTag} {...props} ref={ref} />;
+            });
+        },
+    },
+);
+export default zen;
 type TagProp<Tag extends React.ElementType> = {
     tag?: Tag;
     asChild?: boolean;
