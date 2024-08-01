@@ -20,14 +20,10 @@ const Popover = (props: PopoverProps): JSX.Element => {
         role = 'tooltip',
     } = props;
     const [__internalShow, __setInternalShow] = useState(show);
-    const getShow = () => {
-        return setShow !== undefined && show !== undefined ? show : __internalShow;
-    };
-    const getShowSetter = () => {
-        return setShow !== undefined && show !== undefined ? setShow : __setInternalShow;
-    };
+    const actualShow = setShow !== undefined && show !== undefined ? show : __internalShow;
+    const actualSetShow = setShow !== undefined && show !== undefined ? setShow : __setInternalShow;
     const { x, y, strategy, refs } = useFloating({
-        open: getShow(),
+        open: actualShow,
         middleware: [offset(4), flip(), shift()],
         whileElementsMounted: autoUpdate,
         placement,
@@ -36,7 +32,7 @@ const Popover = (props: PopoverProps): JSX.Element => {
     useEffect(() => {
         return useClickOutside(refs.floating, (outside) => {
             if (outside) {
-                getShowSetter()(false);
+                actualSetShow(false);
             }
         });
     }, []);
@@ -51,11 +47,11 @@ const Popover = (props: PopoverProps): JSX.Element => {
                         if (disabled) {
                             return;
                         }
-                        if (getShow()) {
-                            getShowSetter()(false);
+                        if (actualShow) {
+                            actualSetShow(false);
                             onClose?.();
                         } else {
-                            getShowSetter()(true);
+                            actualSetShow(true);
                             onOpen?.();
                         }
                     }
@@ -66,11 +62,11 @@ const Popover = (props: PopoverProps): JSX.Element => {
             >
                 {children}
             </zen.div>
-            {getShow() &&
+            {actualShow &&
                 createPortal(
                     <zen.div
                         onClick={(e) => e.stopPropagation()}
-                        visible={getShow()}
+                        visible={actualShow}
                         role="tooltip"
                         className={cx(
                             'zen__popover z-50 w-fit rounded border border-border bg-background shadow-secondary',

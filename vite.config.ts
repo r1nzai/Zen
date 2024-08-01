@@ -8,7 +8,9 @@ import { peerDependencies } from './package.json';
 import tailwindcss from 'tailwindcss';
 export default defineConfig({
     plugins: [
-        react(),
+        react({
+            tsDecorators: true,
+        }),
         tsConfigPaths(),
         dts({
             include: ['packages/'],

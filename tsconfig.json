@@ -18,6 +18,7 @@
         "esModuleInterop": true,
         "declarationMap": true,
         "baseUrl": ".",
+        "experimentalDecorators": true,
         "paths": {
             "@zen/*": ["packages/*"]
         }

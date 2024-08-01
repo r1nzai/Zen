@@ -1,9 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
 import React, { useRef } from 'react';
-
+import zen from '@zen/zen';
 import Collapse from './index';
 import Badge from '@zen/badge';
-import Container from '@zen/container';
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
     title: 'Collapse',
@@ -15,7 +14,7 @@ const items = Array.from({ length: 100 }, (_, i) => `testItem${i}`);
 const Template: StoryFn<typeof Collapse> = (args) => {
     const ref = useRef<HTMLDivElement>(null);
     return (
-        <Container ref={ref} className="flex w-full items-center gap-1">
+        <zen.div ref={ref} className="flex w-full items-center gap-1">
             <Collapse items={items} parentRef={ref} badgeStyles="h-6">
                 {(item, index) => (
                     <Badge key={index} className="h-6" variant={'secondary'}>
@@ -23,7 +22,7 @@ const Template: StoryFn<typeof Collapse> = (args) => {
                     </Badge>
                 )}
             </Collapse>
-        </Container>
+        </zen.div>
     );
 };
 
