@@ -1,16 +1,19 @@
 import { resolve } from 'node:path';
 
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import tsConfigPaths from 'vite-tsconfig-paths';
 import { peerDependencies } from './package.json';
 import tailwindcss from 'tailwindcss';
 export default defineConfig({
+    // Let esbuild to transpile decorators during dev mode
+    esbuild: {
+        target: 'ES2020',
+    },
+
     plugins: [
-        react({
-            tsDecorators: true,
-        }),
+        react(),
         tsConfigPaths(),
         dts({
             include: ['packages/'],
