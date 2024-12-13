@@ -1,5 +1,5 @@
 import { cx } from '@zen/utils/cx';
-import { ComponentProps } from '@zen/zen';
+import { ComponentProps } from 'react';
 
 export default function Input(props: InputProps) {
     const { className, ...rest } = props;

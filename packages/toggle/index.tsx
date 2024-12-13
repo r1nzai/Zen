@@ -1,5 +1,5 @@
 import { cx } from '@zen/utils/cx';
-import { ComponentProps } from '@zen/zen';
+import { ComponentProps } from 'react';
 
 export interface ToggleProps extends Omit<ComponentProps<'input'>, 'onChange'> {
     onChange?: (e: boolean) => void;

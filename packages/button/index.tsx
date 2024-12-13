@@ -1,5 +1,5 @@
 import { cva, VariantProps } from '@zen/utils/cva';
-import { ComponentProps } from '@zen/zen';
+import { ComponentProps } from 'react';
 
 export default function Button({ className, variant, size, ...rest }: ButtonProps) {
     return <button className={buttonVariants({ variant, size, className })} {...rest} />;

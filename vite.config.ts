@@ -1,10 +1,8 @@
 import react from '@vitejs/plugin-react';
-import { resolve } from 'node:path';
 import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import tsConfigPaths from 'vite-tsconfig-paths';
-import { peerDependencies } from './package.json';
 export default defineConfig({
     plugins: [
         react(),
@@ -22,13 +20,15 @@ export default defineConfig({
 
     build: {
         lib: {
-            entry: resolve('packages', 'index.ts'),
+            entry: ['./packages/index.ts'],
+            name: 'zen',
             formats: ['es'],
-            fileName: 'index',
+            fileName: 'zen',
+            cssFileName: 'zen',
         },
 
         rollupOptions: {
-            external: [...Object.keys(peerDependencies)],
+            external: ['react', 'react-dom'],
             output: {
                 globals: {
                     react: 'React',

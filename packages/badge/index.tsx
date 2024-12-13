@@ -1,5 +1,5 @@
 import { VariantProps, cva } from '@zen/utils/cva';
-import { ComponentProps } from '@zen/zen';
+import { ComponentProps } from 'react';
 
 export default function Badge({ variant, className, ...rest }: BadgeProps) {
     return <span {...rest} className={badgeVariants({ variant, className })} />;

@@ -5,8 +5,7 @@ import Search from '@zen/icons/search';
 import XMark from '@zen/icons/x-mark';
 import Popover from '@zen/popover';
 import { cx } from '@zen/utils/cx';
-import { ComponentProps } from '@zen/zen';
-import { ChangeEvent, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, ComponentProps, useMemo, useRef, useState } from 'react';
 import { Badge, Button, Collapse } from '..';
 export default function Dropdown(
     props: (MultiSelectProps | SingleSelectProps) &
