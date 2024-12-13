@@ -7,18 +7,7 @@ import tsConfigPaths from 'vite-tsconfig-paths';
 import { peerDependencies } from './package.json';
 export default defineConfig({
     plugins: [
-        react({
-            babel: {
-                plugins: [
-                    [
-                        'babel-plugin-react-compiler',
-                        {
-                            target: '19',
-                        },
-                    ],
-                ],
-            },
-        }),
+        react(),
         tsConfigPaths(),
         dts({
             include: ['packages/'],
