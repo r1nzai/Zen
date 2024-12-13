@@ -3,19 +3,19 @@
     "version": "0.1.0",
     "type": "module",
     "types": "./dist/index.d.ts",
-    "module": "./dist/zen.js",
+    "module": "./dist/index.js",
     "files": [
         "dist"
     ],
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
-            "import": "./dist/zen.js",
-            "require": "./dist/zen.js"
+            "import": "./dist/index.js",
+            "require": "./dist/index.js"
         },
-        "./dist/style.css": {
-            "import": "./dist/style.css",
-            "require": "./dist/style.css"
+        "./css": {
+            "import": "./dist/index.css",
+            "require": "./dist/index.css"
         }
     },
     "scripts": {

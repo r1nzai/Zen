@@ -27,6 +27,7 @@ export default defineConfig({
         lib: {
             entry: resolve('packages', 'index.ts'),
             formats: ['es'],
+            fileName: 'index',
         },
 
         rollupOptions: {
