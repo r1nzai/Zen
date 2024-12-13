@@ -2,10 +2,10 @@ import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react
 import zen from '@zen/zen';
 import { cx } from '@zen/utils/cx';
 import useClickOutside from '@zen/utils/useClickOutside';
-import { MouseEvent, useEffect, useId, useState } from 'react';
+import { MouseEvent, RefObject, useEffect, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-const Popover = (props: PopoverProps): JSX.Element => {
+const Popover = (props: PopoverProps) => {
     const {
         className,
         placement = 'bottom-start',
@@ -34,7 +34,7 @@ const Popover = (props: PopoverProps): JSX.Element => {
     });
     const rootId = useId();
     useEffect(
-        useClickOutside(refs.floating, (outside) => {
+        useClickOutside(refs.floating as RefObject<HTMLElement>, (outside) => {
             if (outside) {
                 getShowSetter()(false);
             }

@@ -1,4 +1,5 @@
 import { ClassValue, cx } from '@zen/utils/cx';
+import { FunctionComponent } from 'react';
 type ClassProp =
     | {
           class: ClassValue;
@@ -15,7 +16,7 @@ type ClassProp =
 type OmitUndefined<T> = T extends undefined ? never : T;
 type StringToBoolean<T> = T extends 'true' | 'false' ? boolean : T;
 
-export type VariantProps<Component extends (...args: unknown[]) => unknown> = Omit<
+export type VariantProps<Component extends FunctionComponent> = Omit<
     OmitUndefined<Parameters<Component>[0]>,
     'class' | 'className'
 >;

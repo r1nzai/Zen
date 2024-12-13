@@ -25,7 +25,8 @@
         "format": "prettier --write packages/**/*.{ts,tsx,css} --config ./.prettierrc",
         "prepare": "husky",
         "dev": "storybook dev -p 6006",
-        "build-storybook": "storybook build"
+        "build-storybook": "storybook build",
+        "prepublishOnly": "npm run build"
     },
     "dependencies": {
         "@floating-ui/react-dom": "^2.1.2",

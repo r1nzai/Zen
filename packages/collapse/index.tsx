@@ -105,7 +105,7 @@ export interface CollapseProps<TData> {
     data?: TData[];
     children: (item: string, index: number, itemData?: TData) => React.ReactNode;
     moreItemsLabel?: string;
-    parentRef?: React.Ref<HTMLElement>;
+    parentRef?: React.RefObject<HTMLElement | null>;
     estimator?: (item: string, textWidth: number) => number;
     font?: string;
     badgeVariant?: BadgeProps['variant'];
