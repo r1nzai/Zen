@@ -19,7 +19,7 @@ export const Primary: StoryObj<typeof Collapse> = {
     render: (args) => {
         const parentRef = useRef<HTMLDivElement>(null);
         return (
-            <zen.div ref={parentRef} className="flex w-full items-center gap-1">
+            <div ref={parentRef} className="flex w-full items-center gap-1">
                 <Collapse items={args.items} parentRef={parentRef} badgeStyles="h-6">
                     {(item, index) => (
                         <Badge key={index} className="h-6" variant={'secondary'}>
@@ -27,7 +27,7 @@ export const Primary: StoryObj<typeof Collapse> = {
                         </Badge>
                     )}
                 </Collapse>
-            </zen.div>
+            </div>
         );
     },
 };

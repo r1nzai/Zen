@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 
 import Badge, { BadgeProps } from '@zen/badge';
 import Popover from '@zen/popover';
-import zen from '@zen/zen';
 
 const Collapse = <TData,>(props: CollapseProps<TData>) => {
     const {
@@ -79,7 +78,7 @@ const Collapse = <TData,>(props: CollapseProps<TData>) => {
                 <Popover
                     trigger="click"
                     content={
-                        <zen.div className="grid max-h-60 grid-flow-row grid-cols-2 gap-3 overflow-auto p-2">
+                        <div className="grid max-h-60 grid-flow-row grid-cols-2 gap-3 overflow-auto p-2">
                             {renderItems.hidden.map((section, index) =>
                                 children(
                                     section,
@@ -87,11 +86,11 @@ const Collapse = <TData,>(props: CollapseProps<TData>) => {
                                     data?.[renderItems.visible.length + index],
                                 ),
                             )}
-                        </zen.div>
+                        </div>
                     }
                 >
                     <Badge className={badgeStyles} key={'more_items_button'} variant={badgeVariant}>
-                        <zen.p>{`+${renderItems.hidden.length} ${moreItemsLabel}`}</zen.p>
+                        <p>{`+${renderItems.hidden.length} ${moreItemsLabel}`}</p>
                     </Badge>
                 </Popover>
             )}

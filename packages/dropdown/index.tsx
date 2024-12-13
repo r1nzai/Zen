@@ -5,7 +5,7 @@ import Search from '@zen/icons/search';
 import XMark from '@zen/icons/x-mark';
 import Popover from '@zen/popover';
 import { cx } from '@zen/utils/cx';
-import zen, { ComponentProps } from '@zen/zen';
+import { ComponentProps } from '@zen/zen';
 import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import { Badge, Button, Collapse } from '..';
 export default function Dropdown(
@@ -45,7 +45,7 @@ export default function Dropdown(
                 />
             }
         >
-            <zen.div
+            <div
                 style={{ width, height }}
                 className={cx(
                     'inline-flex grow items-center justify-between rounded border-2 border-input bg-background p-2 transition',
@@ -54,7 +54,7 @@ export default function Dropdown(
                     className,
                 )}
             >
-                <zen.div
+                <div
                     className={cx(
                         'flex max-w-[calc(100%-30px)] flex-none grow items-center gap-1 text-sm',
                         disabled ? 'text-muted-foreground' : 'text-foreground',
@@ -92,7 +92,7 @@ export default function Dropdown(
                     ) : (
                         (selected.text ?? placeholder)
                     )}
-                </zen.div>
+                </div>
                 <ChevronUp
                     className={cx(
                         'size-4 rounded-full bg-input p-0.5 transition duration-300 ease-in-out',
@@ -100,7 +100,7 @@ export default function Dropdown(
                         disabled ? 'text-muted-foreground' : 'text-foreground',
                     )}
                 />
-            </zen.div>
+            </div>
         </Popover>
     );
 }
@@ -155,24 +155,24 @@ const DropdownItemList = (
     });
     const selectedItems = selected instanceof Array ? selected.map((item) => item.key) : [selected.key];
     return (
-        <zen.div
+        <div
             className="flex flex-col divide-y-2 divide-border overflow-hidden rounded border border-input bg-background"
             style={{ width }}
         >
-            <zen.div className={cx('inline-flex grow items-center rounded px-3 py-2')}>
+            <div className={cx('inline-flex grow items-center rounded px-3 py-2')}>
                 <Search className="left-3 top-3 mr-2 size-4 text-muted-foreground" />
-                <zen.input
+                <input
                     className="inline-flex grow bg-transparent text-sm text-foreground outline-none"
                     placeholder="Search"
                     value={search}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
                 />
-            </zen.div>
-            <zen.ul
+            </div>
+            <ul
                 className={cx('max-h-60 grow overflow-auto shadow', 'focus:outline-none focus:ring-0')}
                 ref={virtualRef}
             >
-                <zen.div
+                <div
                     style={{
                         height: `${rowVirtualizer.getTotalSize()}px`,
                         width: '100%',
@@ -180,7 +180,7 @@ const DropdownItemList = (
                     }}
                 >
                     {rowVirtualizer.getVirtualItems().map((virtualItem) => (
-                        <zen.li
+                        <li
                             key={virtualItem.key}
                             style={{
                                 height: `${virtualItem.size}px`,
@@ -212,13 +212,13 @@ const DropdownItemList = (
                             }}
                         >
                             {filteredItems[virtualItem.index].text}
-                        </zen.li>
+                        </li>
                     ))}
-                </zen.div>
+                </div>
                 {search.length > 0 &&
                     filteredItems.length === 0 &&
                     (mutable ? (
-                        <zen.li
+                        <li
                             className={cx('px-3 py-2 text-sm text-foreground')}
                             onClick={() => {
                                 onAdd({ text: search, key: search });
@@ -226,13 +226,11 @@ const DropdownItemList = (
                             }}
                         >
                             Add {search}
-                        </zen.li>
+                        </li>
                     ) : (
-                        <zen.li className={cx('cursor-not-allowed px-3 py-2 text-sm text-foreground')}>
-                            No results found
-                        </zen.li>
+                        <li className={cx('cursor-not-allowed px-3 py-2 text-sm text-foreground')}>No results found</li>
                     ))}
-            </zen.ul>
-        </zen.div>
+            </ul>
+        </div>
     );
 };
