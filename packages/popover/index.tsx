@@ -6,7 +6,7 @@ import { MouseEvent, useEffect, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const Popover = (props: PopoverProps): JSX.Element => {
-    let {
+    const {
         className,
         placement = 'bottom-start',
         trigger = 'hover',
@@ -33,13 +33,14 @@ const Popover = (props: PopoverProps): JSX.Element => {
         placement,
     });
     const rootId = useId();
-    useEffect(() => {
-        return useClickOutside(refs.floating, (outside) => {
+    useEffect(
+        useClickOutside(refs.floating, (outside) => {
             if (outside) {
                 getShowSetter()(false);
             }
-        });
-    }, []);
+        }),
+        [],
+    );
     return (
         <>
             <zen.div

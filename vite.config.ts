@@ -1,14 +1,17 @@
+import react from '@vitejs/plugin-react';
 import { resolve } from 'node:path';
-
-import react from '@vitejs/plugin-react-swc';
+import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import tsConfigPaths from 'vite-tsconfig-paths';
 import { peerDependencies } from './package.json';
-import tailwindcss from 'tailwindcss';
 export default defineConfig({
     plugins: [
-        react(),
+        react({
+            babel: {
+                plugins: [['babel-plugin-react-compiler', {}]],
+            },
+        }),
         tsConfigPaths(),
         dts({
             include: ['packages/'],
@@ -25,6 +28,7 @@ export default defineConfig({
             entry: resolve('packages', 'index.ts'),
             formats: ['es'],
         },
+
         rollupOptions: {
             external: [...Object.keys(peerDependencies)],
             output: {

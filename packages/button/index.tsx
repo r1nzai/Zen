@@ -1,8 +1,7 @@
 import zen, { ComponentProps } from '@zen/zen';
 import { cva, VariantProps } from '@zen/utils/cva';
 
-const Button = (props: ButtonProps) => {
-    let { children, className, variant = 'default', size = 'default', ...rest } = props;
+const Button = ({ children, className, variant = 'default', size = 'default', ...rest }: ButtonProps) => {
     return (
         <zen.button className={buttonVariants({ variant, size, className })} {...rest}>
             {children}

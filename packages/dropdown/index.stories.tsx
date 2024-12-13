@@ -1,6 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react';
-import React from 'react';
-
+import { useArgs } from '@storybook/preview-api';
+import { Meta, StoryObj } from '@storybook/react';
 import Dropdown from './index';
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -8,42 +7,76 @@ export default {
     component: Dropdown,
 } as Meta<typeof Dropdown>;
 
-export const SingleSelect: StoryFn<typeof Dropdown> = (args) => {
-    const [selected, setSelected] = React.useState(args.items[0]);
-    args.selected = selected;
-    args.onChange = setSelected;
-    return <Dropdown {...args} />;
+export const SingleSelect: StoryObj<typeof Dropdown> = {
+    args: {
+        items: Array.from({ length: 100 }, (_, i) => ({
+            text: `Item ${i + 1}`,
+            key: `item${i + 1}`,
+        })),
+        disabled: false,
+        selected: { text: 'Item 1', key: 'item1' },
+    },
+    render: (args) => {
+        const [, updateArgs] = useArgs();
+        return (
+            <Dropdown
+                {...args}
+                onChange={(e) => {
+                    updateArgs({ selected: e });
+                }}
+            />
+        );
+    },
 };
-SingleSelect.args = {
-    items: Array.from({ length: 100 }, (_, i) => ({
-        text: `Item ${i + 1}`,
-        key: `item${i + 1}`,
-    })),
-    disabled: false,
-};
-export const MultiSelect: StoryFn<typeof Dropdown> = (args) => {
-    const [selected, setSelected] = React.useState(args.items.slice(0, 2));
-    const [items, setItems] = React.useState(args.items);
-    args.selected = selected;
-    args.onChange = setSelected;
-    return (
-        <Dropdown
-            {...args}
-            width={500}
-            mutable
-            items={items}
-            onAdd={(newItem) => {
-                setItems([...items, newItem]);
-            }}
-        />
-    );
-};
-
-MultiSelect.args = {
-    items: Array.from({ length: 100 }, (_, i) => ({
-        text: `Item ${i + 1}`,
-        key: `item${i + 1}`,
-    })),
-    disabled: false,
-    multiple: true,
+export const MultiSelect: StoryObj<typeof Dropdown> = {
+    args: {
+        items: Array.from({ length: 100 }, (_, i) => ({
+            text: `Item ${i + 1}`,
+            key: `item${i + 1}`,
+        })),
+        disabled: false,
+        multiple: true,
+        mutable: true,
+        width: 500,
+        selected: [
+            {
+                text: 'Item 1',
+                key: 'item1',
+            },
+            {
+                text: 'Item 4',
+                key: 'item4',
+            },
+            {
+                text: 'Item 5',
+                key: 'item5',
+            },
+            {
+                text: 'Item 3',
+                key: 'item3',
+            },
+            {
+                text: 'Item 6',
+                key: 'item6',
+            },
+            {
+                text: 'Item 2',
+                key: 'item2',
+            },
+        ],
+    },
+    render: (args) => {
+        const [, updateArgs] = useArgs();
+        return (
+            <Dropdown
+                {...args}
+                onChange={(e) => {
+                    updateArgs({ selected: e });
+                }}
+                onAdd={(newItem) => {
+                    updateArgs({ items: [...args.items, newItem] });
+                }}
+            />
+        );
+    },
 };

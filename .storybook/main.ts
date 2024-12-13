@@ -1,5 +1,5 @@
 export default {
-    stories: ['../packages/**/*.mdx', '../packages/**/*.stories.@(ts|tsx)'],
+    stories: ['../packages/**/*.stories.@(ts|tsx)'],
 
     addons: [
         '@storybook/addon-links',
@@ -16,6 +16,6 @@ export default {
     docs: {},
 
     typescript: {
-        reactDocgen: 'react-docgen-typescript'
-    }
+        reactDocgen: 'react-docgen-typescript',
+    },
 };

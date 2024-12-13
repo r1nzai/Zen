@@ -1,1 +1,2 @@
-export default interface IconProps extends React.SVGProps<SVGSVGElement> {}
+type IconProps = React.SVGProps<SVGSVGElement>;
+export default IconProps;

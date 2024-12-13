@@ -22,7 +22,7 @@
         @apply scroll-m-20 text-base font-semibold tracking-tight;
     }
     p {
-        @apply leading-7  [&:not(:first-child)]:mt-6;
+        @apply leading-7 [&:not(:first-child)]:mt-6;
     }
     blockquote {
         @apply mt-6 border-l-2 pl-6 italic;
@@ -33,5 +33,12 @@
     }
     label {
         @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+    }
+    .zen__popover {
+        position-try-options:
+            flip-block,
+            flip-inline,
+            flip-block flip-inline;
+        position-visibility: anchors-visible;
     }
 }

@@ -19,5 +19,5 @@ export const cx = (...args: ClassValue[]): string => {
     }, '');
 };
 export type ClassValue = ClassArray | ClassDictionary | string | number | null | boolean | undefined;
-export type ClassDictionary = Record<string, any>;
+export type ClassDictionary = Record<string, unknown>;
 export type ClassArray = ClassValue[];

@@ -1,11 +1,9 @@
-import zen, { ComponentProps } from '@zen/zen';
 import { VariantProps, cva } from '@zen/utils/cva';
-import { forwardRef } from 'react';
+import zen, { ComponentProps } from '@zen/zen';
 
-export default forwardRef<HTMLDivElement, BadgeProps>(function Badge(props, ref) {
-    const { variant, className, ...rest } = props;
-    return <zen.div {...rest} className={badgeVariants({ variant, className })} ref={ref} />;
-});
+export default function Badge({ variant, className, ...rest }: BadgeProps) {
+    return <zen.div {...rest} className={badgeVariants({ variant, className })} />;
+}
 const badgeVariants = cva(
     'zen__badge inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors whitespace-nowrap',
     {

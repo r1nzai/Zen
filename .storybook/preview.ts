@@ -20,4 +20,4 @@ export const decorators = [
         defaultTheme: 'light',
     }),
 ];
-export const tags = ['autodocs', 'autodocs'];
+export const tags = ['autodocs'];

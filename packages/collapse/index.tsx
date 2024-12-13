@@ -25,7 +25,7 @@ const Collapse = <TData,>(props: CollapseProps<TData>) => {
     });
     const canvasContext = useMemo(() => {
         const canvas = document.createElement('canvas');
-        let context = canvas.getContext('2d');
+        const context = canvas.getContext('2d');
         if (context) {
             context.font = font;
         }
@@ -105,7 +105,7 @@ export interface CollapseProps<TData> {
     data?: TData[];
     children: (item: string, index: number, itemData?: TData) => React.ReactNode;
     moreItemsLabel?: string;
-    parentRef?: React.RefObject<HTMLElement>;
+    parentRef?: React.Ref<HTMLElement>;
     estimator?: (item: string, textWidth: number) => number;
     font?: string;
     badgeVariant?: BadgeProps['variant'];

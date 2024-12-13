@@ -18,4 +18,4 @@ export default function Input(props: InputProps) {
     );
 }
 
-export interface InputProps extends ComponentProps<'input'> {}
+export type InputProps = ComponentProps<'input'>;

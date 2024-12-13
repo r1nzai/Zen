@@ -1,20 +1,16 @@
-import { Meta, StoryFn } from '@storybook/react';
-import React from 'react';
+import { Meta, StoryObj } from '@storybook/react';
 
-import Component from './index';
+import zen from './index';
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-    title: 'Component',
-    component: Component,
+    title: 'Zen',
+    component: zen.div,
     // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
-} as Meta<typeof Component>;
+} as Meta<typeof zen.div>;
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: StoryFn<typeof Component> = (args) => <Component {...args} />;
-
-export const Primary = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-Primary.args = {
-    tag: 'h1',
-    children: 'Text Component',
+export const Primary: StoryObj<typeof zen.div> = {
+    args: {
+        children: 'Text Component',
+    },
+    render: (args) => <zen.div {...args} />,
 };

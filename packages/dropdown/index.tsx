@@ -26,7 +26,6 @@ export default function Dropdown(
         height = '40px',
         mutable,
         onAdd,
-        ...rest
     } = props;
     const ref = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
@@ -91,7 +90,7 @@ export default function Dropdown(
                             )}
                         </Collapse>
                     ) : (
-                        selected.text ?? 'Select an item'
+                        (selected.text ?? placeholder)
                     )}
                 </zen.div>
                 <ChevronUp
@@ -141,7 +140,7 @@ const DropdownItemList = (
     const virtualRef = useRef<HTMLUListElement>(null);
     const filteredItems = useMemo(
         () =>
-            items.reduce((acc, item, index, array) => {
+            items.reduce((acc, item) => {
                 if (search.length ? item.text.toLowerCase().includes(search.toLowerCase()) : true) {
                     acc.push(item);
                 }
@@ -154,7 +153,7 @@ const DropdownItemList = (
         getScrollElement: () => virtualRef.current,
         estimateSize: () => 35,
     });
-    const selectedItems = selected instanceof Array ? selected : [selected];
+    const selectedItems = selected instanceof Array ? selected.map((item) => item.key) : [selected.key];
     return (
         <zen.div
             className="flex flex-col divide-y-2 divide-border overflow-hidden rounded border border-input bg-background"
@@ -189,15 +188,13 @@ const DropdownItemList = (
                             }}
                             className={cx(
                                 'absolute left-0 top-0 w-full cursor-pointer px-3 py-2 text-sm text-foreground',
-                                selectedItems.some((item) => item.key === filteredItems[virtualItem.index].key)
+                                selectedItems.includes(filteredItems[virtualItem.index].key)
                                     ? 'bg-primary/90 text-primary-foreground'
                                     : 'transition hover:bg-primary/60',
                             )}
                             onClick={() => {
                                 if (multiple) {
-                                    if (
-                                        selectedItems.some((item) => item.key === filteredItems[virtualItem.index].key)
-                                    ) {
+                                    if (selectedItems.includes(filteredItems[virtualItem.index].key)) {
                                         onChange(
                                             structuredClone(
                                                 selected.filter(
