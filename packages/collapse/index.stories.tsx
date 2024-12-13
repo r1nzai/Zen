@@ -2,7 +2,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import { useRef } from 'react';
 
 import Badge from '@zen/badge';
-import zen from '@zen/zen';
 import Collapse from './index';
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

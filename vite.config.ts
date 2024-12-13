@@ -11,6 +11,7 @@ export default defineConfig({
         tsConfigPaths(),
         dts({
             include: ['packages/'],
+            exclude: ['**/*.stories.tsx', '**/*.test.tsx', '**/*.test.ts', '**/*.spec.tsx', '**/*.spec.ts'],
         }),
     ],
     css: {
