@@ -9,7 +9,14 @@ export default defineConfig({
     plugins: [
         react({
             babel: {
-                plugins: [['babel-plugin-react-compiler', {}]],
+                plugins: [
+                    [
+                        'babel-plugin-react-compiler',
+                        {
+                            target: '19',
+                        },
+                    ],
+                ],
             },
         }),
         tsConfigPaths(),

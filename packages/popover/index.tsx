@@ -4,7 +4,7 @@ import useClickOutside from '@zen/utils/useClickOutside';
 import { MouseEvent, RefObject, useEffect, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-const Popover = (props: PopoverProps) => {
+export default function Popover(props: PopoverProps) {
     const {
         className,
         placement = 'bottom-start',
@@ -87,8 +87,7 @@ const Popover = (props: PopoverProps) => {
                 )}
         </>
     );
-};
-export default Popover;
+}
 
 export interface PopoverProps {
     placement?: Placement;

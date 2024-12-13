@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Badge, { BadgeProps } from '@zen/badge';
 import Popover from '@zen/popover';
 
-const Collapse = <TData,>(props: CollapseProps<TData>) => {
+export default function Collapse<TData>(props: CollapseProps<TData>) {
     const {
         items = [],
         children,
@@ -96,9 +96,7 @@ const Collapse = <TData,>(props: CollapseProps<TData>) => {
             )}
         </>
     );
-};
-
-export default Collapse;
+}
 export interface CollapseProps<TData> {
     items: string[];
     data?: TData[];

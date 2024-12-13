@@ -130,11 +130,11 @@ export type DropdownItem = {
     key: string;
 };
 
-const DropdownItemList = (
+function DropdownItemList(
     props: (MultiSelectProps | SingleSelectProps) &
         (MutableDropdownProps | ImmutableDropdownProps) &
         DropdownProps & { width: string | number },
-) => {
+) {
     const { items, multiple, selected, onChange, width, mutable, onAdd } = props;
     const [search, setSearch] = useState('');
     const virtualRef = useRef<HTMLUListElement>(null);
@@ -233,4 +233,4 @@ const DropdownItemList = (
             </ul>
         </div>
     );
-};
+}
