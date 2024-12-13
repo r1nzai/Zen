@@ -5,6 +5,9 @@ export default function useClickOutside<TElement extends HTMLElement>(
     handler: (outside: boolean) => void,
 ) {
     return () => {
+        if (typeof document === 'undefined') {
+            return;
+        }
         const listener = (event: MouseEvent) => {
             if (!ref.current || ref.current.contains(event.target as Node)) {
                 return;

@@ -23,6 +23,9 @@ export default function Collapse<TData>(props: CollapseProps<TData>) {
         hidden: [],
     });
     const canvasContext = useMemo(() => {
+        if (typeof document === 'undefined') {
+            return null;
+        }
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         if (context) {
