@@ -1,4 +1,4 @@
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
@@ -8,6 +8,7 @@ export default defineConfig({
         react(),
         tsConfigPaths(),
         dts({
+            insertTypesEntry: true,
             include: ['packages/'],
             exclude: ['**/*.stories.tsx', '**/*.test.tsx', '**/*.test.ts', '**/*.spec.tsx', '**/*.spec.ts'],
         }),
@@ -20,7 +21,7 @@ export default defineConfig({
 
     build: {
         lib: {
-            entry: ['./packages/index.ts'],
+            entry: './packages/index.ts',
             name: 'zen',
             formats: ['es'],
             fileName: 'zen',
@@ -28,7 +29,7 @@ export default defineConfig({
         },
 
         rollupOptions: {
-            external: ['react', 'react-dom'],
+            external: ['react', 'react-dom', 'react/jsx-runtime'],
             output: {
                 globals: {
                     react: 'React',
