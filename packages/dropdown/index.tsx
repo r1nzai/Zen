@@ -5,7 +5,7 @@ import Search from '@zen/icons/search';
 import XMark from '@zen/icons/x-mark';
 import Popover from '@zen/popover';
 import { cx } from '@zen/utils/cx';
-import { ChangeEvent, ComponentProps, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, ComponentProps, CSSProperties, useMemo, useRef, useState } from 'react';
 import { Badge, Button, Collapse } from '..';
 export default function Dropdown(
     props: (MultiSelectProps | SingleSelectProps) &
@@ -21,13 +21,12 @@ export default function Dropdown(
         disabled,
         placeholder = 'Select an Item',
         multiple,
-        width = '215px',
-        height = '40px',
         mutable,
         onAdd,
     } = props;
     const ref = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
+    const triggerRef = useRef<HTMLDivElement>(null);
     return (
         <Popover
             placement="bottom"
@@ -36,22 +35,24 @@ export default function Dropdown(
             setShow={setOpen}
             role="combobox"
             disabled={disabled}
+            style={{
+                '--input-width': `${triggerRef.current?.offsetWidth}px`,
+            }}
             content={
                 <DropdownItemList
                     {...(mutable ? { mutable, onAdd } : { mutable })}
                     {...(multiple ? { multiple, items, onChange, selected } : { items, onChange, selected })}
-                    width={width}
                 />
             }
         >
             <div
-                style={{ width, height }}
                 className={cx(
-                    'inline-flex grow items-center justify-between rounded border-2 border-input bg-background p-2 transition',
+                    'inline-flex h-10 w-56 grow items-center justify-between rounded border-2 border-input bg-background p-2 transition',
                     disabled ? 'cursor-not-allowed bg-muted text-muted' : 'cursor-pointer',
                     open && 'border-primary shadow-sm shadow-ring',
                     className,
                 )}
+                ref={triggerRef}
             >
                 <div
                     className={cx(
@@ -65,6 +66,7 @@ export default function Dropdown(
                             items={selected.map((item) => item.text)}
                             data={selected}
                             parentRef={ref}
+                            estimator={(_, textWidth) => textWidth + 40}
                             badgeVariant="secondary"
                             badgeStyles="!bg-input h-6 min-w-min gap-2 !bg-input"
                         >
@@ -103,38 +105,10 @@ export default function Dropdown(
         </Popover>
     );
 }
-export interface SingleSelectProps {
-    selected: DropdownItem;
-    onChange: (item: DropdownItem) => void;
-    multiple?: false;
-}
-export interface MultiSelectProps {
-    selected: DropdownItem[];
-    onChange: (items: DropdownItem[]) => void;
-    multiple: true;
-}
-export interface DropdownProps {
-    items: DropdownItem[];
-}
-export interface MutableDropdownProps {
-    mutable: true;
-    onAdd: (item: DropdownItem) => void;
-}
-export interface ImmutableDropdownProps {
-    mutable?: never;
-    onAdd?: never;
-}
-export type DropdownItem = {
-    text: string;
-    key: string;
-};
-
 function DropdownItemList(
-    props: (MultiSelectProps | SingleSelectProps) &
-        (MutableDropdownProps | ImmutableDropdownProps) &
-        DropdownProps & { width: string | number },
+    props: (MultiSelectProps | SingleSelectProps) & (MutableDropdownProps | ImmutableDropdownProps) & DropdownProps,
 ) {
-    const { items, multiple, selected, onChange, width, mutable, onAdd } = props;
+    const { items, multiple, selected, onChange, mutable, onAdd } = props;
     const [search, setSearch] = useState('');
     const virtualRef = useRef<HTMLUListElement>(null);
     const filteredItems = useMemo(
@@ -154,10 +128,7 @@ function DropdownItemList(
     });
     const selectedItems = selected instanceof Array ? selected.map((item) => item.key) : [selected.key];
     return (
-        <div
-            className="flex flex-col divide-y-2 divide-border overflow-hidden rounded border border-input bg-background"
-            style={{ width }}
-        >
+        <div className="flex min-w-[var(--input-width)] flex-col divide-y-2 divide-border overflow-hidden rounded border border-input bg-background">
             <div className={cx('inline-flex grow items-center rounded px-3 py-2')}>
                 <Search className="left-3 top-3 mr-2 size-4 text-muted-foreground" />
                 <input
@@ -233,3 +204,28 @@ function DropdownItemList(
         </div>
     );
 }
+export interface SingleSelectProps {
+    selected: DropdownItem;
+    onChange: (item: DropdownItem) => void;
+    multiple?: false;
+}
+export interface MultiSelectProps {
+    selected: DropdownItem[];
+    onChange: (items: DropdownItem[]) => void;
+    multiple: true;
+}
+export interface DropdownProps {
+    items: DropdownItem[];
+}
+export interface MutableDropdownProps {
+    mutable: true;
+    onAdd: (item: DropdownItem) => void;
+}
+export interface ImmutableDropdownProps {
+    mutable?: never;
+    onAdd?: never;
+}
+export type DropdownItem = {
+    text: string;
+    key: string;
+};

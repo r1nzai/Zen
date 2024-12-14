@@ -9,3 +9,10 @@ export { default as Popover } from './popover';
 export { default as Toggle } from './toggle';
 export { cva, type VariantProps } from './utils/cva';
 export { cx } from './utils/cx';
+import 'react';
+
+declare module 'react' {
+    interface CSSProperties {
+        [key: `--${string}`]: string | number;
+    }
+}

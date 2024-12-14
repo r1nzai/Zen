@@ -13,6 +13,7 @@ export const SingleSelect: StoryObj<typeof Dropdown> = {
             text: `Item ${i + 1}`,
             key: `item${i + 1}`,
         })),
+        className: 'w-64',
         disabled: false,
         selected: { text: 'Item 1', key: 'item1' },
     },
@@ -37,7 +38,7 @@ export const MultiSelect: StoryObj<typeof Dropdown> = {
         disabled: false,
         multiple: true,
         mutable: true,
-        width: 500,
+        className: 'w-[500px]',
         selected: [
             {
                 text: 'Item 1',

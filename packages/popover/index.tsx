@@ -1,7 +1,7 @@
 import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/react-dom';
 import { cx } from '@zen/utils/cx';
 import useClickOutside from '@zen/utils/useClickOutside';
-import { MouseEvent, RefObject, useEffect, useId, useState } from 'react';
+import { ComponentProps, MouseEvent, RefObject, useEffect, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 export default function Popover(props: PopoverProps) {
@@ -17,6 +17,8 @@ export default function Popover(props: PopoverProps) {
         show = false,
         setShow,
         role = 'tooltip',
+        style,
+        ...rest
     } = props;
     const [__internalShow, __setInternalShow] = useState(show);
     const getShow = () => {
@@ -43,7 +45,7 @@ export default function Popover(props: PopoverProps) {
     return (
         <>
             <div
-                className="z-auto block min-w-max"
+                className="z-auto min-w-fit max-w-fit"
                 id={`zen__popover-${rootId}`}
                 ref={refs.setReference}
                 onClick={(e: MouseEvent<HTMLDivElement>) => {
@@ -68,6 +70,7 @@ export default function Popover(props: PopoverProps) {
             {getShow() &&
                 createPortal(
                     <div
+                        {...rest}
                         onClick={(e) => e.stopPropagation()}
                         role="tooltip"
                         className={cx(
@@ -76,6 +79,7 @@ export default function Popover(props: PopoverProps) {
                         )}
                         ref={refs.setFloating}
                         style={{
+                            ...style,
                             position: strategy,
                             top: y ?? 0,
                             left: x ?? 0,
@@ -89,7 +93,7 @@ export default function Popover(props: PopoverProps) {
     );
 }
 
-export interface PopoverProps {
+export interface PopoverProps extends Omit<ComponentProps<'div'>, 'content'> {
     placement?: Placement;
     className?: string;
     children?: React.ReactNode;
