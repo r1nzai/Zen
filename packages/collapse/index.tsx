@@ -41,7 +41,10 @@ export default function Collapse<TData>(props: CollapseProps<TData>) {
         const itemListWidth = itemList.offsetWidth;
         const visibleItems: string[] = [];
         const hiddenItems: string[] = [];
-        const moreItemsLabelLength = estimator(moreItemsLabel, canvasContext!.measureText(moreItemsLabel).width + 10);
+        const moreItemsLabelLength = estimator(
+            moreItemsLabel,
+            (canvasContext?.measureText(moreItemsLabel).width ?? 0) + 10,
+        );
         itemsWidth?.reduce((acc, tabWidth, index) => {
             if (acc + tabWidth + moreItemsLabelLength > itemListWidth - 20) {
                 hiddenItems.push(items[index]);
@@ -58,7 +61,7 @@ export default function Collapse<TData>(props: CollapseProps<TData>) {
     };
 
     const itemsWidth = useMemo(
-        () => items?.map((item) => estimator(item, canvasContext!.measureText(item).width)) ?? [],
+        () => items?.map((item) => estimator(item, canvasContext?.measureText(item).width ?? 0)) ?? [],
         [items],
     );
     useEffect(() => {
