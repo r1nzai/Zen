@@ -1,6 +1,6 @@
 {
     "name": "@rinzai/zen",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "type": "module",
     "types": "./dist/index.d.ts",
     "module": "./dist/zen.js",
