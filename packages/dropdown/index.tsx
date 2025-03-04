@@ -49,7 +49,7 @@ export default function Dropdown(
                 className={cx(
                     'inline-flex h-10 w-56 grow items-center justify-between rounded border-2 border-input bg-background p-2 transition',
                     disabled ? 'cursor-not-allowed bg-muted text-muted' : 'cursor-pointer',
-                    open && 'border-primary shadow-sm shadow-ring',
+                    open && 'border-primary shadow-xs shadow-ring',
                     className,
                 )}
                 ref={triggerRef}
@@ -68,12 +68,12 @@ export default function Dropdown(
                             parentRef={ref}
                             estimator={(_, textWidth) => textWidth + 40}
                             badgeVariant="secondary"
-                            badgeStyles="!bg-input h-6 min-w-min gap-2 !bg-input"
+                            badgeStyles="bg-input! h-6 min-w-min gap-2 bg-input!"
                         >
                             {(item, index, data) => (
                                 <Badge
                                     key={`collapsed_item_${index}`}
-                                    className="flex h-6 min-w-min gap-2 !bg-input pr-1"
+                                    className="flex h-6 min-w-min gap-2 bg-input! pr-1"
                                     variant={'secondary'}
                                 >
                                     {item}
@@ -132,14 +132,14 @@ function DropdownItemList(
             <div className={cx('inline-flex grow items-center rounded px-3 py-2')}>
                 <Search className="left-3 top-3 mr-2 size-4 text-muted-foreground" />
                 <input
-                    className="inline-flex grow bg-transparent text-sm text-foreground outline-none"
+                    className="inline-flex grow bg-transparent text-sm text-foreground outline-hidden"
                     placeholder="Search"
                     value={search}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
                 />
             </div>
             <ul
-                className={cx('max-h-60 grow overflow-auto shadow', 'focus:outline-none focus:ring-0')}
+                className={cx('max-h-60 grow overflow-auto shadow-sm', 'focus:outline-hidden focus:ring-0')}
                 ref={virtualRef}
             >
                 <div
