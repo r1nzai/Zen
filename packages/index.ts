@@ -7,6 +7,7 @@ export * from './icons';
 export { default as Input } from './input';
 export { default as Popover } from './popover';
 export { default as Toggle } from './toggle';
+export { default as TextArea } from './textarea';
 export { cva, type VariantProps } from './utils/cva';
 export { cx } from './utils/cx';
 import 'react';
