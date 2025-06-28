@@ -1,5 +1,5 @@
-import { useArgs } from '@storybook/preview-api';
-import { Meta, StoryObj } from '@storybook/react';
+import { useArgs } from 'storybook/preview-api';
+import { Meta, StoryObj } from '@storybook/react-vite';
 import Dropdown from './index';
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

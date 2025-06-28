@@ -3,9 +3,8 @@ export default {
 
     addons: [
         '@storybook/addon-links',
-        '@storybook/addon-essentials',
-        '@storybook/addon-interactions',
         '@storybook/addon-themes',
+        '@storybook/addon-docs'
     ],
 
     framework: {
