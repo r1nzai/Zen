@@ -1,5 +1,5 @@
 import { cx } from '@zen/utils/cx';
-import { ComponentProps, MouseEvent, useEffect, useId, useRef } from 'react';
+import { ComponentProps, MouseEvent, useEffect, useRef, useState } from 'react';
 
 export default function Popover(props: PopoverProps) {
     const {
@@ -16,14 +16,27 @@ export default function Popover(props: PopoverProps) {
         ...rest
     } = props;
 
-    const rootId = crypto.randomUUID();
+    const rootIdRef = useRef<string | null>(null);
+    if (rootIdRef.current === null) {
+        rootIdRef.current = crypto.randomUUID();
+    }
+    const rootId = rootIdRef.current;
+
+    const [isOpen, setIsOpen] = useState(false);
     const popoverRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         const popoverEl = popoverRef.current;
         if (!popoverEl) return;
 
-        const handleOpen = () => props.onOpen?.();
-        const handleClose = () => props.onClose?.();
+        const handleOpen = () => {
+            setIsOpen(true);
+            props.onOpen?.();
+        };
+        const handleClose = () => {
+            setIsOpen(false);
+            props.onClose?.();
+        };
 
         popoverEl.addEventListener('popover:open', handleOpen);
         popoverEl.addEventListener('popover:close', handleClose);
@@ -33,6 +46,7 @@ export default function Popover(props: PopoverProps) {
             popoverEl.removeEventListener('popover:close', handleClose);
         };
     }, [props.onOpen, props.onClose]);
+
     useEffect(() => {
         if (triggerType === 'manual') {
             if (show) {
@@ -42,10 +56,12 @@ export default function Popover(props: PopoverProps) {
             }
         }
     }, [show, triggerType]);
+
     return (
         <div>
             <div
-                className="z-auto max-w-fit min-w-fit"
+                aria-expanded={isOpen}
+                className="max-w-fit min-w-fit"
                 style={
                     {
                         'anchor-name': `--zen-popover-anchor-${rootId}`,
@@ -73,7 +89,6 @@ export default function Popover(props: PopoverProps) {
                     trigger === 'hover'
                         ? (e) => {
                               e.stopPropagation();
-
                               popoverRef.current?.showPopover?.();
                           }
                         : undefined
@@ -82,7 +97,6 @@ export default function Popover(props: PopoverProps) {
                     trigger === 'hover'
                         ? (e) => {
                               e.stopPropagation();
-
                               popoverRef.current?.hidePopover?.();
                           }
                         : undefined
@@ -93,11 +107,11 @@ export default function Popover(props: PopoverProps) {
             <div
                 {...rest}
                 ref={popoverRef}
-                role="tooltip"
+                role={role}
                 popover={triggerType}
                 id={`zen__popover-${rootId}`}
                 className={cx(
-                    'zen__popover border-border bg-background shadow-secondary fixed z-50 w-[anchor-size(width)] min-w-max [justify-self:anchor-center] rounded border [position-area:block-end_center]',
+                    'zen__popover border-border bg-background fixed z-50 w-[anchor-size(width)] min-w-max [justify-self:anchor-center] rounded border shadow-md [position-area:block-end_center]',
                     className,
                 )}
                 style={
@@ -128,7 +142,6 @@ export interface PopoverProps extends Omit<ComponentProps<'div'>, 'content'> {
     show?: boolean;
     setShow?: (show: boolean) => void;
     role?: AriaRole | ComponentRole;
-
     gap?: string;
 }
 type AriaRole = 'tooltip' | 'dialog' | 'alertdialog' | 'menu' | 'listbox' | 'grid' | 'tree';

@@ -69,9 +69,9 @@ export const UserProfileCard: StoryObj<typeof Popover> = {
                     <div className="bg-primary text-primary-foreground flex size-10 items-center justify-center rounded-full text-sm font-bold">
                         AJ
                     </div>
-                    <div>
-                        <p className="text-sm font-semibold">Alex Johnson</p>
-                        <p className="text-muted-foreground text-xs">alex@example.com</p>
+                    <div className="flex flex-col">
+                        <span className="text-sm font-semibold">Alex Johnson</span>
+                        <span className="text-muted-foreground text-xs">alex@example.com</span>
                     </div>
                 </div>
                 <div className="flex gap-2">

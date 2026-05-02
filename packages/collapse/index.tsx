@@ -95,8 +95,13 @@ export default function Collapse<TData>(props: CollapseProps<TData>) {
                         </div>
                     }
                 >
-                    <Badge className={badgeStyles} key={'more_items_button'} variant={badgeVariant}>
-                        <p>{`+${renderItems.hidden.length} ${moreItemsLabel}`}</p>
+                    <Badge
+                        className={badgeStyles}
+                        key={'more_items_button'}
+                        variant={badgeVariant}
+                        aria-label={`Show ${renderItems.hidden.length} more ${moreItemsLabel}`}
+                    >
+                        <span>{`+${renderItems.hidden.length} ${moreItemsLabel}`}</span>
                     </Badge>
                 </Popover>
             )}

@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *, [data-theme='dark'] *));
 
 @theme {
     --color-border: hsl(var(--border));
@@ -107,11 +107,13 @@
     label {
         @apply text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
     }
-    .zen__popover {
-        position-try-options:
-            flip-block,
-            flip-inline,
-            flip-block flip-inline;
-        position-visibility: anchors-visible;
+    @supports (position-area: block-end) {
+        .zen__popover {
+            position-try-options:
+                flip-block,
+                flip-inline,
+                flip-block flip-inline;
+            position-visibility: anchors-visible;
+        }
     }
 }
