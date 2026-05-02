@@ -5,7 +5,7 @@ import Search from '@zen/icons/search';
 import XMark from '@zen/icons/x-mark';
 import Popover from '@zen/popover';
 import { cx } from '@zen/utils/cx';
-import { ChangeEvent, ComponentProps, CSSProperties, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, ComponentProps, useId, useMemo, useRef, useState } from 'react';
 import { Badge, Button, Collapse } from '..';
 export default function Dropdown(
     props: (MultiSelectProps | SingleSelectProps) &
@@ -27,32 +27,17 @@ export default function Dropdown(
     const ref = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
     const triggerRef = useRef<HTMLDivElement>(null);
+    const dropdownId = useId();
     return (
-        <Popover
-            placement="bottom"
-            trigger="click"
-            show={open}
-            setShow={setOpen}
-            role="combobox"
-            disabled={disabled}
-            style={{
-                '--input-width': `${triggerRef.current?.offsetWidth}px`,
-            }}
-            content={
-                <DropdownItemList
-                    {...(mutable ? { mutable, onAdd } : { mutable })}
-                    {...(multiple ? { multiple, items, onChange, selected } : { items, onChange, selected })}
-                />
-            }
-        >
-            <div
+        <div>
+            <button
+                popoverTarget={`zen__dropdown-${dropdownId}`}
                 className={cx(
-                    'inline-flex h-10 w-56 grow items-center justify-between rounded border-2 border-input bg-background p-2 transition',
-                    disabled ? 'cursor-not-allowed bg-muted text-muted' : 'cursor-pointer',
-                    open && 'border-primary shadow-xs shadow-ring',
+                    'border-input bg-background inline-flex h-10 w-56 grow items-center justify-between rounded border-2 p-2 transition',
+                    disabled ? 'bg-muted text-muted cursor-not-allowed' : 'cursor-pointer',
+                    open && 'border-primary',
                     className,
                 )}
-                ref={triggerRef}
             >
                 <div
                     className={cx(
@@ -73,7 +58,7 @@ export default function Dropdown(
                             {(item, index, data) => (
                                 <Badge
                                     key={`collapsed_item_${index}`}
-                                    className="flex h-6 min-w-min gap-2 bg-input! pr-1"
+                                    className="bg-input! flex h-6 min-w-min gap-2 pr-1"
                                     variant={'secondary'}
                                 >
                                     {item}
@@ -83,9 +68,9 @@ export default function Dropdown(
                                         }}
                                         variant={'icon'}
                                         size={'icon'}
-                                        className="group bg-muted p-0.5 hover:bg-muted-foreground"
+                                        className="group bg-muted hover:bg-muted-foreground p-0.5"
                                     >
-                                        <XMark className="size-3 transition duration-300 group-hover:rotate-90 group-hover:text-muted" />
+                                        <XMark className="group-hover:text-muted size-3 transition duration-300 group-hover:rotate-90" />
                                     </Button>
                                 </Badge>
                             )}
@@ -96,17 +81,24 @@ export default function Dropdown(
                 </div>
                 <ChevronUp
                     className={cx(
-                        'size-4 rounded-full bg-input p-0.5 transition duration-300 ease-in-out',
+                        'bg-input size-4 rounded-full p-0.5 transition duration-300 ease-in-out',
                         open ? 'rotate-180' : 'rotate-0',
                         disabled ? 'text-muted-foreground' : 'text-foreground',
                     )}
                 />
-            </div>
-        </Popover>
+            </button>
+            <DropdownItemList
+                id={`zen__dropdown-${dropdownId}`}
+                {...(mutable ? { mutable, onAdd } : { mutable })}
+                {...(multiple ? { multiple, items, onChange, selected } : { items, onChange, selected })}
+            />
+        </div>
     );
 }
 function DropdownItemList(
-    props: (MultiSelectProps | SingleSelectProps) & (MutableDropdownProps | ImmutableDropdownProps) & DropdownProps,
+    props: (MultiSelectProps | SingleSelectProps) &
+        (MutableDropdownProps | ImmutableDropdownProps) &
+        DropdownProps & { id: string },
 ) {
     const { items, multiple, selected, onChange, mutable, onAdd } = props;
     const [search, setSearch] = useState('');
@@ -128,18 +120,22 @@ function DropdownItemList(
     });
     const selectedItems = selected instanceof Array ? selected.map((item) => item.key) : [selected.key];
     return (
-        <div className="flex min-w-[var(--input-width)] flex-col divide-y-2 divide-border overflow-hidden rounded border border-input bg-background">
+        <div
+            className="divide-border border-input bg-background fixed top-[calc(anchor(bottom)+5px)] min-w-[anchor-size(width)] flex-col divide-y-2 [justify-self:anchor-center] overflow-hidden rounded border [:popover-open]:flex"
+            popover="auto"
+            id={props.id}
+        >
             <div className={cx('inline-flex grow items-center rounded px-3 py-2')}>
-                <Search className="left-3 top-3 mr-2 size-4 text-muted-foreground" />
+                <Search className="text-muted-foreground top-3 left-3 mr-2 size-4" />
                 <input
-                    className="inline-flex grow bg-transparent text-sm text-foreground outline-hidden"
+                    className="text-foreground inline-flex grow bg-transparent text-sm outline-hidden"
                     placeholder="Search"
                     value={search}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
                 />
             </div>
             <ul
-                className={cx('max-h-60 grow overflow-auto shadow-sm', 'focus:outline-hidden focus:ring-0')}
+                className={cx('max-h-60 grow overflow-auto shadow-sm', 'focus:ring-0 focus:outline-hidden')}
                 ref={virtualRef}
             >
                 <div
@@ -157,10 +153,10 @@ function DropdownItemList(
                                 transform: `translateY(${virtualItem.start}px)`,
                             }}
                             className={cx(
-                                'absolute left-0 top-0 w-full cursor-pointer px-3 py-2 text-sm text-foreground',
+                                'text-foreground absolute top-0 left-0 w-full cursor-pointer px-3 py-2 text-sm transition',
                                 selectedItems.includes(filteredItems[virtualItem.index].key)
-                                    ? 'bg-primary/90 text-primary-foreground'
-                                    : 'transition hover:bg-primary/60',
+                                    ? 'bg-primary/90 text-primary-foreground dark:text-foreground'
+                                    : 'hover:bg-primary/60 hover:text-primary-foreground dark:hover:text-foreground',
                             )}
                             onClick={() => {
                                 if (multiple) {
@@ -189,7 +185,7 @@ function DropdownItemList(
                     filteredItems.length === 0 &&
                     (mutable ? (
                         <li
-                            className={cx('px-3 py-2 text-sm text-foreground')}
+                            className={cx('text-foreground px-3 py-2 text-sm')}
                             onClick={() => {
                                 onAdd({ text: search, key: search });
                                 setSearch('');
@@ -198,7 +194,7 @@ function DropdownItemList(
                             Add {search}
                         </li>
                     ) : (
-                        <li className={cx('cursor-not-allowed px-3 py-2 text-sm text-foreground')}>No results found</li>
+                        <li className={cx('text-foreground cursor-not-allowed px-3 py-2 text-sm')}>No results found</li>
                     ))}
             </ul>
         </div>

@@ -1,19 +1,19 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import { Meta, StoryFn, StoryObj } from '@storybook/react-vite';
 
 import Button from './index';
 export default {
     title: 'Button',
     component: Button,
 } as Meta<typeof Button>;
-const Template: StoryFn<typeof Button> = (args) => <Button {...args} />;
-
-export const Primary = Template.bind({});
-Primary.args = {
-    children: 'Button',
-    className: '',
-    variant: 'default',
-    size: 'default',
-    onClick: () => {
-        console.log('clicked');
+export const Primary: StoryObj<typeof Button> = {
+    args: {
+        children: 'Button',
+        className: '',
+        variant: 'default',
+        size: 'default',
+        onClick: () => {
+            console.log('clicked');
+        },
     },
+    render: (args) => <Button {...args} />,
 };

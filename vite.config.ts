@@ -1,12 +1,10 @@
-import react from '@vitejs/plugin-react-swc';
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
-import tsConfigPaths from 'vite-tsconfig-paths';
-import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
     plugins: [
         react(),
-        tsConfigPaths(),
         tailwindcss(),
         dts({
             insertTypesEntry: true,
@@ -14,7 +12,9 @@ export default defineConfig({
             exclude: ['**/*.stories.tsx', '**/*.test.tsx', '**/*.test.ts', '**/*.spec.tsx', '**/*.spec.ts'],
         }),
     ],
-
+    resolve: {
+        tsconfigPaths: true,
+    },
     build: {
         lib: {
             entry: './packages/index.ts',
