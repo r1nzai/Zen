@@ -46,9 +46,11 @@ export default function Popover(props: PopoverProps) {
         <div>
             <div
                 className="z-auto max-w-fit min-w-fit"
-                style={{
-                    'anchor-name': `--zen-popover-anchor-${rootId}`,
-                }}
+                style={
+                    {
+                        'anchor-name': `--zen-popover-anchor-${rootId}`,
+                    } as React.CSSProperties
+                }
                 popoverTarget={`zen__popover-${rootId}`}
                 popoverTargetAction="toggle"
                 onClick={
