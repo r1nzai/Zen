@@ -31,7 +31,6 @@
         "prepublishOnly": "npm run build"
     },
     "dependencies": {
-        "@floating-ui/react-dom": "^2.1.8",
         "@tanstack/react-virtual": "^3.13.24",
         "react": "^19.2.5",
         "react-dom": "^19.2.5"
