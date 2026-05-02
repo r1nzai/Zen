@@ -15,6 +15,17 @@ export default defineConfig({
     resolve: {
         tsconfigPaths: true,
     },
+    test: {
+        environment: 'jsdom',
+        globals: true,
+        setupFiles: ['./vitest.setup.ts'],
+        exclude: ['**/node_modules/**', '**/dist/**', '**/*.stories.tsx'],
+        coverage: {
+            provider: 'v8',
+            include: ['packages/**/*.{ts,tsx}'],
+            exclude: ['packages/**/*.stories.tsx', 'packages/**/index.ts', 'packages/icons/**'],
+        },
+    },
     build: {
         lib: {
             entry: './packages/index.ts',

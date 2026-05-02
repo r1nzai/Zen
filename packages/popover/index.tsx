@@ -9,12 +9,14 @@ export default function Popover(props: PopoverProps) {
         role = 'tooltip',
         triggerType = 'auto',
         trigger = 'click',
+        gap = '5px',
         show,
         setShow,
+        style,
         ...rest
     } = props;
 
-    const rootId = useId();
+    const rootId = crypto.randomUUID();
     const popoverRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         const popoverEl = popoverRef.current;
@@ -41,11 +43,11 @@ export default function Popover(props: PopoverProps) {
         }
     }, [show, triggerType]);
     return (
-        <>
+        <div>
             <div
-                className="z-auto max-w-fit min-w-fit [anchor-name:--zen-anchor]"
+                className="z-auto max-w-fit min-w-fit"
                 style={{
-                    '--zen-anchor': `zen__popover-anchor-${rootId}`,
+                    'anchor-name': `--zen-popover-anchor-${rootId}`,
                 }}
                 popoverTarget={`zen__popover-${rootId}`}
                 popoverTargetAction="toggle"
@@ -53,6 +55,7 @@ export default function Popover(props: PopoverProps) {
                     trigger === 'click'
                         ? (e: MouseEvent) => {
                               e.stopPropagation();
+                              e.nativeEvent.stopImmediatePropagation();
                               switch (triggerType) {
                                   case 'auto':
                                       popoverRef.current?.togglePopover?.();
@@ -92,13 +95,21 @@ export default function Popover(props: PopoverProps) {
                 popover={triggerType}
                 id={`zen__popover-${rootId}`}
                 className={cx(
-                    'zen__popover border-border bg-background shadow-secondary fixed top-[calc(anchor(bottom)+5px)] z-50 w-fit min-w-max [justify-self:anchor-center] rounded border [position-anchor:--zen-anchor] [position-area:block-end_center]',
+                    'zen__popover border-border bg-background shadow-secondary fixed z-50 w-[anchor-size(width)] min-w-max [justify-self:anchor-center] rounded border [position-area:block-end_center]',
                     className,
                 )}
+                style={
+                    {
+                        ...style,
+                        '--gap': gap,
+                        top: `calc(anchor(bottom) + var(--gap))`,
+                        'position-anchor': `--zen-popover-anchor-${rootId}`,
+                    } as React.CSSProperties
+                }
             >
                 {content}
             </div>
-        </>
+        </div>
     );
 }
 
@@ -115,6 +126,8 @@ export interface PopoverProps extends Omit<ComponentProps<'div'>, 'content'> {
     show?: boolean;
     setShow?: (show: boolean) => void;
     role?: AriaRole | ComponentRole;
+
+    gap?: string;
 }
 type AriaRole = 'tooltip' | 'dialog' | 'alertdialog' | 'menu' | 'listbox' | 'grid' | 'tree';
 type ComponentRole = 'select' | 'label' | 'combobox';

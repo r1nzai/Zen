@@ -29,9 +29,15 @@ export default function Dropdown(
     const triggerRef = useRef<HTMLDivElement>(null);
     const dropdownId = useId();
     return (
-        <div>
-            <button
-                popoverTarget={`zen__dropdown-${dropdownId}`}
+        <Popover
+            content={
+                <DropdownItemList
+                    {...(mutable ? { mutable, onAdd } : { mutable })}
+                    {...(multiple ? { multiple, items, onChange, selected } : { items, onChange, selected })}
+                />
+            }
+        >
+            <div
                 className={cx(
                     'border-input bg-background inline-flex h-10 w-56 grow items-center justify-between rounded border-2 p-2 transition',
                     disabled ? 'bg-muted text-muted cursor-not-allowed' : 'cursor-pointer',
@@ -57,7 +63,7 @@ export default function Dropdown(
                         >
                             {(item, index, data) => (
                                 <Badge
-                                    key={`collapsed_item_${index}`}
+                                    key={`collapsed_item_${data?.key ?? index}`}
                                     className="bg-input! flex h-6 min-w-min gap-2 pr-1"
                                     variant={'secondary'}
                                 >
@@ -86,19 +92,12 @@ export default function Dropdown(
                         disabled ? 'text-muted-foreground' : 'text-foreground',
                     )}
                 />
-            </button>
-            <DropdownItemList
-                id={`zen__dropdown-${dropdownId}`}
-                {...(mutable ? { mutable, onAdd } : { mutable })}
-                {...(multiple ? { multiple, items, onChange, selected } : { items, onChange, selected })}
-            />
-        </div>
+            </div>
+        </Popover>
     );
 }
 function DropdownItemList(
-    props: (MultiSelectProps | SingleSelectProps) &
-        (MutableDropdownProps | ImmutableDropdownProps) &
-        DropdownProps & { id: string },
+    props: (MultiSelectProps | SingleSelectProps) & (MutableDropdownProps | ImmutableDropdownProps) & DropdownProps,
 ) {
     const { items, multiple, selected, onChange, mutable, onAdd } = props;
     const [search, setSearch] = useState('');
@@ -120,12 +119,8 @@ function DropdownItemList(
     });
     const selectedItems = selected instanceof Array ? selected.map((item) => item.key) : [selected.key];
     return (
-        <div
-            className="divide-border border-input bg-background fixed top-[calc(anchor(bottom)+5px)] min-w-[anchor-size(width)] flex-col divide-y-2 [justify-self:anchor-center] overflow-hidden rounded border [:popover-open]:flex"
-            popover="auto"
-            id={props.id}
-        >
-            <div className={cx('inline-flex grow items-center rounded px-3 py-2')}>
+        <div className="divide-border border-input bg-background w-full flex-col divide-y-2 overflow-hidden rounded border">
+            <div className={cx('flex grow items-center rounded px-3 py-2')}>
                 <Search className="text-muted-foreground top-3 left-3 mr-2 size-4" />
                 <input
                     className="text-foreground inline-flex grow bg-transparent text-sm outline-hidden"
