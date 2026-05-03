@@ -119,6 +119,7 @@ export default function Popover(props: PopoverProps) {
                         ...style,
                         '--gap': gap,
                         top: `calc(anchor(bottom) + var(--gap))`,
+                        left: `calc(anchor(center) - 50%)`,
                         'position-anchor': `--zen-popover-anchor-${rootId}`,
                     } as React.CSSProperties
                 }
