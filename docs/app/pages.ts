@@ -91,6 +91,14 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'WithButton'],
     },
     {
+        slug: 'month-picker',
+        title: 'Month Picker',
+        description:
+            'A field showing a month that opens a year and a 12-month grid, with optional limits and clearing.',
+        parts: ['MonthPicker'],
+        examples: ['Default', 'Range'],
+    },
+    {
         slug: 'money-input',
         title: 'Money Input',
         description:
@@ -128,6 +136,14 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Segmented',
         description: 'A pill row for a few mutually exclusive options.',
         parts: ['Segmented'],
+    },
+    {
+        slug: 'select',
+        title: 'Select',
+        description:
+            'Pick one value from a short list, fully keyboard-driven. For long or searchable lists, use Dropdown.',
+        parts: ['Select'],
+        examples: ['Default', 'CustomOptions'],
     },
     {
         slug: 'side-nav',

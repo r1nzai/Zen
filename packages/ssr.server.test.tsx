@@ -19,6 +19,7 @@ import {
     InputGroupAddon,
     InputGroupInput,
     MoneyInput,
+    MonthPicker,
     NavPill,
     NavPillIndicator,
     NavPills,
@@ -26,6 +27,7 @@ import {
     Popover,
     ProgressRing,
     Segmented,
+    Select,
     SideNav,
     SideNavGroup,
     SideNavLink,
@@ -95,6 +97,8 @@ const components = {
         </Tabs>
     ),
     ToastProvider: <ToastProvider>app</ToastProvider>,
+    Select: <Select aria-label="x" value="a" options={[{ value: 'a', label: 'A' }]} onChange={() => {}} />,
+    MonthPicker: <MonthPicker aria-label="x" value="2026-09" onChange={() => {}} locale="en-US" />,
     CodeBlock: <CodeBlock code="const a = 1;" />,
     InputGroup: (
         <InputGroup>

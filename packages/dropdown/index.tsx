@@ -3,6 +3,7 @@ import XMark from '@zen/icons/x-mark';
 import Popover from '@zen/popover';
 import { InputGroupAddon, InputGroupInput } from '@zen/input-group';
 import { cx } from '@zen/utils/cx';
+import { FieldChevron } from '@zen/utils/field-chevron';
 import { useVirtualList } from '@zen/utils/useVirtualList';
 import { TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
 import { ChangeEvent, ComponentProps, useEffect, useMemo, useRef, useState } from 'react';
@@ -97,21 +98,7 @@ export default function Dropdown(
                         (selected.text ?? placeholder)
                     )}
                 </div>
-                <svg
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden
-                    className={cx(
-                        'text-muted-foreground size-4 shrink-0 transition-transform duration-300',
-                        open && 'rotate-180',
-                    )}
-                >
-                    <path d="m4 6 4 4 4-4" />
-                </svg>
+                <FieldChevron open={open} />
             </div>
         </Popover>
     );

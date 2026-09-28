@@ -14,12 +14,14 @@ export { default as Header } from './header';
 export * from './icons';
 export { default as Input } from './input';
 export { default as InputGroup, InputGroupAddon, InputGroupInput } from './input-group';
+export { default as MonthPicker, type MonthPickerProps } from './month-picker';
 export { default as MoneyInput, type MoneyInputOptions, type MoneyInputProps, useMoneyInput } from './money-input';
 export { default as NavPills, NavPill, NavPillIndicator } from './nav-pills';
 export { default as PageHeader } from './page-header';
 export { default as Popover } from './popover';
 export { default as ProgressRing } from './progress-ring';
 export { default as Segmented } from './segmented';
+export { default as Select, type SelectOption, type SelectProps } from './select';
 export { default as SideNav, SideNavGroup, SideNavLink } from './side-nav';
 export { default as Skeleton } from './skeleton';
 export { default as Spinner } from './spinner';
@@ -56,6 +58,19 @@ export { default as Toggle } from './toggle';
 export { default as ThemeToggle, ThemeScript, themeScript } from './theme-toggle';
 export { cva, type VariantProps } from './utils/cva';
 export { cx } from './utils/cx';
+export {
+    addMonths,
+    currentMonth,
+    formatMonth,
+    fromMonthIndex,
+    isMonth,
+    type Month,
+    monthIndex,
+    monthNames,
+    monthRange,
+    monthsBetween,
+} from './utils/month';
+export { type AnchoredPopupOptions, useAnchoredPopup } from './utils/useAnchoredPopup';
 export { useVirtualList, type VirtualItem, type VirtualListOptions } from './utils/useVirtualList';
 export { applyGraphicsMode, detectGraphicsMode, type GraphicsMode } from './utils/graphics';
 export {

@@ -1,6 +1,7 @@
 import { cx } from '@zen/utils/cx';
 import { useGraphicsMode } from '@zen/utils/graphics';
-import { CSSProperties, KeyboardEvent, useId, useRef } from 'react';
+import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
+import { KeyboardEvent } from 'react';
 
 export interface Action {
     label: string;
@@ -16,9 +17,14 @@ const ITEM =
  * outside clicks and Escape close it, and focus returns to the button.
  */
 export default function ActionsMenu({ label, actions, className }: ActionsMenuProps) {
-    const id = `zen__menu-${useId().replace(/[^\w-]/g, '')}`;
     useGraphicsMode();
-    const menuRef = useRef<HTMLDivElement>(null);
+    const popup = useAnchoredPopup<HTMLDivElement>({
+        align: 'end',
+        offset: 6,
+        // Focus the menu itself, so arrow keys work without highlighting an item for mouse users.
+        onOpenChange: (open) => open && popup.popupRef.current?.focus(),
+    });
+    const menuRef = popup.popupRef;
     const items = actions.filter((a): a is Action => !!a);
 
     const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -38,14 +44,13 @@ export default function ActionsMenu({ label, actions, className }: ActionsMenuPr
                 type="button"
                 aria-label={label}
                 aria-haspopup="menu"
-                popoverTarget={id}
+                {...popup.triggerProps}
                 className={cx(
                     'text-muted-foreground grid size-9 shrink-0 place-items-center rounded-lg outline-hidden',
                     'hover:bg-tint/[0.06] hover:text-foreground focus-visible:ring-ring/50 focus-visible:ring-2',
-                    '[&:has(+:popover-open)]:bg-tint/[0.06]',
+                    'data-popup-open:bg-tint/[0.06]',
                     className,
                 )}
-                style={{ anchorName: `--${id}` } as CSSProperties}
             >
                 <svg viewBox="0 0 16 16" fill="currentColor" className="size-4" aria-hidden>
                     <circle cx="3" cy="8" r="1.4" />
@@ -54,22 +59,12 @@ export default function ActionsMenu({ label, actions, className }: ActionsMenuPr
                 </svg>
             </button>
             <div
-                ref={menuRef}
-                id={id}
-                popover="auto"
+                {...popup.popupProps}
                 role="menu"
                 aria-label={label}
                 tabIndex={-1}
                 onKeyDown={onKeyDown}
-                onToggle={(e) => {
-                    // Focus the menu itself, so arrow keys work without highlighting an item for mouse users.
-                    if ((e.nativeEvent as ToggleEvent).newState === 'open') menuRef.current?.focus();
-                }}
-                className={cx(
-                    'zen__popover glass glass-blur text-foreground min-w-44 rounded-xl p-1.5 outline-hidden',
-                    '[position-area:block-end_span-inline-start] [position-try-fallbacks:flip-block]',
-                )}
-                style={{ positionAnchor: `--${id}`, inset: 'auto', margin: '6px 0' } as CSSProperties}
+                className="zen__popover glass glass-blur text-foreground min-w-44 rounded-xl p-1.5 outline-hidden"
             >
                 {items.map((a) => (
                     <button
@@ -82,7 +77,7 @@ export default function ActionsMenu({ label, actions, className }: ActionsMenuPr
                             a.destructive && 'text-destructive hover:bg-destructive/10 focus:bg-destructive/10',
                         )}
                         onClick={() => {
-                            menuRef.current?.hidePopover?.();
+                            popup.setOpen(false);
                             a.onClick();
                         }}
                     >
