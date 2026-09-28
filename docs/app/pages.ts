@@ -21,6 +21,20 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['ActionsMenu'],
     },
     {
+        slug: 'animated-number',
+        title: 'Animated Number',
+        description: 'Numbers and amounts that count smoothly to each new value.',
+        parts: ['AnimatedNumber', 'AnimatedMoney'],
+    },
+    {
+        slug: 'avatar',
+        title: 'Avatar',
+        description:
+            "A round picture, or the name's initial on the glowing accent. With an in-browser crop for uploads.",
+        parts: ['Avatar'],
+        examples: ['Default', 'Upload'],
+    },
+    {
         slug: 'backdrop',
         title: 'Backdrop',
         description:
@@ -77,6 +91,13 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['EditableCell'],
     },
     {
+        slug: 'field',
+        title: 'Field',
+        description:
+            'A label, hint and error wired to their control for screen readers, and messages for a whole form.',
+        parts: ['Field', 'FormMessage'],
+    },
+    {
         slug: 'header',
         title: 'Header',
         description: 'A sticky glass bar across the top of the page.',
@@ -91,12 +112,10 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'WithButton'],
     },
     {
-        slug: 'month-picker',
-        title: 'Month Picker',
-        description:
-            'A field showing a month that opens a year and a 12-month grid, with optional limits and clearing.',
-        parts: ['MonthPicker'],
-        examples: ['Default', 'Range'],
+        slug: 'meter',
+        title: 'Meter',
+        description: 'A measure against a limit, like spend against a budget: warm near it, red past it.',
+        parts: ['Meter'],
     },
     {
         slug: 'money-input',
@@ -105,6 +124,14 @@ export const COMPONENTS: ComponentDoc[] = [
             'Amounts in any currency and locale, with shorthand like 1.5L or 10k, exact to the paisa. Built on Input Group.',
         parts: ['MoneyInput'],
         examples: ['Default', 'Dollars', 'CurrencyMenu', 'Compact'],
+    },
+    {
+        slug: 'month-picker',
+        title: 'Month Picker',
+        description:
+            'A field showing a month that opens a year and a 12-month grid, with optional limits and clearing.',
+        parts: ['MonthPicker'],
+        examples: ['Default', 'Range'],
     },
     {
         slug: 'nav-pills',
@@ -159,6 +186,19 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['LoadingCard', 'WithSpinner'],
     },
     {
+        slug: 'slider',
+        title: 'Slider',
+        description: 'A native range input with a glowing thumb and any track you like.',
+        parts: ['Slider'],
+        examples: ['Default', 'Hue'],
+    },
+    {
+        slug: 'tab-bar',
+        title: 'Tab Bar',
+        description: 'Phone navigation fixed to the bottom of the screen. Works with any router.',
+        parts: ['TabBar', 'TabBarItem'],
+    },
+    {
         slug: 'table',
         title: 'Table',
         description:
@@ -181,14 +221,6 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['TableOfContents'],
     },
     {
-        slug: 'tree',
-        title: 'Tree Table',
-        description:
-            'Rows that open into child rows, animated, built from useTree and the Table parts. With virtual rows and editable cells, enough for a budget planner.',
-        parts: ['TreeRow', 'TreeCell', 'TreeLabel', 'TreeToggle'],
-        examples: ['Basic', 'Planner'],
-    },
-    {
         slug: 'tabs',
         title: 'Tabs',
         description: 'Switch between views, with an underline or a glowing pill that slides to the active tab.',
@@ -209,6 +241,14 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['ToastProvider'],
     },
     { slug: 'toggle', title: 'Toggle', description: 'An on/off switch.', parts: ['Toggle'] },
+    {
+        slug: 'tree',
+        title: 'Tree Table',
+        description:
+            'Rows that open into child rows, animated, built from useTree and the Table parts. With virtual rows and editable cells, enough for a budget planner.',
+        parts: ['TreeRow', 'TreeCell', 'TreeLabel', 'TreeToggle'],
+        examples: ['Basic', 'Planner'],
+    },
 ];
 
 // Trailing slashes throughout: pages are built as <path>/index.html, which Cloudflare serves at

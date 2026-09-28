@@ -3,6 +3,8 @@ import { renderToString } from 'react-dom/server';
 
 import {
     ActionsMenu,
+    AnimatedNumber,
+    Avatar,
     Backdrop,
     Badge,
     Button,
@@ -13,11 +15,13 @@ import {
     Dialog,
     Dropdown,
     EditableCell,
+    Field,
     Header,
     Input,
     InputGroup,
     InputGroupAddon,
     InputGroupInput,
+    Meter,
     MoneyInput,
     MonthPicker,
     NavPill,
@@ -29,12 +33,15 @@ import {
     Segmented,
     Select,
     SideNav,
+    Slider,
     SideNavGroup,
     SideNavLink,
     Skeleton,
     Spinner,
     Stat,
     Tab,
+    TabBar,
+    TabBarItem,
     Table,
     TableBody,
     TableCell,
@@ -99,6 +106,22 @@ const components = {
     ToastProvider: <ToastProvider>app</ToastProvider>,
     Select: <Select aria-label="x" value="a" options={[{ value: 'a', label: 'A' }]} onChange={() => {}} />,
     MonthPicker: <MonthPicker aria-label="x" value="2026-09" onChange={() => {}} locale="en-US" />,
+    AnimatedNumber: <AnimatedNumber value={42} />,
+    Avatar: <Avatar name="Rin" />,
+    Field: (
+        <Field label="Name" hint="Hint">
+            <input />
+        </Field>
+    ),
+    Meter: <Meter value={5} max={10} label="Meter" />,
+    Slider: <Slider aria-label="x" value={5} onValueChange={() => {}} />,
+    TabBar: (
+        <TabBar>
+            <TabBarItem href="/" active>
+                Home
+            </TabBarItem>
+        </TabBar>
+    ),
     CodeBlock: <CodeBlock code="const a = 1;" />,
     InputGroup: (
         <InputGroup>

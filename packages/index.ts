@@ -1,5 +1,7 @@
 import 'react';
 export { default as ActionsMenu, type Action } from './actions-menu';
+export { default as AnimatedNumber, AnimatedMoney, type AnimatedNumberProps } from './animated-number';
+export { default as Avatar, type AvatarProps, cropImageToSquare, ImageCropError } from './avatar';
 export { default as Backdrop } from './backdrop';
 export { default as Badge } from './badge';
 export { default as Button, buttonVariants } from './button';
@@ -9,11 +11,13 @@ export { default as Collapse } from './collapse';
 export { default as ConfirmDialog } from './confirm-dialog';
 export { default as Dialog } from './dialog';
 export { default as EditableCell, type EditableCellProps } from './editable-cell';
+export { default as Field, type FieldProps, FormMessage, type FormMessageProps } from './field';
 export { default as Dropdown, type DropdownItem } from './dropdown';
 export { default as Header } from './header';
 export * from './icons';
 export { default as Input } from './input';
 export { default as InputGroup, InputGroupAddon, InputGroupInput } from './input-group';
+export { default as Meter, type MeterProps } from './meter';
 export { default as MonthPicker, type MonthPickerProps } from './month-picker';
 export { default as MoneyInput, type MoneyInputOptions, type MoneyInputProps, useMoneyInput } from './money-input';
 export { default as NavPills, NavPill, NavPillIndicator } from './nav-pills';
@@ -24,7 +28,9 @@ export { default as Segmented } from './segmented';
 export { default as Select, type SelectOption, type SelectProps } from './select';
 export { default as SideNav, SideNavGroup, SideNavLink } from './side-nav';
 export { default as Skeleton } from './skeleton';
+export { default as Slider, type SliderProps } from './slider';
 export { default as Spinner } from './spinner';
+export { default as TabBar, TabBarItem, type TabBarItemProps, type TabBarProps } from './tab-bar';
 export {
     default as Table,
     type SortDirection,
@@ -58,6 +64,7 @@ export { default as Toggle } from './toggle';
 export { default as ThemeToggle, ThemeScript, themeScript } from './theme-toggle';
 export { cva, type VariantProps } from './utils/cva';
 export { cx } from './utils/cx';
+export { useHydrated } from './utils/useHydrated';
 export {
     addMonths,
     currentMonth,
