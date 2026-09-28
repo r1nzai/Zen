@@ -3,7 +3,13 @@ import type { ReactNode } from 'react';
 import { Sidebar } from './sidebar';
 
 /** Sidebar, page, and an optional "On this page" list. */
-export function DocsLayout({ children, toc }: { children: ReactNode; toc?: { id: string; label: string; depth?: number }[] }) {
+export function DocsLayout({
+    children,
+    toc,
+}: {
+    children: ReactNode;
+    toc?: { id: string; label: string; depth?: number }[];
+}) {
     return (
         <div className="mx-auto flex max-w-7xl gap-10 px-4 md:px-6">
             <aside className="sticky top-16 hidden h-[calc(100dvh-4rem)] w-56 shrink-0 overflow-y-auto py-10 md:block">
@@ -16,7 +22,10 @@ export function DocsLayout({ children, toc }: { children: ReactNode; toc?: { id:
                     <ul className="flex flex-col gap-2 text-sm">
                         {toc.map((item) => (
                             <li key={item.id} className={item.depth === 2 ? 'pl-3' : undefined}>
-                                <a href={`#${item.id}`} className="text-muted-foreground hover:text-foreground transition-colors">
+                                <a
+                                    href={`#${item.id}`}
+                                    className="text-muted-foreground hover:text-foreground transition-colors"
+                                >
                                     {item.label}
                                 </a>
                             </li>

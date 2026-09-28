@@ -9,9 +9,6 @@
         "directory": "./docs/build/client",
         // Unknown URLs get 404.html (React Router's fallback, which shows the not-found page).
         "not_found_handling": "404-page",
-        // Pages are built as components/button/index.html; serve them at /components/button
-        // (the URLs the site links to) instead of redirecting to /components/button/.
-        "html_handling": "drop-trailing-slash",
     },
     // The zone is on Cloudflare, so deploying creates the DNS record and certificate.
     "routes": [{ "pattern": "zen.rinzai.dev", "custom_domain": true }],

@@ -2,7 +2,15 @@ import { Button, cx, useToast } from '@rinzai/zen';
 import { highlight } from 'sugar-high';
 
 /** Highlighted code with a copy button. */
-export function CodeBlock({ code, lang = 'typescript', className }: { code: string; lang?: 'typescript' | 'shell' | 'css'; className?: string }) {
+export function CodeBlock({
+    code,
+    lang = 'typescript',
+    className,
+}: {
+    code: string;
+    lang?: 'typescript' | 'shell' | 'css';
+    className?: string;
+}) {
     const toast = useToast();
     return (
         <div className={cx('group relative', className)}>

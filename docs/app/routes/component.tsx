@@ -68,11 +68,18 @@ export default function ComponentPage({ params }: Route.ComponentProps) {
                         API reference
                     </h2>
                     {doc.parts.map((part) => (
-                        <PropsTable key={part} name={part} component={(Zen as unknown as Record<string, ComponentType>)[part]} />
+                        <PropsTable
+                            key={part}
+                            name={part}
+                            component={(Zen as unknown as Record<string, ComponentType>)[part]}
+                        />
                     ))}
                 </section>
 
-                <nav className="border-tint/[0.07] flex justify-between gap-4 border-t pt-8 text-sm" aria-label="Pagination">
+                <nav
+                    className="border-tint/[0.07] flex justify-between gap-4 border-t pt-8 text-sm"
+                    aria-label="Pagination"
+                >
                     {prev ? (
                         <Link to={componentPath(prev.slug)} className="text-muted-foreground hover:text-foreground">
                             ← {prev.title}

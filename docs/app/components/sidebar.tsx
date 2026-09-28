@@ -8,7 +8,7 @@ const GROUPS = [
         title: 'Get started',
         links: [
             { to: '/', label: 'Introduction' },
-            { to: '/showcase', label: 'Showcase' },
+            { to: '/showcase/', label: 'Showcase' },
         ],
     },
     { title: 'Components', links: COMPONENTS.map((c) => ({ to: componentPath(c.slug), label: c.title })) },

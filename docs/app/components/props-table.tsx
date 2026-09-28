@@ -15,9 +15,17 @@ interface DocgenInfo {
 }
 
 /** Props of one component, from its TypeScript types and JSDoc (attached at build time as __docgenInfo). */
-export function PropsTable({ name, component }: { name: string; component: ComponentType & { __docgenInfo?: DocgenInfo } }) {
+export function PropsTable({
+    name,
+    component,
+}: {
+    name: string;
+    component: ComponentType & { __docgenInfo?: DocgenInfo };
+}) {
     const info = component.__docgenInfo;
-    const props = Object.values(info?.props ?? {}).sort((a, b) => Number(b.required) - Number(a.required) || a.name.localeCompare(b.name));
+    const props = Object.values(info?.props ?? {}).sort(
+        (a, b) => Number(b.required) - Number(a.required) || a.name.localeCompare(b.name),
+    );
     return (
         <section className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
@@ -26,7 +34,9 @@ export function PropsTable({ name, component }: { name: string; component: Compo
                     {name}
                     {'>'}
                 </h3>
-                {info?.description && <p className="text-muted-foreground mt-0! text-sm leading-6">{info.description}</p>}
+                {info?.description && (
+                    <p className="text-muted-foreground mt-0! text-sm leading-6">{info.description}</p>
+                )}
             </div>
             <div className="glass overflow-x-auto rounded-xl">
                 {props.length ? (
@@ -43,11 +53,15 @@ export function PropsTable({ name, component }: { name: string; component: Compo
                                 <tr key={p.name} className="align-top">
                                     <td className="px-4 py-3">
                                         <div className="flex items-center gap-2">
-                                            <code className="text-foreground bg-transparent! p-0! text-[13px]">{p.name}</code>
+                                            <code className="text-foreground bg-transparent! p-0! text-[13px]">
+                                                {p.name}
+                                            </code>
                                             {p.required && <Badge variant="outline">Required</Badge>}
                                         </div>
                                         {p.description && (
-                                            <p className="text-muted-foreground mt-1! text-xs leading-5">{p.description}</p>
+                                            <p className="text-muted-foreground mt-1! text-xs leading-5">
+                                                {p.description}
+                                            </p>
                                         )}
                                     </td>
                                     <td className="px-4 py-3">
@@ -56,7 +70,9 @@ export function PropsTable({ name, component }: { name: string; component: Compo
                                         </code>
                                     </td>
                                     <td className="text-muted-foreground px-4 py-3">
-                                        <code className="bg-transparent! p-0! text-xs">{p.defaultValue?.value ?? '—'}</code>
+                                        <code className="bg-transparent! p-0! text-xs">
+                                            {p.defaultValue?.value ?? '—'}
+                                        </code>
                                     </td>
                                 </tr>
                             ))}

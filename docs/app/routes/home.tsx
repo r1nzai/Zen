@@ -37,7 +37,7 @@ export default function Home() {
                     <a href="#installation" className={buttonVariants()}>
                         Get started
                     </a>
-                    <Link to="/showcase" className={buttonVariants({ variant: 'outline' })}>
+                    <Link to="/showcase/" className={buttonVariants({ variant: 'outline' })}>
                         See it in an app
                     </Link>
                 </div>
@@ -86,7 +86,10 @@ export default function App() {
                 <section className="flex flex-col gap-4">
                     <h2 id="background">Background</h2>
                     <p>
-                        <Link to={componentPath('backdrop')} className="text-primary underline-offset-4 hover:underline">
+                        <Link
+                            to={componentPath('backdrop')}
+                            className="text-primary underline-offset-4 hover:underline"
+                        >
                             Backdrop
                         </Link>{' '}
                         draws the page background and lights up card edges near the pointer. It sits at{' '}
@@ -132,8 +135,12 @@ body {
                     <h2 id="components">Components</h2>
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {COMPONENTS.map((c) => (
-                            <Link key={c.slug} to={componentPath(c.slug)} className="group rounded-xl outline-hidden focus-visible:ring-2 focus-visible:ring-glow/50">
-                                <Card className="h-full transition-colors group-hover:bg-card/90">
+                            <Link
+                                key={c.slug}
+                                to={componentPath(c.slug)}
+                                className="group focus-visible:ring-glow/50 rounded-xl outline-hidden focus-visible:ring-2"
+                            >
+                                <Card className="group-hover:bg-card/90 h-full transition-colors">
                                     <p className="mt-0! font-semibold tracking-tight">{c.title}</p>
                                     <p className="text-muted-foreground mt-1! text-sm leading-6">{c.description}</p>
                                 </Card>

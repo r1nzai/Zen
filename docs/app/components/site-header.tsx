@@ -8,7 +8,11 @@ const GITHUB = 'https://github.com/r1nzai/Zen';
 
 export function SiteHeader() {
     const { pathname } = useLocation();
-    const section = pathname.startsWith('/components') ? 'components' : pathname.startsWith('/showcase') ? 'showcase' : 'docs';
+    const section = pathname.startsWith('/components')
+        ? 'components'
+        : pathname.startsWith('/showcase')
+          ? 'showcase'
+          : 'docs';
     return (
         <header className="glass glass-blur sticky top-0 z-40 rounded-none! border-x-0! border-t-0!">
             <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 md:px-6">
@@ -24,10 +28,10 @@ export function SiteHeader() {
                         <Link to="/">Docs</Link>
                     </NavPill>
                     <NavPill asChild active={section === 'components'}>
-                        <Link to="/components/button">Components</Link>
+                        <Link to="/components/button/">Components</Link>
                     </NavPill>
                     <NavPill asChild active={section === 'showcase'}>
-                        <Link to="/showcase">Showcase</Link>
+                        <Link to="/showcase/">Showcase</Link>
                     </NavPill>
                 </NavPills>
                 <div className="flex items-center gap-1">
@@ -71,7 +75,15 @@ function ThemeToggle() {
             }}
             className="text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground grid size-9 place-items-center rounded-lg"
         >
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="size-4" aria-hidden>
+            <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                className="size-4"
+                aria-hidden
+            >
                 {theme === 'dark' ? (
                     <path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z" />
                 ) : (
@@ -104,7 +116,15 @@ function MobileMenu() {
                 }
             >
                 <Button variant="icon" size="icon" aria-label="Menu">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="size-4" aria-hidden>
+                    <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        className="size-4"
+                        aria-hidden
+                    >
                         <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11" />
                     </svg>
                 </Button>
