@@ -186,7 +186,7 @@ export const COMPONENTS: ComponentDoc[] = [
         description:
             'Rows that open into child rows, animated, built from useTree and the Table parts. With virtual rows and editable cells, enough for a budget planner.',
         parts: ['TreeRow', 'TreeCell', 'TreeLabel', 'TreeToggle'],
-        examples: ['Planner'],
+        examples: ['Basic', 'Planner'],
     },
     {
         slug: 'tabs',
