@@ -30,6 +30,9 @@ export default defineConfig({
         ],
     },
     server: {
+        // In this WSL setup `localhost` resolves to ::1 only, which Windows can't reach
+        // (it forwards IPv4 loopback). Loopback only: not exposed on the LAN.
+        host: '127.0.0.1',
         fs: { allow: ['..'] },
     },
 });
