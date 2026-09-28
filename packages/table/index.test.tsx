@@ -46,6 +46,28 @@ describe('Table', () => {
         expect(screen.getByRole('region', { name: 'Schedule' })).toHaveAttribute('tabindex', '0');
     });
 
+    it('marks which edges have content scrolled under them (sticky cells frost only then)', () => {
+        render(<TableContainer label="T" />);
+        const el = screen.getByRole('region');
+        const scroll = (top: number, left: number) => {
+            Object.defineProperties(el, {
+                scrollTop: { configurable: true, value: top },
+                scrollLeft: { configurable: true, value: left },
+                clientHeight: { configurable: true, value: 100 },
+                scrollHeight: { configurable: true, value: 300 },
+            });
+            fireEvent.scroll(el);
+        };
+        scroll(0, 0);
+        expect(el).not.toHaveAttribute('data-under-top');
+        expect(el).not.toHaveAttribute('data-under-left');
+        expect(el).toHaveAttribute('data-under-bottom');
+        scroll(200, 30);
+        expect(el).toHaveAttribute('data-under-top');
+        expect(el).toHaveAttribute('data-under-left');
+        expect(el).not.toHaveAttribute('data-under-bottom');
+    });
+
     it('keeps the first column and the footer in view', () => {
         render(
             <Table>
@@ -61,7 +83,7 @@ describe('Table', () => {
                 </TableFooter>
             </Table>,
         );
-        expect(screen.getByRole('cell', { name: 'Rent' })).toHaveClass('sticky', 'left-0', 'zen__frosted');
+        expect(screen.getByRole('cell', { name: 'Rent' })).toHaveClass('sticky', 'left-0', 'zen__sticky-left');
         expect(screen.getByRole('cell', { name: 'Total' }).closest('tfoot')).toHaveClass('sticky', 'bottom-0');
     });
 

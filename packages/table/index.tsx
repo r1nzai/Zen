@@ -1,12 +1,12 @@
 import { cx } from '@zen/utils/cx';
-import { ComponentProps, ReactNode, useMemo, useState } from 'react';
+import { ComponentProps, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-/**
- * Sticky cells (header, first column, footer) are frosted glass: content
- * scrolling under them blurs instead of showing through. Where blur is off (no
- * GPU, touch screens, reduced transparency) they're solid card instead.
+/*
+ * Sticky cells (header, first column, footer) are clear glass at rest, and
+ * frost only while content passes under them: TableContainer marks the panel
+ * with data-under-top/left/bottom as it scrolls, and the zen__sticky-* rules in
+ * theme.css frost (or, without blur, fill) the cells on that edge.
  */
-const FROSTED = 'zen__frosted bg-card/80 backdrop-blur-[18px] backdrop-saturate-140';
 
 /**
  * The panel a table scrolls in: glass with an edge that catches the pointer
@@ -14,9 +14,41 @@ const FROSTED = 'zen__frosted bg-card/80 backdrop-blur-[18px] backdrop-saturate-
  * the table is wider. With `label`, it's a focusable region, so keyboard users
  * can scroll it too.
  */
-export function TableContainer({ label, className, ...rest }: TableContainerProps) {
+export function TableContainer({ label, className, ref, onScroll, ...rest }: TableContainerProps) {
+    const own = useRef<HTMLDivElement | null>(null);
+
+    // Which edges have content scrolled under them, as data attributes (no re-render).
+    const mark = useCallback(() => {
+        const el = own.current;
+        if (!el) return;
+        const set = (name: string, on: boolean) => (on ? el.setAttribute(name, '') : el.removeAttribute(name));
+        set('data-under-top', el.scrollTop > 0);
+        set('data-under-left', el.scrollLeft > 0);
+        set('data-under-bottom', el.scrollTop + el.clientHeight < el.scrollHeight - 1);
+    }, []);
+
+    useEffect(() => {
+        const el = own.current;
+        if (!el) return;
+        mark();
+        // Content and size changes move the edges too (rows added, groups opened, resizes).
+        const resizes = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(mark);
+        resizes?.observe(el);
+        if (el.firstElementChild) resizes?.observe(el.firstElementChild);
+        return () => resizes?.disconnect();
+    }, [mark]);
+
     return (
         <div
+            ref={(node) => {
+                own.current = node;
+                if (typeof ref === 'function') ref(node);
+                else if (ref) ref.current = node;
+            }}
+            onScroll={(e) => {
+                mark();
+                onScroll?.(e);
+            }}
             role={label ? 'region' : undefined}
             aria-label={label}
             tabIndex={label ? 0 : undefined}
@@ -72,9 +104,8 @@ export function TableHead({
             scope={scope}
             aria-sort={sortDirection === 'asc' ? 'ascending' : sortDirection === 'desc' ? 'descending' : undefined}
             className={cx(
-                FROSTED,
-                'border-tint/[0.07] text-muted-foreground sticky top-0 border-b px-3 py-2.5 align-middle text-xs leading-5 font-medium tracking-wider whitespace-nowrap uppercase',
-                sticky === 'left' ? 'left-0 z-30' : 'z-20',
+                'zen__sticky-top border-tint/[0.07] text-muted-foreground sticky top-0 border-b px-3 py-2.5 align-middle text-xs leading-5 font-medium tracking-wider whitespace-nowrap uppercase',
+                sticky === 'left' ? 'zen__sticky-left left-0 z-30' : 'z-20',
                 numeric ? 'text-right' : 'text-left',
                 className,
             )}
@@ -111,7 +142,8 @@ export function TableCell({ numeric, sticky, className, ...rest }: TableCellProp
                 // cells stay opaque (a translucent colour would show the scrolled content through them).
                 'border-tint/[0.045] border-b px-3 py-2.5 transition-colors duration-150',
                 'group-hover:[background-image:linear-gradient(oklch(var(--tint)/0.035),oklch(var(--tint)/0.035))]',
-                sticky === 'left' && cx(FROSTED, 'sticky left-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)]'),
+                sticky === 'left' &&
+                    'zen__sticky-left sticky left-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)]',
                 numeric && 'text-right tabular-nums',
                 className,
             )}
@@ -122,12 +154,13 @@ export function TableCell({ numeric, sticky, className, ...rest }: TableCellProp
 
 /** A footer cell: sits on the card, above a hairline. Use inside TableFooter. */
 export function TableFooterCell({ numeric, sticky, className, ...rest }: TableCellProps) {
+    // Footer cells frost with the bottom edge (and the first one with the left edge too).
     return (
         <td
             className={cx(
-                FROSTED,
-                'border-tint/[0.07] h-9 border-t px-3 font-medium whitespace-nowrap',
-                sticky === 'left' && 'sticky left-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)]',
+                'zen__sticky-bottom border-tint/[0.07] h-9 border-t px-3 font-medium whitespace-nowrap',
+                sticky === 'left' &&
+                    'zen__sticky-left sticky left-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)]',
                 numeric && 'text-right tabular-nums',
                 className,
             )}
