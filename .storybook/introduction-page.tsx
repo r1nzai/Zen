@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { highlight } from 'sugar-high';
 
 import { COMPONENTS } from '../docs/app/pages';
+import { version } from '../package.json';
 import Badge from '../packages/badge';
 import { buttonVariants } from '../packages/button';
 import Card, { Stat, StatRow } from '../packages/card';
@@ -18,12 +19,12 @@ export function IntroductionPage() {
         <Unstyled>
             <article className="flex flex-col gap-14 font-sans">
                 <header className="flex flex-col gap-5">
-                    <Badge className="self-start">v0.3 · dark glass</Badge>
+                    <Badge className="self-start">v{version} · dark glass</Badge>
                     <h1 className="text-aurora text-5xl font-semibold tracking-tight lg:text-6xl">Zen</h1>
                     <p className="text-muted-foreground mt-0! max-w-2xl text-lg leading-relaxed">
                         React components in dark glass: translucent surfaces, hairline borders that catch a pointer
                         light, and one accent colour carrying the UI. Built on native platform features (
-                        <code>{'<dialog>'}</code>, the Popover API, radio inputs) with a single runtime dependency.
+                        <code>{'<dialog>'}</code>, the Popover API, radio inputs) with no runtime dependencies.
                     </p>
                     <div className="flex flex-wrap gap-3">
                         <button className={buttonVariants()} onClick={() => navigate({ storyId: docsId('button') })}>
@@ -43,7 +44,7 @@ export function IntroductionPage() {
 
                 <StatRow>
                     <Stat label="Components" value={COMPONENTS.length} hint="and counting" />
-                    <Stat label="Runtime dependencies" value="1" hint="@tanstack/react-virtual" />
+                    <Stat label="Runtime dependencies" value="0" hint="React is the only peer" />
                     <Stat label="Themes" value="Dark + light" tone="positive" hint="OKLCH tokens" />
                 </StatRow>
 

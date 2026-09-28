@@ -33,6 +33,11 @@ const meta = preview.meta({
     },
 });
 
+// A long list (100 items, only the visible rows rendered), driven by the controls.
+export const Playground = meta.story({
+    args: { selected: { text: 'Item 1', key: 'item1' }, className: 'w-64' },
+});
+
 export const SingleSelect = meta.story({ render: () => <SingleSelectExample /> });
 
 export const MultiSelect = meta.story({ render: () => <MultiSelectExample /> });

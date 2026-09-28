@@ -8,24 +8,6 @@ import Dropdown from './index';
 // ---------------------------------------------------------------------------
 
 /**
- * Replace the real virtualizer with a trivial implementation that renders
- * every item without any scroll/intersection magic.  This lets us query
- * list items directly without scrolling the container.
- */
-vi.mock('@tanstack/react-virtual', () => ({
-    useVirtualizer: ({ count, estimateSize }: { count: number; estimateSize: () => number }) => ({
-        getTotalSize: () => count * estimateSize(),
-        getVirtualItems: () =>
-            Array.from({ length: count }, (_, i) => ({
-                key: i,
-                index: i,
-                start: i * estimateSize(),
-                size: estimateSize(),
-            })),
-    }),
-}));
-
-/**
  * jsdom does not implement ResizeObserver — provide a no-op stub so that the
  * Collapse component's `new ResizeObserver(cb)` call does not throw.
  * vi.fn() with an arrow-function implementation is NOT a valid constructor in

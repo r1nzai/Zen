@@ -1,5 +1,7 @@
 import { create } from 'storybook/theming';
 
+import { version } from '../package.json';
+
 // Sora's palette (packages/variables.css), converted from OKLCH to sRGB for Storybook's chrome.
 const fontBase = '"Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif';
 const fontCode = 'ui-monospace, SFMono-Regular, Menlo, monospace';
@@ -7,7 +9,8 @@ const fontCode = 'ui-monospace, SFMono-Regular, Menlo, monospace';
 const shared = {
     fontBase,
     fontCode,
-    brandTitle: 'Zen',
+    // Rendered as HTML: the name, then the current version, muted.
+    brandTitle: `Zen <span style="margin-left:6px;font:500 11px ui-monospace,monospace;opacity:.55">v${version}</span>`,
     brandUrl: '/',
     brandTarget: '_self',
     appBorderRadius: 10, // --radius: 0.625rem

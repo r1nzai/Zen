@@ -33,9 +33,6 @@
         "docs:dev": "pnpm --filter zen-docs dev",
         "docs:build": "pnpm --filter zen-docs build && cp docs/build/client/__spa-fallback.html docs/build/client/404.html && storybook build --output-dir docs/build/client/storybook"
     },
-    "dependencies": {
-        "@tanstack/react-virtual": "^3.14.13"
-    },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
         "@storybook/addon-a11y": "^10.6.0",

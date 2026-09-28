@@ -1,10 +1,10 @@
-import { useVirtualizer } from '@tanstack/react-virtual';
 import Search from '@zen/icons/search';
 import XMark from '@zen/icons/x-mark';
 import Popover from '@zen/popover';
 import { cx } from '@zen/utils/cx';
+import { useVirtualList } from '@zen/utils/useVirtualList';
 import { TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
-import { ChangeEvent, ComponentProps, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, ComponentProps, useEffect, useMemo, useRef, useState } from 'react';
 import { Badge, Button, Collapse } from '..';
 export default function Dropdown(
     props: (MultiSelectProps | SingleSelectProps) &
@@ -131,11 +131,12 @@ function DropdownItemList(
             }, [] as DropdownItem[]),
         [items, search],
     );
-    const rowVirtualizer = useVirtualizer({
-        count: filteredItems.length,
-        getScrollElement: () => virtualRef.current,
-        estimateSize: () => 35,
-    });
+    // Long lists render only the rows in view.
+    const rows = useVirtualList({ count: filteredItems.length, itemHeight: 35, scrollRef: virtualRef });
+    // New search, new results: show them from the top.
+    useEffect(() => {
+        if (virtualRef.current) virtualRef.current.scrollTop = 0;
+    }, [search]);
     const selectedItems = selected instanceof Array ? selected.map((item) => item.key) : [selected.key];
     return (
         <div className="divide-tint/10 flex w-full flex-col divide-y overflow-hidden rounded-xl">
@@ -155,14 +156,14 @@ function DropdownItemList(
             >
                 <div
                     style={{
-                        height: `${rowVirtualizer.getTotalSize()}px`,
+                        height: `${rows.totalSize}px`,
                         width: '100%',
                         position: 'relative',
                     }}
                 >
-                    {rowVirtualizer.getVirtualItems().map((virtualItem) => (
+                    {rows.items.map((virtualItem) => (
                         <li
-                            key={virtualItem.key}
+                            key={virtualItem.index}
                             role="option"
                             aria-selected={selectedItems.includes(filteredItems[virtualItem.index].key)}
                             style={{

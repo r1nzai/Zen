@@ -2,6 +2,7 @@ import { Button, buttonVariants, Header, NavPill, NavPillIndicator, NavPills, Po
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 
+import { version } from '../../../package.json';
 import { Sidebar } from './sidebar';
 
 const GITHUB = 'https://github.com/r1nzai/Zen';
@@ -21,6 +22,13 @@ export function SiteHeader() {
                     <Link to="/" className="text-lg font-semibold tracking-tight">
                         Zen
                     </Link>
+                    <a
+                        href={`https://www.npmjs.com/package/@rinzai/zen/v/${version}`}
+                        aria-label={`Version ${version} on npm`}
+                        className="border-tint/10 text-muted-foreground hover:text-foreground hover:border-tint/20 rounded-md border px-1.5 py-0.5 font-mono text-xs transition-colors"
+                    >
+                        v{version}
+                    </a>
                 </div>
                 <NavPills aria-label="Main" className="hidden md:block">
                     <NavPillIndicator />
