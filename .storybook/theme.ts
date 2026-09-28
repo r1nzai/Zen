@@ -50,8 +50,8 @@ export const dark = create({
 export const light = create({
     ...shared,
     base: 'light',
-    colorPrimary: '#7e4ed7',
-    colorSecondary: '#7e4ed7',
+    colorPrimary: '#6a39bd',
+    colorSecondary: '#6a39bd',
 
     appBg: '#fafafd',
     appContentBg: '#fafafd',
@@ -66,7 +66,7 @@ export const light = create({
     barBg: '#ffffff',
     barTextColor: '#64616e',
     barHoverColor: '#191721',
-    barSelectedColor: '#7e4ed7',
+    barSelectedColor: '#6a39bd',
 
     buttonBg: '#ffffff',
     buttonBorder: '#e1e0e7',

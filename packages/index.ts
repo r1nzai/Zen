@@ -64,6 +64,23 @@ export { default as Toggle } from './toggle';
 export { default as ThemeToggle, ThemeScript, themeScript } from './theme-toggle';
 export { cva, type VariantProps } from './utils/cva';
 export { cx } from './utils/cx';
+export {
+    type Appearance,
+    applyPreset,
+    applyTheme,
+    contrastRatio,
+    customize,
+    DEFAULT_THEME,
+    type Intensity,
+    INTENSITIES,
+    normalizeTheme,
+    oklchToLinearRgb,
+    type PresetId,
+    PRESETS,
+    resetTheme,
+    type ThemeSettings,
+    themeVars,
+} from './utils/theme';
 export { useHydrated } from './utils/useHydrated';
 export {
     addMonths,

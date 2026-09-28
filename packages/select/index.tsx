@@ -36,16 +36,16 @@ export default function Select<V extends string>({
         matchWidth: true,
         onOpenChange: (open) => {
             if (!open) return;
-            // Start on the chosen option, and take focus so the keys work.
+            // Start on the chosen option.
             setActive(
                 Math.max(
                     0,
                     options.findIndex((o) => o.value === value),
                 ),
             );
-            requestAnimationFrame(() => listRef.current?.focus());
         },
     });
+    // Take focus once open, so the keys work.
     useEffect(() => {
         if (popup.open) listRef.current?.focus();
     }, [popup.open]);
