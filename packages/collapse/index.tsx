@@ -89,6 +89,8 @@ export default function Collapse<TData>(props: CollapseProps<TData>) {
             {renderItems.hidden?.length > 0 && (
                 <Popover
                     trigger="click"
+                    // A flex box, so the trigger is just the badge (no line box around it) and centres with the others.
+                    triggerClassName="flex rounded-md"
                     content={
                         <div className="grid max-h-60 grid-flow-row grid-cols-2 gap-3 overflow-auto p-2">
                             {renderItems.hidden.map((section, index) =>
