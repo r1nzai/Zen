@@ -1,4 +1,4 @@
-import { Button, buttonVariants, NavPill, NavPillIndicator, NavPills, Popover } from '@rinzai/zen';
+import { Button, buttonVariants, Header, NavPill, NavPillIndicator, NavPills, Popover, ThemeToggle } from '@rinzai/zen';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 
@@ -14,8 +14,8 @@ export function SiteHeader() {
           ? 'showcase'
           : 'docs';
     return (
-        <header className="glass glass-blur sticky top-0 z-40 rounded-none! border-x-0! border-t-0!">
-            <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 md:px-6">
+        <Header>
+            <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                     <MobileMenu />
                     <Link to="/" className="text-lg font-semibold tracking-tight">
@@ -51,49 +51,7 @@ export function SiteHeader() {
                     <ThemeToggle />
                 </div>
             </div>
-        </header>
-    );
-}
-
-/** Light/dark switch, remembered in localStorage (applied before paint by the script in root.tsx). */
-function ThemeToggle() {
-    const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-    useEffect(() => setTheme(document.documentElement.classList.contains('light') ? 'light' : 'dark'), []);
-    const next = theme === 'dark' ? 'light' : 'dark';
-    return (
-        <button
-            type="button"
-            aria-label={`Switch to ${next} theme`}
-            onClick={() => {
-                document.documentElement.classList.replace(theme, next);
-                try {
-                    localStorage.setItem('theme', next);
-                } catch {
-                    /* private mode: just this visit */
-                }
-                setTheme(next);
-            }}
-            className="text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground grid size-9 place-items-center rounded-lg"
-        >
-            <svg
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                className="size-4"
-                aria-hidden
-            >
-                {theme === 'dark' ? (
-                    <path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z" />
-                ) : (
-                    <>
-                        <circle cx="8" cy="8" r="3" />
-                        <path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" />
-                    </>
-                )}
-            </svg>
-        </button>
+        </Header>
     );
 }
 

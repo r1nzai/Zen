@@ -2,6 +2,7 @@ import * as Zen from '@rinzai/zen';
 import type { ComponentType } from 'react';
 import { Link } from 'react-router';
 
+import { CodeCard } from '../components/code-block';
 import { DocsLayout, PageHeader } from '../components/docs-layout';
 import { ExampleBlock } from '../components/example-block';
 import { PropsTable } from '../components/props-table';
@@ -44,14 +45,7 @@ export default function ComponentPage({ params }: Route.ComponentProps) {
 
                 <section className="flex flex-col gap-3">
                     <h2 className="text-2xl">Import</h2>
-                    <Zen.Card className="overflow-hidden p-0!">
-                        <pre className="m-0! rounded-none! bg-transparent! p-5! font-mono text-[13px]! font-normal!">
-                            <span className="text-[oklch(0.75_0.14_330)]">import</span> {'{ '}
-                            {doc.parts.join(', ')}
-                            {' }'} <span className="text-[oklch(0.75_0.14_330)]">from</span>{' '}
-                            <span className="text-[oklch(0.8_0.12_150)]">'@rinzai/zen'</span>;
-                        </pre>
-                    </Zen.Card>
+                    <CodeCard code={`import { ${doc.parts.join(', ')} } from '@rinzai/zen';`} />
                 </section>
 
                 {rest.length > 0 && (

@@ -7,25 +7,38 @@ import {
     Badge,
     Button,
     Card,
+    CodeBlock,
     Collapse,
     ConfirmDialog,
     Dialog,
     Dropdown,
+    Header,
     Input,
     NavPill,
     NavPillIndicator,
     NavPills,
+    PageHeader,
     Popover,
     ProgressRing,
     Segmented,
+    SideNav,
+    SideNavGroup,
+    SideNavLink,
     Skeleton,
     Spinner,
     Stat,
     Tab,
+    Table,
+    TableBody,
+    TableCell,
+    TableOfContents,
+    TableRow,
     TabList,
     TabPanel,
     Tabs,
     TextArea,
+    ThemeScript,
+    ThemeToggle,
     ToastProvider,
     Toggle,
 } from '.';
@@ -72,6 +85,30 @@ const components = {
         </Tabs>
     ),
     ToastProvider: <ToastProvider>app</ToastProvider>,
+    CodeBlock: <CodeBlock code="const a = 1;" />,
+    Header: <Header>Zen</Header>,
+    PageHeader: <PageHeader title="Title" lead="Lead" />,
+    SideNav: (
+        <SideNav aria-label="Docs">
+            <SideNavGroup title="Group">
+                <SideNavLink href="/" active>
+                    Home
+                </SideNavLink>
+            </SideNavGroup>
+        </SideNav>
+    ),
+    Table: (
+        <Table>
+            <TableBody>
+                <TableRow>
+                    <TableCell>cell</TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
+    ),
+    TableOfContents: <TableOfContents items={[{ id: 'a', label: 'A' }]} />,
+    ThemeScript: <ThemeScript />,
+    ThemeToggle: <ThemeToggle />,
 };
 
 describe('server rendering', () => {

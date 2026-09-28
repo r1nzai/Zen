@@ -1,4 +1,4 @@
-import { Backdrop, ToastProvider } from '@rinzai/zen';
+import { Backdrop, ThemeScript, ToastProvider } from '@rinzai/zen';
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 
 import topo from '../../packages/backdrop/examples/topo.svg';
@@ -13,9 +13,6 @@ export const links: Route.LinksFunction = () => [
     { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
 ];
 
-// Before first paint: the remembered theme, so a light-mode visitor never sees a dark flash.
-const THEME_SCRIPT = `try{if(localStorage.getItem('theme')==='light')document.documentElement.classList.replace('dark','light')}catch(e){}`;
-
 export function Layout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" className="dark" suppressHydrationWarning>
@@ -23,7 +20,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <meta name="theme-color" content="#0d0b12" />
-                <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+                {/* Before first paint: the remembered theme, so light-mode visitors never see a dark flash. */}
+                <ThemeScript />
                 <Meta />
                 <Links />
             </head>

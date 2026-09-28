@@ -1,16 +1,7 @@
 import { cx } from '@zen/utils/cx';
 import { PILL_INDICATOR, PILL_ITEM, PILL_TRACK } from '@zen/utils/styles';
-import {
-    cloneElement,
-    ComponentProps,
-    createContext,
-    isValidElement,
-    ReactElement,
-    useContext,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from 'react';
+import { Slot } from '@zen/utils/slot';
+import { ComponentProps, createContext, useContext, useLayoutEffect, useRef, useState } from 'react';
 
 const PillContext = createContext<{ x: number; w: number } | null>(null);
 
@@ -87,20 +78,13 @@ const LINK = cx(
  * styles go onto your own link element instead (a router's Link or NavLink).
  */
 export function NavPill({ active, asChild, className, children, ...rest }: NavPillProps) {
-    const current = active ? ('page' as const) : undefined;
-    if (asChild && isValidElement(children)) {
-        const child = children as ReactElement<ComponentProps<'a'>>;
-        return cloneElement(child, {
-            ...rest,
-            ...(current && { 'aria-current': current }),
-            className: cx(LINK, child.props.className, className),
-        });
+    const props = { ...rest, 'aria-current': active ? ('page' as const) : undefined, className: cx(LINK, className) };
+    // With asChild, a router link that sets aria-current itself keeps it unless `active` is given.
+    if (asChild) {
+        if (!active) delete props['aria-current'];
+        return <Slot {...props}>{children}</Slot>;
     }
-    return (
-        <a aria-current={current} className={cx(LINK, className)} {...rest}>
-            {children}
-        </a>
-    );
+    return <a {...props}>{children}</a>;
 }
 
 export type NavPillsProps = ComponentProps<'nav'>;

@@ -143,6 +143,30 @@
     }
 }
 
+/* ───────────────────────── Code ───────────────────────── */
+
+/*
+ * Syntax colours for CodeBlock, in the --sh-* variables sugar-high reads
+ * (other highlighters can map their own classes to these).
+ */
+.zen__code-block {
+    --sh-class: oklch(var(--primary));
+    --sh-identifier: oklch(var(--foreground));
+    --sh-sign: oklch(var(--muted-foreground));
+    --sh-property: oklch(0.8 0.1 250);
+    --sh-entity: oklch(0.78 0.12 200);
+    --sh-jsxliterals: oklch(var(--foreground) / 0.85);
+    --sh-string: oklch(0.8 0.12 150);
+    --sh-keyword: oklch(0.75 0.14 330);
+    --sh-comment: oklch(var(--muted-foreground) / 0.8);
+}
+:is(.light, [data-theme='light']) .zen__code-block {
+    --sh-property: oklch(0.5 0.15 250);
+    --sh-entity: oklch(0.5 0.12 200);
+    --sh-string: oklch(0.5 0.14 150);
+    --sh-keyword: oklch(0.5 0.2 330);
+}
+
 /* ───────────────────────── Backdrop: contours / dots + light ───────────────────────── */
 
 .zen-backdrop {

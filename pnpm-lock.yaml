@@ -114,6 +114,9 @@ importers:
       storybook:
         specifier: ^10.6.0
         version: 10.6.0(@types/react@19.3.0)(prettier@3.9.9)(react@19.3.0)
+      sugar-high:
+        specifier: ^2.5.0
+        version: 2.5.0
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3

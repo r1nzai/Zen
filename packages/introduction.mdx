@@ -1,59 +1,7 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 
+import { IntroductionPage } from '../.storybook/introduction-page';
+
 <Meta title="Introduction" />
 
-# Introduction
-
-React components in dark glass: translucent surfaces, hairline borders that catch a pointer light, and one accent colour carrying the UI. Built on native platform features (`<dialog>`, the Popover API, radio inputs), styled with Tailwind CSS, themed with CSS variables.
-
-## Installation
-
-```bash
-pnpm add @rinzai/zen
-```
-
-Import the stylesheet once, near the root of your app. It includes the default theme.
-
-```tsx
-import '@rinzai/zen/css';
-```
-
-The look is set in [Inter](https://rsms.me/inter/). Load it however you like (for example `@fontsource-variable/inter`).
-
-## Usage
-
-```tsx
-import { Backdrop, Button, Card } from '@rinzai/zen';
-
-export default function App() {
-    return (
-        <>
-            <Backdrop />
-            <Card title="Budget">
-                <Button>Save changes</Button>
-            </Card>
-        </>
-    );
-}
-```
-
-`<Backdrop>` draws the page background (aurora glows over a dot grid, or topographic contours with `topoSrc`) and lights up `.glow-edge` borders near the pointer. It sits at `z-index: -1`, so give `<html>` the background colour and keep `<body>` transparent:
-
-```css
-html {
-    background: oklch(var(--background));
-}
-body {
-    background: transparent;
-}
-```
-
-## Theming
-
-Dark is the default. Add the `light` class (or `data-theme="light"`) to an element for the light palette, and `dark` to switch back inside it.
-
-Colours are OKLCH `L C H` triplets such as `--primary: 0.72 0.13 295`, used as `oklch(var(--primary))` or `oklch(var(--primary) / 0.5)`. Lightness is fixed per role, so changing only the hue keeps contrast intact. `--tint` is the ink for translucent overlays (white on dark), and `--glow-strength` (0 to 1) scales every glow. The defaults sit in a cascade layer, so your own overrides always win.
-
-## Components
-
-Pick a component from the sidebar to see its examples and props.
+<IntroductionPage />

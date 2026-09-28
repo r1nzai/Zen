@@ -21,22 +21,3 @@ body {
     scrollbar-width: thin;
     scrollbar-color: oklch(var(--tint) / 0.14) transparent;
 }
-
-/* Code blocks (sugar-high): Zen's palette. */
-.code {
-    --sh-class: oklch(var(--primary));
-    --sh-identifier: oklch(var(--foreground));
-    --sh-sign: oklch(var(--muted-foreground));
-    --sh-property: oklch(0.8 0.1 250);
-    --sh-entity: oklch(0.78 0.12 200);
-    --sh-jsxliterals: oklch(var(--foreground) / 0.85);
-    --sh-string: oklch(0.8 0.12 150);
-    --sh-keyword: oklch(0.75 0.14 330);
-    --sh-comment: oklch(var(--muted-foreground) / 0.8);
-}
-.light .code {
-    --sh-property: oklch(0.5 0.15 250);
-    --sh-entity: oklch(0.5 0.12 200);
-    --sh-string: oklch(0.5 0.14 150);
-    --sh-keyword: oklch(0.5 0.2 330);
-}

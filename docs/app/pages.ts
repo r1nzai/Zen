@@ -44,6 +44,13 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Goal', 'Stats'],
     },
     {
+        slug: 'code-block',
+        title: 'Code Block',
+        description: 'Code with a copy button; bring your own highlighter for colours.',
+        parts: ['CodeBlock'],
+        examples: ['Highlighted', 'Plain'],
+    },
+    {
         slug: 'collapse',
         title: 'Collapse',
         description: 'Shows as many items as fit on one line, and the rest behind "+N".',
@@ -63,12 +70,24 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['Dropdown'],
         examples: ['SingleSelect', 'MultiSelect'],
     },
+    {
+        slug: 'header',
+        title: 'Header',
+        description: 'A sticky glass bar across the top of the page.',
+        parts: ['Header'],
+    },
     { slug: 'input', title: 'Input', description: 'Text fields in faint glass that glow on focus.', parts: ['Input'] },
     {
         slug: 'nav-pills',
         title: 'Nav Pills',
         description: 'Top navigation with a glowing pill that slides to the current page. Works with any router.',
         parts: ['NavPills', 'NavPill', 'NavPillIndicator'],
+    },
+    {
+        slug: 'page-header',
+        title: 'Page Header',
+        description: 'Eyebrow, aurora title and lead paragraph for the top of a page.',
+        parts: ['PageHeader'],
     },
     {
         slug: 'popover',
@@ -90,11 +109,29 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['Segmented'],
     },
     {
+        slug: 'side-nav',
+        title: 'Side Nav',
+        description: 'Vertical navigation in titled groups, for docs and settings sidebars. Works with any router.',
+        parts: ['SideNav', 'SideNavGroup', 'SideNavLink'],
+    },
+    {
         slug: 'skeleton',
         title: 'Skeleton & Spinner',
         description: 'Placeholders for content on its way.',
         parts: ['Skeleton', 'Spinner'],
         examples: ['LoadingCard', 'WithSpinner'],
+    },
+    {
+        slug: 'table',
+        title: 'Table',
+        description: 'Plain HTML tables on a glass panel, with hairline rows.',
+        parts: ['Table', 'TableHeader', 'TableBody', 'TableRow', 'TableHead', 'TableCell'],
+    },
+    {
+        slug: 'table-of-contents',
+        title: 'Table of Contents',
+        description: 'An "On this page" list that highlights the section being read.',
+        parts: ['TableOfContents'],
     },
     {
         slug: 'tabs',
@@ -104,6 +141,12 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Underline', 'Pills'],
     },
     { slug: 'textarea', title: 'Textarea', description: 'Multi-line text, styled like Input.', parts: ['TextArea'] },
+    {
+        slug: 'theme-toggle',
+        title: 'Theme Toggle',
+        description: 'Switches between the dark and light themes and remembers the choice.',
+        parts: ['ThemeToggle', 'ThemeScript'],
+    },
     {
         slug: 'toast',
         title: 'Toast',
