@@ -10,7 +10,7 @@ export default function Card({ title, action, children, className, ...rest }: Ca
         >
             {(title || action) && (
                 <header className="mb-4 flex items-center justify-between gap-4">
-                    {title && <h4 className="text-base tracking-tight">{title}</h4>}
+                    {title && <h4 className="text-base font-semibold tracking-tight">{title}</h4>}
                     {action}
                 </header>
             )}

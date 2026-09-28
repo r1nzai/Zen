@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { useGraphicsMode } from '@zen/utils/graphics';
 import { ComponentProps } from 'react';
 
 /**
@@ -7,6 +8,7 @@ import { ComponentProps } from 'react';
  * solid instead (a live blur over scrolling content stutters there).
  */
 export default function Header({ className, children, ...rest }: ComponentProps<'header'>) {
+    useGraphicsMode();
     return (
         <header
             className={cx(

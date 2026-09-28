@@ -1,0 +1,7 @@
+/* Storybook uses Zen like a Tailwind app: one Tailwind build, Zen's theme and optional base. */
+@import 'tailwindcss';
+@import '../packages/theme.css';
+@import '../packages/base.css';
+
+@source '../packages';
+@source '.';

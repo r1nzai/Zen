@@ -340,7 +340,7 @@ function Goals() {
 
 const GLOW = { off: '0', soft: '0.55', bright: '1' } as const;
 
-/** Live controls for the theme's glow, like Sora's appearance settings. */
+/** Live controls for the theme's glow and motion. */
 function Appearance() {
     const [glow, setGlow] = useState<keyof typeof GLOW>('soft');
     const [reduceMotion, setReduceMotion] = useState(false);

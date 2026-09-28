@@ -1,0 +1,98 @@
+/*
+ * Optional app base: the page setup a Zen app wants (the
+ * backdrop shows through a transparent body), a heading scale, labels, inline
+ * code, selection colour and quiet scrollbars. Plain CSS in a low-priority
+ * layer, so it works with or without Tailwind and your own styles win.
+ */
+@layer base {
+    html {
+        background: oklch(var(--background));
+    }
+    body {
+        /* Transparent: an opaque body would paint over the z-index −1 <Backdrop>. */
+        background: transparent;
+        color: oklch(var(--foreground));
+        font-family: 'Inter Variable', Inter, ui-sans-serif, system-ui, sans-serif;
+        font-feature-settings: 'cv11', 'ss01';
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: oklch(var(--border));
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-weight: 600;
+    }
+    h1,
+    h2,
+    h3,
+    h4 {
+        letter-spacing: -0.025em;
+    }
+    h1 {
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+    }
+    @media (width >= 64rem) {
+        h1 {
+            font-size: 3rem;
+            line-height: 1;
+        }
+    }
+    h2 {
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+    }
+    h3 {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+    }
+    h4 {
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+    }
+    h5,
+    h6 {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+    label {
+        font-size: 0.875rem;
+        line-height: 1;
+        font-weight: 500;
+    }
+    code,
+    pre {
+        border-radius: 0.25rem;
+        background: oklch(var(--muted));
+        padding: 0.2rem 0.3rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        color: oklch(var(--muted-foreground));
+    }
+    ::selection {
+        background: oklch(var(--glow) / 0.35);
+    }
+    /*
+     * Grid items default to min-width: auto, so a wide table inside one would
+     * stretch its column (and the page) instead of scrolling in its own frame.
+     */
+    .grid > * {
+        min-width: 0;
+    }
+    /* Thin, quiet scrollbars where scrolling is real (tables, long dialogs). */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: oklch(var(--tint) / 0.14) transparent;
+    }
+}

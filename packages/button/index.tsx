@@ -8,11 +8,14 @@ export default function Button({
     size,
     loading = false,
     disabled,
+    type = 'button',
     children,
     ...rest
 }: ButtonProps) {
     return (
         <button
+            // A plain action by default, so it never submits a form by accident; pass type="submit" to submit.
+            type={type}
             disabled={disabled || loading}
             aria-busy={loading || undefined}
             className={buttonVariants({ variant, size, className })}

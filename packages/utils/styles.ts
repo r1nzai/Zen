@@ -29,3 +29,15 @@ export const PILL_INDICATOR =
 /** …and items that sit above it. */
 export const PILL_ITEM =
     'relative z-10 rounded-full px-3.5 py-1.5 text-sm whitespace-nowrap outline-hidden transition-colors duration-300 select-none focus-visible:ring-2 focus-visible:ring-ring/40';
+
+/**
+ * For a wrapper whose child input takes focus (InputGroup): FIELD, lit by
+ * focus-within. Written out in full rather than derived from FIELD, because
+ * Tailwind only generates classes that appear literally in the source.
+ */
+export const FIELD_WITHIN =
+    'flex w-full items-center gap-1.5 h-10 rounded-lg border border-tint/10 bg-tint/[0.035] px-3 text-sm text-foreground ' +
+    'shadow-[inset_0_1px_0_hsl(0_0%_100%/0.04)] transition-[border-color,background-color,box-shadow] duration-200 ' +
+    'placeholder:text-muted-foreground hover:border-tint/20 ' +
+    'focus-within:border-glow/60 focus-within:bg-tint/[0.05] focus-within:shadow-[0_0_0_3px_oklch(var(--glow)/0.16),0_0_24px_-6px_oklch(var(--glow)/0.6)] focus-within:outline-hidden ' +
+    'disabled:cursor-not-allowed disabled:opacity-50';

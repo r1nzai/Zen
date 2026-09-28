@@ -14,6 +14,10 @@ import {
     Dropdown,
     Header,
     Input,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+    MoneyInput,
     NavPill,
     NavPillIndicator,
     NavPills,
@@ -86,6 +90,13 @@ const components = {
     ),
     ToastProvider: <ToastProvider>app</ToastProvider>,
     CodeBlock: <CodeBlock code="const a = 1;" />,
+    InputGroup: (
+        <InputGroup>
+            <InputGroupAddon>$</InputGroupAddon>
+            <InputGroupInput />
+        </InputGroup>
+    ),
+    MoneyInput: <MoneyInput value={15200000} onChange={() => {}} currency="INR" locale="en-IN" />,
     Header: <Header>Zen</Header>,
     PageHeader: <PageHeader title="Title" lead="Lead" />,
     SideNav: (

@@ -78,6 +78,21 @@ export const COMPONENTS: ComponentDoc[] = [
     },
     { slug: 'input', title: 'Input', description: 'Text fields in faint glass that glow on focus.', parts: ['Input'] },
     {
+        slug: 'input-group',
+        title: 'Input Group',
+        description: 'A field with slots: put symbols, icons, units, buttons or menus before and after the input.',
+        parts: ['InputGroup', 'InputGroupInput', 'InputGroupAddon'],
+        examples: ['Default', 'WithButton'],
+    },
+    {
+        slug: 'money-input',
+        title: 'Money Input',
+        description:
+            'Amounts in any currency and locale, with shorthand like 1.5L or 10k, exact to the paisa. Built on Input Group.',
+        parts: ['MoneyInput'],
+        examples: ['Default', 'Dollars', 'CurrencyMenu', 'Compact'],
+    },
+    {
         slug: 'nav-pills',
         title: 'Nav Pills',
         description: 'Top navigation with a glowing pill that slides to the current page. Works with any router.',

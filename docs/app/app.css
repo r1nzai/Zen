@@ -1,23 +1,16 @@
-@import '../../packages/index.css';
+/*
+ * The docs use Zen the way a Tailwind app would: one Tailwind build, Zen's
+ * theme, and Zen's optional base (page setup, headings, code, scrollbars).
+ */
+@import 'tailwindcss';
+@import '../../packages/theme.css';
+@import '../../packages/base.css';
 
-/* Tailwind: scan the library (components and examples) as well as the site. */
+/* Also scan the library: its components and the examples the pages show. */
 @source '../../packages';
 @source '.';
 
-/* Sora's page setup: canvas colour on <html>, a transparent body so the fixed Backdrop shows. */
 html {
-    background: oklch(var(--background));
+    /* Anchored headings land below the sticky header. */
     scroll-padding-top: 5rem;
-}
-body {
-    background: transparent;
-    color: oklch(var(--foreground));
-    font-family: var(--font-sans);
-    font-feature-settings: 'cv11', 'ss01';
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-* {
-    scrollbar-width: thin;
-    scrollbar-color: oklch(var(--tint) / 0.14) transparent;
 }

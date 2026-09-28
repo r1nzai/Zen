@@ -1,6 +1,9 @@
 import { cx } from '@zen/utils/cx';
-import { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useGraphicsMode } from '@zen/utils/graphics';
+import { createContext, CSSProperties, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+
+import { AlertIcon, CheckIcon, InfoIcon } from '@zen/utils/status-icons';
 
 export type ToastTone = 'info' | 'success' | 'error';
 
@@ -27,8 +30,20 @@ const EXIT_MS = 300;
 
 const ToastContext = createContext<((title: string, options?: ToastOptions) => number) | null>(null);
 
+export interface ToastProviderProps {
+    children: ReactNode;
+    /**
+     * Gap between the toasts and the bottom of the screen on phones (a CSS
+     * length, default 1rem), e.g. "5.5rem" to clear a bottom tab bar.
+     */
+    offset?: string;
+    /** Classes for the column the toasts stack in (position, width…). */
+    viewportClassName?: string;
+}
+
 /** Mount once near the root; `useToast()` works anywhere inside. */
-export default function ToastProvider({ children }: { children: ReactNode }) {
+export default function ToastProvider({ children, offset, viewportClassName }: ToastProviderProps) {
+    useGraphicsMode();
     const [toasts, setToasts] = useState<ToastItem[]>([]);
     const [mounted, setMounted] = useState(false);
     const nextId = useRef(0);
@@ -62,7 +77,11 @@ export default function ToastProvider({ children }: { children: ReactNode }) {
                 createPortal(
                     <section
                         aria-label="Notifications"
-                        className="zen__toast-viewport fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-50 flex w-[calc(100vw-2rem)] flex-col-reverse gap-2.5 md:bottom-5 md:w-[24rem]"
+                        className={cx(
+                            'zen__toast-viewport fixed right-4 bottom-[calc(var(--zen-toast-offset,1rem)+env(safe-area-inset-bottom))] z-50 flex w-[calc(100vw-2rem)] flex-col-reverse gap-2.5 md:bottom-5 md:w-[24rem]',
+                            viewportClassName,
+                        )}
+                        style={offset ? ({ '--zen-toast-offset': offset } as CSSProperties) : undefined}
                     >
                         {visible.map((t) => (
                             <Toast key={t.id} toast={t} onDismiss={() => dismiss(t.id)} />
@@ -188,57 +207,5 @@ function Toast({ toast, onDismiss }: { toast: ToastItem; onDismiss: () => void }
                 />
             )}
         </div>
-    );
-}
-
-function CheckIcon({ className }: { className?: string }) {
-    return (
-        <svg
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={cx('size-3.5', className)}
-            aria-hidden
-        >
-            <path d="m3.5 8.5 3 3 6-7" />
-        </svg>
-    );
-}
-
-function AlertIcon({ className }: { className?: string }) {
-    return (
-        <svg
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={cx('size-3.5', className)}
-            aria-hidden
-        >
-            <path d="M8 2.2 1.6 13.3h12.8L8 2.2Z" />
-            <path d="M8 6.5v3M8 11.6v.1" />
-        </svg>
-    );
-}
-
-function InfoIcon({ className }: { className?: string }) {
-    return (
-        <svg
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            className={cx('size-3.5', className)}
-            aria-hidden
-        >
-            <circle cx="8" cy="8" r="6.3" />
-            <path d="M8 7.3v3.8M8 4.9v.1" />
-        </svg>
     );
 }

@@ -41,6 +41,21 @@ describe('Button', () => {
         expect(handleClick).not.toHaveBeenCalled();
     });
 
+    it('is a plain button by default, so it never submits a form by accident', () => {
+        const onSubmit = vi.fn((e) => e.preventDefault());
+        render(
+            <form onSubmit={onSubmit}>
+                <Button>Action</Button>
+                <Button type="submit">Save</Button>
+            </form>,
+        );
+        expect(screen.getByRole('button', { name: 'Action' })).toHaveAttribute('type', 'button');
+        fireEvent.click(screen.getByRole('button', { name: 'Action' }));
+        expect(onSubmit).not.toHaveBeenCalled();
+        fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+        expect(onSubmit).toHaveBeenCalledTimes(1);
+    });
+
     it('shows a spinner and is busy and disabled while loading', () => {
         const { container } = render(<Button loading>Save</Button>);
         const btn = screen.getByRole('button', { name: 'Save' });

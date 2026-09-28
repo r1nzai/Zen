@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { useGraphicsMode } from '@zen/utils/graphics';
 import { CSSProperties, KeyboardEvent, useId, useRef } from 'react';
 
 export interface Action {
@@ -16,6 +17,7 @@ const ITEM =
  */
 export default function ActionsMenu({ label, actions, className }: ActionsMenuProps) {
     const id = `zen__menu-${useId().replace(/[^\w-]/g, '')}`;
+    useGraphicsMode();
     const menuRef = useRef<HTMLDivElement>(null);
     const items = actions.filter((a): a is Action => !!a);
 

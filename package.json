@@ -16,6 +16,14 @@
         "./css": {
             "import": "./dist/zen.css",
             "require": "./dist/zen.css"
+        },
+        "./tailwind.css": {
+            "style": "./dist/tailwind.css",
+            "default": "./dist/tailwind.css"
+        },
+        "./base.css": {
+            "style": "./dist/base.css",
+            "default": "./dist/base.css"
         }
     },
     "scripts": {

@@ -1,6 +1,7 @@
 import Search from '@zen/icons/search';
 import XMark from '@zen/icons/x-mark';
 import Popover from '@zen/popover';
+import { InputGroupAddon, InputGroupInput } from '@zen/input-group';
 import { cx } from '@zen/utils/cx';
 import { useVirtualList } from '@zen/utils/useVirtualList';
 import { TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
@@ -140,11 +141,14 @@ function DropdownItemList(
     const selectedItems = selected instanceof Array ? selected.map((item) => item.key) : [selected.key];
     return (
         <div className="divide-tint/10 flex w-full flex-col divide-y overflow-hidden rounded-xl">
-            <div className={cx('flex grow items-center rounded px-3 py-2')}>
-                <Search className="text-muted-foreground mr-2 size-4" />
-                <input
-                    className="text-foreground inline-flex grow bg-transparent text-sm outline-hidden"
+            {/* Search row: InputGroup's parts, without the field shell (the panel is the surface). */}
+            <div className="flex h-10 grow items-center gap-2 px-3">
+                <InputGroupAddon>
+                    <Search />
+                </InputGroupAddon>
+                <InputGroupInput
                     placeholder="Search"
+                    aria-label="Search options"
                     value={search}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
                 />

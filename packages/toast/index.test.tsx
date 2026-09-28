@@ -102,4 +102,15 @@ describe('Toast', () => {
         vi.spyOn(console, 'error').mockImplementation(() => {});
         expect(() => render(<Trigger title="x" />)).toThrow(/ToastProvider/);
     });
+
+    it('can sit higher on phones (offset) and take classes', () => {
+        render(
+            <ToastProvider offset="5.5rem" viewportClassName="left-4">
+                app
+            </ToastProvider>,
+        );
+        const viewport = screen.getByRole('region', { name: 'Notifications' });
+        expect(viewport.style.getPropertyValue('--zen-toast-offset')).toBe('5.5rem');
+        expect(viewport).toHaveClass('left-4');
+    });
 });

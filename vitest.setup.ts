@@ -20,3 +20,7 @@ if (typeof HTMLDialogElement !== 'undefined' && !HTMLDialogElement.prototype.sho
         this.dispatchEvent(new Event('close'));
     };
 }
+
+// jsdom has no canvas/WebGL: pin the graphics mode so components don't try to detect it.
+// (utils/graphics.test.ts clears this to test detection itself.)
+if (typeof document !== 'undefined') document.documentElement.setAttribute('data-zen-graphics', 'full');

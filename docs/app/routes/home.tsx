@@ -55,8 +55,26 @@ export default function Home() {
                 <section className="flex flex-col gap-4">
                     <h2 id="installation">Installation</h2>
                     <CodeCard lang="shell" code="pnpm add @rinzai/zen" />
-                    <p>Import the stylesheet once, near the root of your app. It includes the default theme.</p>
+                    <p>
+                        <strong>Using Tailwind CSS v4?</strong> Add Zen's theme after Tailwind in your stylesheet. Your
+                        one Tailwind build then generates everything Zen's components use.
+                    </p>
+                    <CodeCard
+                        lang="css"
+                        code={`
+@import 'tailwindcss';
+@import '@rinzai/zen/tailwind.css';`}
+                    />
+                    <p>
+                        <strong>Not using Tailwind?</strong> Import the complete stylesheet once, near the root of your
+                        app. It includes the default theme.
+                    </p>
                     <CodeCard code={`import '@rinzai/zen/css';`} />
+                    <p>
+                        Zen never styles your own elements. For its page setup (the background showing through), heading
+                        scale, inline code and quiet scrollbars, also add the optional base:
+                    </p>
+                    <CodeCard lang="css" code={`@import '@rinzai/zen/base.css';`} />
                     <p>
                         The look is set in{' '}
                         <a href="https://rsms.me/inter/" className="text-primary underline-offset-4 hover:underline">
@@ -95,8 +113,8 @@ export default function App() {
                             Backdrop
                         </Link>{' '}
                         draws the page background and lights up card edges near the pointer. It sits at{' '}
-                        <code>z-index: -1</code>, so give <code>{'<html>'}</code> the background colour and keep{' '}
-                        <code>{'<body>'}</code> transparent:
+                        <code>z-index: -1</code>, so <code>{'<html>'}</code> needs the background colour and{' '}
+                        <code>{'<body>'}</code> must stay transparent. The optional base does this; without it:
                     </p>
                     <CodeCard
                         lang="css"

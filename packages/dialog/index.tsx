@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { useGraphicsMode } from '@zen/utils/graphics';
 import { ComponentProps, ReactNode, RefObject, useEffect, useId, useRef } from 'react';
 
 /**
@@ -18,6 +19,7 @@ export default function Dialog({
     className,
     role,
 }: DialogProps) {
+    useGraphicsMode();
     const ref = useRef<HTMLDialogElement>(null);
     const titleId = useId();
     const descriptionId = useId();
@@ -58,7 +60,7 @@ export default function Dialog({
         >
             <div className="flex max-h-[calc(100dvh-2rem)] flex-col gap-4 overflow-x-hidden overflow-y-auto p-6">
                 <div className="flex flex-col gap-2">
-                    <h2 id={titleId} className="text-lg font-semibold">
+                    <h2 id={titleId} className="text-lg font-semibold tracking-tight">
                         {title}
                     </h2>
                     {description && (

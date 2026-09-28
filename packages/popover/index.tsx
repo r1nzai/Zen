@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { useGraphicsMode } from '@zen/utils/graphics';
 import { POPUP } from '@zen/utils/styles';
 import { ComponentProps, MouseEvent, useEffect, useId, useRef, useState } from 'react';
 
@@ -23,6 +24,7 @@ export default function Popover(props: PopoverProps) {
     // useId is stable between server and client renders; strip characters invalid in CSS idents
     const rootId = useId().replace(/[^\w-]/g, '');
 
+    useGraphicsMode();
     const [isOpen, setIsOpen] = useState(false);
     const popoverRef = useRef<HTMLDivElement>(null);
 

@@ -2,9 +2,9 @@ import { cx } from '@zen/utils/cx';
 import { ComponentProps } from 'react';
 
 /** A plain HTML table on a glass panel whose edge catches the pointer light, scrolling sideways when it doesn't fit. Compose with the Table* parts. */
-export default function Table({ className, ...rest }: ComponentProps<'table'>) {
+export default function Table({ className, containerClassName, ...rest }: TableProps) {
     return (
-        <div className="zen__table glass glow-edge overflow-x-auto rounded-xl">
+        <div className={cx('zen__table glass glow-edge overflow-x-auto rounded-xl', containerClassName)}>
             <table className={cx('w-full text-left text-sm', className)} {...rest} />
         </div>
     );
@@ -38,4 +38,9 @@ export function TableHead({ className, ...rest }: ComponentProps<'th'>) {
 
 export function TableCell({ className, ...rest }: ComponentProps<'td'>) {
     return <td className={cx('px-4 py-3', className)} {...rest} />;
+}
+
+export interface TableProps extends ComponentProps<'table'> {
+    /** Classes for the glass panel around the table (className goes to the <table>). */
+    containerClassName?: string;
 }

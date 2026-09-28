@@ -1,3 +1,4 @@
+import { applyGraphicsMode } from '@zen/utils/graphics';
 import { CSSProperties, useEffect } from 'react';
 
 /**
@@ -65,7 +66,8 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
         };
         // Touch screens have no hovering pointer to follow; tracking it would just
         // re-measure every card on each scroll frame, which makes phones stutter.
-        if (window.matchMedia?.('(hover: none), (pointer: coarse)').matches) return;
+        // Without a GPU (lite graphics) the lights are off, so there's nothing to track either.
+        if (window.matchMedia?.('(hover: none), (pointer: coarse)').matches || applyGraphicsMode() === 'lite') return;
         window.addEventListener('pointermove', onMove, { passive: true });
         root.addEventListener('pointerleave', onLeave);
         // Content moves under a still pointer when scrolling or resizing.
