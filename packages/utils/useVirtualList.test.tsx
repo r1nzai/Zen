@@ -46,4 +46,14 @@ describe('useVirtualList', () => {
         render(<List count={3} onRender={(r) => (rows = r)} />);
         expect(rows.items.map((r) => r.index)).toEqual([0, 1, 2]);
     });
+
+    it('reports the space above and below the rendered rows', () => {
+        let rows!: ReturnType<typeof useVirtualList>;
+        const { getByTestId } = render(<List count={1000} onRender={(r) => (rows = r)} />);
+        const scroller = getByTestId('scroller');
+        size(scroller, 100, 1000);
+        act(() => scroller.dispatchEvent(new Event('scroll')));
+        expect(rows.paddingTop).toBe(48 * 20);
+        expect(rows.paddingBottom).toBe(rows.totalSize - 57 * 20);
+    });
 });

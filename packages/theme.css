@@ -434,6 +434,54 @@ html[data-pointer='out'] .zen-topo--lit {
     overflow: hidden;
 }
 
+/*
+ * Tree rows opening and closing (useTree): each cell's content box grows from 0
+ * to the row height (or shrinks back), so rows below glide instead of jumping.
+ * Content fades in a little after the space opens, and out before it closes.
+ */
+@keyframes zen-row-open {
+    from {
+        height: 0;
+        opacity: 0;
+    }
+    60% {
+        opacity: 0;
+    }
+    to {
+        height: var(--row-h);
+        opacity: 1;
+    }
+}
+@keyframes zen-row-close {
+    from {
+        height: var(--row-h);
+        opacity: 1;
+    }
+    40% {
+        opacity: 0;
+    }
+    to {
+        height: 0;
+        opacity: 0;
+    }
+}
+.zen__tree-row-enter .zen__tree-cell,
+.zen__tree-row-exit .zen__tree-cell {
+    overflow: hidden;
+}
+.zen__tree-row-enter .zen__tree-cell {
+    animation: zen-row-open 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.zen__tree-row-exit .zen__tree-cell {
+    animation: zen-row-close 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+/* While a row is 0 tall its border would still show as a stacked line. */
+.zen__tree-row-enter > td,
+.zen__tree-row-exit > td {
+    border-bottom-color: transparent;
+    transition: border-color 200ms;
+}
+
 /* Direct children of a .rise container enter one after another. */
 @keyframes zen-rise {
     from {

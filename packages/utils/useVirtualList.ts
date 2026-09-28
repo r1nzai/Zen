@@ -40,7 +40,15 @@ export function useVirtualList({ count, itemHeight, scrollRef, overscan = 6 }: V
     for (let index = first; index < last; index++) {
         items.push({ index, start: index * itemHeight, size: itemHeight });
     }
-    return { items, totalSize: count * itemHeight };
+    const totalSize = count * itemHeight;
+    return {
+        items,
+        totalSize,
+        /** Space above the rendered rows (for a table: a TableSpacerRow of this height). */
+        paddingTop: items.length ? items[0].start : 0,
+        /** Space below the rendered rows. */
+        paddingBottom: items.length ? totalSize - (items[items.length - 1].start + itemHeight) : 0,
+    };
 }
 
 export interface VirtualListOptions {

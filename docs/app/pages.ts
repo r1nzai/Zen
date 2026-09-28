@@ -71,6 +71,12 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['SingleSelect', 'MultiSelect'],
     },
     {
+        slug: 'editable-cell',
+        title: 'Editable Cell',
+        description: 'A value edited in place: shows the value, swaps in any editor on click or Enter.',
+        parts: ['EditableCell'],
+    },
+    {
         slug: 'header',
         title: 'Header',
         description: 'A sticky glass bar across the top of the page.',
@@ -139,14 +145,32 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'table',
         title: 'Table',
-        description: 'Plain HTML tables on a glass panel, with hairline rows.',
-        parts: ['Table', 'TableHeader', 'TableBody', 'TableRow', 'TableHead', 'TableCell'],
+        description:
+            'Composable tables: a solid panel that scrolls, sticky headers, first column and totals, and sortable columns.',
+        parts: [
+            'TableContainer',
+            'Table',
+            'TableHead',
+            'TableCell',
+            'TableFooter',
+            'TableFooterCell',
+            'TableSpacerRow',
+        ],
+        examples: ['Default', 'Sortable'],
     },
     {
         slug: 'table-of-contents',
         title: 'Table of Contents',
         description: 'An "On this page" list that highlights the section being read.',
         parts: ['TableOfContents'],
+    },
+    {
+        slug: 'tree',
+        title: 'Tree Table',
+        description:
+            'Rows that open into child rows, animated, built from useTree and the Table parts. With virtual rows and editable cells, enough for a budget planner.',
+        parts: ['TreeRow', 'TreeCell', 'TreeLabel', 'TreeToggle'],
+        examples: ['Planner'],
     },
     {
         slug: 'tabs',

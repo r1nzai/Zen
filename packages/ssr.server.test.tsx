@@ -12,6 +12,7 @@ import {
     ConfirmDialog,
     Dialog,
     Dropdown,
+    EditableCell,
     Header,
     Input,
     InputGroup,
@@ -36,7 +37,12 @@ import {
     TableBody,
     TableCell,
     TableOfContents,
+    TableContainer,
     TableRow,
+    TreeCell,
+    TreeLabel,
+    TreeRow,
+    useTree,
     TabList,
     TabPanel,
     Tabs,
@@ -109,18 +115,45 @@ const components = {
         </SideNav>
     ),
     Table: (
-        <Table>
-            <TableBody>
-                <TableRow>
-                    <TableCell>cell</TableCell>
-                </TableRow>
-            </TableBody>
-        </Table>
+        <TableContainer label="Table">
+            <Table>
+                <TableBody>
+                    <TableRow>
+                        <TableCell>cell</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </TableContainer>
     ),
+    TreeTable: <TreeTable />,
+    EditableCell: <EditableCell editor={() => null}>₹1</EditableCell>,
     TableOfContents: <TableOfContents items={[{ id: 'a', label: 'A' }]} />,
     ThemeScript: <ThemeScript />,
     ThemeToggle: <ThemeToggle />,
 };
+
+function TreeTable() {
+    const tree = useTree({
+        items: [{ id: 'a', children: [{ id: 'b' }] }],
+        getKey: (n) => n.id,
+        getChildren: (n: { id: string; children?: { id: string }[] }) => n.children,
+    });
+    return (
+        <Table>
+            <TableBody>
+                {tree.rows.map((row) => (
+                    <TreeRow key={row.key} row={row} tree={tree}>
+                        <TreeCell>
+                            <TreeLabel row={row} tree={tree}>
+                                {row.key}
+                            </TreeLabel>
+                        </TreeCell>
+                    </TreeRow>
+                ))}
+            </TableBody>
+        </Table>
+    );
+}
 
 describe('server rendering', () => {
     it('runs without browser globals', () => {
