@@ -18,7 +18,7 @@ describe('Table', () => {
                 </TableBody>
             </Table>,
         );
-        expect(container.firstChild).toHaveClass('glass', 'overflow-x-auto');
+        expect(container.firstChild).toHaveClass('glass', 'glow-edge', 'overflow-x-auto');
         expect(screen.getByRole('table')).toHaveClass('min-w-96');
         expect(screen.getByRole('columnheader', { name: 'Prop' })).toBeInTheDocument();
         expect(screen.getByRole('cell', { name: 'size' })).toBeInTheDocument();

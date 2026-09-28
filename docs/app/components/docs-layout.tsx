@@ -7,12 +7,12 @@ import { Sidebar } from './sidebar';
 export function DocsLayout({ children, toc }: { children: ReactNode; toc?: TableOfContentsItem[] }) {
     return (
         <div className="mx-auto flex max-w-7xl gap-10 px-4 md:px-6">
-            <aside className="sticky top-16 hidden h-[calc(100dvh-4rem)] w-56 shrink-0 overflow-y-auto py-10 md:block">
+            <aside className="sticky top-[4.25rem] hidden h-[calc(100dvh-4.25rem)] w-56 shrink-0 overflow-y-auto py-10 md:block">
                 <Sidebar />
             </aside>
             <main className="rise min-w-0 flex-1 py-10 md:py-14">{children}</main>
             {toc && toc.length > 0 && (
-                <aside className="sticky top-16 hidden h-[calc(100dvh-4rem)] w-48 shrink-0 py-14 xl:block">
+                <aside className="sticky top-[4.25rem] hidden h-[calc(100dvh-4.25rem)] w-48 shrink-0 py-14 xl:block">
                     <TableOfContents items={toc} />
                 </aside>
             )}

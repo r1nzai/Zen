@@ -10,8 +10,11 @@ export default function Save() {
 /** Colours come from any highlighter that turns code into HTML; here sugar-high. Hover to copy. */
 export default function Highlighted() {
     return (
-        <div className="glass w-full max-w-xl overflow-hidden rounded-xl">
-            <CodeBlock code={CODE} language="typescript" highlight={(code) => highlight(code)} />
-        </div>
+        <CodeBlock
+            code={CODE}
+            language="typescript"
+            highlight={(code) => highlight(code)}
+            className="w-full max-w-xl"
+        />
     );
 }

@@ -13,9 +13,9 @@ describe('PageHeader', () => {
 });
 
 describe('Header', () => {
-    it('is a sticky glass banner', () => {
+    it('is a sticky, blurred banner', () => {
         render(<Header>Zen</Header>);
-        expect(screen.getByRole('banner')).toHaveClass('sticky', 'glass');
+        expect(screen.getByRole('banner')).toHaveClass('sticky', 'backdrop-blur-xl', 'border-b');
         expect(screen.getByRole('banner')).toHaveTextContent('Zen');
     });
 });

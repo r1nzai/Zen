@@ -33,4 +33,15 @@ describe('CodeBlock', () => {
         render(<CodeBlock code="x" copyable={false} />);
         expect(screen.queryByRole('button')).toBeNull();
     });
+
+    it('draws its own lit glass panel by default', () => {
+        const { container } = render(<CodeBlock code="x" />);
+        expect(container.firstChild).toHaveClass('glass', 'glow-edge', 'rounded-xl');
+    });
+
+    it('has no surface with variant="plain", for code inside a card', () => {
+        const { container } = render(<CodeBlock code="x" variant="plain" />);
+        expect(container.firstChild).not.toHaveClass('glass');
+        expect(container.firstChild).not.toHaveClass('glow-edge');
+    });
 });

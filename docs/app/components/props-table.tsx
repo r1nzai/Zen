@@ -74,7 +74,7 @@ export function PropsTable({
                     </TableBody>
                 </Table>
             ) : (
-                <p className="glass text-muted-foreground mt-0! rounded-xl px-4 py-3 text-sm">
+                <p className="glass glow-edge text-muted-foreground mt-0! rounded-xl px-4 py-3 text-sm">
                     No props of its own; it accepts the props of the element it renders.
                 </p>
             )}

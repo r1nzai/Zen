@@ -35,7 +35,7 @@ export function ExampleBlock({ example, heading = true }: { example: Example; he
                         </div>
                     </TabPanel>
                     <TabPanel value="code">
-                        <CodeBlock code={example.source} className="max-h-[32rem] overflow-y-auto" />
+                        <CodeBlock variant="plain" code={example.source} className="max-h-[32rem] overflow-y-auto" />
                     </TabPanel>
                 </Tabs>
             </Card>

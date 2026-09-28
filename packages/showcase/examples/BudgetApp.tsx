@@ -174,7 +174,7 @@ function Budget({ nav }: { nav: boolean }) {
             <StatRow>
                 {loading ? (
                     [0, 1, 2].map((i) => (
-                        <div key={i} className="glass flex flex-col gap-2 rounded-xl p-4">
+                        <div key={i} className="glass glow-edge flex flex-col gap-2 rounded-xl p-4">
                             <Skeleton className="h-3 w-20" />
                             <Skeleton className="h-7 w-28" />
                         </div>

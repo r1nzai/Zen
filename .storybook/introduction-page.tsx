@@ -145,11 +145,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
     );
 }
 
-/** A code snippet on a glass panel, coloured by sugar-high. */
+/** A code snippet on a lit glass panel, coloured by sugar-high. */
 function Code({ code, language = 'typescript' }: { code: string; language?: 'typescript' | 'shell' | 'css' }) {
-    return (
-        <div className="glass overflow-hidden rounded-xl">
-            <CodeBlock code={code} language={language} highlight={(c) => highlight(c, { lang: language })} />
-        </div>
-    );
+    return <CodeBlock code={code} language={language} highlight={(c) => highlight(c, { lang: language })} />;
 }

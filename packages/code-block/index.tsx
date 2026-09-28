@@ -2,10 +2,19 @@ import { cx } from '@zen/utils/cx';
 import { ComponentProps, useEffect, useState } from 'react';
 
 /**
- * Code in a mono block with a copy button. Zen ships no highlighter: pass
- * `highlight` (code → HTML string, e.g. sugar-high's `highlight`) for colours.
+ * Code on a glass panel whose edge catches the pointer light, with a copy
+ * button. Zen ships no highlighter: pass `highlight` (code → HTML string, e.g.
+ * sugar-high's `highlight`) for colours.
  */
-export default function CodeBlock({ code, language, highlight, copyable = true, className, ...rest }: CodeBlockProps) {
+export default function CodeBlock({
+    code,
+    language,
+    highlight,
+    copyable = true,
+    variant = 'glass',
+    className,
+    ...rest
+}: CodeBlockProps) {
     const text = code.trim();
     const [copied, setCopied] = useState(false);
     useEffect(() => {
@@ -15,7 +24,15 @@ export default function CodeBlock({ code, language, highlight, copyable = true, 
     }, [copied]);
 
     return (
-        <div className={cx('zen__code-block group relative', className)} data-language={language} {...rest}>
+        <div
+            className={cx(
+                'zen__code-block group relative',
+                variant === 'glass' && 'glass glow-edge overflow-hidden rounded-xl',
+                className,
+            )}
+            data-language={language}
+            {...rest}
+        >
             <pre className="text-foreground m-0! overflow-x-auto rounded-none! bg-transparent! p-5! font-mono text-[13px]! leading-6 font-normal!">
                 {highlight ? (
                     <code
@@ -54,4 +71,6 @@ export interface CodeBlockProps extends Omit<ComponentProps<'div'>, 'children'> 
     highlight?: (code: string, language?: string) => string;
     /** Show the copy button (on hover and focus). */
     copyable?: boolean;
+    /** `glass` (default): its own lit glass panel. `plain`: no surface, for code inside a card or panel. */
+    variant?: 'glass' | 'plain';
 }

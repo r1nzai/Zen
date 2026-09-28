@@ -48,7 +48,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Code Block',
         description: 'Code with a copy button; bring your own highlighter for colours.',
         parts: ['CodeBlock'],
-        examples: ['Highlighted', 'Plain'],
+        examples: ['Highlighted', 'Plain', 'InCard'],
     },
     {
         slug: 'collapse',
