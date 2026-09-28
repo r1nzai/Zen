@@ -191,6 +191,23 @@ html[data-zen-graphics='lite'] :is(.zen-topo--lit, .zen-dots--lit) {
     }
 }
 
+/*
+ * Frosted sticky table cells: where there's no blur, fully solid card, so
+ * content scrolling underneath never shows through.
+ */
+html[data-zen-graphics='lite'] .zen__frosted {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: oklch(var(--card));
+}
+@media (hover: none), (pointer: coarse), (prefers-reduced-transparency: reduce) {
+    .zen__frosted {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        background-color: oklch(var(--card));
+    }
+}
+
 /* ───────────────────────── Code ───────────────────────── */
 
 /*

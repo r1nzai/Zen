@@ -15,7 +15,7 @@ import Table, {
 } from './index';
 
 describe('Table', () => {
-    it('is a real table in a lit, solid panel', () => {
+    it('is a real table in a lit glass panel', () => {
         const { container } = render(
             <TableContainer className="max-h-80">
                 <Table className="min-w-96">
@@ -34,7 +34,7 @@ describe('Table', () => {
                 </Table>
             </TableContainer>,
         );
-        expect(container.firstChild).toHaveClass('bg-card', 'glow-edge', 'overflow-auto', 'max-h-80');
+        expect(container.firstChild).toHaveClass('glass', 'glow-edge', 'overflow-auto', 'max-h-80');
         expect(screen.getByRole('table')).toHaveClass('min-w-96');
         expect(screen.getByRole('columnheader', { name: 'Prop' })).toHaveClass('sticky', 'top-0');
         expect(screen.getByRole('columnheader', { name: 'Amount' })).toHaveClass('text-right');
@@ -61,7 +61,7 @@ describe('Table', () => {
                 </TableFooter>
             </Table>,
         );
-        expect(screen.getByRole('cell', { name: 'Rent' })).toHaveClass('sticky', 'left-0', 'bg-card');
+        expect(screen.getByRole('cell', { name: 'Rent' })).toHaveClass('sticky', 'left-0', 'zen__frosted');
         expect(screen.getByRole('cell', { name: 'Total' }).closest('tfoot')).toHaveClass('sticky', 'bottom-0');
     });
 

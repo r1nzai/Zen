@@ -2,9 +2,15 @@ import { cx } from '@zen/utils/cx';
 import { ComponentProps, ReactNode, useMemo, useState } from 'react';
 
 /**
- * The panel a table scrolls in: a solid card (so sticky rows and columns can
- * slide over content), hairline border, and an edge that catches the pointer
- * light. Give it a max height to scroll vertically; it scrolls sideways when
+ * Sticky cells (header, first column, footer) are frosted glass: content
+ * scrolling under them blurs instead of showing through. Where blur is off (no
+ * GPU, touch screens, reduced transparency) they're solid card instead.
+ */
+const FROSTED = 'zen__frosted bg-card/80 backdrop-blur-[18px] backdrop-saturate-140';
+
+/**
+ * The panel a table scrolls in: glass with an edge that catches the pointer
+ * light, like a Card. Give it a max height to scroll vertically; it scrolls sideways when
  * the table is wider. With `label`, it's a focusable region, so keyboard users
  * can scroll it too.
  */
@@ -15,8 +21,8 @@ export function TableContainer({ label, className, ...rest }: TableContainerProp
             aria-label={label}
             tabIndex={label ? 0 : undefined}
             className={cx(
-                'zen__table-container glow-edge border-tint/[0.07] bg-card isolate overflow-auto rounded-xl border',
-                'focus-visible:ring-ring/30 shadow-[0_20px_60px_-30px_oklch(0_0_0/0.8)] outline-hidden focus-visible:ring-2',
+                'zen__table-container glass glow-edge isolate overflow-auto rounded-xl',
+                'focus-visible:ring-ring/30 outline-hidden focus-visible:ring-2',
                 className,
             )}
             {...rest}
@@ -66,7 +72,8 @@ export function TableHead({
             scope={scope}
             aria-sort={sortDirection === 'asc' ? 'ascending' : sortDirection === 'desc' ? 'descending' : undefined}
             className={cx(
-                'border-tint/[0.07] bg-card text-muted-foreground sticky top-0 border-b px-3 py-2.5 align-middle text-xs leading-5 font-medium tracking-wider whitespace-nowrap uppercase',
+                FROSTED,
+                'border-tint/[0.07] text-muted-foreground sticky top-0 border-b px-3 py-2.5 align-middle text-xs leading-5 font-medium tracking-wider whitespace-nowrap uppercase',
                 sticky === 'left' ? 'left-0 z-30' : 'z-20',
                 numeric ? 'text-right' : 'text-left',
                 className,
@@ -104,7 +111,7 @@ export function TableCell({ numeric, sticky, className, ...rest }: TableCellProp
                 // cells stay opaque (a translucent colour would show the scrolled content through them).
                 'border-tint/[0.045] border-b px-3 py-2.5 transition-colors duration-150',
                 'group-hover:[background-image:linear-gradient(oklch(var(--tint)/0.035),oklch(var(--tint)/0.035))]',
-                sticky === 'left' && 'bg-card sticky left-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)]',
+                sticky === 'left' && cx(FROSTED, 'sticky left-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)]'),
                 numeric && 'text-right tabular-nums',
                 className,
             )}
@@ -118,7 +125,8 @@ export function TableFooterCell({ numeric, sticky, className, ...rest }: TableCe
     return (
         <td
             className={cx(
-                'border-tint/[0.07] bg-card h-9 border-t px-3 font-medium whitespace-nowrap',
+                FROSTED,
+                'border-tint/[0.07] h-9 border-t px-3 font-medium whitespace-nowrap',
                 sticky === 'left' && 'sticky left-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)]',
                 numeric && 'text-right tabular-nums',
                 className,
