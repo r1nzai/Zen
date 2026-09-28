@@ -1,0 +1,49 @@
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" />
+<style>
+    /* Sora's type: Inter with its alternate digits and single-storey a. */
+    body {
+        font-feature-settings: 'cv11', 'ss01';
+    }
+
+    .sidebar-header a,
+    .sidebar-header div {
+        font-weight: 600;
+        font-size: 15px;
+        letter-spacing: -0.01em;
+    }
+
+    /* Section headings: Sora's small caps labels (Stat label style). */
+    .sidebar-subheading {
+        font-size: 0.68rem !important;
+        letter-spacing: 0.1em !important;
+        font-weight: 500 !important;
+    }
+
+    /* Rows: rounded, with Sora's tonal selection (secondary button) instead of a solid fill. */
+    .sidebar-item {
+        border-radius: 8px;
+        margin-inline: 8px;
+    }
+    .sidebar-item[data-selected='true'] {
+        background: oklch(0.72 0.13 295 / 0.15) !important;
+        box-shadow: inset 0 0 0 1px oklch(0.72 0.13 295 / 0.25);
+        color: #f5f5f8 !important;
+        font-weight: 500;
+    }
+    .sidebar-item[data-selected='true'] svg {
+        color: #ab93ed !important;
+    }
+
+    @media (prefers-color-scheme: light) {
+        .sidebar-item[data-selected='true'] {
+            background: oklch(0.55 0.2 295 / 0.12) !important;
+            box-shadow: inset 0 0 0 1px oklch(0.55 0.2 295 / 0.25);
+            color: #191721 !important;
+        }
+        .sidebar-item[data-selected='true'] svg {
+            color: #7e4ed7 !important;
+        }
+    }
+</style>

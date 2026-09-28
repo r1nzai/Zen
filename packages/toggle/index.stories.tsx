@@ -1,27 +1,32 @@
-import { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
+import { fn } from 'storybook/test';
 
-import { useArgs } from 'storybook/internal/preview-api';
+import preview from '../../.storybook/preview';
+import DefaultExample from './examples/Default';
 import Toggle from './index';
-// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-export default {
-    title: 'Toggle',
-    component: Toggle,
-} as Meta<typeof Toggle>;
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-export const Primary: StoryObj<typeof Toggle> = {
+const meta = preview.meta({
+    title: 'Components/Toggle',
+    component: Toggle,
+});
+
+export const Primary = meta.story({
     args: {
         checked: false,
+        onChange: fn(),
     },
-    render: (args) => {
+    render: function Render(args) {
         const [, updateArgs] = useArgs();
         return (
             <Toggle
                 {...args}
-                onChange={(e) => {
-                    updateArgs({ checked: e });
+                onChange={(checked) => {
+                    args.onChange?.(checked);
+                    updateArgs({ checked });
                 }}
             />
         );
     },
-};
+});
+
+export const Example = meta.story({ render: () => <DefaultExample /> });

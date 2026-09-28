@@ -1,51 +1,43 @@
 import { cx } from '@zen/utils/cx';
-import { ComponentProps, useId } from 'react';
+import { ComponentProps } from 'react';
 
-export interface ToggleProps extends Omit<ComponentProps<'input'>, 'onChange'> {
+export interface ToggleProps extends Omit<ComponentProps<'input'>, 'onChange' | 'type'> {
     onChange?: (checked: boolean) => void;
 }
 
+/**
+ * On/off switch. A native checkbox with the switch role underneath, so
+ * keyboard, forms and screen readers work as they do for any checkbox.
+ */
 export default function Toggle(props: ToggleProps) {
-    const { className, checked, onChange, defaultChecked, id, ...rest } = props;
-    const generatedId = useId();
-    const inputId = id ?? generatedId;
+    const { className, onChange, disabled, ...rest } = props;
 
     return (
-        <div
-            role="switch"
-            aria-checked={checked ?? defaultChecked ?? false}
-            tabIndex={0}
+        <label
             className={cx(
-                'relative inline-flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full',
-                'border-primary bg-secondary dark:bg-muted border',
-                'focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden',
-                'transition-colors duration-300 ease-in-out',
+                'zen__toggle border-tint/10 bg-tint/[0.06] relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border p-0.5',
+                'has-focus-visible:ring-glow/50 transition-[background-color,box-shadow,border-color] duration-300 has-focus-visible:ring-2',
+                'has-checked:border-glow/60 has-checked:bg-glow/40 has-checked:shadow-[0_0_18px_-2px_oklch(var(--glow)/0.8)]',
+                'has-disabled:cursor-not-allowed has-disabled:opacity-50',
                 className,
             )}
-            onClick={() => onChange?.(!checked)}
-            onKeyDown={(e) => {
-                if (e.key === ' ' || e.key === 'Enter') {
-                    e.preventDefault();
-                    onChange?.(!checked);
-                }
-            }}
         >
             <input
                 type="checkbox"
-                id={inputId}
-                className="sr-only"
-                checked={checked}
-                defaultChecked={defaultChecked}
+                role="switch"
+                className="peer sr-only"
+                disabled={disabled}
                 onChange={(e) => onChange?.(e.target.checked)}
-                tabIndex={-1}
                 {...rest}
             />
             <span
+                aria-hidden
                 className={cx(
-                    'bg-primary size-4 rounded-full transition-all duration-300 ease-in-out',
-                    checked ? 'translate-x-5' : 'translate-x-0.5',
+                    'size-[1.125rem] rounded-full bg-white/70 shadow-md',
+                    'transition-[translate,background-color] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
+                    'peer-checked:translate-x-5 peer-checked:bg-white',
                 )}
             />
-        </div>
+        </label>
     );
 }

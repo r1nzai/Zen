@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { FIELD } from '@zen/utils/styles';
 import { ComponentProps } from 'react';
 
 export default function Textarea(props: TextAreaProps) {
@@ -6,11 +7,10 @@ export default function Textarea(props: TextAreaProps) {
     return (
         <textarea
             className={cx(
-                'border-input bg-background text-foreground h-32 w-full resize-y rounded border-2 px-3 py-2 text-sm transition',
-                'placeholder:text-muted-foreground',
-                'focus-visible:border-primary focus-visible:ring-ring/30 focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:outline-hidden',
+                // FIELD's fixed height swapped for a taller, resizable box
+                FIELD.replace('h-10', ''),
+                'h-32 w-full resize-y py-2',
                 'read-only:text-foreground read-only:cursor-default read-only:border-none! read-only:bg-transparent read-only:shadow-none! read-only:outline-hidden!',
-                'disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed',
                 className,
             )}
             {...rest}

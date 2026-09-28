@@ -1,0 +1,21 @@
+{
+    "include": ["app", ".react-router/types/**/*", "*.ts", "../packages/vite-env.d.ts"],
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": ["DOM", "DOM.Iterable", "ES2022"],
+        "types": ["vite/client", "node"],
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "jsx": "react-jsx",
+        "strict": true,
+        "noEmit": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "allowImportingTsExtensions": true,
+        "rootDirs": [".", "./.react-router/types"],
+        "paths": {
+            "@rinzai/zen": ["../packages/index.ts"],
+            "@zen/*": ["../packages/*"]
+        }
+    }
+}

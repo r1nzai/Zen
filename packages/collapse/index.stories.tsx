@@ -1,32 +1,12 @@
-import { Meta, StoryObj } from '@storybook/react-vite';
-import { useRef } from 'react';
-
-import Badge from '@zen/badge';
+import preview from '../../.storybook/preview';
+import DefaultExample from './examples/Default';
 import Collapse from './index';
-// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-export default {
-    title: 'Collapse',
+
+const meta = preview.meta({
+    title: 'Components/Collapse',
     component: Collapse,
-    // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
-} as Meta<typeof Collapse>;
-const items = Array.from({ length: 100 }, (_, i) => `testItem${i}`);
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-export const Primary: StoryObj<typeof Collapse> = {
-    args: {
-        items,
-    },
-    render: (args) => {
-        const parentRef = useRef<HTMLDivElement>(null);
-        return (
-            <div ref={parentRef} className="flex w-full items-center gap-1">
-                <Collapse items={args.items} parentRef={parentRef} badgeStyles="h-6">
-                    {(item, index) => (
-                        <Badge key={index} className="h-6" variant={'secondary'}>
-                            {item}
-                        </Badge>
-                    )}
-                </Collapse>
-            </div>
-        );
-    },
-};
+    // Collapse measures its parent's width, so give it the full canvas
+    parameters: { layout: 'padded' },
+});
+
+export const Default = meta.story({ render: () => <DefaultExample /> });

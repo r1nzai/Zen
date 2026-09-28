@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Dropdown from './index';
@@ -31,7 +31,7 @@ vi.mock('@tanstack/react-virtual', () => ({
  * vi.fn() with an arrow-function implementation is NOT a valid constructor in
  * Vitest v4; using a class avoids the "is not a constructor" error.
  */
-global.ResizeObserver = class {
+globalThis.ResizeObserver = class {
     observe = vi.fn();
     disconnect = vi.fn();
     unobserve = vi.fn();
@@ -62,12 +62,12 @@ const defaultItems = [
 
 describe('Dropdown', () => {
     // ── 1. Single-select: shows selected text ───────────────────────────────
-    it('shows the selected item text in the trigger button (single-select)', () => {
+    it('shows the selected item text in the trigger (single-select)', () => {
         render(<Dropdown items={defaultItems} selected={{ text: 'Item 1', key: 'item1' }} onChange={vi.fn()} />);
 
-        // In single-select mode there is exactly one <button> (the popover
-        // trigger).  Its text content should reflect the selected item.
-        expect(screen.getByRole('button')).toHaveTextContent('Item 1');
+        // The trigger is the combobox; its text content should reflect the
+        // selected item.
+        expect(screen.getByRole('combobox')).toHaveTextContent('Item 1');
     });
 
     // ── 2. Single-select: shows placeholder ─────────────────────────────────
@@ -83,16 +83,16 @@ describe('Dropdown', () => {
             />,
         );
 
-        expect(screen.getByRole('button')).toHaveTextContent('Pick an item');
+        expect(screen.getByRole('combobox')).toHaveTextContent('Pick an item');
     });
 
     // ── 3. Disabled ──────────────────────────────────────────────────────────
-    it('applies cursor-not-allowed class to the trigger button when disabled', () => {
+    it('applies cursor-not-allowed class to the trigger when disabled', () => {
         render(
             <Dropdown items={defaultItems} selected={{ text: 'Item 1', key: 'item1' }} onChange={vi.fn()} disabled />,
         );
 
-        expect(screen.getByRole('button')).toHaveClass('cursor-not-allowed');
+        expect(screen.getByRole('combobox')).toHaveClass('cursor-not-allowed');
     });
 
     // ── 4. Search filters items ──────────────────────────────────────────────
@@ -162,12 +162,8 @@ describe('Dropdown', () => {
             />,
         );
 
-        // 'Item 1' appears in two places: as a badge chip <span> (inside the
-        // Collapse Popover, which lives inside the trigger <button>) AND as an
-        // <li> in the dropdown panel.  getByText would throw on the ambiguity,
-        // so we grab all matches and pick the list-item element explicitly.
-        const liItem1 = screen.getAllByText('Item 1').find((el) => el.tagName === 'LI')!;
-        fireEvent.click(liItem1);
+        // 'Item 1' is also a chip in the trigger, so pick the list option by role.
+        fireEvent.click(screen.getByRole('option', { name: 'Item 1', hidden: true }));
 
         expect(onChange).toHaveBeenCalledWith([{ text: 'Item 2', key: 'item2' }]);
     });
@@ -233,5 +229,25 @@ describe('Dropdown', () => {
         fireEvent.click(screen.getByText('Add xyz'));
 
         expect(onAdd).toHaveBeenCalledWith({ text: 'xyz', key: 'xyz' });
+    });
+
+    // ── Sizing and placeholders ──────────────────────────────────────────────
+    it('uses its default width only when the caller sets none', () => {
+        const { rerender } = render(<Dropdown items={defaultItems} selected={defaultItems[0]} onChange={vi.fn()} />);
+        expect(screen.getByRole('combobox')).toHaveClass('w-56');
+        rerender(<Dropdown items={defaultItems} selected={defaultItems[0]} onChange={vi.fn()} className="w-40" />);
+        expect(screen.getByRole('combobox')).not.toHaveClass('w-56');
+        expect(screen.getByRole('combobox')).toHaveClass('w-40');
+    });
+
+    it('can fill its container', () => {
+        render(<Dropdown items={defaultItems} selected={defaultItems[0]} onChange={vi.fn()} className="w-full" />);
+        // The wrapper Popover puts around the trigger must stretch too.
+        expect(screen.getByRole('combobox').parentElement).toHaveClass('w-full', 'max-w-none');
+    });
+
+    it('shows the placeholder when nothing is selected (multi-select)', () => {
+        render(<Dropdown multiple items={defaultItems} selected={[]} onChange={vi.fn()} placeholder="No tags" />);
+        expect(screen.getByRole('combobox')).toHaveTextContent('No tags');
     });
 });

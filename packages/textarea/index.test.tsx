@@ -6,11 +6,7 @@ import Textarea from './index';
 // ── helpers ──────────────────────────────────────────────────────────────────
 
 /** Wraps Textarea in local state so controlled behaviour can be tested. */
-function ControlledTextarea({
-    onChange: onChangeProp,
-}: {
-    onChange?: (value: string) => void;
-}) {
+function ControlledTextarea({ onChange: onChangeProp }: { onChange?: (value: string) => void }) {
     const [value, setValue] = useState('');
     return (
         <Textarea
@@ -103,7 +99,7 @@ describe('Textarea', () => {
         const el = container.firstChild as HTMLElement;
         expect(el).toHaveClass('my-textarea');
         // one of the fixed base classes is always present
-        expect(el).toHaveClass('border-input');
+        expect(el).toHaveClass('border-tint/10');
     });
 
     it('custom className does not strip core layout classes', () => {

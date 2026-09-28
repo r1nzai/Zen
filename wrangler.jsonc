@@ -1,0 +1,15 @@
+// Cloudflare deploy for the docs site (https://zen.rinzai.dev), a static site on
+// Workers static assets. Cloudflare's Git integration runs the build command
+// (pnpm docs:build) and then `npx wrangler deploy`, which reads this file.
+{
+    "name": "zen",
+    "compatibility_date": "2026-09-28",
+    "assets": {
+        // Prerendered docs, with Storybook at /storybook.
+        "directory": "./docs/build/client",
+        // Unknown URLs get 404.html (React Router's fallback, which shows the not-found page).
+        "not_found_handling": "404-page",
+    },
+    // The zone is on Cloudflare, so deploying creates the DNS record and certificate.
+    "routes": [{ "pattern": "zen.rinzai.dev", "custom_domain": true }],
+}

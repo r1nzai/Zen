@@ -1,15 +1,16 @@
-import { Meta, StoryObj } from '@storybook/react-vite';
-
+import preview from '../../.storybook/preview';
+import VariantsExample from './examples/Variants';
 import Badge from './index';
 
-export default {
-    title: 'Badge',
+const meta = preview.meta({
+    title: 'Components/Badge',
     component: Badge,
-} as Meta<typeof Badge>;
+});
 
-export const Primary: StoryObj<typeof Badge> = {
+export const Primary = meta.story({
     args: {
         children: 'Text Component',
     },
-    render: (args) => <Badge {...args} />,
-};
+});
+
+export const Variants = meta.story({ render: () => <VariantsExample /> });

@@ -1,43 +1,53 @@
 @import 'tailwindcss';
+/* Default theme, layered so an app's own (unlayered) token overrides always win. */
+@import './variables.css' layer(base);
 
 @custom-variant dark (&:is(.dark *, [data-theme='dark'] *));
+@custom-variant light (&:is(.light *, [data-theme='light'] *));
 
 @theme {
-    --color-border: hsl(var(--border));
-    --color-input: hsl(var(--input));
-    --color-ring: hsl(var(--ring));
-    --color-background: hsl(var(--background));
-    --color-foreground: hsl(var(--foreground));
+    --color-border: oklch(var(--border));
+    --color-input: oklch(var(--input));
+    --color-ring: oklch(var(--ring));
+    --color-background: oklch(var(--background));
+    --color-foreground: oklch(var(--foreground));
 
-    --color-primary: hsl(var(--primary));
-    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-primary: oklch(var(--primary));
+    --color-primary-foreground: oklch(var(--primary-foreground));
 
-    --color-secondary: hsl(var(--secondary));
-    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-secondary: oklch(var(--secondary));
+    --color-secondary-foreground: oklch(var(--secondary-foreground));
 
-    --color-destructive: hsl(var(--destructive));
-    --color-destructive-foreground: hsl(var(--destructive-foreground));
+    --color-destructive: oklch(var(--destructive));
+    --color-destructive-foreground: oklch(var(--destructive-foreground));
 
-    --color-muted: hsl(var(--muted));
-    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-muted: oklch(var(--muted));
+    --color-muted-foreground: oklch(var(--muted-foreground));
 
-    --color-accent: hsl(var(--accent));
-    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-accent: oklch(var(--accent));
+    --color-accent-foreground: oklch(var(--accent-foreground));
 
-    --color-popover: hsl(var(--popover));
-    --color-popover-foreground: hsl(var(--popover-foreground));
+    --color-popover: oklch(var(--popover));
+    --color-popover-foreground: oklch(var(--popover-foreground));
 
-    --color-card: hsl(var(--card));
-    --color-card-foreground: hsl(var(--card-foreground));
+    --color-card: oklch(var(--card));
+    --color-card-foreground: oklch(var(--card-foreground));
+
+    --color-glow: oklch(var(--glow));
+    --color-glow-2: oklch(var(--glow-2));
+
+    --color-tint: oklch(var(--tint));
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);
 
+    --font-sans: 'Inter Variable', Inter, ui-sans-serif, system-ui, sans-serif;
+
+    --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+
     --animate-accordion-down: accordion-down 0.2s ease-out;
     --animate-accordion-up: accordion-up 0.2s ease-out;
-
-    --font-inter: Inter, sans-serif;
 
     @keyframes accordion-down {
         from {
@@ -57,42 +67,275 @@
     }
 }
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
+/* ───────────────────────── Glass surfaces ───────────────────────── */
 
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
+/*
+ * Tinted glass without a live blur: a backdrop that animates would force a
+ * blur to be recomputed every frame under every card. Overlays that sit above
+ * content (dialogs, popups, toasts) add `glass-blur`.
+ */
+@utility glass {
+    background: linear-gradient(180deg, oklch(var(--card) / 0.82), oklch(var(--card) / 0.7));
+    border: 1px solid oklch(var(--tint) / 0.07);
+    box-shadow:
+        inset 0 1px 0 hsl(0 0% 100% / 0.06),
+        var(--glass-shadow);
+}
+
+/*
+ * Border that lights up near the pointer. <Backdrop> writes the pointer
+ * position into each element's --gx/--gy, so neighbouring cards light up
+ * consistently as if from one light source.
+ */
+@utility glow-edge {
+    position: relative;
+    isolation: isolate;
+    &::before {
+        content: '';
+        position: absolute;
+        /* Inside the box (over its 1px border), so it never causes overflow or scrollbars. */
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: radial-gradient(
+            360px circle at var(--gx, -999px) var(--gy, -999px),
+            oklch(var(--glow) / calc(0.7 * var(--glow-strength))),
+            oklch(var(--glow-2) / calc(0.2 * var(--glow-strength))) 40%,
+            transparent 65%
+        );
+        -webkit-mask:
+            linear-gradient(#000 0 0) content-box,
+            linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask:
+            linear-gradient(#000 0 0) content-box exclude,
+            linear-gradient(#000 0 0);
+        pointer-events: none;
+        z-index: 1;
+    }
+}
+
+/*
+ * Built from Tailwind's backdrop utilities, which emit the standard and -webkit-
+ * properties correctly. Phones: a live blur over scrolling content is the main
+ * cause of jank, so touch screens get a solid tint instead.
+ */
+@utility glass-blur {
+    @apply backdrop-blur-[18px] backdrop-saturate-140;
+    /* !: glass's `background` shorthand would otherwise reset the colour. */
+    @apply pointer-coarse:bg-card/96! pointer-coarse:backdrop-filter-none;
+    @apply [@media(hover:none)]:bg-card/96! [@media(hover:none)]:backdrop-filter-none;
+}
+
+@utility text-glow {
+    text-shadow: 0 0 18px oklch(var(--glow) / calc(0.55 * var(--glow-strength)));
+}
+
+/* Gradient headline text. */
+@utility text-aurora {
+    background: linear-gradient(100deg, oklch(0.98 0 0), oklch(var(--primary)) 85%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* Light theme: start from the ink colour, since near-white would vanish. */
+    &:where(.light *, [data-theme='light'] *) {
+        background-image: linear-gradient(100deg, oklch(var(--foreground)), oklch(var(--primary)) 85%);
+    }
+}
+
+/* ───────────────────────── Backdrop: contours / dots + light ───────────────────────── */
+
+.zen-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background: oklch(var(--background));
+}
+
+/* Slow-moving aurora glows. Pre-softened gradients, no filters: cheap to animate. */
+.zen-aurora {
+    position: absolute;
+    width: 70vmax;
+    height: 70vmax;
+    border-radius: 9999px;
+    opacity: calc(0.16 * var(--glow-strength));
+    will-change: transform;
+}
+.zen-aurora--a {
+    top: -48vmax;
+    left: -10vmax;
+    background: radial-gradient(closest-side, oklch(var(--glow) / 0.9), transparent);
+    animation: zen-float-a 38s ease-in-out infinite alternate;
+}
+.zen-aurora--b {
+    right: -25vmax;
+    bottom: -35vmax;
+    background: radial-gradient(closest-side, oklch(var(--glow-2) / 0.7), transparent);
+    animation: zen-float-b 46s ease-in-out infinite alternate;
+}
+.zen-aurora--c {
+    top: 30%;
+    left: 40%;
+    width: 45vmax;
+    height: 45vmax;
+    opacity: calc(0.12 * var(--glow-strength));
+    background: radial-gradient(closest-side, oklch(var(--glow) / 0.8), transparent);
+    animation: zen-float-c 52s ease-in-out infinite alternate;
+}
+
+/*
+ * Contour lines (image from <Backdrop topoSrc>), faint everywhere… The image
+ * is used as a mask over the tint, so its strokes are white on dark and ink
+ * on light.
+ */
+.zen-topo {
+    position: absolute;
+    inset: 0;
+    background: oklch(var(--tint));
+    -webkit-mask: var(--zen-topo) center / cover no-repeat;
+    mask: var(--zen-topo) center / cover no-repeat;
+    opacity: calc(0.1 * var(--topo-strength));
+}
+/* …and lit up around the pointer, tinted with the glow colour. */
+.zen-topo--lit {
+    opacity: calc(0.6 * var(--topo-strength) * var(--glow-strength));
+    background: none;
+    transition: opacity 200ms;
+}
+.zen-topo--lit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        420px circle at var(--mx) var(--my),
+        oklch(var(--glow) / 0.9),
+        oklch(var(--glow-2) / 0.3) 45%,
+        transparent 70%
+    );
+}
+
+/*
+ * Dot grid: a dense 12px grid of 1px dots, barely there; the aurora's drifting
+ * colours show through the same dot mask; near the pointer a small light
+ * brings the dots up in the glow colour.
+ */
+.zen-dots {
+    position: absolute;
+    inset: 0;
+    opacity: var(--topo-strength);
+    background-image: radial-gradient(circle, oklch(var(--muted-foreground) / 0.13) 1px, transparent 1px);
+    background-size: 12px 12px;
+}
+.zen-dots--ambient,
+.zen-dots--lit {
+    background-size: auto;
+    -webkit-mask: radial-gradient(circle, #000 1px, transparent 1px) 0 0 / 12px 12px;
+    mask: radial-gradient(circle, #000 1px, transparent 1px) 0 0 / 12px 12px;
+}
+/* Only a faint tint (never as bright as the pointer light, so it can't be mistaken for it). */
+.zen-dots--ambient {
+    opacity: min(0.6, calc(1.1 * var(--topo-strength) * var(--glow-strength)));
+    background-image:
+        radial-gradient(60vmax 45vmax at 15% 10%, oklch(var(--glow) / 0.45), transparent 75%),
+        radial-gradient(55vmax 42vmax at 90% 95%, oklch(var(--glow-2) / 0.4), transparent 75%);
+    background-repeat: no-repeat;
+    /* The colours drift; the dot mask stays put, so these dots never slide off the grid. */
+    animation: zen-dots-drift 60s ease-in-out infinite alternate;
+}
+.zen-dots--lit {
+    opacity: min(1, calc(100 * var(--topo-strength) * var(--glow-strength)));
+    background-image: radial-gradient(
+        110px circle at var(--mx) var(--my),
+        oklch(var(--glow)),
+        oklch(var(--glow) / 0.35) 45%,
+        transparent 75%
+    );
+    transition: opacity 200ms;
+}
+/* Pointer left the window: the lights fade out where they are. */
+html[data-pointer='out'] .zen-dots--lit,
+html[data-pointer='out'] .zen-topo--lit {
+    opacity: 0;
+}
+
+/* Vignette so content edges stay calm. */
+.zen-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 20%, transparent 40%, oklch(var(--background) / 0.85) 100%);
+}
+
+/* Phones: a still background (no drifting glows, no pointer light) keeps scrolling smooth. */
+@media (hover: none), (pointer: coarse) {
+    .zen-aurora {
+        animation: none;
+        will-change: auto;
+    }
+    .zen-topo--lit,
+    .zen-dots--lit {
+        display: none;
+    }
+    .zen-dots--ambient {
+        animation: none;
+    }
+}
+
+@keyframes zen-float-a {
+    to {
+        transform: translate3d(12vmax, 8vmax, 0) scale(1.1);
+    }
+}
+@keyframes zen-float-b {
+    to {
+        transform: translate3d(-14vmax, -6vmax, 0) scale(0.95);
+    }
+}
+@keyframes zen-float-c {
+    to {
+        transform: translate3d(-10vmax, 6vmax, 0) scale(1.15);
+    }
+}
+@keyframes zen-dots-drift {
+    to {
+        background-position:
+            6vmax 4vmax,
+            -6vmax -3vmax;
+    }
+}
+
+/* ───────────────────────── Base ───────────────────────── */
+
 @layer base {
     *,
     ::after,
     ::before,
     ::backdrop,
     ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: oklch(var(--border));
+    }
+    ::selection {
+        background: oklch(var(--glow) / 0.35);
     }
 }
 
 @layer base {
     h1 {
-        @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+        @apply scroll-m-20 text-4xl font-semibold tracking-tight lg:text-5xl;
     }
     h2 {
         @apply scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0;
     }
     h3 {
-        @apply scroll-m-20 text-2xl font-semibold tracking-tight;
-    }
-    h4 {
         @apply scroll-m-20 text-xl font-semibold tracking-tight;
     }
-    h5 {
+    h4 {
         @apply scroll-m-20 text-lg font-semibold tracking-tight;
     }
+    h5,
     h6 {
-        @apply scroll-m-20 text-base font-semibold tracking-tight;
+        @apply scroll-m-20 text-base font-semibold;
     }
     p {
         @apply leading-7 not-first:mt-6;
@@ -102,7 +345,7 @@
     }
     code,
     pre {
-        @apply bg-muted text-muted-foreground relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
+        @apply bg-muted text-muted-foreground relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm;
     }
     label {
         @apply text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
@@ -116,4 +359,137 @@
             position-visibility: anchors-visible;
         }
     }
+}
+
+/* ───────────────────────── Motion ───────────────────────── */
+
+/* Popovers scale and fade in from their top-layer entry, and back out. */
+.zen__popover {
+    transition:
+        opacity 150ms,
+        scale 150ms,
+        overlay 150ms allow-discrete,
+        display 150ms allow-discrete;
+}
+.zen__dialog {
+    transition:
+        opacity 200ms var(--ease-out-soft),
+        scale 200ms var(--ease-out-soft),
+        overlay 200ms allow-discrete,
+        display 200ms allow-discrete;
+}
+.zen__dialog::backdrop {
+    transition:
+        opacity 150ms,
+        overlay 150ms allow-discrete,
+        display 150ms allow-discrete;
+}
+.zen__popover:not(:popover-open),
+.zen__dialog:not([open]) {
+    opacity: 0;
+    scale: 0.95;
+}
+.zen__dialog:not([open])::backdrop {
+    opacity: 0;
+}
+@starting-style {
+    .zen__popover:popover-open,
+    .zen__dialog[open] {
+        opacity: 0;
+        scale: 0.95;
+    }
+    .zen__dialog[open]::backdrop {
+        opacity: 0;
+    }
+}
+/* The page behind a modal dialog doesn't scroll. */
+:root:has(.zen__dialog[open]) {
+    overflow: hidden;
+}
+
+/* Direct children of a .rise container enter one after another. */
+@keyframes zen-rise {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+.rise > * {
+    animation: zen-rise 0.5s var(--ease-out-soft) both;
+}
+.rise > *:nth-child(2) {
+    animation-delay: 50ms;
+}
+.rise > *:nth-child(3) {
+    animation-delay: 100ms;
+}
+.rise > *:nth-child(4) {
+    animation-delay: 150ms;
+}
+.rise > *:nth-child(n + 5) {
+    animation-delay: 200ms;
+}
+
+/* Loading placeholders: a soft light sweeping across. */
+.zen__skeleton {
+    background: linear-gradient(
+            100deg,
+            oklch(var(--tint) / 0.04) 30%,
+            oklch(var(--tint) / 0.09) 50%,
+            oklch(var(--tint) / 0.04) 70%
+        )
+        0 0 / 300% 100%;
+    animation: zen-shimmer 1.6s ease-in-out infinite;
+}
+@keyframes zen-shimmer {
+    from {
+        background-position: 100% 0;
+    }
+    to {
+        background-position: 0 0;
+    }
+}
+
+/* Time left before a toast goes away. */
+.zen__toast-timer {
+    animation: zen-toast-timer linear forwards;
+}
+@keyframes zen-toast-timer {
+    to {
+        transform: scaleX(0);
+    }
+}
+
+@keyframes zen-pop {
+    0% {
+        transform: scale(0.4);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.2);
+    }
+}
+
+/* Reduced motion: the OS setting, or opt in with html.reduce-motion. */
+@media (prefers-reduced-motion: reduce) {
+    .zen-backdrop *,
+    .zen-backdrop *::before,
+    [class*='zen__'],
+    [class*='zen__']::before,
+    [class*='zen__']::backdrop,
+    .rise > * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+html.reduce-motion .zen-backdrop *,
+html.reduce-motion .zen-backdrop *::before,
+html.reduce-motion [class*='zen__'],
+html.reduce-motion [class*='zen__']::before,
+html.reduce-motion [class*='zen__']::backdrop,
+html.reduce-motion .rise > * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
 }

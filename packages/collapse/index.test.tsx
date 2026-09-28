@@ -9,7 +9,7 @@ class MockResizeObserver {
     unobserve = vi.fn();
     disconnect = vi.fn();
 }
-global.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
+globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
 
 HTMLCanvasElement.prototype.getContext = vi.fn(() => ({
     font: '',
@@ -54,6 +54,26 @@ describe('Collapse', () => {
 
         it('does not render the overflow badge', () => {
             render(<CollapseWithRef width={9999} />);
+            expect(screen.queryByText(/^\+/)).not.toBeInTheDocument();
+        });
+    });
+
+    describe('when everything fits but a "+N" label would not', () => {
+        it('shows every item instead of collapsing them all', () => {
+            // One item needs 80px (50 measured + 30); the "+more" label would need 90 on top.
+            vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(110);
+            function One() {
+                const ref = useRef<HTMLDivElement>(null);
+                return (
+                    <div ref={ref}>
+                        <Collapse items={['only']} parentRef={ref} moreItemsLabel="more">
+                            {renderChildren}
+                        </Collapse>
+                    </div>
+                );
+            }
+            render(<One />);
+            expect(screen.getByText('only')).toBeInTheDocument();
             expect(screen.queryByText(/^\+/)).not.toBeInTheDocument();
         });
     });

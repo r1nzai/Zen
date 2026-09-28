@@ -9,7 +9,7 @@ export default defineConfig({
         dts({
             insertTypesEntry: true,
             include: ['packages/'],
-            exclude: ['**/*.stories.tsx', '**/*.test.tsx', '**/*.test.ts', '**/*.spec.tsx', '**/*.spec.ts'],
+            exclude: ['**/*.stories.tsx', '**/examples/**', '**/*.test.tsx', '**/*.test.ts', '**/*.spec.tsx', '**/*.spec.ts'],
         }),
     ],
     resolve: {
@@ -23,7 +23,7 @@ export default defineConfig({
         coverage: {
             provider: 'v8',
             include: ['packages/**/*.{ts,tsx}'],
-            exclude: ['packages/**/*.stories.tsx', 'packages/**/index.ts', 'packages/icons/**'],
+            exclude: ['packages/**/*.stories.tsx', 'packages/**/examples/**', 'packages/**/index.ts', 'packages/icons/**'],
         },
     },
     build: {
@@ -38,6 +38,8 @@ export default defineConfig({
         rollupOptions: {
             external: ['react', 'react-dom', 'react/jsx-runtime'],
             output: {
+                // Components use hooks and browser APIs; mark the bundle as a client module for RSC frameworks
+                banner: "'use client';",
                 globals: {
                     react: 'React',
                 },

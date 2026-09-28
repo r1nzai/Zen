@@ -23,34 +23,34 @@ describe('Badge', () => {
 
     // ── variants ────────────────────────────────────────────────────────────
 
-    it('default variant (no prop) applies bg-primary and text-primary-foreground', () => {
+    it('default variant (no prop) applies the accent glow chip', () => {
         const { container } = render(<Badge>Default</Badge>);
         const el = container.firstChild as HTMLElement;
-        expect(el).toHaveClass('bg-primary');
-        expect(el).toHaveClass('text-primary-foreground');
+        expect(el).toHaveClass('bg-glow/10');
+        expect(el).toHaveClass('text-primary');
     });
 
-    it('variant="default" applies bg-primary and text-primary-foreground', () => {
+    it('variant="default" applies the accent glow chip', () => {
         const { container } = render(<Badge variant="default">Default</Badge>);
         const el = container.firstChild as HTMLElement;
-        expect(el).toHaveClass('bg-primary');
-        expect(el).toHaveClass('text-primary-foreground');
+        expect(el).toHaveClass('bg-glow/10');
+        expect(el).toHaveClass('text-primary');
     });
 
-    it('variant="secondary" applies bg-secondary and text-secondary-foreground', () => {
+    it('variant="secondary" applies a neutral tint', () => {
         const { container } = render(<Badge variant="secondary">Secondary</Badge>);
         const el = container.firstChild as HTMLElement;
-        expect(el).toHaveClass('bg-secondary');
-        expect(el).toHaveClass('text-secondary-foreground');
-        expect(el).not.toHaveClass('bg-primary');
+        expect(el).toHaveClass('bg-tint/[0.06]');
+        expect(el).toHaveClass('text-foreground');
+        expect(el).not.toHaveClass('bg-glow/10');
     });
 
-    it('variant="destructive" applies bg-destructive and text-destructive-foreground', () => {
+    it('variant="destructive" applies a destructive tint', () => {
         const { container } = render(<Badge variant="destructive">Destructive</Badge>);
         const el = container.firstChild as HTMLElement;
-        expect(el).toHaveClass('bg-destructive');
-        expect(el).toHaveClass('text-destructive-foreground');
-        expect(el).not.toHaveClass('bg-primary');
+        expect(el).toHaveClass('bg-destructive/15');
+        expect(el).toHaveClass('text-destructive');
+        expect(el).not.toHaveClass('bg-glow/10');
     });
 
     it('variant="outline" applies text-foreground without any bg override', () => {
@@ -59,9 +59,9 @@ describe('Badge', () => {
         expect(el).toHaveClass('text-foreground');
         // outline has no background colour — the bg-* classes from other variants
         // must be absent
-        expect(el).not.toHaveClass('bg-primary');
-        expect(el).not.toHaveClass('bg-secondary');
-        expect(el).not.toHaveClass('bg-destructive');
+        expect(el).not.toHaveClass('bg-glow/10');
+        expect(el).not.toHaveClass('bg-tint/[0.06]');
+        expect(el).not.toHaveClass('bg-destructive/15');
     });
 
     // ── className forwarding ─────────────────────────────────────────────────
@@ -80,7 +80,7 @@ describe('Badge', () => {
             </Badge>,
         );
         const el = container.firstChild as HTMLElement;
-        expect(el).toHaveClass('bg-secondary');
+        expect(el).toHaveClass('bg-tint/[0.06]');
         expect(el).toHaveClass('extra-class');
     });
 

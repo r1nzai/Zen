@@ -1,30 +1,58 @@
+import Spinner from '@zen/spinner';
 import { cva, VariantProps } from '@zen/utils/cva';
 import { ComponentProps } from 'react';
 
-export default function Button({ className, variant, size, ...rest }: ButtonProps) {
-    return <button className={buttonVariants({ variant, size, className })} {...rest} />;
+export default function Button({
+    className,
+    variant,
+    size,
+    loading = false,
+    disabled,
+    children,
+    ...rest
+}: ButtonProps) {
+    return (
+        <button
+            disabled={disabled || loading}
+            aria-busy={loading || undefined}
+            className={buttonVariants({ variant, size, className })}
+            {...rest}
+        >
+            {loading && <Spinner />}
+            {children}
+        </button>
+    );
 }
-const buttonVariants = cva(
-    'zen__button inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+
+export const buttonVariants = cva(
+    'zen__button inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap outline-hidden select-none ' +
+        'transition-[background-color,border-color,box-shadow,color,transform] duration-200 ease-out active:scale-[0.97] ' +
+        'focus-visible:ring-2 focus-visible:ring-glow/50 disabled:pointer-events-none disabled:opacity-50',
     {
         variants: {
             variant: {
-                default: 'bg-primary text-primary-foreground shadow-sm hover:bg-primary/70 active:bg-primary/90',
-                destructive:
-                    'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/70 active:bg-destructive/90',
-                outline:
-                    'border border-input bg-background text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground',
+                default:
+                    'bg-primary bg-[linear-gradient(to_bottom,oklch(1_0_0/0.16),transparent)] text-primary-foreground ' +
+                    'shadow-[0_0_0_1px_oklch(var(--glow)/0.55),0_0_22px_-6px_oklch(var(--glow)/0.7),inset_0_1px_0_hsl(0_0%_100%/0.3)] ' +
+                    'hover:shadow-[0_0_0_1px_oklch(var(--glow)/0.8),0_0_28px_-4px_oklch(var(--glow)/0.85),inset_0_1px_0_hsl(0_0%_100%/0.35)]',
+                // Tonal: a soft fill in the accent colour, for the second action beside a primary one.
                 secondary:
-                    'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/70 active:bg-secondary/90',
-                ghost: 'text-foreground hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground',
-                link: 'text-primary underline-offset-4 hover:underline active:underline active:opacity-75',
-                icon: 'text-foreground hover:bg-accent hover:text-accent-foreground active:bg-accent/80',
+                    'bg-primary/15 text-foreground shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.25)] hover:bg-primary/25',
+                // Clear with a hairline border that catches the pointer light, like cards.
+                outline:
+                    'glow-edge border border-tint/10 bg-tint/[0.03] text-foreground hover:border-tint/20 hover:bg-tint/[0.07]',
+                ghost: 'text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground',
+                destructive:
+                    'bg-destructive/90 text-destructive-foreground shadow-[0_0_0_1px_oklch(var(--destructive)/0.6),0_0_22px_-8px_oklch(var(--destructive)/0.7)] hover:bg-destructive',
+                link: 'h-auto! px-0! text-primary underline-offset-4 hover:underline',
+                // Square ghost button for a lone icon (Sora's menu trigger).
+                icon: 'text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground',
             },
             size: {
-                default: 'h-9 px-4 py-2',
+                default: 'h-10 px-4',
                 sm: 'h-8 px-3 text-xs',
-                lg: 'h-10 px-8',
-                icon: 'p-0',
+                lg: 'h-11 px-6',
+                icon: 'size-9',
             },
         },
         defaultVariants: {
@@ -34,4 +62,7 @@ const buttonVariants = cva(
     },
 );
 
-export interface ButtonProps extends ComponentProps<'button'>, VariantProps<typeof buttonVariants> {}
+export interface ButtonProps extends ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
+    /** Shows a spinner and disables the button while an action runs. */
+    loading?: boolean;
+}

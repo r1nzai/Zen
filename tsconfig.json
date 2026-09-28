@@ -18,8 +18,10 @@
         "skipLibCheck": true,
         "esModuleInterop": true,
         "declarationMap": true,
+        "types": ["vitest/globals", "@testing-library/jest-dom/vitest"],
         "paths": {
-            "@zen/*": ["./packages/*"]
+            "@zen/*": ["./packages/*"],
+            "@rinzai/zen": ["./packages/index.ts"]
         }
     },
     "include": ["packages"],

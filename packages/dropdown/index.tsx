@@ -1,10 +1,9 @@
-'use client';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import ChevronUp from '@zen/icons/chevron-up';
 import Search from '@zen/icons/search';
 import XMark from '@zen/icons/x-mark';
 import Popover from '@zen/popover';
 import { cx } from '@zen/utils/cx';
+import { TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
 import { ChangeEvent, ComponentProps, useMemo, useRef, useState } from 'react';
 import { Badge, Button, Collapse } from '..';
 export default function Dropdown(
@@ -26,8 +25,12 @@ export default function Dropdown(
     } = props;
     const ref = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
+    // cx doesn't resolve Tailwind conflicts: only use the default width when the caller sets none.
+    const sized = !!className && /(^|\s)(w-|min-w-|max-w-)/.test(className);
+    const fullWidth = !!className && /(^|\s)w-full(\s|$)/.test(className);
     return (
         <Popover
+            triggerClassName={fullWidth ? 'w-full max-w-none' : undefined}
             content={
                 <DropdownItemList
                     {...(mutable ? { mutable, onAdd } : { mutable })}
@@ -42,32 +45,37 @@ export default function Dropdown(
                 aria-expanded={open}
                 aria-haspopup="listbox"
                 className={cx(
-                    'border-input bg-background inline-flex h-10 w-56 grow items-center justify-between rounded border-2 p-2 transition',
-                    disabled ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'cursor-pointer',
-                    open && 'border-primary',
+                    TRIGGER,
+                    !sized && 'w-56',
+                    'grow',
+                    disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
+                    open && TRIGGER_OPEN,
                     className,
                 )}
             >
                 <div
                     className={cx(
-                        'flex max-w-[calc(100%-30px)] flex-none grow items-center gap-1 text-sm',
+                        // Takes all the space beside the chevron, whatever its content: Collapse measures this box.
+                        'flex min-w-0 flex-1 items-center gap-1 overflow-hidden text-sm',
                         disabled ? 'text-muted-foreground' : 'text-foreground',
                     )}
                     ref={ref}
                 >
-                    {multiple ? (
+                    {multiple && !selected.length ? (
+                        <span className="text-muted-foreground">{placeholder}</span>
+                    ) : multiple ? (
                         <Collapse
                             items={selected.map((item) => item.text)}
                             data={selected}
                             parentRef={ref}
                             estimator={(_, textWidth) => textWidth + 40}
                             badgeVariant="secondary"
-                            badgeStyles="bg-input! h-6 min-w-min gap-2"
+                            badgeStyles="h-6 min-w-min gap-2"
                         >
                             {(item, index, data) => (
                                 <Badge
                                     key={`collapsed_item_${data?.key ?? index}`}
-                                    className="bg-input! flex h-6 min-w-min gap-2 pr-1"
+                                    className="flex h-6 min-w-min gap-2 pr-1"
                                     variant={'secondary'}
                                 >
                                     {item}
@@ -77,9 +85,9 @@ export default function Dropdown(
                                         }}
                                         variant={'icon'}
                                         size={'icon'}
-                                        className="group bg-muted hover:bg-muted-foreground p-0.5"
+                                        className="group size-4 rounded-sm p-0.5"
                                     >
-                                        <XMark className="group-hover:text-muted size-3 transition duration-300 group-hover:rotate-90" />
+                                        <XMark className="size-3 transition duration-300 group-hover:rotate-90" />
                                     </Button>
                                 </Badge>
                             )}
@@ -88,13 +96,21 @@ export default function Dropdown(
                         (selected.text ?? placeholder)
                     )}
                 </div>
-                <ChevronUp
+                <svg
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden
                     className={cx(
-                        'bg-input size-4 rounded-full p-0.5 transition duration-300 ease-in-out',
-                        open ? 'rotate-180' : 'rotate-0',
-                        disabled ? 'text-muted-foreground' : 'text-foreground',
+                        'text-muted-foreground size-4 shrink-0 transition-transform duration-300',
+                        open && 'rotate-180',
                     )}
-                />
+                >
+                    <path d="m4 6 4 4 4-4" />
+                </svg>
             </div>
         </Popover>
     );
@@ -122,7 +138,7 @@ function DropdownItemList(
     });
     const selectedItems = selected instanceof Array ? selected.map((item) => item.key) : [selected.key];
     return (
-        <div className="divide-border border-input bg-background flex w-full flex-col divide-y overflow-hidden rounded border">
+        <div className="divide-tint/10 flex w-full flex-col divide-y overflow-hidden rounded-xl">
             <div className={cx('flex grow items-center rounded px-3 py-2')}>
                 <Search className="text-muted-foreground mr-2 size-4" />
                 <input
@@ -134,7 +150,7 @@ function DropdownItemList(
             </div>
             <ul
                 role="listbox"
-                className={cx('max-h-60 grow overflow-auto shadow-sm', 'focus:ring-0 focus:outline-hidden')}
+                className={cx('max-h-72 grow overflow-y-auto py-1', 'focus:ring-0 focus:outline-hidden')}
                 ref={virtualRef}
             >
                 <div
@@ -154,10 +170,7 @@ function DropdownItemList(
                                 transform: `translateY(${virtualItem.start}px)`,
                             }}
                             className={cx(
-                                'text-foreground absolute top-0 left-0 w-full cursor-pointer px-3 py-2 text-sm transition',
-                                selectedItems.includes(filteredItems[virtualItem.index].key)
-                                    ? 'bg-primary/90 text-primary-foreground dark:text-foreground'
-                                    : 'hover:bg-primary/60 hover:text-primary-foreground dark:hover:text-foreground',
+                                'hover:bg-muted absolute top-0 left-0 grid w-full cursor-pointer grid-cols-[1rem_1fr] items-center gap-2 px-3 py-2 text-sm outline-hidden select-none',
                             )}
                             onClick={() => {
                                 if (multiple) {
@@ -178,7 +191,10 @@ function DropdownItemList(
                                 }
                             }}
                         >
-                            {filteredItems[virtualItem.index].text}
+                            <span className="text-primary col-start-1" aria-hidden>
+                                {selectedItems.includes(filteredItems[virtualItem.index].key) && '✓'}
+                            </span>
+                            <span className="col-start-2 truncate">{filteredItems[virtualItem.index].text}</span>
                         </li>
                     ))}
                 </div>
@@ -188,7 +204,7 @@ function DropdownItemList(
                         <li
                             role="option"
                             aria-selected={false}
-                            className={cx('text-foreground cursor-pointer px-3 py-2 text-sm')}
+                            className={cx('hover:bg-muted cursor-pointer px-3 py-2 text-sm select-none')}
                             onClick={() => {
                                 onAdd({ text: search, key: search });
                                 setSearch('');
@@ -200,7 +216,7 @@ function DropdownItemList(
                         <li
                             role="option"
                             aria-selected={false}
-                            className={cx('text-foreground cursor-not-allowed px-3 py-2 text-sm')}
+                            className={cx('text-muted-foreground cursor-not-allowed px-3 py-2 text-sm')}
                         >
                             No results found
                         </li>

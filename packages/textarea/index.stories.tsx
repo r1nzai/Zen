@@ -1,14 +1,16 @@
-import { Meta, StoryObj } from '@storybook/react-vite';
-
+import preview from '../../.storybook/preview';
+import DefaultExample from './examples/Default';
 import TextArea from './index';
-export default {
-    title: 'TextArea',
-    component: TextArea,
-} as Meta<typeof TextArea>;
 
-export const Primary: StoryObj<typeof TextArea> = {
+const meta = preview.meta({
+    title: 'Components/Textarea',
+    component: TextArea,
+});
+
+export const Primary = meta.story({
     args: {
         defaultValue: 'Text Component',
     },
-    render: (args) => <TextArea {...args} />,
-};
+});
+
+export const Example = meta.story({ render: () => <DefaultExample /> });

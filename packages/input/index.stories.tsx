@@ -1,14 +1,16 @@
-import { Meta, StoryObj } from '@storybook/react-vite';
-
+import preview from '../../.storybook/preview';
+import StatesExample from './examples/States';
 import Input from './index';
-export default {
-    title: 'Input',
-    component: Input,
-} as Meta<typeof Input>;
 
-export const Primary: StoryObj<typeof Input> = {
+const meta = preview.meta({
+    title: 'Components/Input',
+    component: Input,
+});
+
+export const Primary = meta.story({
     args: {
         defaultValue: 'Text Component',
     },
-    render: (args) => <Input {...args} />,
-};
+});
+
+export const States = meta.story({ render: () => <StatesExample /> });

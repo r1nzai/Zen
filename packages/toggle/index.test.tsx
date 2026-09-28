@@ -3,30 +3,31 @@ import Toggle from './index';
 
 describe('Toggle', () => {
     describe('rendering', () => {
-        it('renders a clickable div', () => {
+        it('renders a clickable label', () => {
             const { container } = render(<Toggle />);
             expect(container.firstChild).toBeInTheDocument();
         });
 
-        it('applies additional className to the root div', () => {
+        it('applies additional className to the root label', () => {
             const { container } = render(<Toggle className="my-custom-class" />);
             expect(container.firstChild).toHaveClass('my-custom-class');
         });
     });
 
-    describe('knob position', () => {
-        it('knob has translate-x-0.5 when unchecked', () => {
-            const { container } = render(<Toggle checked={false} onChange={() => {}} />);
-            const knob = container.querySelector('[class*="translate-x"]');
-            expect(knob).toHaveClass('translate-x-0.5');
-            expect(knob).not.toHaveClass('translate-x-5');
+    describe('switch state', () => {
+        it('is announced as an unchecked switch', () => {
+            render(<Toggle checked={false} onChange={() => {}} />);
+            expect(screen.getByRole('switch')).not.toBeChecked();
         });
 
-        it('knob has translate-x-5 when checked', () => {
-            const { container } = render(<Toggle checked={true} onChange={() => {}} />);
-            const knob = container.querySelector('[class*="translate-x"]');
-            expect(knob).toHaveClass('translate-x-5');
-            expect(knob).not.toHaveClass('translate-x-0.5');
+        it('is announced as a checked switch', () => {
+            render(<Toggle checked={true} onChange={() => {}} />);
+            expect(screen.getByRole('switch')).toBeChecked();
+        });
+
+        it('slides the knob with the checked state', () => {
+            const { container } = render(<Toggle />);
+            expect(container.querySelector('span')).toHaveClass('peer-checked:translate-x-5');
         });
     });
 

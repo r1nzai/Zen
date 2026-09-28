@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import Badge, { BadgeProps } from '@zen/badge';
+import { cx } from '@zen/utils/cx';
 import Popover from '@zen/popover';
 
 export default function Collapse<TData>(props: CollapseProps<TData>) {
@@ -39,6 +40,11 @@ export default function Collapse<TData>(props: CollapseProps<TData>) {
             return;
         }
         const itemListWidth = itemList.offsetWidth;
+        // Everything fits: no "+N" label needed, so don't reserve room for one.
+        if (itemsWidth.reduce((sum, w) => sum + w, 0) <= itemListWidth - 20) {
+            setRenderItems({ visible: items, hidden: [] });
+            return;
+        }
         const visibleItems: string[] = [];
         const hiddenItems: string[] = [];
         const moreItemsLabelLength = estimator(
@@ -96,7 +102,7 @@ export default function Collapse<TData>(props: CollapseProps<TData>) {
                     }
                 >
                     <Badge
-                        className={badgeStyles}
+                        className={cx('cursor-pointer', badgeStyles)}
                         key={'more_items_button'}
                         variant={badgeVariant}
                         aria-label={`Show ${renderItems.hidden.length} more ${moreItemsLabel}`}

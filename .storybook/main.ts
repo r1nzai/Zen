@@ -1,20 +1,15 @@
-export default {
-    stories: ['../packages/**/*.stories.@(ts|tsx)'],
+import { defineMain } from '@storybook/react-vite/node';
 
-    addons: [
-        '@storybook/addon-links',
-        '@storybook/addon-themes',
-        '@storybook/addon-docs'
-    ],
-
-    framework: {
-        name: '@storybook/react-vite',
-        options: {},
-    },
-
-    docs: {},
-
+export default defineMain({
+    stories: ['../packages/**/*.mdx', '../packages/**/*.stories.@(ts|tsx)'],
+    addons: ['@storybook/addon-docs', '@storybook/addon-links', '@storybook/addon-themes', '@storybook/addon-a11y'],
+    framework: '@storybook/react-vite',
     typescript: {
         reactDocgen: 'react-docgen-typescript',
     },
-};
+    // The root Vite config also builds the library's type declarations; Storybook doesn't need them.
+    viteFinal: (config) => ({
+        ...config,
+        plugins: config.plugins?.flat().filter((p) => !(p && typeof p === 'object' && 'name' in p && /dts/.test(p.name))),
+    }),
+});

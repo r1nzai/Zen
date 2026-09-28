@@ -6,11 +6,7 @@ import Input from './index';
 // ── helpers ──────────────────────────────────────────────────────────────────
 
 /** Wraps Input in local state so controlled behaviour can be tested. */
-function ControlledInput({
-    onChange: onChangeProp,
-}: {
-    onChange?: (value: string) => void;
-}) {
+function ControlledInput({ onChange: onChangeProp }: { onChange?: (value: string) => void }) {
     const [value, setValue] = useState('');
     return (
         <Input
@@ -119,7 +115,7 @@ describe('Input', () => {
         const el = container.firstChild as HTMLElement;
         expect(el).toHaveClass('my-input');
         // one of the fixed base classes is always present
-        expect(el).toHaveClass('border-input');
+        expect(el).toHaveClass('border-tint/10');
     });
 
     it('custom className does not strip core layout classes', () => {
