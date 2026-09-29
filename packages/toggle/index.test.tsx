@@ -66,4 +66,10 @@ describe('Toggle', () => {
             expect(() => fireEvent.click(container.firstChild as Element)).not.toThrow();
         });
     });
+    it('the switch itself is the click target (an invisible layer over the whole control)', () => {
+        render(<Toggle aria-label="Placeholder" />);
+        const input = screen.getByRole('switch');
+        expect(input).toHaveClass('absolute', 'inset-0', 'size-full', 'opacity-0', 'z-10');
+        expect(input).not.toHaveClass('sr-only');
+    });
 });

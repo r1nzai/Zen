@@ -68,7 +68,9 @@ export default function Segmented<V extends string>({
                     >
                         <input
                             type="radio"
-                            className="sr-only"
+                            // The real radio covers its option, invisible: it's what gets clicked,
+                            // tapped and focused, so the pointer and assistive tech hit the same element.
+                            className="absolute inset-0 z-10 m-0 size-full cursor-pointer appearance-none rounded-[inherit] opacity-0"
                             name={name ?? id}
                             value={o.value}
                             checked={value === o.value}

@@ -27,4 +27,21 @@ describe('Segmented', () => {
         render(<Segmented label="Glow" name="glow" value="off" options={options} onChange={() => {}} />);
         for (const radio of screen.getAllByRole('radio')) expect(radio).toHaveAttribute('name', 'glow');
     });
+    it('each radio is the click target for its option (an invisible layer over it)', () => {
+        render(
+            <Segmented
+                label="Glow"
+                value="soft"
+                onChange={() => {}}
+                options={[
+                    { value: 'off', label: 'Off' },
+                    { value: 'soft', label: 'Soft' },
+                ]}
+            />,
+        );
+        for (const radio of screen.getAllByRole('radio')) {
+            expect(radio).toHaveClass('absolute', 'inset-0', 'size-full', 'opacity-0', 'z-10');
+            expect(radio).not.toHaveClass('sr-only');
+        }
+    });
 });

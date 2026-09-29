@@ -26,7 +26,9 @@ export default function Toggle(props: ToggleProps) {
             <input
                 type="checkbox"
                 role="switch"
-                className="peer sr-only"
+                // The real checkbox covers the switch, invisible: it's what gets clicked, tapped
+                // and focused, so the pointer and assistive tech hit the same element.
+                className="peer absolute inset-0 z-10 m-0 size-full cursor-pointer appearance-none rounded-full opacity-0 disabled:cursor-not-allowed"
                 disabled={disabled}
                 onChange={(e) => onChange?.(e.target.checked)}
                 onKeyDown={(e) => {
