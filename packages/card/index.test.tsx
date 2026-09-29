@@ -89,8 +89,9 @@ describe('Backdrop', () => {
         window.dispatchEvent(new PointerEvent('pointermove', { clientX: 10, clientY: 20 }));
         const card = container.querySelector<HTMLElement>('.glow-edge')!;
         expect(card.style.getPropertyValue('--gx')).toBe('10px');
-        // The backdrop's own light is positioned on the backdrop, not <html> (a change there restyles the page).
-        expect(container.querySelector<HTMLElement>('.zen-backdrop')!.style.getPropertyValue('--mx')).toBe('10px');
+        // The backdrop's own light is a small box moved to the pointer (only it repaints).
+        const light = container.querySelector<HTMLElement>('.zen-light')!;
+        expect([light.style.left, light.style.top]).toEqual(['10px', '20px']);
         raf.mockRestore();
     });
 });

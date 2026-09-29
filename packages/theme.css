@@ -384,12 +384,22 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     background: none;
     transition: opacity 200ms;
 }
-.zen-topo--lit::before {
-    content: '';
+/*
+ * The light is a box the size of its gradient that Backdrop moves to the
+ * pointer (left/top), not a full-screen gradient re-aimed at it, so a pointer
+ * move repaints only where the light was and is. It starts off-screen.
+ */
+.zen-light {
     position: absolute;
-    inset: 0;
+    left: -9999px;
+    top: -9999px;
+}
+.zen-topo--lit > .zen-light {
+    width: 840px;
+    height: 840px;
+    margin: -420px 0 0 -420px;
     background: radial-gradient(
-        420px circle at var(--mx) var(--my),
+        420px circle at center,
         oklch(var(--glow) / 0.9),
         oklch(var(--glow-2) / 0.3) 45%,
         transparent 70%
@@ -426,13 +436,20 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
 }
 .zen-dots--lit {
     opacity: min(1, calc(100 * var(--topo-strength) * var(--glow-strength)));
+    background-image: none;
+    transition: opacity 200ms;
+}
+/* The dots' pointer light: a box moved to the pointer, like the contour light. */
+.zen-dots--lit > .zen-light {
+    width: 220px;
+    height: 220px;
+    margin: -110px 0 0 -110px;
     background-image: radial-gradient(
-        110px circle at var(--mx) var(--my),
+        110px circle at center,
         oklch(var(--glow)),
         oklch(var(--glow) / 0.35) 45%,
         transparent 75%
     );
-    transition: opacity 200ms;
 }
 /* Pointer left the window: the lights fade out where they are. */
 .zen-backdrop[data-pointer='out'] .zen-dots--lit,

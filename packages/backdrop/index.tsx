@@ -18,7 +18,7 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
         let frame = 0;
         let x = -9999;
         let y = -9999;
-        // Publishes the pointer for the backdrop light (--mx/--my on <html>) and,
+        // Moves the backdrop's pointer light (the .zen-light box) and publishes the pointer,
         // for every .glow-edge element, in that element's own coordinates
         // (--gx/--gy). Per-element values stay exact inside transformed, masked
         // or scrolling containers, where viewport-fixed backgrounds don't.
@@ -41,13 +41,15 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
         };
         const apply = () => {
             frame = 0;
-            // The backdrop's own light: its variables live on the backdrop (not <html>,
-            // where a change would restyle the whole page). Pointer gone: the lights
-            // fade out where they are (CSS, data-pointer).
+            // The backdrop's own light is a small box moved to the pointer: only the
+            // box changes, so only where it was and is gets repainted. (A change on the
+            // backdrop itself would repaint the whole full-screen layer.) Pointer gone:
+            // the light fades out where it is (CSS, data-pointer).
             if (backdrop) {
                 const state = out ? 'out' : 'in';
                 if (backdrop.dataset.pointer !== state) backdrop.dataset.pointer = state;
-                if (!out) write(backdrop, `${x}px`, `${y}px`, '--mx', '--my');
+                const light = backdrop.querySelector<HTMLElement>('.zen-light');
+                if (light && !out) write(light, `${x}px`, `${y}px`, 'left', 'top');
             }
             const els = Array.from(document.querySelectorAll<HTMLElement>('.glow-edge'));
             const rects = els.map((el) => el.getBoundingClientRect());
@@ -104,6 +106,63 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
         };
     }, []);
 
+    // The contour image is drawn once into a bitmap at the backdrop's exact pixel
+    // size (again after a resize) and used as the mask from then on. Otherwise a
+    // vector image (thousands of path segments) is re-drawn every time the lit
+    // layer repaints, i.e. on every pointer move; at 1440p that took ~20ms of GPU.
+    // Same pixels: the image is fitted the way the CSS mask fits it (centre, cover).
+    useEffect(() => {
+        const el = ref.current;
+        if (!topoSrc || !el || typeof document === 'undefined') return;
+        let bitmapUrl = '';
+        let cancelled = false;
+        let timer = 0;
+        const image = new Image();
+        image.src = topoSrc;
+        const render = async () => {
+            try {
+                await image.decode();
+                const dpr = window.devicePixelRatio || 1;
+                const w = Math.round(el.clientWidth * dpr);
+                const h = Math.round(el.clientHeight * dpr);
+                if (!w || !h) return;
+                const canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                const nw = image.naturalWidth || w;
+                const nh = image.naturalHeight || h;
+                const scale = Math.max(w / nw, h / nh);
+                canvas
+                    .getContext('2d')
+                    ?.drawImage(image, (w - nw * scale) / 2, (h - nh * scale) / 2, nw * scale, nh * scale);
+                const blob = await new Promise<Blob | null>((done) => canvas.toBlob(done));
+                if (cancelled || !blob) return;
+                const next = URL.createObjectURL(blob);
+                el.style.setProperty('--zen-topo', `url("${next}")`);
+                if (bitmapUrl) URL.revokeObjectURL(bitmapUrl);
+                bitmapUrl = next;
+            } catch {
+                // Not drawable (e.g. a cross-origin image): keep using it as it is.
+            }
+        };
+        render();
+        const resizes =
+            typeof ResizeObserver === 'undefined'
+                ? null
+                : new ResizeObserver(() => {
+                      clearTimeout(timer);
+                      timer = window.setTimeout(render, 200);
+                  });
+        resizes?.observe(el);
+        return () => {
+            cancelled = true;
+            clearTimeout(timer);
+            resizes?.disconnect();
+            if (bitmapUrl) URL.revokeObjectURL(bitmapUrl);
+            el.style.setProperty('--zen-topo', `url("${topoSrc}")`);
+        };
+    }, [topoSrc]);
+
     return (
         <div
             ref={ref}
@@ -115,13 +174,17 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
             {kind === 'contours' ? (
                 <>
                     <div className="zen-topo" />
-                    <div className="zen-topo zen-topo--lit" />
+                    <div className="zen-topo zen-topo--lit">
+                        <div className="zen-light" />
+                    </div>
                 </>
             ) : (
                 <>
                     <div className="zen-dots" />
                     <div className="zen-dots zen-dots--ambient" />
-                    <div className="zen-dots zen-dots--lit" />
+                    <div className="zen-dots zen-dots--lit">
+                        <div className="zen-light" />
+                    </div>
                 </>
             )}
             <div className="zen-vignette" />
