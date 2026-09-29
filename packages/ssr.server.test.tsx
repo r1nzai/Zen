@@ -2,7 +2,10 @@
 import { renderToString } from 'react-dom/server';
 
 import {
-    ActionsMenu,
+    Menu,
+    MenuItem,
+    SegmentedItem,
+    SelectItem,
     AnimatedNumber,
     Avatar,
     Backdrop,
@@ -97,7 +100,11 @@ const components = {
     Popover: <Popover content={<span>content</span>}>trigger</Popover>,
     TextArea: <TextArea />,
     Toggle: <Toggle />,
-    ActionsMenu: <ActionsMenu label="Actions" actions={[{ label: 'Edit', onClick: () => {} }]} />,
+    Menu: (
+        <Menu label="Actions" trigger="⋯">
+            <MenuItem>Edit</MenuItem>
+        </Menu>
+    ),
     Backdrop: <Backdrop />,
     NavPills: (
         <NavPills aria-label="Main">
@@ -111,7 +118,11 @@ const components = {
     ConfirmDialog: <ConfirmDialog open onOpenChange={() => {}} title="Sure?" confirmLabel="Yes" onConfirm={() => {}} />,
     Dialog: <Dialog open title="Title" />,
     ProgressRing: <ProgressRing value={0.5} label="Progress" />,
-    Segmented: <Segmented label="Pick" value="a" options={[{ value: 'a', label: 'A' }]} onChange={() => {}} />,
+    Segmented: (
+        <Segmented label="Pick" value="a" onChange={() => {}}>
+            <SegmentedItem value="a">A</SegmentedItem>
+        </Segmented>
+    ),
     Skeleton: <Skeleton />,
     Spinner: <Spinner />,
     Stat: <Stat label="Net" value="1" />,
@@ -124,7 +135,11 @@ const components = {
         </Tabs>
     ),
     ToastProvider: <ToastProvider>app</ToastProvider>,
-    Select: <Select aria-label="x" value="a" options={[{ value: 'a', label: 'A' }]} onChange={() => {}} />,
+    Select: (
+        <Select aria-label="x" value="a" onChange={() => {}}>
+            <SelectItem value="a">A</SelectItem>
+        </Select>
+    ),
     MonthPicker: <MonthPicker aria-label="x" value="2026-09" onChange={() => {}} locale="en-US" />,
     AnimatedNumber: <AnimatedNumber value={42} />,
     Avatar: <Avatar name="Rin" />,

@@ -1,13 +1,13 @@
 import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
-    ActionsMenu,
     AnimatedMoney,
     applyPreset,
     applyTheme,
     Avatar,
     Badge,
     Button,
+    buttonVariants,
     Card,
     Collapse,
     Combobox,
@@ -20,6 +20,7 @@ import {
     customize,
     DEFAULT_THEME,
     Dialog,
+    Ellipsis,
     EditableCell,
     Field,
     formatMoney,
@@ -30,6 +31,8 @@ import {
     MoneyInput,
     type Month,
     MonthPicker,
+    Menu,
+    MenuItem,
     Meter,
     NavPill,
     NavPillIndicator,
@@ -41,7 +44,9 @@ import {
     ProgressRing,
     resetTheme,
     Segmented,
+    SegmentedItem,
     Select,
+    SelectItem,
     Skeleton,
     Slider,
     Stat,
@@ -193,6 +198,9 @@ const INITIAL: Entry[] = [
     },
 ];
 
+/** The "⋯" button that opens a row's or page's actions. */
+const MORE = buttonVariants({ variant: 'icon', size: 'icon' });
+
 const CURRENCY = 'USD';
 const LOCALE = 'en-US';
 const money = (m: Money) => formatMoney(m, CURRENCY, LOCALE, { showDecimals: false });
@@ -249,13 +257,12 @@ function Budget({ nav }: { nav: boolean }) {
                             {loading ? 'Refreshing' : 'Refresh'}
                         </Button>
                         <Button onClick={() => setAdding(true)}>Add entry</Button>
-                        <ActionsMenu
-                            label="Budget actions"
-                            actions={[
-                                { label: 'Export CSV', onClick: () => toast('Export started', { tone: 'info' }) },
-                                { label: 'Reset month', onClick: () => setResetting(true), destructive: true },
-                            ]}
-                        />
+                        <Menu label="Budget actions" triggerClassName={MORE} trigger={<Ellipsis />}>
+                            <MenuItem onSelect={() => toast('Export started', { tone: 'info' })}>Export CSV</MenuItem>
+                            <MenuItem destructive onSelect={() => setResetting(true)}>
+                                Reset month
+                            </MenuItem>
+                        </Menu>
                     </div>
                 </PageHeader>
 
@@ -506,10 +513,11 @@ function EntryTable({
                                 </EditableCell>
                             </TableCell>
                             <TableCell className="w-10 px-1">
-                                <ActionsMenu
-                                    label={`Actions for ${e.label}`}
-                                    actions={[{ label: 'Delete', onClick: () => onDelete(e), destructive: true }]}
-                                />
+                                <Menu label={`Actions for ${e.label}`} triggerClassName={MORE} trigger={<Ellipsis />}>
+                                    <MenuItem destructive onSelect={() => onDelete(e)}>
+                                        Delete
+                                    </MenuItem>
+                                </Menu>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -744,9 +752,14 @@ function Appearance() {
                     <Select
                         value={theme.preset === 'custom' ? null : theme.preset}
                         placeholder="Custom"
-                        options={PRESETS.map((p) => ({ value: p.id, label: p.label }))}
                         onChange={(id: PresetId) => setTheme((t) => applyPreset(t, id))}
-                    />
+                    >
+                        {PRESETS.map((p) => (
+                            <SelectItem key={p.id} value={p.id}>
+                                {p.label}
+                            </SelectItem>
+                        ))}
+                    </Select>
                 </Field>
                 <div className="flex flex-col gap-2">
                     <span className="text-sm font-medium">Hue</span>
@@ -761,16 +774,11 @@ function Appearance() {
                         valueText={(v) => `Hue ${v} degrees`}
                     />
                 </div>
-                <Segmented
-                    label="Glow"
-                    value={theme.glow}
-                    onChange={(glow) => setTheme((t) => ({ ...t, glow }))}
-                    options={[
-                        { value: 'off', label: 'Off' },
-                        { value: 'soft', label: 'Soft' },
-                        { value: 'bright', label: 'Bright' },
-                    ]}
-                />
+                <Segmented label="Glow" value={theme.glow} onChange={(glow) => setTheme((t) => ({ ...t, glow }))}>
+                    <SegmentedItem value="off">Off</SegmentedItem>
+                    <SegmentedItem value="soft">Soft</SegmentedItem>
+                    <SegmentedItem value="bright">Bright</SegmentedItem>
+                </Segmented>
                 <label className="flex items-center justify-between gap-4 text-sm">
                     Reduce motion
                     <Toggle checked={reduceMotion} onChange={setReduceMotion} aria-label="Reduce motion" />
@@ -845,15 +853,10 @@ function AddEntryDialog({
                     close();
                 }}
             >
-                <Segmented
-                    label="Type"
-                    value={form.kind}
-                    onChange={(kind) => set('kind', kind)}
-                    options={[
-                        { value: 'expense', label: 'Expense' },
-                        { value: 'income', label: 'Income' },
-                    ]}
-                />
+                <Segmented label="Type" value={form.kind} onChange={(kind) => set('kind', kind)}>
+                    <SegmentedItem value="expense">Expense</SegmentedItem>
+                    <SegmentedItem value="income">Income</SegmentedItem>
+                </Segmented>
                 <div className="grid gap-3 sm:grid-cols-[3fr_2fr]">
                     <Field label="Description" error={submitted ? errors.label : undefined}>
                         <Input
@@ -875,11 +878,13 @@ function AddEntryDialog({
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                     <Field label="Category">
-                        <Select
-                            value={form.category}
-                            options={CATEGORIES.map((c) => ({ value: c.value, label: c.label }))}
-                            onChange={(c) => set('category', c)}
-                        />
+                        <Select value={form.category} onChange={(c) => set('category', c)}>
+                            {CATEGORIES.map((c) => (
+                                <SelectItem key={c.value} value={c.value}>
+                                    {c.label}
+                                </SelectItem>
+                            ))}
+                        </Select>
                     </Field>
                     <Field label="Month">
                         <MonthPicker value={form.month} onChange={(m) => set('month', m)} locale={LOCALE} />

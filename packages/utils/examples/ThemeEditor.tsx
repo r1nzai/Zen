@@ -11,7 +11,9 @@ import {
     type PresetId,
     PRESETS,
     Segmented,
+    SegmentedItem,
     Select,
+    SelectItem,
     Slider,
     type ThemeSettings,
     Toggle,
@@ -51,9 +53,14 @@ export default function ThemeEditor() {
                     aria-label="Preset"
                     value={theme.preset === 'custom' ? null : theme.preset}
                     placeholder="Custom"
-                    options={PRESETS.map((p) => ({ value: p.id, label: p.label }))}
                     onChange={(id: PresetId) => setTheme((t) => applyPreset(t, id))}
-                />
+                >
+                    {PRESETS.map((p) => (
+                        <SelectItem key={p.id} value={p.id}>
+                            {p.label}
+                        </SelectItem>
+                    ))}
+                </Select>
                 <Slider
                     aria-label="Hue"
                     min={0}
@@ -68,8 +75,13 @@ export default function ThemeEditor() {
                     label="Intensity"
                     value={theme.intensity}
                     onChange={(intensity) => setTheme((t) => customize(t, { intensity }))}
-                    options={INTENSITIES.map((i) => ({ value: i, label: i[0].toUpperCase() + i.slice(1) }))}
-                />
+                >
+                    {INTENSITIES.map((i) => (
+                        <SegmentedItem key={i} value={i}>
+                            {i[0].toUpperCase() + i.slice(1)}
+                        </SegmentedItem>
+                    ))}
+                </Segmented>
                 <label className="flex items-center justify-between gap-4 text-sm">
                     Tinted greys
                     <Toggle

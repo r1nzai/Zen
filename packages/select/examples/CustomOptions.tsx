@@ -1,4 +1,4 @@
-import { currencySymbol, Select } from '@rinzai/zen';
+import { currencySymbol, Select, SelectItem } from '@rinzai/zen';
 import { useState } from 'react';
 
 const CURRENCIES = [
@@ -8,7 +8,7 @@ const CURRENCIES = [
     { value: 'JPY', label: 'Japanese yen', disabled: true },
 ];
 
-/** renderOption shows anything per option; disabled options are skipped by the keyboard. */
+/** An item can show anything; its `label` is what the field shows and typing matches. Disabled items are skipped by the keyboard. */
 export default function CustomOptions() {
     const [currency, setCurrency] = useState<string | null>(null);
     return (
@@ -16,17 +16,19 @@ export default function CustomOptions() {
             aria-label="Currency"
             placeholder="Choose a currency"
             value={currency}
-            options={CURRENCIES}
             onChange={setCurrency}
             className="w-64"
-            renderOption={(o) => (
-                <span className="flex items-center justify-between gap-3">
-                    {o.label}
-                    <span className="text-muted-foreground tabular-nums">
-                        {o.value} {currencySymbol(o.value, 'en')}
+        >
+            {CURRENCIES.map((c) => (
+                <SelectItem key={c.value} value={c.value} label={c.label} disabled={c.disabled}>
+                    <span className="flex items-center justify-between gap-3">
+                        {c.label}
+                        <span className="text-muted-foreground tabular-nums">
+                            {c.value} {currencySymbol(c.value, 'en')}
+                        </span>
                     </span>
-                </span>
-            )}
-        />
+                </SelectItem>
+            ))}
+        </Select>
     );
 }

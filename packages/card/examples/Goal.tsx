@@ -1,10 +1,18 @@
-import { ActionsMenu, Button, Card, ProgressRing } from '@rinzai/zen';
+import { Button, buttonVariants, Card, Ellipsis, Menu, MenuItem, ProgressRing } from '@rinzai/zen';
 
 export default function Goal() {
     return (
         <Card
             title="Emergency fund"
-            action={<ActionsMenu label="Goal actions" actions={[{ label: 'Edit', onClick: () => {} }]} />}
+            action={
+                <Menu
+                    label="Goal actions"
+                    triggerClassName={buttonVariants({ variant: 'icon', size: 'icon' })}
+                    trigger={<Ellipsis />}
+                >
+                    <MenuItem>Edit</MenuItem>
+                </Menu>
+            }
             className="w-full max-w-sm"
         >
             <div className="flex items-center gap-4">

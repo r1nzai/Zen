@@ -14,14 +14,12 @@ const SegmentedContext = createContext<SegmentedContextValue | null>(null);
 /**
  * A small set of mutually exclusive options, shown as a pill row. Native radio
  * inputs underneath, so arrow keys and forms work as for any radio group. The
- * selection slides between options, like NavPills. Give it SegmentedItem
- * children (any content: icons, badges, disabled options), or `options` as a
- * shorthand for plain text ones.
+ * selection slides between options, like NavPills. Fill it with
+ * SegmentedItem (any content: text, icons, a disabled option).
  */
 export default function Segmented<V extends string>({
     label,
     value,
-    options,
     onChange,
     name,
     className,
@@ -49,7 +47,7 @@ export default function Segmented<V extends string>({
         const resizes = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
         resizes?.observe(track);
         return () => resizes?.disconnect();
-    }, [value, options, children]);
+    }, [value, children]);
 
     return (
         <div className={cx('zen__segmented flex flex-col gap-2', className)}>
@@ -77,11 +75,6 @@ export default function Segmented<V extends string>({
                         measured: box !== null,
                     }}
                 >
-                    {options?.map((o) => (
-                        <SegmentedItem key={o.value} value={o.value}>
-                            {o.label}
-                        </SegmentedItem>
-                    ))}
                     {children}
                 </SegmentedContext.Provider>
             </div>
@@ -123,13 +116,12 @@ export function SegmentedItem({ value, disabled, className, children }: Segmente
 export interface SegmentedProps<V extends string> {
     label: string;
     value: V;
-    /** Shorthand for plain text options; or give SegmentedItem children. */
-    options?: readonly { value: V; label: string }[];
     onChange: (value: V) => void;
     /** Form field name; defaults to a generated one. */
     name?: string;
     className?: string;
-    children?: ReactNode;
+    /** The SegmentedItems. */
+    children: ReactNode;
 }
 
 export interface SegmentedItemProps {

@@ -3,14 +3,19 @@ import { useState } from 'react';
 
 import { renderToString } from 'react-dom/server';
 
-import Select, { SelectGroup, SelectItem, SelectOption, SelectSeparator } from './index';
+import Select, { SelectGroup, SelectItem, SelectSeparator } from './index';
 
-const OPTIONS: SelectOption<string>[] = [
+const OPTIONS = [
     { value: 'inr', label: 'Indian rupee' },
     { value: 'usd', label: 'US dollar' },
     { value: 'eur', label: 'Euro', disabled: true },
     { value: 'gbp', label: 'British pound' },
 ];
+const ITEMS = OPTIONS.map((o) => (
+    <SelectItem key={o.value} value={o.value} disabled={o.disabled}>
+        {o.label}
+    </SelectItem>
+));
 
 function Controlled({ onValue }: { onValue?: (v: string) => void }) {
     const [value, setValue] = useState<string | null>('usd');
@@ -19,12 +24,13 @@ function Controlled({ onValue }: { onValue?: (v: string) => void }) {
             aria-label="Currency"
             name="currency"
             value={value}
-            options={OPTIONS}
             onChange={(v) => {
                 setValue(v);
                 onValue?.(v);
             }}
-        />
+        >
+            {ITEMS}
+        </Select>
     );
 }
 
@@ -83,7 +89,9 @@ describe('Select', () => {
 
     it('shows the placeholder when nothing is chosen', () => {
         render(
-            <Select aria-label="Currency" value={null} options={OPTIONS} onChange={() => {}} placeholder="Pick one" />,
+            <Select aria-label="Currency" value={null} onChange={() => {}} placeholder="Pick one">
+                {ITEMS}
+            </Select>,
         );
         expect(trigger()).toHaveTextContent('Pick one');
     });

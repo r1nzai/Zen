@@ -17,12 +17,6 @@ export interface ComponentDoc {
 
 export const COMPONENTS: ComponentDoc[] = [
     {
-        slug: 'actions-menu',
-        title: 'Actions Menu',
-        description: 'A "⋯" button that opens a short menu of actions for one thing.',
-        parts: ['ActionsMenu'],
-    },
-    {
         slug: 'animated-number',
         title: 'Animated Number',
         description: 'Numbers and amounts that count smoothly to each new value.',
@@ -128,7 +122,7 @@ export const COMPONENTS: ComponentDoc[] = [
         description:
             'A button that opens a menu, with your own trigger, a header, icons, groups and destructive items.',
         parts: ['Menu', 'MenuItem', 'MenuSeparator', 'MenuHeader'],
-        examples: ['Account'],
+        examples: ['Account', 'Actions'],
     },
     {
         slug: 'meter',

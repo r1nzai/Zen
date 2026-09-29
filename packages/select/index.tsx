@@ -19,13 +19,6 @@ import {
     useState,
 } from 'react';
 
-export interface SelectOption<V extends string> {
-    value: V;
-    /** Text shown, and matched when the user types to jump to an option. */
-    label: string;
-    disabled?: boolean;
-}
-
 interface SelectContextValue {
     value: string | null;
     active: string | null;
@@ -40,17 +33,14 @@ const SelectContext = createContext<SelectContextValue | null>(null);
 /**
  * Pick one value from a short list: a field-styled button that opens a list
  * below it. Keyboard: arrows, Home/End, type to jump, Enter to choose, Escape
- * to close. Give it SelectItem children (with SelectGroup and SelectSeparator
- * to organise them), or `options` as a shorthand. For long or searchable
- * lists, use Combobox.
+ * to close. Fill it with SelectItem, organised with SelectGroup and
+ * SelectSeparator. For long or searchable lists, use Combobox.
  */
 export default function Select<V extends string>({
     value,
-    options,
     onChange,
     placeholder = 'Select…',
     disabled = false,
-    renderOption,
     name,
     id,
     className,
@@ -103,7 +93,6 @@ export default function Select<V extends string>({
 
     // The chosen option's text, known on the first render (so server HTML shows it).
     const labels = new Map<string, string>(registered);
-    options?.forEach((o) => labels.set(o.value, o.label));
     collectLabels(children, labels);
     const selectedLabel = value === null ? undefined : labels.get(value);
 
@@ -178,16 +167,6 @@ export default function Select<V extends string>({
                     className="max-h-72 overflow-y-auto outline-hidden"
                 >
                     <SelectContext.Provider value={{ value, active, setActive, choose, optionId, register }}>
-                        {options?.map((option) => (
-                            <SelectItem
-                                key={option.value}
-                                value={option.value}
-                                label={option.label}
-                                disabled={option.disabled}
-                            >
-                                {renderOption ? renderOption(option) : option.label}
-                            </SelectItem>
-                        ))}
                         {children}
                     </SelectContext.Provider>
                 </div>
@@ -275,14 +254,10 @@ export function SelectSeparator() {
 
 export interface SelectProps<V extends string> {
     value: V | null;
-    /** Shorthand for plain options; or give SelectItem children. */
-    options?: readonly SelectOption<V>[];
     onChange: (value: V) => void;
     /** Shown while nothing is chosen. */
     placeholder?: string;
     disabled?: boolean;
-    /** With `options`: custom content for each (the label is still used for typing to jump). */
-    renderOption?: (option: SelectOption<V>) => ReactNode;
     /** Form field name: adds a hidden input with the value. */
     name?: string;
     id?: string;
@@ -290,7 +265,8 @@ export interface SelectProps<V extends string> {
     className?: string;
     /** Classes for the popup list. */
     listClassName?: string;
-    children?: ReactNode;
+    /** SelectItem, SelectGroup and SelectSeparator. */
+    children: ReactNode;
     'aria-label'?: string;
 }
 

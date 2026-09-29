@@ -11,6 +11,7 @@ import {
     ComboboxTrigger,
     MonthPicker,
     Select,
+    SelectItem,
     useToast,
 } from '@rinzai/zen';
 import { useState } from 'react';
@@ -38,7 +39,13 @@ export default function Pickers() {
                 <div className="grid gap-3 sm:grid-cols-2">
                     <label className="flex flex-col gap-2 text-sm">
                         Category
-                        <Select aria-label="Category" value={category} options={CATEGORIES} onChange={setCategory} />
+                        <Select aria-label="Category" value={category} onChange={setCategory}>
+                            {CATEGORIES.map((c) => (
+                                <SelectItem key={c.value} value={c.value}>
+                                    {c.label}
+                                </SelectItem>
+                            ))}
+                        </Select>
                     </label>
                     <label className="flex flex-col gap-2 text-sm">
                         From

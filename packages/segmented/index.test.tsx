@@ -8,10 +8,19 @@ const options = [
     { value: 'soft', label: 'Soft' },
     { value: 'bright', label: 'Bright' },
 ] as const;
+const ITEMS = options.map((o) => (
+    <SegmentedItem key={o.value} value={o.value}>
+        {o.label}
+    </SegmentedItem>
+));
 
 describe('Segmented', () => {
     it('is a labelled radio group with the value checked', () => {
-        render(<Segmented label="Glow" value="soft" options={options} onChange={() => {}} />);
+        render(
+            <Segmented label="Glow" value="soft" onChange={() => {}}>
+                {ITEMS}
+            </Segmented>,
+        );
         expect(screen.getByRole('radiogroup', { name: 'Glow' })).toBeInTheDocument();
         expect(screen.getByRole('radio', { name: 'Soft' })).toBeChecked();
         expect(screen.getByRole('radio', { name: 'Off' })).not.toBeChecked();
@@ -19,26 +28,28 @@ describe('Segmented', () => {
 
     it('reports the picked value', () => {
         const onChange = vi.fn();
-        render(<Segmented label="Glow" value="soft" options={options} onChange={onChange} />);
+        render(
+            <Segmented label="Glow" value="soft" onChange={onChange}>
+                {ITEMS}
+            </Segmented>,
+        );
         fireEvent.click(screen.getByRole('radio', { name: 'Bright' }));
         expect(onChange).toHaveBeenCalledWith('bright');
     });
 
     it('groups its radios under one name', () => {
-        render(<Segmented label="Glow" name="glow" value="off" options={options} onChange={() => {}} />);
+        render(
+            <Segmented label="Glow" name="glow" value="off" onChange={() => {}}>
+                {ITEMS}
+            </Segmented>,
+        );
         for (const radio of screen.getAllByRole('radio')) expect(radio).toHaveAttribute('name', 'glow');
     });
     it('each radio is the click target for its option (an invisible layer over it)', () => {
         render(
-            <Segmented
-                label="Glow"
-                value="soft"
-                onChange={() => {}}
-                options={[
-                    { value: 'off', label: 'Off' },
-                    { value: 'soft', label: 'Soft' },
-                ]}
-            />,
+            <Segmented label="Glow" value="soft" onChange={() => {}}>
+                {ITEMS}
+            </Segmented>,
         );
         for (const radio of screen.getAllByRole('radio')) {
             expect(radio).toHaveClass('absolute', 'inset-0', 'size-full', 'opacity-0', 'z-10');
@@ -78,16 +89,6 @@ describe('Segmented', () => {
             expect(bright).toBeDisabled();
             await userEvent.click(bright);
             expect(onChange).not.toHaveBeenCalled();
-        });
-
-        it('options and items share one radio group', () => {
-            render(
-                <Segmented label="Glow" value="off" onChange={() => {}} options={[{ value: 'off', label: 'Off' }]}>
-                    <SegmentedItem value="soft">Soft</SegmentedItem>
-                </Segmented>,
-            );
-            const [off, soft] = screen.getAllByRole('radio');
-            expect(off).toHaveAttribute('name', soft.getAttribute('name'));
         });
     });
 });
