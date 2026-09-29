@@ -48,6 +48,19 @@ describe('Toggle', () => {
             expect(onChange).toHaveBeenCalledWith(false);
         });
 
+        it('Enter flips it too, without submitting a surrounding form', () => {
+            const onChange = vi.fn();
+            const onSubmit = vi.fn((e: Event) => e.preventDefault());
+            render(
+                <form onSubmit={onSubmit as never}>
+                    <Toggle aria-label="Placeholder" onChange={onChange} />
+                </form>,
+            );
+            fireEvent.keyDown(screen.getByRole('switch'), { key: 'Enter' });
+            expect(onChange).toHaveBeenCalledWith(true);
+            expect(onSubmit).not.toHaveBeenCalled();
+        });
+
         it('does not throw when onChange is not provided', () => {
             const { container } = render(<Toggle checked={false} />);
             expect(() => fireEvent.click(container.firstChild as Element)).not.toThrow();

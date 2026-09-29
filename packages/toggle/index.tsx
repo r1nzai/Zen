@@ -6,11 +6,12 @@ export interface ToggleProps extends Omit<ComponentProps<'input'>, 'onChange' | 
 }
 
 /**
- * On/off switch. A native checkbox with the switch role underneath, so
- * keyboard, forms and screen readers work as they do for any checkbox.
+ * On/off switch. A native checkbox with the switch role underneath, so forms
+ * and screen readers work as they do for any checkbox. Space and Enter both
+ * flip it (Enter doesn't submit a surrounding form), as for a switch button.
  */
 export default function Toggle(props: ToggleProps) {
-    const { className, onChange, disabled, ...rest } = props;
+    const { className, onChange, onKeyDown, disabled, ...rest } = props;
 
     return (
         <label
@@ -28,6 +29,13 @@ export default function Toggle(props: ToggleProps) {
                 className="peer sr-only"
                 disabled={disabled}
                 onChange={(e) => onChange?.(e.target.checked)}
+                onKeyDown={(e) => {
+                    onKeyDown?.(e);
+                    if (e.key === 'Enter' && !e.defaultPrevented) {
+                        e.preventDefault();
+                        e.currentTarget.click();
+                    }
+                }}
                 {...rest}
             />
             <span

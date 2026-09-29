@@ -62,6 +62,7 @@ export {
     useToastHost,
 } from './toast';
 export { default as Toggle } from './toggle';
+export { FieldChevron } from './utils/field-chevron';
 export { default as ThemeToggle, ThemeScript, themeScript } from './theme-toggle';
 export { cva, type VariantProps } from './utils/cva';
 export { cx } from './utils/cx';
