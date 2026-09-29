@@ -14,6 +14,21 @@ interface DocgenInfo {
     props: Record<string, DocgenProp>;
 }
 
+/**
+ * A prop's type as text. Flat unions are sorted (null and undefined last): the
+ * prerender and the client each get types from their own docgen run, which can
+ * list union members in different orders and break hydration.
+ */
+function typeText(type: DocgenProp['type']) {
+    const text = type.raw ?? type.name;
+    if (!text.includes(' | ') || /[()[\]{}<>]/.test(text)) return text;
+    const last = (m: string) => Number(m === 'null' || m === 'undefined');
+    return text
+        .split(' | ')
+        .sort((a, b) => last(a) - last(b) || a.localeCompare(b))
+        .join(' | ');
+}
+
 /** Props of one component, from its TypeScript types and JSDoc (attached at build time as __docgenInfo). */
 export function PropsTable({
     name,
@@ -66,7 +81,7 @@ export function PropsTable({
                                     </TableCell>
                                     <TableCell>
                                         <code className="text-primary bg-transparent! p-0! text-xs break-words whitespace-pre-wrap">
-                                            {p.type.raw ?? p.type.name}
+                                            {typeText(p.type)}
                                         </code>
                                     </TableCell>
                                     <TableCell className="text-muted-foreground">
