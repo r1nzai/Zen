@@ -111,9 +111,7 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
             aria-hidden
             style={topoSrc ? ({ '--zen-topo': `url("${topoSrc}")` } as CSSProperties) : undefined}
         >
-            <div className="zen-aurora zen-aurora--a" />
-            <div className="zen-aurora zen-aurora--b" />
-            <div className="zen-aurora zen-aurora--c" />
+            <div className="zen-aurora" />
             {kind === 'contours' ? (
                 <>
                     <div className="zen-topo" />

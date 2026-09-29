@@ -281,39 +281,88 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
 }
 
 /*
- * Slow-moving aurora glows. Pre-softened gradients, no filters. The drift moves
- * in small steps (about 6 a second, a pixel or two each, invisible on a soft
- * glow) rather than every frame: anything moving behind the page makes the
- * whole screen redraw, blurs included, and at 240Hz that's 240 times a second.
+ * Slow-moving aurora glows: three soft lights in one layer. They drift along an
+ * ease-in-out path in small steps (about 6 a second, a pixel or two each,
+ * invisible on a soft glow) rather than every frame, and they are painted as
+ * gradients of one element instead of three large layers of their own: extra
+ * full-screen layers are what the GPU pays for on every frame, and anything
+ * moving behind the page makes the whole screen redraw, blurs included.
+ * (--zen-*-dx/dy/s: each light's drift and scale, animated below. Every step lasts
+ * exactly 1/6s in all three, so they repaint together, about 6 times a second.)
  */
+@property --zen-a-dx {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+@property --zen-a-dy {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+@property --zen-a-s {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 1;
+}
+@property --zen-b-dx {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+@property --zen-b-dy {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+@property --zen-b-s {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 1;
+}
+@property --zen-c-dx {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+@property --zen-c-dy {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+@property --zen-c-s {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 1;
+}
 .zen-aurora {
     position: absolute;
-    width: 70vmax;
-    height: 70vmax;
-    border-radius: 9999px;
+    inset: 0;
+    /* Faded as one layer, like the separate glows it replaces were, so it renders the same. */
     opacity: calc(0.16 * var(--glow-strength));
-    will-change: transform;
-}
-.zen-aurora--a {
-    top: -48vmax;
-    left: -10vmax;
-    background: radial-gradient(closest-side, oklch(var(--glow) / 0.9), transparent);
-    animation: zen-float-a 38s steps(230) infinite alternate;
-}
-.zen-aurora--b {
-    right: -25vmax;
-    bottom: -35vmax;
-    background: radial-gradient(closest-side, oklch(var(--glow-2) / 0.7), transparent);
-    animation: zen-float-b 46s steps(280) infinite alternate;
-}
-.zen-aurora--c {
-    top: 30%;
-    left: 40%;
-    width: 45vmax;
-    height: 45vmax;
-    opacity: calc(0.12 * var(--glow-strength));
-    background: radial-gradient(closest-side, oklch(var(--glow) / 0.8), transparent);
-    animation: zen-float-c 52s steps(310) infinite alternate;
+    background-repeat: no-repeat;
+    /* Last listed is drawn first: a, then b, then c on top. */
+    background-image:
+        radial-gradient(
+            circle calc(22.5vmax * var(--zen-c-s)) at calc(40% + 22.5vmax + var(--zen-c-dx))
+                calc(30% + 22.5vmax + var(--zen-c-dy)),
+            oklch(var(--glow) / 0.6),
+            transparent
+        ),
+        radial-gradient(
+            circle calc(35vmax * var(--zen-b-s)) at calc(100% - 10vmax + var(--zen-b-dx)) calc(100% + var(--zen-b-dy)),
+            oklch(var(--glow-2) / 0.7),
+            transparent
+        ),
+        radial-gradient(
+            circle calc(35vmax * var(--zen-a-s)) at calc(25vmax + var(--zen-a-dx)) calc(-13vmax + var(--zen-a-dy)),
+            oklch(var(--glow) / 0.9),
+            transparent
+        );
+    animation:
+        zen-aurora-a 38s steps(19) infinite alternate,
+        zen-aurora-b 46s steps(23) infinite alternate,
+        zen-aurora-c 52s steps(26) infinite alternate;
 }
 
 /*
@@ -413,19 +462,205 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     }
 }
 
-@keyframes zen-float-a {
-    to {
-        transform: translate3d(12vmax, 8vmax, 0) scale(1.1);
+@keyframes zen-aurora-a {
+    0% {
+        --zen-a-dx: 0vmax;
+        --zen-a-dy: 0vmax;
+        --zen-a-s: 1;
+    }
+    8.3333% {
+        --zen-a-dx: 0.1633vmax;
+        --zen-a-dy: 0.1088vmax;
+        --zen-a-s: 1.0014;
+    }
+    16.6667% {
+        --zen-a-dx: 0.6736vmax;
+        --zen-a-dy: 0.449vmax;
+        --zen-a-s: 1.0056;
+    }
+    25% {
+        --zen-a-dx: 1.5499vmax;
+        --zen-a-dy: 1.0333vmax;
+        --zen-a-s: 1.0129;
+    }
+    33.3333% {
+        --zen-a-dx: 2.7813vmax;
+        --zen-a-dy: 1.8542vmax;
+        --zen-a-s: 1.0232;
+    }
+    41.6667% {
+        --zen-a-dx: 4.3059vmax;
+        --zen-a-dy: 2.8706vmax;
+        --zen-a-s: 1.0359;
+    }
+    50% {
+        --zen-a-dx: 6vmax;
+        --zen-a-dy: 4vmax;
+        --zen-a-s: 1.05;
+    }
+    58.3333% {
+        --zen-a-dx: 7.6941vmax;
+        --zen-a-dy: 5.1294vmax;
+        --zen-a-s: 1.0641;
+    }
+    66.6667% {
+        --zen-a-dx: 9.2187vmax;
+        --zen-a-dy: 6.1458vmax;
+        --zen-a-s: 1.0768;
+    }
+    75% {
+        --zen-a-dx: 10.4501vmax;
+        --zen-a-dy: 6.9667vmax;
+        --zen-a-s: 1.0871;
+    }
+    83.3333% {
+        --zen-a-dx: 11.3264vmax;
+        --zen-a-dy: 7.551vmax;
+        --zen-a-s: 1.0944;
+    }
+    91.6667% {
+        --zen-a-dx: 11.8367vmax;
+        --zen-a-dy: 7.8912vmax;
+        --zen-a-s: 1.0986;
+    }
+    100% {
+        --zen-a-dx: 12vmax;
+        --zen-a-dy: 8vmax;
+        --zen-a-s: 1.1;
     }
 }
-@keyframes zen-float-b {
-    to {
-        transform: translate3d(-14vmax, -6vmax, 0) scale(0.95);
+@keyframes zen-aurora-b {
+    0% {
+        --zen-b-dx: -0vmax;
+        --zen-b-dy: -0vmax;
+        --zen-b-s: 1;
+    }
+    8.3333% {
+        --zen-b-dx: -0.1905vmax;
+        --zen-b-dy: -0.0816vmax;
+        --zen-b-s: 0.9993;
+    }
+    16.6667% {
+        --zen-b-dx: -0.7858vmax;
+        --zen-b-dy: -0.3368vmax;
+        --zen-b-s: 0.9972;
+    }
+    25% {
+        --zen-b-dx: -1.8083vmax;
+        --zen-b-dy: -0.775vmax;
+        --zen-b-s: 0.9935;
+    }
+    33.3333% {
+        --zen-b-dx: -3.2448vmax;
+        --zen-b-dy: -1.3906vmax;
+        --zen-b-s: 0.9884;
+    }
+    41.6667% {
+        --zen-b-dx: -5.0236vmax;
+        --zen-b-dy: -2.153vmax;
+        --zen-b-s: 0.9821;
+    }
+    50% {
+        --zen-b-dx: -7vmax;
+        --zen-b-dy: -3vmax;
+        --zen-b-s: 0.975;
+    }
+    58.3333% {
+        --zen-b-dx: -8.9764vmax;
+        --zen-b-dy: -3.847vmax;
+        --zen-b-s: 0.9679;
+    }
+    66.6667% {
+        --zen-b-dx: -10.7552vmax;
+        --zen-b-dy: -4.6094vmax;
+        --zen-b-s: 0.9616;
+    }
+    75% {
+        --zen-b-dx: -12.1917vmax;
+        --zen-b-dy: -5.225vmax;
+        --zen-b-s: 0.9565;
+    }
+    83.3333% {
+        --zen-b-dx: -13.2142vmax;
+        --zen-b-dy: -5.6632vmax;
+        --zen-b-s: 0.9528;
+    }
+    91.6667% {
+        --zen-b-dx: -13.8095vmax;
+        --zen-b-dy: -5.9184vmax;
+        --zen-b-s: 0.9507;
+    }
+    100% {
+        --zen-b-dx: -14vmax;
+        --zen-b-dy: -6vmax;
+        --zen-b-s: 0.95;
     }
 }
-@keyframes zen-float-c {
-    to {
-        transform: translate3d(-10vmax, 6vmax, 0) scale(1.15);
+@keyframes zen-aurora-c {
+    0% {
+        --zen-c-dx: -0vmax;
+        --zen-c-dy: 0vmax;
+        --zen-c-s: 1;
+    }
+    8.3333% {
+        --zen-c-dx: -0.136vmax;
+        --zen-c-dy: 0.0816vmax;
+        --zen-c-s: 1.002;
+    }
+    16.6667% {
+        --zen-c-dx: -0.5613vmax;
+        --zen-c-dy: 0.3368vmax;
+        --zen-c-s: 1.0084;
+    }
+    25% {
+        --zen-c-dx: -1.2916vmax;
+        --zen-c-dy: 0.775vmax;
+        --zen-c-s: 1.0194;
+    }
+    33.3333% {
+        --zen-c-dx: -2.3177vmax;
+        --zen-c-dy: 1.3906vmax;
+        --zen-c-s: 1.0348;
+    }
+    41.6667% {
+        --zen-c-dx: -3.5883vmax;
+        --zen-c-dy: 2.153vmax;
+        --zen-c-s: 1.0538;
+    }
+    50% {
+        --zen-c-dx: -5vmax;
+        --zen-c-dy: 3vmax;
+        --zen-c-s: 1.075;
+    }
+    58.3333% {
+        --zen-c-dx: -6.4117vmax;
+        --zen-c-dy: 3.847vmax;
+        --zen-c-s: 1.0962;
+    }
+    66.6667% {
+        --zen-c-dx: -7.6823vmax;
+        --zen-c-dy: 4.6094vmax;
+        --zen-c-s: 1.1152;
+    }
+    75% {
+        --zen-c-dx: -8.7084vmax;
+        --zen-c-dy: 5.225vmax;
+        --zen-c-s: 1.1306;
+    }
+    83.3333% {
+        --zen-c-dx: -9.4387vmax;
+        --zen-c-dy: 5.6632vmax;
+        --zen-c-s: 1.1416;
+    }
+    91.6667% {
+        --zen-c-dx: -9.864vmax;
+        --zen-c-dy: 5.9184vmax;
+        --zen-c-s: 1.148;
+    }
+    100% {
+        --zen-c-dx: -10vmax;
+        --zen-c-dy: 6vmax;
+        --zen-c-s: 1.15;
     }
 }
 @keyframes zen-dots-drift {
