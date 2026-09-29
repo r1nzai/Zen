@@ -10,7 +10,10 @@ export const links: Route.LinksFunction = () => [
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
     { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
     { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap' },
+    // SVG for browsers that take it, ICO for everything that asks for /favicon.ico, and iOS's own.
+    { rel: 'icon', href: '/favicon.ico', sizes: '32x32' },
     { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+    { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {

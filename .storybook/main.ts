@@ -4,6 +4,8 @@ export default defineMain({
     stories: ['../packages/**/*.mdx', '../packages/**/*.stories.@(ts|tsx)'],
     addons: ['@storybook/addon-docs', '@storybook/addon-links', '@storybook/addon-themes', '@storybook/addon-a11y'],
     framework: '@storybook/react-vite',
+    // favicon.svg here replaces Storybook's own (a copy of docs/public/favicon.svg).
+    staticDirs: ['./public'],
     typescript: {
         reactDocgen: 'react-docgen-typescript',
     },
