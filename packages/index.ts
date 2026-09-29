@@ -9,6 +9,17 @@ export { default as Button, buttonVariants } from './button';
 export { default as Card, Stat, StatRow } from './card';
 export { default as CodeBlock } from './code-block';
 export { default as Collapse } from './collapse';
+export {
+    default as Combobox,
+    ComboboxCreate,
+    ComboboxEmpty,
+    ComboboxItem,
+    ComboboxList,
+    ComboboxPopup,
+    type ComboboxProps,
+    ComboboxSearch,
+    ComboboxTrigger,
+} from './combobox';
 export { default as ConfirmDialog } from './confirm-dialog';
 export { default as Dialog, DialogClose, DialogFooter, type DialogProps } from './dialog';
 export { default as EditableCell, type EditableCellProps } from './editable-cell';

@@ -235,10 +235,14 @@ describe('Dropdown', () => {
         expect(screen.getByRole('combobox')).toHaveClass('w-40');
     });
 
-    it('can fill its container', () => {
-        render(<Dropdown items={defaultItems} selected={defaultItems[0]} onChange={vi.fn()} className="w-full" />);
-        // The wrapper Popover puts around the trigger must stretch too.
-        expect(screen.getByRole('combobox').parentElement).toHaveClass('w-full', 'max-w-none');
+    it('can fill its container (the field itself takes the width, no wrapper)', () => {
+        const { container } = render(
+            <Dropdown items={defaultItems} selected={defaultItems[0]} onChange={vi.fn()} className="w-full" />,
+        );
+        const field = screen.getByRole('combobox');
+        expect(field).toHaveClass('w-full');
+        expect(field).not.toHaveClass('w-56');
+        expect(field.parentElement).toBe(container);
     });
 
     it('shows the placeholder when nothing is selected (multi-select)', () => {
