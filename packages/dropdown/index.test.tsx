@@ -52,6 +52,19 @@ describe('Dropdown', () => {
         expect(screen.getByRole('combobox')).toHaveTextContent('Item 1');
     });
 
+    it('inside a <label>, clicking the trigger does not also click the search input', () => {
+        render(
+            <label>
+                Month
+                <Dropdown items={defaultItems} selected={{ text: 'Item 1', key: 'item1' }} onChange={vi.fn()} />
+            </label>,
+        );
+        const inputClicks = vi.fn();
+        document.querySelector('input')!.addEventListener('click', inputClicks);
+        fireEvent.click(screen.getByRole('combobox'));
+        expect(inputClicks).not.toHaveBeenCalled();
+    });
+
     // ── 2. Single-select: shows placeholder ─────────────────────────────────
     it('shows the placeholder when no text is present on the selected item (single-select)', () => {
         // Pass `text: undefined` (cast away TS strictness) so that the

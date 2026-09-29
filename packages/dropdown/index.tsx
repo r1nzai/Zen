@@ -27,12 +27,13 @@ export default function Dropdown(
     } = props;
     const ref = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
-    // cx doesn't resolve Tailwind conflicts: only use the default width when the caller sets none.
-    const sized = !!className && /(^|\s)(w-|min-w-|max-w-)/.test(className);
+    // A full-width field needs its popover's trigger wrapper to be full width too.
     const fullWidth = !!className && /(^|\s)w-full(\s|$)/.test(className);
     return (
         <Popover
             triggerClassName={fullWidth ? 'w-full max-w-none' : undefined}
+            // Exactly the field's width, lined up under it (long options truncate).
+            className="min-w-0"
             content={
                 <DropdownItemList
                     {...(mutable ? { mutable, onAdd } : { mutable })}
@@ -46,9 +47,11 @@ export default function Dropdown(
                 role="combobox"
                 aria-expanded={open}
                 aria-haspopup="listbox"
+                // Inside a <label>, the click would also go to the list's search input and close the list.
+                onClick={(e) => e.preventDefault()}
                 className={cx(
                     TRIGGER,
-                    !sized && 'w-56',
+                    'w-56',
                     'grow',
                     disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
                     open && TRIGGER_OPEN,

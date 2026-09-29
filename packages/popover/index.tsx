@@ -32,22 +32,15 @@ export default function Popover(props: PopoverProps) {
         const popoverEl = popoverRef.current;
         if (!popoverEl) return;
 
-        const handleOpen = () => {
-            setIsOpen(true);
-            onOpen?.();
+        // The browser's toggle event covers every way it opens or closes (click, Escape, light dismiss).
+        const handleToggle = (e: Event) => {
+            const open = (e as ToggleEvent).newState === 'open';
+            setIsOpen(open);
+            if (open) onOpen?.();
+            else onClose?.();
         };
-        const handleClose = () => {
-            setIsOpen(false);
-            onClose?.();
-        };
-
-        popoverEl.addEventListener('popover:open', handleOpen);
-        popoverEl.addEventListener('popover:close', handleClose);
-
-        return () => {
-            popoverEl.removeEventListener('popover:open', handleOpen);
-            popoverEl.removeEventListener('popover:close', handleClose);
-        };
+        popoverEl.addEventListener('toggle', handleToggle);
+        return () => popoverEl.removeEventListener('toggle', handleToggle);
     }, [onOpen, onClose]);
 
     useEffect(() => {

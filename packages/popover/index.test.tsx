@@ -119,7 +119,7 @@ describe('Popover', () => {
     });
 
     describe('event callbacks', () => {
-        it('calls onOpen when the popover:open event fires on the panel', () => {
+        it('calls onOpen when the panel toggles open', () => {
             const onOpen = vi.fn();
             render(
                 <Popover onOpen={onOpen} content={<span>content</span>}>
@@ -127,11 +127,11 @@ describe('Popover', () => {
                 </Popover>,
             );
             const panel = screen.getByRole('tooltip', { hidden: true });
-            panel.dispatchEvent(new Event('popover:open'));
+            panel.dispatchEvent(Object.assign(new Event('toggle'), { oldState: 'closed', newState: 'open' }));
             expect(onOpen).toHaveBeenCalledTimes(1);
         });
 
-        it('calls onClose when the popover:close event fires on the panel', () => {
+        it('calls onClose when the panel toggles closed', () => {
             const onClose = vi.fn();
             render(
                 <Popover onClose={onClose} content={<span>content</span>}>
@@ -139,7 +139,7 @@ describe('Popover', () => {
                 </Popover>,
             );
             const panel = screen.getByRole('tooltip', { hidden: true });
-            panel.dispatchEvent(new Event('popover:close'));
+            panel.dispatchEvent(Object.assign(new Event('toggle'), { oldState: 'open', newState: 'closed' }));
             expect(onClose).toHaveBeenCalledTimes(1);
         });
     });

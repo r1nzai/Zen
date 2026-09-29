@@ -75,7 +75,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Dialog',
         description: 'Modal dialogs on the native <dialog> element, and a confirmation for destructive actions.',
         parts: ['Dialog', 'ConfirmDialog'],
-        examples: ['Form', 'Confirm'],
+        examples: ['Form', 'Pickers', 'Confirm'],
     },
     {
         slug: 'dropdown',
