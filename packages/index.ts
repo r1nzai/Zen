@@ -1,5 +1,6 @@
 import 'react';
 export { default as ActionsMenu, type Action } from './actions-menu';
+export { default as Menu, MenuHeader, MenuItem, type MenuItemProps, type MenuProps, MenuSeparator } from './menu';
 export { default as AnimatedNumber, AnimatedMoney, type AnimatedNumberProps } from './animated-number';
 export { default as Avatar, type AvatarProps, cropImageToSquare, ImageCropError } from './avatar';
 export { default as Backdrop } from './backdrop';

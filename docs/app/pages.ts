@@ -114,6 +114,13 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'WithButton'],
     },
     {
+        slug: 'menu',
+        title: 'Menu',
+        description: 'A button that opens a menu, with your own trigger, a header, icons, groups and destructive items.',
+        parts: ['Menu', 'MenuItem', 'MenuSeparator', 'MenuHeader'],
+        examples: ['Account'],
+    },
+    {
         slug: 'meter',
         title: 'Meter',
         description: 'A measure against a limit, like spend against a budget: warm near it, red past it.',
