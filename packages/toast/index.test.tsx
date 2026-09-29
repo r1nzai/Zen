@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
+import { useEffect, useRef, useState } from 'react';
 
 import ToastProvider, { ToastOptions, useToast } from './index';
 
@@ -27,6 +28,54 @@ describe('Toast', () => {
         );
         show('Saved');
         expect(screen.getByRole('region', { name: 'Notifications' })).toHaveAttribute('popover', 'manual');
+    });
+
+    it('still shows a toast added just before its dialog unmounts', async () => {
+        // jsdom opens modal dialogs but doesn't match :modal; browsers do.
+        const matches = Element.prototype.matches;
+        const spy = vi.spyOn(Element.prototype, 'matches').mockImplementation(function (
+            this: Element,
+            selector: string,
+        ) {
+            return selector === ':modal' ? (this as HTMLDialogElement).open : matches.call(this, selector);
+        });
+        function Flow() {
+            const toast = useToast();
+            const [open, setOpen] = useState(true);
+            const ref = useRef<HTMLDialogElement>(null);
+            useEffect(() => {
+                const d = ref.current;
+                if (!d) return;
+                if (d.showModal) d.showModal();
+                else d.setAttribute('open', '');
+            }, []);
+            return open ? (
+                <dialog ref={ref}>
+                    <button
+                        onClick={() => {
+                            toast('Converted to USD');
+                            setOpen(false);
+                        }}
+                    >
+                        convert
+                    </button>
+                </dialog>
+            ) : null;
+        }
+        render(
+            <ToastProvider>
+                <Flow />
+            </ToastProvider>,
+        );
+        await act(async () => {}); // let the provider notice the open dialog
+        await act(async () => {
+            fireEvent.click(screen.getByRole('button', { name: 'convert', hidden: true }));
+        });
+        await act(async () => {}); // the removal is observed, then the toasts move
+        const status = screen.getByRole('status');
+        expect(status).toHaveTextContent('Converted to USD');
+        expect(document.body.contains(status)).toBe(true);
+        spy.mockRestore();
     });
 
     it('shows a status message with title and description', () => {

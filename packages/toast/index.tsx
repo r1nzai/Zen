@@ -57,15 +57,32 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
      * dialog's box), and clickable.
      */
     useEffect(() => {
+        let current: HTMLElement | null = null;
+        const isModal = (d: HTMLDialogElement) => {
+            try {
+                return d.matches(':modal');
+            } catch {
+                return true; // No :modal support (e.g. jsdom): any open dialog.
+            }
+        };
         const pick = () => {
-            const modals = [...document.querySelectorAll<HTMLDialogElement>('dialog[open]')].filter((d) =>
-                d.matches(':modal'),
-            );
-            setHost(modals.at(-1) ?? document.body);
+            const modals = [...document.querySelectorAll<HTMLDialogElement>('dialog[open]')].filter(isModal);
+            current = modals.at(-1) ?? document.body;
+            setHost(current);
         };
         pick();
-        const watch = new MutationObserver(pick);
-        watch.observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ['open'] });
+        // A dialog opening or closing changes its open attribute; one removed from the
+        // page while open (unmounted by React) doesn't, so removals re-pick too, but only
+        // when they took the current host with them.
+        const watch = new MutationObserver((records) => {
+            if (records.some((r) => r.type === 'attributes') || !current?.isConnected) pick();
+        });
+        watch.observe(document.documentElement, {
+            subtree: true,
+            childList: true,
+            attributes: true,
+            attributeFilter: ['open'],
+        });
         return () => watch.disconnect();
     }, []);
 
