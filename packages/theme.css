@@ -10,7 +10,12 @@
 @custom-variant dark (&:is(.dark *, [data-theme='dark'] *));
 @custom-variant light (&:is(.light *, [data-theme='light'] *));
 
-@theme {
+/*
+ * inline: utilities use oklch(var(--primary)) directly rather than through
+ * --color-primary, so tokens set on any element (applyTheme's target, a .light
+ * section) recolour everything inside it, not only when set on :root.
+ */
+@theme inline {
     --color-border: oklch(var(--border));
     --color-input: oklch(var(--input));
     --color-ring: oklch(var(--ring));
