@@ -50,7 +50,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Button',
         description: 'Actions, from the one glowing primary action to quiet ghost buttons.',
         parts: ['Button'],
-        examples: ['Variants', 'Sizes', 'Loading'],
+        examples: ['Variants', 'Sizes', 'Loading', 'AsLink'],
     },
     {
         slug: 'card',
@@ -73,10 +73,26 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['Collapse'],
     },
     {
+        slug: 'combobox',
+        title: 'Combobox',
+        description:
+            'Search and pick one or several items of any shape, composed from parts: field, panel, search, a virtualized list, empty and create rows.',
+        parts: [
+            'Combobox',
+            'ComboboxTrigger',
+            'ComboboxSearch',
+            'ComboboxList',
+            'ComboboxItem',
+            'ComboboxEmpty',
+            'ComboboxCreate',
+        ],
+        examples: ['Accounts'],
+    },
+    {
         slug: 'dialog',
         title: 'Dialog',
         description: 'Modal dialogs on the native <dialog> element, and a confirmation for destructive actions.',
-        parts: ['Dialog', 'ConfirmDialog'],
+        parts: ['Dialog', 'DialogFooter', 'DialogClose', 'ConfirmDialog'],
         examples: ['Form', 'Pickers', 'Confirm'],
     },
     {
@@ -116,7 +132,8 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'menu',
         title: 'Menu',
-        description: 'A button that opens a menu, with your own trigger, a header, icons, groups and destructive items.',
+        description:
+            'A button that opens a menu, with your own trigger, a header, icons, groups and destructive items.',
         parts: ['Menu', 'MenuItem', 'MenuSeparator', 'MenuHeader'],
         examples: ['Account'],
     },
@@ -171,15 +188,16 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'segmented',
         title: 'Segmented',
         description: 'A pill row for a few mutually exclusive options.',
-        parts: ['Segmented'],
+        parts: ['Segmented', 'SegmentedItem'],
+        examples: ['Default', 'WithIcons'],
     },
     {
         slug: 'select',
         title: 'Select',
         description:
             'Pick one value from a short list, fully keyboard-driven. For long or searchable lists, use Dropdown.',
-        parts: ['Select'],
-        examples: ['Default', 'CustomOptions'],
+        parts: ['Select', 'SelectItem', 'SelectGroup', 'SelectSeparator'],
+        examples: ['Default', 'CustomOptions', 'Groups'],
     },
     {
         slug: 'side-nav',
