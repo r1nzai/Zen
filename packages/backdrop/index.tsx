@@ -41,18 +41,22 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
         };
         const apply = () => {
             frame = 0;
+            const els = Array.from(document.querySelectorAll<HTMLElement>('.glow-edge'));
+            const rects = els.map((el) => el.getBoundingClientRect());
+            const box = backdrop?.getBoundingClientRect();
             // The backdrop's own light is a small box moved to the pointer: only the
             // box changes, so only where it was and is gets repainted. (A change on the
-            // backdrop itself would repaint the whole full-screen layer.) Pointer gone:
-            // the light fades out where it is (CSS, data-pointer).
-            if (backdrop) {
+            // backdrop itself would repaint the whole full-screen layer.) Positioned in
+            // the backdrop's own box, which is the viewport unless an ancestor contains
+            // it (a transformed frame, as in the docs examples). Pointer gone: the light
+            // fades out where it is (CSS, data-pointer).
+            if (backdrop && box) {
                 const state = out ? 'out' : 'in';
                 if (backdrop.dataset.pointer !== state) backdrop.dataset.pointer = state;
                 const light = backdrop.querySelector<HTMLElement>('.zen-light');
-                if (light && !out) write(light, `${x}px`, `${y}px`, 'left', 'top');
+                if (light && !out)
+                    write(light, `${Math.round(x - box.left)}px`, `${Math.round(y - box.top)}px`, 'left', 'top');
             }
-            const els = Array.from(document.querySelectorAll<HTMLElement>('.glow-edge'));
-            const rects = els.map((el) => el.getBoundingClientRect());
             els.forEach((el, i) => {
                 const r = rects[i];
                 const near = x > r.left - REACH && x < r.right + REACH && y > r.top - REACH && y < r.bottom + REACH;
