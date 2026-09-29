@@ -4,6 +4,7 @@ import Popover from '@zen/popover';
 import { InputGroupAddon, InputGroupInput } from '@zen/input-group';
 import { cx } from '@zen/utils/cx';
 import { FieldChevron } from '@zen/utils/field-chevron';
+import { CheckIcon } from '@zen/utils/status-icons';
 import { useVirtualList } from '@zen/utils/useVirtualList';
 import { TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
 import { ChangeEvent, ComponentProps, useEffect, useMemo, useRef, useState } from 'react';
@@ -90,7 +91,8 @@ export default function Dropdown(
                                         }}
                                         variant={'icon'}
                                         size={'icon'}
-                                        className="group size-4 rounded-sm p-0.5"
+                                        // Up 1px: capitals sit above their line box's centre, so this centres the × on them.
+                                        className="group relative -top-px size-4 rounded-sm p-0.5"
                                     >
                                         <XMark className="size-3 transition duration-300 group-hover:rotate-90" />
                                     </Button>
@@ -187,7 +189,7 @@ function DropdownItemList(
                             }}
                         >
                             <span className="text-primary col-start-1" aria-hidden>
-                                {selectedItems.includes(filteredItems[virtualItem.index].key) && '✓'}
+                                {selectedItems.includes(filteredItems[virtualItem.index].key) && <CheckIcon />}
                             </span>
                             <span className="col-start-2 truncate">{filteredItems[virtualItem.index].text}</span>
                         </li>

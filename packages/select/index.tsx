@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { CheckIcon } from '@zen/utils/status-icons';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
@@ -142,7 +143,7 @@ export default function Select<V extends string>({
                             )}
                         >
                             <span className="text-primary col-start-1" aria-hidden>
-                                {option.value === value && '✓'}
+                                {option.value === value && <CheckIcon />}
                             </span>
                             <span className="col-start-2 truncate">
                                 {renderOption ? renderOption(option) : option.label}

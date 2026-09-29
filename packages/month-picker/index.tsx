@@ -1,3 +1,5 @@
+import ChevronLeft from '@zen/icons/chevron-left';
+import ChevronRight from '@zen/icons/chevron-right';
 import { cx } from '@zen/utils/cx';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { formatMonth, type Month, monthNames } from '@zen/utils/month';
@@ -58,9 +60,9 @@ export default function MonthPicker({
                         type="button"
                         aria-label="Previous year"
                         onClick={() => setYear((y) => y - 1)}
-                        className="hover:bg-muted rounded px-2 py-1 text-sm"
+                        className="hover:bg-muted rounded p-1.5"
                     >
-                        ‹
+                        <ChevronLeft className="size-4" />
                     </button>
                     <span className="text-sm font-semibold tabular-nums" aria-live="polite">
                         {year}
@@ -69,9 +71,9 @@ export default function MonthPicker({
                         type="button"
                         aria-label="Next year"
                         onClick={() => setYear((y) => y + 1)}
-                        className="hover:bg-muted rounded px-2 py-1 text-sm"
+                        className="hover:bg-muted rounded p-1.5"
                     >
-                        ›
+                        <ChevronRight className="size-4" />
                     </button>
                 </div>
                 <div className="grid grid-cols-3 gap-1">
