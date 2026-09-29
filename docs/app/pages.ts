@@ -84,7 +84,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Dropdown',
         description: 'Searchable single or multiple selection, with optional creation of new items.',
         parts: ['Dropdown'],
-        examples: ['SingleSelect', 'MultiSelect'],
+        examples: ['SingleSelect', 'MultiSelect', 'ManyItems'],
     },
     {
         slug: 'editable-cell',
@@ -204,7 +204,7 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'table',
         title: 'Table',
         description:
-            'Composable tables: a solid panel that scrolls, sticky headers, first column and totals, and sortable columns.',
+            'Composable tables: a glass panel that scrolls, sticky headers, first column and totals, sortable columns, and virtual rows for long lists.',
         parts: [
             'TableContainer',
             'Table',
@@ -214,7 +214,7 @@ export const COMPONENTS: ComponentDoc[] = [
             'TableFooterCell',
             'TableSpacerRow',
         ],
-        examples: ['Default', 'Sortable'],
+        examples: ['Default', 'Sortable', 'Virtual'],
     },
     {
         slug: 'table-of-contents',
