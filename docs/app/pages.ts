@@ -10,6 +10,8 @@ export interface ComponentDoc {
     /** packages/<folder> holding the component and its examples (defaults to slug). */
     folder?: string;
     parts: string[];
+    /** What the import line shows, when it isn't `parts` (pages about functions rather than components). */
+    imports?: string[];
     examples?: string[];
 }
 
@@ -241,6 +243,16 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['ToastProvider'],
     },
     { slug: 'toggle', title: 'Toggle', description: 'An on/off switch.', parts: ['Toggle'] },
+    {
+        slug: 'theming',
+        title: 'Theming & styling',
+        description:
+            'Your own colours from a few settings, readable in dark and light for any hue; and className overrides that always win.',
+        folder: 'utils',
+        parts: [],
+        imports: ['applyTheme', 'applyPreset', 'customize', 'PRESETS', 'DEFAULT_THEME', 'themeVars', 'cx'],
+        examples: ['ThemeEditor', 'Stylesheet', 'Overrides'],
+    },
     {
         slug: 'tree',
         title: 'Tree Table',

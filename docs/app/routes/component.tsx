@@ -33,7 +33,7 @@ export default function ComponentPage({ params }: Route.ComponentProps) {
     const next = COMPONENTS[index + 1];
     const toc = [
         ...rest.map((e) => ({ id: e.name.toLowerCase(), label: e.title })),
-        { id: 'api', label: 'API reference' },
+        ...(doc.parts.length ? [{ id: 'api', label: 'API reference' }] : []),
         ...doc.parts.map((p) => ({ id: `api-${p.toLowerCase()}`, label: p, depth: 2 })),
     ];
 
@@ -45,7 +45,7 @@ export default function ComponentPage({ params }: Route.ComponentProps) {
 
                 <section className="flex flex-col gap-3">
                     <h2 className="text-2xl">Import</h2>
-                    <CodeCard code={`import { ${doc.parts.join(', ')} } from '@rinzai/zen';`} />
+                    <CodeCard code={`import { ${(doc.imports ?? doc.parts).join(', ')} } from '@rinzai/zen';`} />
                 </section>
 
                 {rest.length > 0 && (
@@ -57,18 +57,20 @@ export default function ComponentPage({ params }: Route.ComponentProps) {
                     </section>
                 )}
 
-                <section className="flex flex-col gap-8">
-                    <h2 id="api" className="text-2xl">
-                        API reference
-                    </h2>
-                    {doc.parts.map((part) => (
-                        <PropsTable
-                            key={part}
-                            name={part}
-                            component={(Zen as unknown as Record<string, ComponentType>)[part]}
-                        />
-                    ))}
-                </section>
+                {doc.parts.length > 0 && (
+                    <section className="flex flex-col gap-8">
+                        <h2 id="api" className="text-2xl">
+                            API reference
+                        </h2>
+                        {doc.parts.map((part) => (
+                            <PropsTable
+                                key={part}
+                                name={part}
+                                component={(Zen as unknown as Record<string, ComponentType>)[part]}
+                            />
+                        ))}
+                    </section>
+                )}
 
                 <nav
                     className="border-tint/[0.07] flex justify-between gap-4 border-t pt-8 text-sm"
