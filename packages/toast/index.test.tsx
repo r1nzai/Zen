@@ -1,5 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+
+import Dialog from '../dialog';
 
 import ToastProvider, { ToastOptions, useToast } from './index';
 
@@ -30,27 +32,38 @@ describe('Toast', () => {
         expect(screen.getByRole('region', { name: 'Notifications' })).toHaveAttribute('popover', 'manual');
     });
 
-    it('still shows a toast added just before its dialog unmounts', async () => {
-        // jsdom opens modal dialogs but doesn't match :modal; browsers do.
-        const matches = Element.prototype.matches;
-        const spy = vi.spyOn(Element.prototype, 'matches').mockImplementation(function (
-            this: Element,
-            selector: string,
-        ) {
-            return selector === ':modal' ? (this as HTMLDialogElement).open : matches.call(this, selector);
-        });
+    it('renders inside an open Dialog, and back on the page after it closes', () => {
+        function Flow() {
+            const toast = useToast();
+            const [open, setOpen] = useState(false);
+            return (
+                <>
+                    <button onClick={() => setOpen(true)}>open</button>
+                    <Dialog open={open} onOpenChange={setOpen} title="Settings">
+                        <button onClick={() => toast('Saved')}>save</button>
+                        <button onClick={() => setOpen(false)}>close</button>
+                    </Dialog>
+                </>
+            );
+        }
+        render(
+            <ToastProvider>
+                <Flow />
+            </ToastProvider>,
+        );
+        fireEvent.click(screen.getByRole('button', { name: 'open' }));
+        fireEvent.click(screen.getByRole('button', { name: 'save' }));
+        expect(screen.getByRole('status').closest('dialog')).not.toBeNull();
+        fireEvent.click(screen.getByRole('button', { name: 'close' }));
+        expect(screen.getByRole('status').closest('dialog')).toBeNull();
+    });
+
+    it('still shows a toast added just before its dialog unmounts', () => {
         function Flow() {
             const toast = useToast();
             const [open, setOpen] = useState(true);
-            const ref = useRef<HTMLDialogElement>(null);
-            useEffect(() => {
-                const d = ref.current;
-                if (!d) return;
-                if (d.showModal) d.showModal();
-                else d.setAttribute('open', '');
-            }, []);
             return open ? (
-                <dialog ref={ref}>
+                <Dialog open title="Change currency">
                     <button
                         onClick={() => {
                             toast('Converted to USD');
@@ -59,7 +72,7 @@ describe('Toast', () => {
                     >
                         convert
                     </button>
-                </dialog>
+                </Dialog>
             ) : null;
         }
         render(
@@ -67,15 +80,36 @@ describe('Toast', () => {
                 <Flow />
             </ToastProvider>,
         );
-        await act(async () => {}); // let the provider notice the open dialog
-        await act(async () => {
-            fireEvent.click(screen.getByRole('button', { name: 'convert', hidden: true }));
-        });
-        await act(async () => {}); // the removal is observed, then the toasts move
+        fireEvent.click(screen.getByRole('button', { name: 'convert' }));
         const status = screen.getByRole('status');
         expect(status).toHaveTextContent('Converted to USD');
-        expect(document.body.contains(status)).toBe(true);
-        spy.mockRestore();
+        expect(status.closest('dialog')).toBeNull();
+    });
+
+    it('keeps its countdown when it moves into a dialog', () => {
+        function Flow() {
+            const toast = useToast();
+            const [open, setOpen] = useState(false);
+            return (
+                <>
+                    <button onClick={() => toast('Saved')}>save</button>
+                    <button onClick={() => setOpen(true)}>open</button>
+                    <Dialog open={open} onOpenChange={setOpen} title="Settings" />
+                </>
+            );
+        }
+        render(
+            <ToastProvider>
+                <Flow />
+            </ToastProvider>,
+        );
+        fireEvent.click(screen.getByRole('button', { name: 'save' }));
+        act(() => vi.advanceTimersByTime(3000));
+        fireEvent.click(screen.getByRole('button', { name: 'open' }));
+        expect(screen.getByRole('status', { hidden: true }).closest('dialog')).not.toBeNull();
+        // 5 s in all: 3 s before the move and 2 s after, not 5 s more.
+        act(() => vi.advanceTimersByTime(2000 + 300));
+        expect(screen.queryByRole('status', { hidden: true })).toBeNull();
     });
 
     it('shows a status message with title and description', () => {

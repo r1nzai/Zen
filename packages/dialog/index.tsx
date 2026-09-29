@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { useToastHost } from '@zen/toast';
 import { useGraphicsMode } from '@zen/utils/graphics';
 import { ComponentProps, ReactNode, RefObject, useEffect, useId, useRef } from 'react';
 
@@ -37,6 +38,8 @@ export default function Dialog({
             dialog.close();
         }
     }, [open, initialFocus]);
+    // While open, toasts render in here: outside a modal dialog they'd be inert.
+    useToastHost(ref, open);
 
     return (
         <dialog

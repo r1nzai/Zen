@@ -59,6 +59,7 @@ export {
     type ToastProviderProps,
     type ToastTone,
     useToast,
+    useToastHost,
 } from './toast';
 export { default as Toggle } from './toggle';
 export { default as ThemeToggle, ThemeScript, themeScript } from './theme-toggle';

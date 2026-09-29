@@ -1,6 +1,16 @@
 import { cx } from '@zen/utils/cx';
 import { useGraphicsMode } from '@zen/utils/graphics';
-import { createContext, CSSProperties, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import {
+    createContext,
+    CSSProperties,
+    ReactNode,
+    RefObject,
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 
 import { AlertIcon, CheckIcon, InfoIcon } from '@zen/utils/status-icons';
@@ -30,6 +40,9 @@ const EXIT_MS = 300;
 
 const ToastContext = createContext<((title: string, options?: ToastOptions) => number) | null>(null);
 
+/** Registers an element the toasts should render in; returns the unregister function. */
+const ToastHostContext = createContext<((el: HTMLElement) => () => void) | null>(null);
+
 export interface ToastProviderProps {
     children: ReactNode;
     /**
@@ -45,50 +58,36 @@ export interface ToastProviderProps {
 export default function ToastProvider({ children, offset, viewportClassName }: ToastProviderProps) {
     useGraphicsMode();
     const [toasts, setToasts] = useState<ToastItem[]>([]);
-    // Where the toasts render: the page, or the open modal dialog (see below).
-    const [host, setHost] = useState<HTMLElement | null>(null);
     const nextId = useRef(0);
+    // Per toast, kept here so they survive moving between hosts (which remounts them):
+    // its countdown, and whether it has already made its entrance.
+    const clocks = useRef(new Map<number, Clock>());
+    const entered = useRef(new Set<number>());
 
     /*
      * Toasts sit in the browser's top layer (a manual popover), so they show above
      * dialogs instead of dimmed behind them. A modal dialog also makes everything
-     * outside it inert, top layer included, so while one is open the toasts render
-     * inside it: still positioned against the viewport (the top layer ignores the
-     * dialog's box), and clickable.
+     * outside it inert, top layer included, so the toasts must render inside the open
+     * dialog to stay clickable: dialogs register themselves as hosts while open (Zen's
+     * Dialog does; others use useToastHost), and the latest one wins. Inside a dialog
+     * they're still placed against the viewport, as the top layer ignores the dialog's box.
      */
-    useEffect(() => {
-        let current: HTMLElement | null = null;
-        const isModal = (d: HTMLDialogElement) => {
-            try {
-                return d.matches(':modal');
-            } catch {
-                return true; // No :modal support (e.g. jsdom): any open dialog.
-            }
-        };
-        const pick = () => {
-            const modals = [...document.querySelectorAll<HTMLDialogElement>('dialog[open]')].filter(isModal);
-            current = modals.at(-1) ?? document.body;
-            setHost(current);
-        };
-        pick();
-        // A dialog opening or closing changes its open attribute; one removed from the
-        // page while open (unmounted by React) doesn't, so removals re-pick too, but only
-        // when they took the current host with them.
-        const watch = new MutationObserver((records) => {
-            if (records.some((r) => r.type === 'attributes') || !current?.isConnected) pick();
-        });
-        watch.observe(document.documentElement, {
-            subtree: true,
-            childList: true,
-            attributes: true,
-            attributeFilter: ['open'],
-        });
-        return () => watch.disconnect();
+    const [hosts, setHosts] = useState<HTMLElement[]>([]);
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+    const registerHost = useCallback((el: HTMLElement) => {
+        setHosts((h) => [...h, el]);
+        return () => setHosts((h) => h.filter((x) => x !== el));
     }, []);
+    const host = hosts.at(-1) ?? (mounted ? document.body : null);
 
     const dismiss = useCallback((id: number) => {
         setToasts((ts) => ts.map((t) => (t.id === id ? { ...t, leaving: true } : t)));
-        setTimeout(() => setToasts((ts) => ts.filter((t) => t.id !== id)), EXIT_MS);
+        setTimeout(() => {
+            setToasts((ts) => ts.filter((t) => t.id !== id));
+            clocks.current.delete(id);
+            entered.current.delete(id);
+        }, EXIT_MS);
     }, []);
 
     const add = useCallback((title: string, { description, tone = 'info', action, timeout }: ToastOptions = {}) => {
@@ -109,7 +108,7 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
 
     return (
         <ToastContext.Provider value={add}>
-            {children}
+            <ToastHostContext.Provider value={registerHost}>{children}</ToastHostContext.Provider>
             {host &&
                 createPortal(
                     <section
@@ -124,13 +123,33 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
                         style={offset ? ({ '--zen-toast-offset': offset } as CSSProperties) : undefined}
                     >
                         {visible.map((t) => (
-                            <Toast key={t.id} toast={t} onDismiss={() => dismiss(t.id)} />
+                            <Toast
+                                key={t.id}
+                                toast={t}
+                                onDismiss={() => dismiss(t.id)}
+                                clocks={clocks.current}
+                                entered={entered.current}
+                            />
                         ))}
                     </section>,
                     host,
                 )}
         </ToastContext.Provider>
     );
+}
+
+/**
+ * Makes an element (a modal dialog, while it's open) the place toasts render, so
+ * they stay above it and clickable. Zen's Dialog does this itself; call it for
+ * other modal dialogs. Does nothing outside a ToastProvider.
+ */
+export function useToastHost(ref: RefObject<HTMLElement | null>, active: boolean) {
+    const register = useContext(ToastHostContext);
+    useEffect(() => {
+        const el = ref.current;
+        if (!register || !active || !el) return;
+        return register(el);
+    }, [register, active, ref]);
 }
 
 /** Shows the toast column in the top layer as soon as it mounts (where the Popover API exists). */
@@ -174,25 +193,54 @@ const TONE = {
     },
 } as const;
 
-function Toast({ toast, onDismiss }: { toast: ToastItem; onDismiss: () => void }) {
+/** A toast's countdown: time already used up, and when the current stretch began (null while paused). */
+interface Clock {
+    spent: number;
+    since: number | null;
+}
+
+function Toast({
+    toast,
+    onDismiss,
+    clocks,
+    entered,
+}: {
+    toast: ToastItem;
+    onDismiss: () => void;
+    clocks: Map<number, Clock>;
+    entered: Set<number>;
+}) {
     const tone = TONE[toast.tone] ?? TONE.info;
     const Icon = tone.icon;
     const [paused, setPaused] = useState(false);
-    const remaining = useRef(toast.timeout);
+    const ref = useRef<HTMLDivElement>(null);
+    // Its entrance plays once, not again when it moves to another host.
+    const [firstShow] = useState(() => !entered.has(toast.id));
+    useEffect(() => {
+        if (ref.current?.isConnected) entered.add(toast.id);
+    }, [entered, toast.id]);
+    if (!clocks.has(toast.id)) clocks.set(toast.id, { spent: 0, since: null });
+    const clock = clocks.get(toast.id)!;
+    // Time used so far, including a stretch still running (a move renders the new copy
+    // before the old one's countdown stops).
+    const used = clock.spent + (clock.since === null ? 0 : Date.now() - clock.since);
 
-    // Counts down only while not hovered, like the timer bar.
+    // Counts down only while not hovered, like the timer bar; the provider keeps the
+    // clock, so moving between hosts doesn't restart it.
     useEffect(() => {
         if (!toast.timeout || paused || toast.leaving) return;
-        const started = Date.now();
-        const timer = setTimeout(onDismiss, remaining.current);
+        clock.since = Date.now();
+        const timer = setTimeout(onDismiss, Math.max(0, toast.timeout - clock.spent));
         return () => {
             clearTimeout(timer);
-            remaining.current -= Date.now() - started;
+            if (clock.since !== null) clock.spent += Date.now() - clock.since;
+            clock.since = null;
         };
-    }, [paused, toast.timeout, toast.leaving, onDismiss]);
+    }, [paused, toast.timeout, toast.leaving, onDismiss, clock]);
 
     return (
         <div
+            ref={ref}
             role={toast.tone === 'error' ? 'alert' : 'status'}
             aria-atomic="true"
             onMouseEnter={() => setPaused(true)}
@@ -200,7 +248,7 @@ function Toast({ toast, onDismiss }: { toast: ToastItem; onDismiss: () => void }
             className={cx(
                 'zen__toast group glass glass-blur text-card-foreground relative flex items-start gap-3 overflow-hidden rounded-2xl border p-3.5 pr-10 select-none',
                 'transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
-                'starting:translate-y-3 starting:scale-[0.97] starting:opacity-0',
+                firstShow && 'starting:translate-y-3 starting:scale-[0.97] starting:opacity-0',
                 toast.leaving && 'translate-x-6 opacity-0',
                 tone.ring,
                 tone.glow,
@@ -253,7 +301,8 @@ function Toast({ toast, onDismiss }: { toast: ToastItem; onDismiss: () => void }
                         'zen__toast-timer absolute bottom-0 left-0 h-0.5 w-full origin-left opacity-60 group-hover:[animation-play-state:paused]',
                         tone.bar,
                     )}
-                    style={{ animationDuration: `${toast.timeout}ms` }}
+                    // Picks up where it was after a move between hosts.
+                    style={{ animationDuration: `${toast.timeout}ms`, animationDelay: `${-used}ms` }}
                 />
             )}
         </div>
