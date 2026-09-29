@@ -1,7 +1,13 @@
 import Spinner from '@zen/spinner';
+import { Slot } from '@zen/utils/slot';
 import { cva, VariantProps } from '@zen/utils/cva';
 import { ComponentProps } from 'react';
 
+/**
+ * A button in one of Zen's styles. With `asChild`, the styles go onto your own
+ * single child element instead, such as a router's Link (`loading` and `type`
+ * then don't apply).
+ */
 export default function Button({
     className,
     variant,
@@ -9,9 +15,17 @@ export default function Button({
     loading = false,
     disabled,
     type = 'button',
+    asChild = false,
     children,
     ...rest
 }: ButtonProps) {
+    if (asChild) {
+        return (
+            <Slot {...(rest as ComponentProps<'a'>)} className={buttonVariants({ variant, size, className })}>
+                {children}
+            </Slot>
+        );
+    }
     return (
         <button
             // A plain action by default, so it never submits a form by accident; pass type="submit" to submit.
@@ -68,4 +82,6 @@ export const buttonVariants = cva(
 export interface ButtonProps extends ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
     /** Shows a spinner and disables the button while an action runs. */
     loading?: boolean;
+    /** Put the button's styles on the single child element (e.g. a link) instead of a <button>. */
+    asChild?: boolean;
 }

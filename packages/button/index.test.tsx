@@ -174,4 +174,31 @@ describe('Button', () => {
         expect(btn).toHaveClass('bg-destructive/90');
         expect(btn).toHaveClass('extra');
     });
+
+    describe('asChild', () => {
+        it('puts the button styles on your own element, e.g. a link', () => {
+            render(
+                <Button asChild variant="outline" size="sm">
+                    <a href="/settings">Settings</a>
+                </Button>,
+            );
+            const link = screen.getByRole('link', { name: 'Settings' });
+            expect(link).toHaveAttribute('href', '/settings');
+            expect(link).toHaveClass('zen__button', 'glow-edge', 'h-8');
+            expect(screen.queryByRole('button')).toBeNull();
+        });
+
+        it("the child's own classes win, and other props pass through", () => {
+            render(
+                <Button asChild aria-label="Home" className="w-full">
+                    <a href="/" className="rounded-full">
+                        Home
+                    </a>
+                </Button>,
+            );
+            const link = screen.getByRole('link', { name: 'Home' });
+            expect(link).toHaveClass('w-full', 'rounded-full');
+            expect(link).not.toHaveClass('rounded-lg');
+        });
+    });
 });
