@@ -28,6 +28,9 @@ export default function Dialog({
         const dialog = ref.current;
         if (!dialog) return;
         if (open && !dialog.open) {
+            // Whether the page shows a scrollbar, measured before opening hides it (see theme.css).
+            const root = document.documentElement;
+            root.toggleAttribute('data-zen-scrollbar', window.innerWidth > root.clientWidth);
             dialog.showModal();
             initialFocus?.current?.focus();
         } else if (!open && dialog.open) {

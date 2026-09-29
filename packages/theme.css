@@ -463,9 +463,16 @@ html[data-pointer='out'] .zen-topo--lit {
         opacity: 0;
     }
 }
-/* The page behind a modal dialog doesn't scroll. */
+/*
+ * The page behind a modal dialog doesn't scroll. Hiding the overflow removes
+ * the scrollbar, so where the page had one (Dialog sets data-zen-scrollbar),
+ * its space stays reserved and the page doesn't shift sideways.
+ */
 :root:has(.zen__dialog[open]) {
     overflow: hidden;
+}
+:root[data-zen-scrollbar]:has(.zen__dialog[open]) {
+    scrollbar-gutter: stable;
 }
 
 /*
