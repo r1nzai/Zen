@@ -3,8 +3,12 @@ import {
     Dialog,
     DialogClose,
     DialogFooter,
-    Dropdown,
-    type DropdownItem,
+    Combobox,
+    ComboboxEmpty,
+    ComboboxList,
+    ComboboxPopup,
+    ComboboxSearch,
+    ComboboxTrigger,
     MonthPicker,
     Select,
     useToast,
@@ -17,10 +21,8 @@ const CATEGORIES = [
     { value: 'transport', label: 'Transport' },
     { value: 'dining', label: 'Dining out' },
 ] as const;
-const TAGS: DropdownItem[] = ['Essential', 'Shared', 'Work', 'Treat'].map((text) => ({
-    text,
-    key: text.toLowerCase(),
-}));
+const TAGS = ['Essential', 'Shared', 'Work', 'Treat'];
+const asText = (tag: string) => tag;
 
 /** Selects, pickers and menus open above the dialog, and toasts show over it (try Save draft). */
 export default function Pickers() {
@@ -28,7 +30,7 @@ export default function Pickers() {
     const [open, setOpen] = useState(false);
     const [category, setCategory] = useState<(typeof CATEGORIES)[number]['value'] | null>('groceries');
     const [month, setMonth] = useState<string | null>('2026-09');
-    const [tags, setTags] = useState<DropdownItem[]>([TAGS[0]]);
+    const [tags, setTags] = useState<string[]>([TAGS[0]]);
     return (
         <>
             <Button onClick={() => setOpen(true)}>Add budget</Button>
@@ -45,7 +47,22 @@ export default function Pickers() {
                 </div>
                 <div className="flex flex-col gap-2 text-sm">
                     <span>Tags</span>
-                    <Dropdown multiple items={TAGS} selected={tags} onChange={setTags} className="w-full" />
+                    <Combobox
+                        multiple
+                        items={TAGS}
+                        itemKey={asText}
+                        itemText={asText}
+                        value={tags}
+                        onValueChange={setTags}
+                    >
+                        <ComboboxTrigger className="w-full" />
+                        <ComboboxPopup>
+                            <ComboboxSearch />
+                            <ComboboxList>
+                                <ComboboxEmpty />
+                            </ComboboxList>
+                        </ComboboxPopup>
+                    </Combobox>
                 </div>
                 <DialogFooter>
                     <Button variant="ghost" className="mr-auto" onClick={() => toast('Draft saved', { tone: 'info' })}>

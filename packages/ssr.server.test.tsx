@@ -13,7 +13,11 @@ import {
     Collapse,
     ConfirmDialog,
     Dialog,
-    Dropdown,
+    Combobox,
+    ComboboxList,
+    ComboboxPopup,
+    ComboboxSearch,
+    ComboboxTrigger,
     EditableCell,
     Field,
     Header,
@@ -71,8 +75,24 @@ const components = {
     Badge: <Badge>badge</Badge>,
     Button: <Button>button</Button>,
     Collapse: <Collapse items={['a', 'b']}>{(item) => <span key={item}>{item}</span>}</Collapse>,
-    'Dropdown (single)': <Dropdown items={items} selected={items[0]} onChange={() => {}} />,
-    'Dropdown (multiple)': <Dropdown multiple items={items} selected={items} onChange={() => {}} />,
+    'Combobox (single)': (
+        <Combobox items={items} value="1" onValueChange={() => {}}>
+            <ComboboxTrigger />
+            <ComboboxPopup>
+                <ComboboxSearch />
+                <ComboboxList />
+            </ComboboxPopup>
+        </Combobox>
+    ),
+    'Combobox (multiple)': (
+        <Combobox multiple items={items} value={['1', '2']} onValueChange={() => {}}>
+            <ComboboxTrigger />
+            <ComboboxPopup>
+                <ComboboxSearch />
+                <ComboboxList />
+            </ComboboxPopup>
+        </Combobox>
+    ),
     Input: <Input />,
     Popover: <Popover content={<span>content</span>}>trigger</Popover>,
     TextArea: <TextArea />,

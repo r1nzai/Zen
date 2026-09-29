@@ -57,7 +57,7 @@ export default function App() {
 ## What's inside
 
 - **Surfaces:** Card, Stat, Dialog, ConfirmDialog, Popover, Toast, Backdrop (aurora, contours or dots, and a pointer light)
-- **Inputs:** Button, Input, TextArea, InputGroup, MoneyInput, Select, Dropdown, MonthPicker, Segmented, Slider, Toggle, Field
+- **Inputs:** Button, Input, TextArea, InputGroup, MoneyInput, Select, Combobox, MonthPicker, Segmented, Slider, Toggle, Field
 - **Data:** composable Table with sticky edges and sorting, tree rows, editable cells, virtual rows, Meter, ProgressRing, AnimatedNumber
 - **Navigation:** Header, NavPills, Tabs, TabBar, SideNav, TableOfContents, ActionsMenu
 - **Theming:** dark and light, OKLCH tokens, and a theme generator (presets or any hue) that keeps contrast readable

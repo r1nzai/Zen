@@ -24,7 +24,6 @@ export { default as ConfirmDialog } from './confirm-dialog';
 export { default as Dialog, DialogClose, DialogFooter, type DialogProps } from './dialog';
 export { default as EditableCell, type EditableCellProps } from './editable-cell';
 export { default as Field, type FieldProps, FormMessage, type FormMessageProps } from './field';
-export { default as Dropdown, type DropdownItem } from './dropdown';
 export { default as Header } from './header';
 export * from './icons';
 export { default as Input } from './input';

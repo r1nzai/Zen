@@ -86,7 +86,7 @@ export const COMPONENTS: ComponentDoc[] = [
             'ComboboxEmpty',
             'ComboboxCreate',
         ],
-        examples: ['Accounts'],
+        examples: ['Accounts', 'Tags', 'ManyItems'],
     },
     {
         slug: 'dialog',
@@ -94,13 +94,6 @@ export const COMPONENTS: ComponentDoc[] = [
         description: 'Modal dialogs on the native <dialog> element, and a confirmation for destructive actions.',
         parts: ['Dialog', 'DialogFooter', 'DialogClose', 'ConfirmDialog'],
         examples: ['Form', 'Pickers', 'Confirm'],
-    },
-    {
-        slug: 'dropdown',
-        title: 'Dropdown',
-        description: 'Searchable single or multiple selection, with optional creation of new items.',
-        parts: ['Dropdown'],
-        examples: ['SingleSelect', 'MultiSelect', 'ManyItems'],
     },
     {
         slug: 'editable-cell',
@@ -195,7 +188,7 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'select',
         title: 'Select',
         description:
-            'Pick one value from a short list, fully keyboard-driven. For long or searchable lists, use Dropdown.',
+            'Pick one value from a short list, fully keyboard-driven. For long or searchable lists, use Combobox.',
         parts: ['Select', 'SelectItem', 'SelectGroup', 'SelectSeparator'],
         examples: ['Default', 'CustomOptions', 'Groups'],
     },

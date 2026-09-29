@@ -42,7 +42,7 @@ const SelectContext = createContext<SelectContextValue | null>(null);
  * below it. Keyboard: arrows, Home/End, type to jump, Enter to choose, Escape
  * to close. Give it SelectItem children (with SelectGroup and SelectSeparator
  * to organise them), or `options` as a shorthand. For long or searchable
- * lists, use Dropdown.
+ * lists, use Combobox.
  */
 export default function Select<V extends string>({
     value,

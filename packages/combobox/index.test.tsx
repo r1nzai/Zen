@@ -159,4 +159,95 @@ describe('Combobox', () => {
         fireEvent.keyDown(field(), { key: 'Enter' });
         expect(field()).toHaveAttribute('aria-expanded', 'false');
     });
+
+    describe('field', () => {
+        const Plain = (props: { className?: string; disabled?: boolean; value?: string | null }) => (
+            <Combobox
+                items={ACCOUNTS}
+                itemKey={(a) => a.id}
+                itemText={(a) => a.name}
+                value={props.value ?? null}
+                onValueChange={() => {}}
+            >
+                <ComboboxTrigger placeholder="Pick" className={props.className} disabled={props.disabled} />
+                <ComboboxPopup>
+                    <ComboboxSearch />
+                    <ComboboxList />
+                </ComboboxPopup>
+            </Combobox>
+        );
+
+        it('inside a <label>, clicking the field does not also click the search input', () => {
+            render(
+                <label>
+                    Account
+                    <Plain />
+                </label>,
+            );
+            const inputClicks = vi.fn();
+            search().addEventListener('click', inputClicks);
+            fireEvent.click(field());
+            expect(inputClicks).not.toHaveBeenCalled();
+        });
+
+        it('has a default width unless given one, and can fill its container (no wrapper)', () => {
+            const { container, rerender } = render(<Plain />);
+            expect(field()).toHaveClass('w-56');
+            rerender(<Plain className="w-full" />);
+            expect(field()).toHaveClass('w-full');
+            expect(field()).not.toHaveClass('w-56');
+            expect(field().parentElement).toBe(container);
+        });
+
+        it('looks disabled when disabled', () => {
+            render(<Plain disabled />);
+            expect(field()).toHaveClass('cursor-not-allowed', 'opacity-50');
+            expect(field()).toHaveAttribute('aria-disabled', 'true');
+        });
+
+        it('shows the placeholder for a chosen key it has no text for', () => {
+            render(<Plain value="nope" />);
+            expect(field()).toHaveTextContent('Pick');
+        });
+
+        it('shows chosen items that are not in items (selectedItems), e.g. just created', () => {
+            render(
+                <Combobox
+                    multiple
+                    items={ACCOUNTS}
+                    selectedItems={[{ id: 'new', name: 'Brokerage' }]}
+                    itemKey={(a) => a.id}
+                    itemText={(a) => a.name}
+                    value={['new']}
+                    onValueChange={() => {}}
+                >
+                    <ComboboxTrigger placeholder="None" />
+                    <ComboboxPopup>
+                        <ComboboxSearch />
+                        <ComboboxList />
+                    </ComboboxPopup>
+                </Combobox>,
+            );
+            expect(screen.getByText('Brokerage')).toBeInTheDocument();
+        });
+
+        it('multiple with nothing chosen shows the placeholder', () => {
+            render(
+                <Combobox
+                    multiple
+                    items={ACCOUNTS}
+                    itemKey={(a) => a.id}
+                    itemText={(a) => a.name}
+                    value={[]}
+                    onValueChange={() => {}}
+                >
+                    <ComboboxTrigger placeholder="No tags" />
+                    <ComboboxPopup>
+                        <ComboboxList />
+                    </ComboboxPopup>
+                </Combobox>,
+            );
+            expect(field()).toHaveTextContent('No tags');
+        });
+    });
 });

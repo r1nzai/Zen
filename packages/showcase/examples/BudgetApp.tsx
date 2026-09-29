@@ -10,12 +10,16 @@ import {
     Button,
     Card,
     Collapse,
+    Combobox,
+    ComboboxCreate,
+    ComboboxList,
+    ComboboxPopup,
+    ComboboxSearch,
+    ComboboxTrigger,
     ConfirmDialog,
     customize,
     DEFAULT_THEME,
     Dialog,
-    Dropdown,
-    type DropdownItem,
     EditableCell,
     Field,
     formatMoney,
@@ -101,10 +105,8 @@ const CATEGORIES = [
 ] as const;
 const categoryOf = (key: CategoryKey) => CATEGORIES.find((c) => c.value === key)!;
 
-const TAGS: DropdownItem[] = ['Essential', 'Shared', 'Work', 'Treat', 'Annual', 'Reimbursable', 'Cash'].map((text) => ({
-    text,
-    key: text.toLowerCase(),
-}));
+const TAGS = ['Essential', 'Shared', 'Work', 'Treat', 'Annual', 'Reimbursable', 'Cash'];
+const asText = (tag: string) => tag;
 
 const INITIAL: Entry[] = [
     { id: 1, label: 'Paycheck', amount: 845000, kind: 'income', category: 'salary', tags: ['Work'], recurring: true },
@@ -795,7 +797,7 @@ function AddEntryDialog({
             amount: null as Money | null,
             kind: 'expense' as Kind,
             category: 'groceries' as CategoryKey,
-            tags: [] as DropdownItem[],
+            tags: [] as string[],
             month: '2026-09' as Month | null,
             recurring: false,
             note: '',
@@ -837,7 +839,7 @@ function AddEntryDialog({
                         amount: form.amount!,
                         kind: form.kind,
                         category: form.category,
-                        tags: form.tags.map((t) => t.text),
+                        tags: form.tags,
                         recurring: form.recurring,
                     });
                     close();
@@ -885,16 +887,22 @@ function AddEntryDialog({
                 </div>
                 <div className="flex flex-col gap-2">
                     <span className="text-sm font-medium">Tags</span>
-                    <Dropdown
+                    <Combobox
                         multiple
-                        mutable
-                        items={TAGS}
-                        placeholder="None"
-                        selected={form.tags}
-                        onChange={(t) => set('tags', t)}
-                        onAdd={(t) => set('tags', [...form.tags, t])}
-                        className="w-full"
-                    />
+                        items={[...new Set([...TAGS, ...form.tags])]}
+                        itemKey={asText}
+                        itemText={asText}
+                        value={form.tags}
+                        onValueChange={(t) => set('tags', t)}
+                    >
+                        <ComboboxTrigger placeholder="None" className="w-full" />
+                        <ComboboxPopup>
+                            <ComboboxSearch />
+                            <ComboboxList>
+                                <ComboboxCreate onCreate={(tag) => set('tags', [...form.tags, tag])} />
+                            </ComboboxList>
+                        </ComboboxPopup>
+                    </Combobox>
                 </div>
                 <Field label="Note" hint="Only you can see this.">
                     <TextArea value={form.note} onChange={(e) => set('note', e.target.value)} placeholder="Optional" />
