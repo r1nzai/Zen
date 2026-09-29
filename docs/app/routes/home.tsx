@@ -6,15 +6,16 @@ import { version } from '../../../package.json';
 import { CodeCard } from '../components/code-block';
 import { DocsLayout } from '../components/docs-layout';
 import { COMPONENTS, componentPath } from '../pages';
+import { LIBRARY_LD, seo, SITE, SITE_NAME } from '../seo';
 
-export const meta = () => [
-    { title: 'Zen · React components in dark glass' },
-    {
-        name: 'description',
-        content:
-            'React components in dark glass: translucent surfaces, hairline borders that catch a pointer light, and one accent colour. Built on native platform features.',
-    },
-];
+export const meta = () =>
+    seo({
+        title: 'Zen · React components in dark glass',
+        description:
+            'A React component library in dark glass: translucent surfaces, borders that catch a pointer light, one accent colour. Tailwind v4, zero dependencies.',
+        path: '/',
+        jsonLd: [LIBRARY_LD, { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE_NAME, url: SITE }],
+    });
 
 const TOC = [
     { id: 'installation', label: 'Installation' },

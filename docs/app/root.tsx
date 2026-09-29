@@ -46,6 +46,9 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     const notFound = isRouteErrorResponse(error) && error.status === 404;
     return (
         <main className="mx-auto flex max-w-xl flex-col items-center gap-3 px-6 py-32 text-center">
+            {/* Error and not-found pages stay out of search results (React hoists these into <head>). */}
+            <title>{notFound ? 'Not found · Zen' : 'Error · Zen'}</title>
+            <meta name="robots" content="noindex" />
             <h1 className="text-aurora text-5xl">{notFound ? '404' : 'Something broke'}</h1>
             <p className="text-muted-foreground mt-0!">
                 {notFound ? "There's no page here." : error instanceof Error ? error.message : 'Unknown error'}

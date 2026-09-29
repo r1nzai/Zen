@@ -1,6 +1,34 @@
 {
     "name": "@rinzai/zen",
     "version": "0.4.0",
+    "description": "React components in dark glass: translucent surfaces, hairline borders that catch a pointer light, one accent colour. Tailwind v4, no runtime dependencies.",
+    "keywords": [
+        "react",
+        "react-components",
+        "component-library",
+        "ui",
+        "design-system",
+        "tailwind",
+        "tailwindcss",
+        "tailwind-v4",
+        "glassmorphism",
+        "dark-mode",
+        "oklch",
+        "popover-api",
+        "dialog",
+        "table",
+        "virtualized",
+        "typescript"
+    ],
+    "homepage": "https://zen.rinzai.dev",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/r1nzai/Zen.git"
+    },
+    "bugs": {
+        "url": "https://github.com/r1nzai/Zen/issues"
+    },
+    "author": "rinzai (https://github.com/r1nzai)",
     "type": "module",
     "types": "./dist/index.d.ts",
     "module": "./dist/zen.js",

@@ -8,13 +8,24 @@ import { ExampleBlock } from '../components/example-block';
 import { PropsTable } from '../components/props-table';
 import { examplesFor } from '../examples';
 import { COMPONENTS, componentPath } from '../pages';
+import { breadcrumbs, seo } from '../seo';
 import type { Route } from './+types/component';
 
 export function meta({ params }: Route.MetaArgs) {
     const doc = COMPONENTS.find((c) => c.slug === params.slug);
-    return doc
-        ? [{ title: `${doc.title} · Zen` }, { name: 'description', content: doc.description }]
-        : [{ title: 'Not found · Zen' }];
+    if (!doc) return [{ title: 'Not found · Zen' }, { name: 'robots', content: 'noindex' }];
+    const path = componentPath(doc.slug);
+    return seo({
+        title: `${doc.title} · React component · Zen`,
+        description: `${doc.description} Part of Zen, a dark-glass React component library.`,
+        path,
+        jsonLd: [
+            breadcrumbs([
+                { name: 'Zen', path: '/' },
+                { name: doc.title, path },
+            ]),
+        ],
+    });
 }
 
 export default function ComponentPage({ params }: Route.ComponentProps) {
