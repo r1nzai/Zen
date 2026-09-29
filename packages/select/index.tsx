@@ -1,9 +1,23 @@
 import { cx } from '@zen/utils/cx';
-import { CheckIcon } from '@zen/utils/status-icons';
 import { FieldChevron } from '@zen/utils/field-chevron';
+import { CheckIcon } from '@zen/utils/status-icons';
 import { POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
-import { KeyboardEvent, ReactNode, useEffect, useRef, useState } from 'react';
+import {
+    Children,
+    createContext,
+    Fragment,
+    isValidElement,
+    KeyboardEvent,
+    ReactElement,
+    ReactNode,
+    useCallback,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react';
 
 export interface SelectOption<V extends string> {
     value: V;
@@ -12,10 +26,23 @@ export interface SelectOption<V extends string> {
     disabled?: boolean;
 }
 
+interface SelectContextValue {
+    value: string | null;
+    active: string | null;
+    setActive: (value: string) => void;
+    choose: (value: string) => void;
+    optionId: (value: string) => string;
+    register: (value: string, label: string) => () => void;
+}
+
+const SelectContext = createContext<SelectContextValue | null>(null);
+
 /**
  * Pick one value from a short list: a field-styled button that opens a list
  * below it. Keyboard: arrows, Home/End, type to jump, Enter to choose, Escape
- * to close. For long or searchable lists, use Dropdown.
+ * to close. Give it SelectItem children (with SelectGroup and SelectSeparator
+ * to organise them), or `options` as a shorthand. For long or searchable
+ * lists, use Dropdown.
  */
 export default function Select<V extends string>({
     value,
@@ -28,43 +55,64 @@ export default function Select<V extends string>({
     id,
     className,
     listClassName,
+    children,
     'aria-label': ariaLabel,
 }: SelectProps<V>) {
     const listRef = useRef<HTMLDivElement>(null);
-    const [active, setActive] = useState(-1);
+    const [active, setActive] = useState<string | null>(null);
     const typed = useRef({ text: '', at: 0 });
+    // Labels of items rendered inside your own components (read once they mount).
+    const [registered, setRegistered] = useState<ReadonlyMap<string, string>>(new Map());
+
+    // The options as rendered, in order (groups and your own wrappers included).
+    const items = () =>
+        Array.from(listRef.current?.querySelectorAll<HTMLElement>('[role="option"]') ?? []).map((el) => ({
+            value: el.dataset.value!,
+            label: el.dataset.label ?? '',
+            disabled: el.getAttribute('aria-disabled') === 'true',
+        }));
+
     const popup = useAnchoredPopup<HTMLDivElement>({
         matchWidth: true,
         onOpenChange: (open) => {
             if (!open) return;
-            // Start on the chosen option.
-            setActive(
-                Math.max(
-                    0,
-                    options.findIndex((o) => o.value === value),
-                ),
-            );
+            // Start on the chosen option, or the first one that can be chosen.
+            const list = items();
+            setActive(list.find((o) => o.value === value)?.value ?? list.find((o) => !o.disabled)?.value ?? null);
         },
     });
     // Take focus once open, so the keys work.
     useEffect(() => {
         if (popup.open) listRef.current?.focus();
     }, [popup.open]);
-    const selected = options.find((o) => o.value === value);
-    const optionId = (i: number) => `${popup.id}-option-${i}`;
 
-    const choose = (i: number) => {
-        const option = options[i];
-        if (!option || option.disabled) return;
-        onChange(option.value);
+    const choose = (v: string) => {
+        if (items().find((o) => o.value === v)?.disabled) return;
+        onChange(v as V);
         popup.setOpen(false);
     };
+    const register = useCallback((v: string, label: string) => {
+        setRegistered((m) => (m.get(v) === label ? m : new Map(m).set(v, label)));
+        return () =>
+            setRegistered((m) => {
+                const next = new Map(m);
+                next.delete(v);
+                return next;
+            });
+    }, []);
 
-    // Next enabled option from `from` in direction `step`, wrapping.
-    const move = (from: number, step: 1 | -1) => {
-        for (let n = 1; n <= options.length; n++) {
-            const i = (from + step * n + options.length * 2) % options.length;
-            if (!options[i].disabled) return i;
+    // The chosen option's text, known on the first render (so server HTML shows it).
+    const labels = new Map<string, string>(registered);
+    options?.forEach((o) => labels.set(o.value, o.label));
+    collectLabels(children, labels);
+    const selectedLabel = value === null ? undefined : labels.get(value);
+
+    // Next option that can be chosen from `from` in direction `step`, wrapping.
+    const move = (from: string | null, step: 1 | -1, list = items()) => {
+        const start = from === null ? (step === 1 ? -1 : list.length) : list.findIndex((o) => o.value === from);
+        for (let n = 1; n <= list.length; n++) {
+            const i = (start + step * n + list.length * 2) % list.length;
+            if (!list[i].disabled) return list[i].value;
         }
         return from;
     };
@@ -73,10 +121,10 @@ export default function Select<V extends string>({
         const keys: Record<string, () => void> = {
             ArrowDown: () => setActive((a) => move(a, 1)),
             ArrowUp: () => setActive((a) => move(a, -1)),
-            Home: () => setActive(move(-1, 1)),
-            End: () => setActive(move(options.length, -1)),
-            Enter: () => choose(active),
-            ' ': () => choose(active),
+            Home: () => setActive(move(null, 1)),
+            End: () => setActive(move(null, -1)),
+            Enter: () => active !== null && choose(active),
+            ' ': () => active !== null && choose(active),
             Tab: () => popup.setOpen(false),
         };
         if (keys[e.key]) {
@@ -89,10 +137,12 @@ export default function Select<V extends string>({
             const now = Date.now();
             const text = (now - typed.current.at < 700 ? typed.current.text : '') + e.key.toLowerCase();
             typed.current = { text, at: now };
-            const i = options.findIndex((o) => !o.disabled && o.label.toLowerCase().startsWith(text));
-            if (i >= 0) setActive(i);
+            const match = items().find((o) => !o.disabled && o.label.toLowerCase().startsWith(text));
+            if (match) setActive(match.value);
         }
     };
+
+    const optionId = (v: string) => `${popup.id}-option-${v}`;
 
     return (
         <>
@@ -111,8 +161,8 @@ export default function Select<V extends string>({
                 }}
                 className={cx('zen__select group', TRIGGER, 'w-full', popup.open && TRIGGER_OPEN, className)}
             >
-                <span className={cx('truncate', !selected && 'text-muted-foreground')}>
-                    {selected ? selected.label : placeholder}
+                <span className={cx('truncate', selectedLabel === undefined && 'text-muted-foreground')}>
+                    {selectedLabel ?? placeholder}
                 </span>
                 <FieldChevron open={popup.open} />
             </button>
@@ -123,47 +173,115 @@ export default function Select<V extends string>({
                     role="listbox"
                     tabIndex={-1}
                     aria-label={ariaLabel}
-                    aria-activedescendant={active >= 0 ? optionId(active) : undefined}
+                    aria-activedescendant={active !== null ? optionId(active) : undefined}
                     onKeyDown={onListKeyDown}
                     className="max-h-72 overflow-y-auto outline-hidden"
                 >
-                    {options.map((option, i) => (
-                        <div
-                            key={option.value}
-                            id={optionId(i)}
-                            role="option"
-                            aria-selected={option.value === value}
-                            aria-disabled={option.disabled || undefined}
-                            data-highlighted={i === active || undefined}
-                            onMouseMove={() => !option.disabled && setActive(i)}
-                            onClick={() => choose(i)}
-                            className={cx(
-                                'grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-2 px-3 py-2 text-sm outline-hidden select-none',
-                                'data-highlighted:bg-muted aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
-                            )}
-                        >
-                            <span className="text-primary col-start-1" aria-hidden>
-                                {option.value === value && <CheckIcon />}
-                            </span>
-                            <span className="col-start-2 truncate">
+                    <SelectContext.Provider value={{ value, active, setActive, choose, optionId, register }}>
+                        {options?.map((option) => (
+                            <SelectItem
+                                key={option.value}
+                                value={option.value}
+                                label={option.label}
+                                disabled={option.disabled}
+                            >
                                 {renderOption ? renderOption(option) : option.label}
-                            </span>
-                        </div>
-                    ))}
+                            </SelectItem>
+                        ))}
+                        {children}
+                    </SelectContext.Provider>
                 </div>
             </div>
         </>
     );
 }
 
+/** Reads SelectItem labels from children, through groups and fragments. */
+function collectLabels(children: ReactNode, into: Map<string, string>) {
+    Children.forEach(children, (child) => {
+        if (!isValidElement(child)) return;
+        const el = child as ReactElement<{ value?: string; label?: string; children?: ReactNode }>;
+        if (el.type === SelectItem && el.props.value !== undefined) {
+            const text = el.props.label ?? textOf(el.props.children);
+            if (text) into.set(el.props.value, text);
+        } else if (el.type === SelectGroup || el.type === Fragment) {
+            collectLabels(el.props.children, into);
+        }
+    });
+}
+
+const textOf = (node: ReactNode): string =>
+    typeof node === 'string' || typeof node === 'number'
+        ? String(node)
+        : Array.isArray(node)
+          ? node.map(textOf).join('')
+          : '';
+
+/**
+ * One choice in a Select. Its `label` (or its text, when that's all it holds)
+ * shows in the field once chosen and is matched when typing to jump.
+ */
+export function SelectItem({ value, label, disabled, className, children }: SelectItemProps) {
+    const select = useContext(SelectContext);
+    if (!select) throw new Error('SelectItem must be inside a Select');
+    const ref = useRef<HTMLDivElement>(null);
+    const text = label ?? textOf(children);
+    const register = select.register;
+    // Items inside your own components can't be read from children: they report their text.
+    useLayoutEffect(() => register(value, text || ref.current?.textContent?.trim() || ''), [register, value, text]);
+    const chosen = select.value === value;
+    return (
+        <div
+            ref={ref}
+            id={select.optionId(value)}
+            role="option"
+            data-value={value}
+            data-label={text || undefined}
+            aria-selected={chosen}
+            aria-disabled={disabled || undefined}
+            data-highlighted={select.active === value || undefined}
+            onMouseMove={() => !disabled && select.setActive(value)}
+            onClick={() => select.choose(value)}
+            className={cx(
+                'grid cursor-pointer grid-cols-[1rem_1fr] items-center gap-2 px-3 py-2 text-sm outline-hidden select-none',
+                'data-highlighted:bg-muted aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
+                className,
+            )}
+        >
+            <span className="text-primary col-start-1" aria-hidden>
+                {chosen && <CheckIcon />}
+            </span>
+            <span className="col-start-2 truncate">{children}</span>
+        </div>
+    );
+}
+
+/** A labelled group of SelectItems. */
+export function SelectGroup({ label, children }: { label: ReactNode; children: ReactNode }) {
+    return (
+        <div role="group" aria-label={typeof label === 'string' ? label : undefined}>
+            <div aria-hidden className="text-muted-foreground px-3 pt-2 pb-1 text-xs font-medium">
+                {label}
+            </div>
+            {children}
+        </div>
+    );
+}
+
+/** A hairline between items or groups. */
+export function SelectSeparator() {
+    return <div role="separator" className="bg-tint/[0.07] mx-2 my-1 h-px" />;
+}
+
 export interface SelectProps<V extends string> {
     value: V | null;
-    options: readonly SelectOption<V>[];
+    /** Shorthand for plain options; or give SelectItem children. */
+    options?: readonly SelectOption<V>[];
     onChange: (value: V) => void;
     /** Shown while nothing is chosen. */
     placeholder?: string;
     disabled?: boolean;
-    /** Custom content for each option (the label is still used for typing to jump). */
+    /** With `options`: custom content for each (the label is still used for typing to jump). */
     renderOption?: (option: SelectOption<V>) => ReactNode;
     /** Form field name: adds a hidden input with the value. */
     name?: string;
@@ -172,5 +290,15 @@ export interface SelectProps<V extends string> {
     className?: string;
     /** Classes for the popup list. */
     listClassName?: string;
+    children?: ReactNode;
     'aria-label'?: string;
+}
+
+export interface SelectItemProps {
+    value: string;
+    /** Text for the field and for typing to jump (defaults to the item's text). */
+    label?: string;
+    disabled?: boolean;
+    className?: string;
+    children: ReactNode;
 }
