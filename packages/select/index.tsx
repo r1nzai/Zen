@@ -93,8 +93,6 @@ export default function Select<V extends string>({
         }
     };
 
-    const width = className && /(^|\s)(w-|min-w-|max-w-)/.test(className) ? className : cx('w-full', className);
-
     return (
         <>
             <button
@@ -110,7 +108,7 @@ export default function Select<V extends string>({
                         popup.setOpen(true);
                     }
                 }}
-                className={cx('zen__select group', TRIGGER, popup.open && TRIGGER_OPEN, width)}
+                className={cx('zen__select group', TRIGGER, 'w-full', popup.open && TRIGGER_OPEN, className)}
             >
                 <span className={cx('truncate', !selected && 'text-muted-foreground')}>
                     {selected ? selected.label : placeholder}
@@ -169,7 +167,7 @@ export interface SelectProps<V extends string> {
     /** Form field name: adds a hidden input with the value. */
     name?: string;
     id?: string;
-    /** Classes for the trigger (a width class replaces the default full width). */
+    /** Classes for the trigger (e.g. a width, instead of the default full width). */
     className?: string;
     /** Classes for the popup list. */
     listClassName?: string;

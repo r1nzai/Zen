@@ -13,9 +13,7 @@ export default function Avatar({ src, name, alt, className }: AvatarProps) {
             aria-hidden={alt ? undefined : true}
             className={cx(
                 'zen__avatar relative inline-grid shrink-0 place-items-center overflow-hidden rounded-full font-semibold select-none',
-                // Defaults only when className doesn't set them (cx doesn't resolve conflicting classes).
-                !/(^|\s)(size-|w-|h-)/.test(className ?? '') && 'size-9',
-                !/(^|\s)text-(xs|sm|base|lg|xl|[2-9]xl|\[)/.test(className ?? '') && 'text-sm',
+                'size-9 text-sm',
                 'text-primary-foreground bg-[radial-gradient(circle_at_30%_25%,oklch(var(--glow)/0.9),oklch(var(--primary)/0.55))]',
                 'shadow-[0_0_0_1px_oklch(var(--tint)/0.12),0_0_18px_-6px_oklch(var(--glow)/calc(0.9*var(--glow-strength)))]',
                 className,

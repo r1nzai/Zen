@@ -1,8 +1,17 @@
-export const cx = (...args: ClassValue[]): string => {
+import { mergeClasses } from './merge';
+
+/**
+ * Joins class names (strings, arrays, { name: condition } objects), skipping
+ * falsy ones. Conflicting Tailwind classes resolve to the last one, so a
+ * className passed in overrides a component's defaults (see mergeClasses).
+ */
+export const cx = (...args: ClassValue[]): string => mergeClasses(join(args));
+
+const join = (args: ClassValue[]): string => {
     return args.reduce((acc: string, arg) => {
         if (arg === undefined || arg === null || arg === false) return acc;
         if (typeof arg === 'string' || typeof arg === 'number') return acc + ' ' + arg;
-        if (Array.isArray(arg)) return acc + ' ' + cx(...arg);
+        if (Array.isArray(arg)) return acc + ' ' + join(arg);
         if (typeof arg === 'object') {
             return (
                 acc +

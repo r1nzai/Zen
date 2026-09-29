@@ -31,7 +31,6 @@ export default function MonthPicker({
     });
     const names = monthNames(locale);
     const inRange = (m: Month) => (!min || m >= min) && (!max || m <= max);
-    const width = className && /(^|\s)(w-|min-w-|max-w-)/.test(className) ? className : cx('w-full', className);
 
     return (
         <>
@@ -41,7 +40,7 @@ export default function MonthPicker({
                 disabled={disabled}
                 aria-label={ariaLabel}
                 {...popup.triggerProps}
-                className={cx('zen__month-picker group', TRIGGER, popup.open && TRIGGER_OPEN, width)}
+                className={cx('zen__month-picker group', TRIGGER, 'w-full', popup.open && TRIGGER_OPEN, className)}
             >
                 <span className={value ? undefined : 'text-muted-foreground'}>
                     {value ? formatMonth(value, locale) : placeholder}
@@ -128,7 +127,7 @@ export interface MonthPickerProps {
     /** Latest month that can be picked. */
     max?: Month;
     id?: string;
-    /** Classes for the trigger (a width class replaces the default full width). */
+    /** Classes for the trigger (e.g. a width, instead of the default full width). */
     className?: string;
     disabled?: boolean;
     placeholder?: string;
