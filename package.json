@@ -29,6 +29,7 @@
         "url": "https://github.com/r1nzai/Zen/issues"
     },
     "author": "rinzai (https://github.com/r1nzai)",
+    "license": "MIT",
     "type": "module",
     "types": "./dist/index.d.ts",
     "module": "./dist/zen.js",

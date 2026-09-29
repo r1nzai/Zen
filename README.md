@@ -93,3 +93,7 @@ pnpm docs:dev     # docs site
 pnpm test
 pnpm build
 ```
+
+## License
+
+[MIT](LICENSE)
