@@ -74,7 +74,8 @@ export default function Collapse<TData>(props: CollapseProps<TData>) {
         recalculateItems();
     }, [items]);
     useEffect(() => {
-        if (!parentRef?.current) return;
+        // Without ResizeObserver (older browsers, tests), it fits once and doesn't follow resizes.
+        if (!parentRef?.current || typeof ResizeObserver === 'undefined') return;
         const observer = new ResizeObserver(() => {
             recalculateItems();
         });
