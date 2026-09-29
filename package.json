@@ -68,7 +68,7 @@
         "prepublishOnly": "npm run build",
         "chromatic": "npx chromatic --project-token $CHROMATIC_PROJECT_TOKEN",
         "docs:dev": "pnpm --filter zen-docs dev",
-        "docs:build": "pnpm --filter zen-docs build && cp docs/build/client/__spa-fallback.html docs/build/client/404.html && storybook build --output-dir docs/build/client/storybook"
+        "docs:build": "pnpm --filter zen-docs build && cp docs/build/client/404/index.html docs/build/client/404.html && storybook build --output-dir docs/build/client/storybook"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
