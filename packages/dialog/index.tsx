@@ -1,7 +1,21 @@
 import { cx } from '@zen/utils/cx';
+import Button, { ButtonProps } from '@zen/button';
 import { useToastHost } from '@zen/toast';
 import { useGraphicsMode } from '@zen/utils/graphics';
-import { ComponentProps, ReactNode, RefObject, useEffect, useId, useRef } from 'react';
+import {
+    ComponentProps,
+    createContext,
+    MouseEvent,
+    ReactNode,
+    RefObject,
+    useContext,
+    useEffect,
+    useId,
+    useRef,
+} from 'react';
+
+/** Closes the dialog; DialogClose calls it. */
+const CloseContext = createContext<() => void>(() => {});
 
 /**
  * Modal dialog on the native <dialog> element: focus is trapped and restored,
@@ -75,9 +89,31 @@ export default function Dialog({
                         </p>
                     )}
                 </div>
-                {children}
+                <CloseContext.Provider value={() => onOpenChange?.(false)}>{children}</CloseContext.Provider>
             </div>
         </dialog>
+    );
+}
+
+/** The row of actions at the end of a dialog, right-aligned. */
+export function DialogFooter({ className, ...rest }: ComponentProps<'div'>) {
+    return <div className={cx('flex justify-end gap-2', className)} {...rest} />;
+}
+
+/**
+ * A button that closes its dialog (after its own onClick, unless that calls
+ * preventDefault). Takes every Button prop: variant, size, asChild…
+ */
+export function DialogClose({ onClick, ...rest }: ButtonProps) {
+    const close = useContext(CloseContext);
+    return (
+        <Button
+            {...rest}
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                onClick?.(e);
+                if (!e.defaultPrevented) close();
+            }}
+        />
     );
 }
 

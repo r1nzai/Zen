@@ -1,4 +1,14 @@
-import { Button, Dialog, Dropdown, type DropdownItem, MonthPicker, Select, useToast } from '@rinzai/zen';
+import {
+    Button,
+    Dialog,
+    DialogClose,
+    DialogFooter,
+    Dropdown,
+    type DropdownItem,
+    MonthPicker,
+    Select,
+    useToast,
+} from '@rinzai/zen';
 import { useState } from 'react';
 
 const CATEGORIES = [
@@ -37,22 +47,13 @@ export default function Pickers() {
                     <span>Tags</span>
                     <Dropdown multiple items={TAGS} selected={tags} onChange={setTags} className="w-full" />
                 </div>
-                <div className="flex justify-end gap-2">
+                <DialogFooter>
                     <Button variant="ghost" className="mr-auto" onClick={() => toast('Draft saved', { tone: 'info' })}>
                         Save draft
                     </Button>
-                    <Button variant="outline" onClick={() => setOpen(false)}>
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            setOpen(false);
-                            toast('Budget added', { tone: 'success' });
-                        }}
-                    >
-                        Add
-                    </Button>
-                </div>
+                    <DialogClose variant="outline">Cancel</DialogClose>
+                    <DialogClose onClick={() => toast('Budget added', { tone: 'success' })}>Add</DialogClose>
+                </DialogFooter>
             </Dialog>
         </>
     );

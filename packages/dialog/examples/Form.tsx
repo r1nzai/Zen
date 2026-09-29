@@ -1,4 +1,4 @@
-import { Button, Dialog, Input } from '@rinzai/zen';
+import { Button, Dialog, DialogClose, DialogFooter, Input } from '@rinzai/zen';
 import { useState } from 'react';
 
 export default function Form() {
@@ -16,12 +16,10 @@ export default function Form() {
                     Name
                     <Input defaultValue="Groceries" />
                 </label>
-                <div className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={() => setOpen(false)}>
-                        Cancel
-                    </Button>
-                    <Button onClick={() => setOpen(false)}>Save</Button>
-                </div>
+                <DialogFooter>
+                    <DialogClose variant="outline">Cancel</DialogClose>
+                    <DialogClose>Save</DialogClose>
+                </DialogFooter>
             </Dialog>
         </>
     );

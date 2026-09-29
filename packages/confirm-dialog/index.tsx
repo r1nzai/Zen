@@ -1,5 +1,4 @@
-import Button from '@zen/button';
-import Dialog from '@zen/dialog';
+import Dialog, { DialogClose, DialogFooter } from '@zen/dialog';
 import { ReactNode } from 'react';
 
 /** Confirmation for destructive or irreversible actions. Cancel has focus, so Enter is the safe choice. */
@@ -22,20 +21,14 @@ export default function ConfirmDialog({
             description={description}
             className="w-[26rem]"
         >
-            <div className="flex justify-end gap-2">
-                <Button variant="outline" autoFocus onClick={() => onOpenChange(false)}>
+            <DialogFooter>
+                <DialogClose variant="outline" autoFocus>
                     {cancelLabel}
-                </Button>
-                <Button
-                    variant={destructive ? 'destructive' : 'default'}
-                    onClick={() => {
-                        onConfirm();
-                        onOpenChange(false);
-                    }}
-                >
+                </DialogClose>
+                <DialogClose variant={destructive ? 'destructive' : 'default'} onClick={onConfirm}>
                     {confirmLabel}
-                </Button>
-            </div>
+                </DialogClose>
+            </DialogFooter>
         </Dialog>
     );
 }

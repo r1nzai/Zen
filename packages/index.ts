@@ -10,7 +10,7 @@ export { default as Card, Stat, StatRow } from './card';
 export { default as CodeBlock } from './code-block';
 export { default as Collapse } from './collapse';
 export { default as ConfirmDialog } from './confirm-dialog';
-export { default as Dialog } from './dialog';
+export { default as Dialog, DialogClose, DialogFooter, type DialogProps } from './dialog';
 export { default as EditableCell, type EditableCellProps } from './editable-cell';
 export { default as Field, type FieldProps, FormMessage, type FormMessageProps } from './field';
 export { default as Dropdown, type DropdownItem } from './dropdown';

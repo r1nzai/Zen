@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { useRef } from 'react';
 
 import ConfirmDialog from '../confirm-dialog';
-import Dialog from './index';
+import Dialog, { DialogClose, DialogFooter } from './index';
 
 const dialogEl = () => document.querySelector('dialog')!;
 
@@ -122,5 +122,40 @@ describe('ConfirmDialog', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
         expect(onConfirm).not.toHaveBeenCalled();
         expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    describe('parts', () => {
+        it('DialogClose closes the dialog after its own onClick', () => {
+            const onOpenChange = vi.fn();
+            const onClick = vi.fn();
+            render(
+                <Dialog open onOpenChange={onOpenChange} title="Rename">
+                    <DialogFooter className="mt-2">
+                        <DialogClose variant="outline">Cancel</DialogClose>
+                        <DialogClose onClick={onClick}>Save</DialogClose>
+                    </DialogFooter>
+                </Dialog>,
+            );
+            fireEvent.click(screen.getByRole('button', { name: 'Save', hidden: true }));
+            expect(onClick).toHaveBeenCalledTimes(1);
+            expect(onOpenChange).toHaveBeenCalledWith(false);
+            expect(screen.getByRole('button', { name: 'Cancel', hidden: true }).parentElement).toHaveClass(
+                'flex',
+                'justify-end',
+                'gap-2',
+                'mt-2',
+            );
+        });
+
+        it('preventDefault in onClick keeps it open (e.g. invalid form)', () => {
+            const onOpenChange = vi.fn();
+            render(
+                <Dialog open onOpenChange={onOpenChange} title="Rename">
+                    <DialogClose onClick={(e) => e.preventDefault()}>Save</DialogClose>
+                </Dialog>,
+            );
+            fireEvent.click(screen.getByRole('button', { name: 'Save', hidden: true }));
+            expect(onOpenChange).not.toHaveBeenCalled();
+        });
     });
 });
