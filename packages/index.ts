@@ -25,7 +25,7 @@ export { default as NavPills, NavPill, NavPillIndicator } from './nav-pills';
 export { default as PageHeader } from './page-header';
 export { default as Popover } from './popover';
 export { default as ProgressRing } from './progress-ring';
-export { default as Segmented } from './segmented';
+export { default as Segmented, SegmentedItem, type SegmentedItemProps, type SegmentedProps } from './segmented';
 export { default as Select, type SelectOption, type SelectProps } from './select';
 export { default as SideNav, SideNavGroup, SideNavLink } from './side-nav';
 export { default as Skeleton } from './skeleton';

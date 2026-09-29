@@ -1,10 +1,22 @@
 import { cx } from '@zen/utils/cx';
-import { useId, useLayoutEffect, useRef, useState } from 'react';
+import { createContext, ReactNode, useContext, useId, useLayoutEffect, useRef, useState } from 'react';
+
+interface SegmentedContextValue {
+    name: string;
+    value: string;
+    onChange: (value: string) => void;
+    /** Whether the sliding indicator is measured (until then, the checked option has its own background). */
+    measured: boolean;
+}
+
+const SegmentedContext = createContext<SegmentedContextValue | null>(null);
 
 /**
  * A small set of mutually exclusive options, shown as a pill row. Native radio
  * inputs underneath, so arrow keys and forms work as for any radio group. The
- * selection slides between options, like NavPills.
+ * selection slides between options, like NavPills. Give it SegmentedItem
+ * children (any content: icons, badges, disabled options), or `options` as a
+ * shorthand for plain text ones.
  */
 export default function Segmented<V extends string>({
     label,
@@ -13,6 +25,7 @@ export default function Segmented<V extends string>({
     onChange,
     name,
     className,
+    children,
 }: SegmentedProps<V>) {
     const id = useId();
     const trackRef = useRef<HTMLDivElement>(null);
@@ -36,7 +49,7 @@ export default function Segmented<V extends string>({
         const resizes = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
         resizes?.observe(track);
         return () => resizes?.disconnect();
-    }, [value, options]);
+    }, [value, options, children]);
 
     return (
         <div className={cx('zen__segmented flex flex-col gap-2', className)}>
@@ -56,40 +69,74 @@ export default function Segmented<V extends string>({
                         style={{ translate: `${box.x}px ${box.y}px`, width: box.w, height: box.h }}
                     />
                 )}
-                {options.map((o) => (
-                    <label
-                        key={o.value}
-                        className={cx(
-                            'text-muted-foreground relative cursor-pointer rounded-lg px-3 py-1.5 text-sm transition-colors duration-300',
-                            'hover:text-foreground has-checked:text-foreground has-focus-visible:ring-ring/50 has-focus-visible:ring-2',
-                            !box &&
-                                'has-checked:bg-primary/15 has-checked:shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.4)]',
-                        )}
-                    >
-                        <input
-                            type="radio"
-                            // The real radio covers its option, invisible: it's what gets clicked,
-                            // tapped and focused, so the pointer and assistive tech hit the same element.
-                            className="absolute inset-0 z-10 m-0 size-full cursor-pointer appearance-none rounded-[inherit] opacity-0"
-                            name={name ?? id}
-                            value={o.value}
-                            checked={value === o.value}
-                            onChange={() => onChange(o.value)}
-                        />
-                        {o.label}
-                    </label>
-                ))}
+                <SegmentedContext.Provider
+                    value={{
+                        name: name ?? id,
+                        value,
+                        onChange: onChange as (value: string) => void,
+                        measured: box !== null,
+                    }}
+                >
+                    {options?.map((o) => (
+                        <SegmentedItem key={o.value} value={o.value}>
+                            {o.label}
+                        </SegmentedItem>
+                    ))}
+                    {children}
+                </SegmentedContext.Provider>
             </div>
         </div>
+    );
+}
+
+/** One option of a Segmented: a native radio covering whatever you put inside. */
+export function SegmentedItem({ value, disabled, className, children }: SegmentedItemProps) {
+    const group = useContext(SegmentedContext);
+    if (!group) throw new Error('SegmentedItem must be inside a Segmented');
+    return (
+        <label
+            className={cx(
+                'text-muted-foreground relative cursor-pointer rounded-lg px-3 py-1.5 text-sm transition-colors duration-300',
+                'hover:text-foreground has-checked:text-foreground has-focus-visible:ring-ring/50 has-focus-visible:ring-2',
+                'has-disabled:hover:text-muted-foreground has-disabled:cursor-not-allowed has-disabled:opacity-50',
+                !group.measured &&
+                    'has-checked:bg-primary/15 has-checked:shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.4)]',
+                className,
+            )}
+        >
+            <input
+                type="radio"
+                // The real radio covers its option, invisible: it's what gets clicked,
+                // tapped and focused, so the pointer and assistive tech hit the same element.
+                className="absolute inset-0 z-10 m-0 size-full cursor-pointer appearance-none rounded-[inherit] opacity-0 disabled:cursor-not-allowed"
+                name={group.name}
+                value={value}
+                checked={group.value === value}
+                disabled={disabled}
+                onChange={() => group.onChange(value)}
+            />
+            {children}
+        </label>
     );
 }
 
 export interface SegmentedProps<V extends string> {
     label: string;
     value: V;
-    options: readonly { value: V; label: string }[];
+    /** Shorthand for plain text options; or give SegmentedItem children. */
+    options?: readonly { value: V; label: string }[];
     onChange: (value: V) => void;
     /** Form field name; defaults to a generated one. */
     name?: string;
     className?: string;
+    children?: ReactNode;
+}
+
+export interface SegmentedItemProps {
+    value: string;
+    /** Skipped by the arrow keys and can't be chosen. */
+    disabled?: boolean;
+    className?: string;
+    /** What the option shows: text, an icon, both. */
+    children: ReactNode;
 }

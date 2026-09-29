@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-import Segmented from './index';
+import Segmented, { SegmentedItem } from './index';
 
 const options = [
     { value: 'off', label: 'Off' },
@@ -43,5 +44,50 @@ describe('Segmented', () => {
             expect(radio).toHaveClass('absolute', 'inset-0', 'size-full', 'opacity-0', 'z-10');
             expect(radio).not.toHaveClass('sr-only');
         }
+    });
+
+    describe('SegmentedItem', () => {
+        it('takes any content, and is a radio named by it', () => {
+            const onChange = vi.fn();
+            render(
+                <Segmented label="Pattern" value="contours" onChange={onChange}>
+                    <SegmentedItem value="contours">
+                        <svg data-testid="icon" /> Contours
+                    </SegmentedItem>
+                    <SegmentedItem value="dots">Dots</SegmentedItem>
+                </Segmented>,
+            );
+            expect(screen.getByTestId('icon')).toBeInTheDocument();
+            expect(screen.getByRole('radio', { name: 'Contours' })).toBeChecked();
+            fireEvent.click(screen.getByRole('radio', { name: 'Dots' }));
+            expect(onChange).toHaveBeenCalledWith('dots');
+        });
+
+        it('a disabled option cannot be chosen', async () => {
+            const onChange = vi.fn();
+            render(
+                <Segmented label="Glow" value="soft" onChange={onChange}>
+                    <SegmentedItem value="off">Off</SegmentedItem>
+                    <SegmentedItem value="soft">Soft</SegmentedItem>
+                    <SegmentedItem value="bright" disabled>
+                        Bright
+                    </SegmentedItem>
+                </Segmented>,
+            );
+            const bright = screen.getByRole('radio', { name: 'Bright' });
+            expect(bright).toBeDisabled();
+            await userEvent.click(bright);
+            expect(onChange).not.toHaveBeenCalled();
+        });
+
+        it('options and items share one radio group', () => {
+            render(
+                <Segmented label="Glow" value="off" onChange={() => {}} options={[{ value: 'off', label: 'Off' }]}>
+                    <SegmentedItem value="soft">Soft</SegmentedItem>
+                </Segmented>,
+            );
+            const [off, soft] = screen.getAllByRole('radio');
+            expect(off).toHaveAttribute('name', soft.getAttribute('name'));
+        });
     });
 });
