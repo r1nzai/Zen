@@ -800,7 +800,12 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     transition: border-color 200ms;
 }
 
-/* Direct children of a .rise container enter one after another. */
+/*
+ * Direct children of a .rise container enter one after another. Filled backwards
+ * only: holding the end state (both/forwards) keeps a transform on the page,
+ * and Chrome then stops frosted glass inside it (e.g. sticky table parts) from
+ * blurring the sticky cells beneath. The end state is the natural style anyway.
+ */
 @keyframes zen-rise {
     from {
         opacity: 0;
@@ -808,7 +813,7 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     }
 }
 .rise > * {
-    animation: zen-rise 0.5s var(--ease-out-soft) both;
+    animation: zen-rise 0.5s var(--ease-out-soft) backwards;
 }
 .rise > *:nth-child(2) {
     animation-delay: 50ms;
