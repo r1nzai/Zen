@@ -83,13 +83,22 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
         if (window.matchMedia?.('(hover: none), (pointer: coarse)').matches || applyGraphicsMode() === 'lite') return;
         window.addEventListener('pointermove', onMove, { passive: true });
         root.addEventListener('pointerleave', onLeave);
-        // Content moves under a still pointer when scrolling or resizing.
-        window.addEventListener('scroll', schedule, { passive: true, capture: true });
+        // Content moves under a still pointer when scrolling. Re-aim the lights once
+        // the scroll settles, not on every frame: each update repaints the edge of every
+        // card near the pointer, which made long pages stutter. Meanwhile the light
+        // simply rides along with the card.
+        let settle = 0;
+        const onScroll = () => {
+            clearTimeout(settle);
+            settle = window.setTimeout(schedule, 120);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true, capture: true });
         window.addEventListener('resize', schedule, { passive: true });
         return () => {
             window.removeEventListener('pointermove', onMove);
             root.removeEventListener('pointerleave', onLeave);
-            window.removeEventListener('scroll', schedule, { capture: true });
+            window.removeEventListener('scroll', onScroll, { capture: true });
+            clearTimeout(settle);
             window.removeEventListener('resize', schedule);
             cancelAnimationFrame(frame);
         };
