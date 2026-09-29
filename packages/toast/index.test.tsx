@@ -9,9 +9,25 @@ function Trigger({ title, options }: { title: string; options?: ToastOptions }) 
 
 const show = (title: string) => fireEvent.click(screen.getByRole('button', { name: `show ${title}` }));
 
+// jsdom keeps [popover] elements at display: none even once shown; browsers show them.
+const popoverShown = document.createElement('style');
+popoverShown.textContent = '[popover] { display: flex !important; }';
+
 describe('Toast', () => {
+    beforeAll(() => document.head.append(popoverShown));
+    afterAll(() => popoverShown.remove());
     beforeEach(() => vi.useFakeTimers());
     afterEach(() => vi.useRealTimers());
+
+    it('shows in the top layer, above dialogs (a manual popover)', () => {
+        render(
+            <ToastProvider>
+                <Trigger title="Saved" />
+            </ToastProvider>,
+        );
+        show('Saved');
+        expect(screen.getByRole('region', { name: 'Notifications' })).toHaveAttribute('popover', 'manual');
+    });
 
     it('shows a status message with title and description', () => {
         render(

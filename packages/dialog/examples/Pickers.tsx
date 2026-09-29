@@ -12,7 +12,7 @@ const TAGS: DropdownItem[] = ['Essential', 'Shared', 'Work', 'Treat'].map((text)
     key: text.toLowerCase(),
 }));
 
-/** Selects, pickers and menus open above the dialog, and toasts show over it. */
+/** Selects, pickers and menus open above the dialog, and toasts show over it (try Save draft). */
 export default function Pickers() {
     const toast = useToast();
     const [open, setOpen] = useState(false);
@@ -38,6 +38,9 @@ export default function Pickers() {
                     <Dropdown multiple items={TAGS} selected={tags} onChange={setTags} className="w-full" />
                 </div>
                 <div className="flex justify-end gap-2">
+                    <Button variant="ghost" className="mr-auto" onClick={() => toast('Draft saved', { tone: 'info' })}>
+                        Save draft
+                    </Button>
                     <Button variant="outline" onClick={() => setOpen(false)}>
                         Cancel
                     </Button>

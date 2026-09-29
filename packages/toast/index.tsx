@@ -45,9 +45,29 @@ export interface ToastProviderProps {
 export default function ToastProvider({ children, offset, viewportClassName }: ToastProviderProps) {
     useGraphicsMode();
     const [toasts, setToasts] = useState<ToastItem[]>([]);
-    const [mounted, setMounted] = useState(false);
+    // Where the toasts render: the page, or the open modal dialog (see below).
+    const [host, setHost] = useState<HTMLElement | null>(null);
     const nextId = useRef(0);
-    useEffect(() => setMounted(true), []);
+
+    /*
+     * Toasts sit in the browser's top layer (a manual popover), so they show above
+     * dialogs instead of dimmed behind them. A modal dialog also makes everything
+     * outside it inert, top layer included, so while one is open the toasts render
+     * inside it: still positioned against the viewport (the top layer ignores the
+     * dialog's box), and clickable.
+     */
+    useEffect(() => {
+        const pick = () => {
+            const modals = [...document.querySelectorAll<HTMLDialogElement>('dialog[open]')].filter((d) =>
+                d.matches(':modal'),
+            );
+            setHost(modals.at(-1) ?? document.body);
+        };
+        pick();
+        const watch = new MutationObserver(pick);
+        watch.observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ['open'] });
+        return () => watch.disconnect();
+    }, []);
 
     const dismiss = useCallback((id: number) => {
         setToasts((ts) => ts.map((t) => (t.id === id ? { ...t, leaving: true } : t)));
@@ -73,12 +93,15 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
     return (
         <ToastContext.Provider value={add}>
             {children}
-            {mounted &&
+            {host &&
                 createPortal(
                     <section
+                        ref={showInTopLayer}
+                        popover="manual"
                         aria-label="Notifications"
                         className={cx(
-                            'zen__toast-viewport fixed right-4 bottom-[calc(var(--zen-toast-offset,1rem)+env(safe-area-inset-bottom))] z-50 flex w-[calc(100vw-2rem)] flex-col-reverse gap-2.5 md:bottom-5 md:w-[24rem]',
+                            // The popover's own defaults (centred, bordered, opaque) reset to a plain corner column.
+                            'zen__toast-viewport fixed top-auto right-4 bottom-[calc(var(--zen-toast-offset,1rem)+env(safe-area-inset-bottom))] left-auto z-50 m-0 flex w-[calc(100vw-2rem)] flex-col-reverse gap-2.5 overflow-visible border-0 bg-transparent p-0 text-inherit md:bottom-5 md:w-[24rem]',
                             viewportClassName,
                         )}
                         style={offset ? ({ '--zen-toast-offset': offset } as CSSProperties) : undefined}
@@ -87,10 +110,20 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
                             <Toast key={t.id} toast={t} onDismiss={() => dismiss(t.id)} />
                         ))}
                     </section>,
-                    document.body,
+                    host,
                 )}
         </ToastContext.Provider>
     );
+}
+
+/** Shows the toast column in the top layer as soon as it mounts (where the Popover API exists). */
+function showInTopLayer(el: HTMLElement | null) {
+    if (!el?.showPopover) return;
+    try {
+        el.showPopover();
+    } catch {
+        // Already showing.
+    }
 }
 
 /** Returns `toast(title, options)`, which shows a toast and returns its id. */
