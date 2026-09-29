@@ -195,6 +195,13 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'Hue'],
     },
     {
+        slug: 'spinner',
+        title: 'Spinner',
+        description: 'A small loading spinner in the current text colour, announced to screen readers when labelled.',
+        parts: ['Spinner'],
+        examples: ['Default', 'Loading'],
+    },
+    {
         slug: 'tab-bar',
         title: 'Tab Bar',
         description: 'Phone navigation fixed to the bottom of the screen. Works with any router.',
