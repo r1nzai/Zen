@@ -97,11 +97,30 @@
  * position into each element's --gx/--gy, so neighbouring cards light up
  * consistently as if from one light source.
  */
+/*
+ * The pointer position for glow-edge, per element. Not inherited: Backdrop
+ * updates it every pointer or scroll frame, and an inherited property would
+ * restyle everything inside the card each time. The edge layer takes it
+ * explicitly (inherit) instead.
+ */
+@property --gx {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: -999px;
+}
+@property --gy {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: -999px;
+}
+
 @utility glow-edge {
     position: relative;
     isolation: isolate;
     &::before {
         content: '';
+        --gx: inherit;
+        --gy: inherit;
         position: absolute;
         /* Inside the box (over its 1px border), so it never causes overflow or scrollbars. */
         inset: 0;
@@ -261,7 +280,12 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     background: oklch(var(--background));
 }
 
-/* Slow-moving aurora glows. Pre-softened gradients, no filters: cheap to animate. */
+/*
+ * Slow-moving aurora glows. Pre-softened gradients, no filters. The drift moves
+ * in small steps (about 6 a second, a pixel or two each, invisible on a soft
+ * glow) rather than every frame: anything moving behind the page makes the
+ * whole screen redraw, blurs included, and at 240Hz that's 240 times a second.
+ */
 .zen-aurora {
     position: absolute;
     width: 70vmax;
@@ -274,13 +298,13 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     top: -48vmax;
     left: -10vmax;
     background: radial-gradient(closest-side, oklch(var(--glow) / 0.9), transparent);
-    animation: zen-float-a 38s ease-in-out infinite alternate;
+    animation: zen-float-a 38s steps(230) infinite alternate;
 }
 .zen-aurora--b {
     right: -25vmax;
     bottom: -35vmax;
     background: radial-gradient(closest-side, oklch(var(--glow-2) / 0.7), transparent);
-    animation: zen-float-b 46s ease-in-out infinite alternate;
+    animation: zen-float-b 46s steps(280) infinite alternate;
 }
 .zen-aurora--c {
     top: 30%;
@@ -289,7 +313,7 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     height: 45vmax;
     opacity: calc(0.12 * var(--glow-strength));
     background: radial-gradient(closest-side, oklch(var(--glow) / 0.8), transparent);
-    animation: zen-float-c 52s ease-in-out infinite alternate;
+    animation: zen-float-c 52s steps(310) infinite alternate;
 }
 
 /*
@@ -349,7 +373,7 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
         radial-gradient(55vmax 42vmax at 90% 95%, oklch(var(--glow-2) / 0.4), transparent 75%);
     background-repeat: no-repeat;
     /* The colours drift; the dot mask stays put, so these dots never slide off the grid. */
-    animation: zen-dots-drift 60s ease-in-out infinite alternate;
+    animation: zen-dots-drift 60s steps(360) infinite alternate;
 }
 .zen-dots--lit {
     opacity: min(1, calc(100 * var(--topo-strength) * var(--glow-strength)));
