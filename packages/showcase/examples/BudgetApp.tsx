@@ -1,128 +1,205 @@
-import { useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
     ActionsMenu,
+    AnimatedMoney,
+    applyPreset,
+    applyTheme,
+    Avatar,
     Badge,
     Button,
     Card,
+    Collapse,
     ConfirmDialog,
+    customize,
+    DEFAULT_THEME,
     Dialog,
     Dropdown,
     type DropdownItem,
+    EditableCell,
+    Field,
+    formatMoney,
+    FormMessage,
+    Header,
     Input,
+    type Money,
+    MoneyInput,
+    type Month,
+    MonthPicker,
+    Meter,
     NavPill,
     NavPillIndicator,
     NavPills,
+    PageHeader,
     Popover,
+    type PresetId,
+    PRESETS,
     ProgressRing,
+    resetTheme,
     Segmented,
+    Select,
     Skeleton,
+    Slider,
     Stat,
     StatRow,
     Tab,
+    TabBar,
+    TabBarItem,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableEmpty,
+    TableFooter,
+    TableFooterCell,
+    TableHead,
+    TableHeader,
+    TableRow,
     TabList,
     TabPanel,
     Tabs,
     TextArea,
+    ThemeToggle,
+    type ThemeSettings,
     ToastProvider,
     Toggle,
+    TreeCell,
+    TreeLabel,
+    TreeRow,
+    useSort,
     useToast,
+    useTree,
 } from '@rinzai/zen';
 
 /*
- * Every component working together in one small budget app: open, fill in and
- * submit dialogs, delete with confirm and undo, filter with tabs, and change
- * the glow from the settings card.
+ * A small budget app built only from Zen: a sortable entries table you can
+ * edit in place, spending by group in a tree with meters, goals, a live theme
+ * editor, and dialogs with every kind of field. Amounts are integer cents.
  */
 
 type Kind = 'expense' | 'income';
+type CategoryKey = (typeof CATEGORIES)[number]['value'];
 
 interface Entry {
     id: number;
     label: string;
-    amount: number;
+    amount: Money;
     kind: Kind;
-    category: DropdownItem;
-    tags: DropdownItem[];
+    category: CategoryKey;
+    tags: string[];
     recurring: boolean;
 }
 
-const CATEGORIES: DropdownItem[] = ['Salary', 'Rent', 'Groceries', 'Transport', 'Dining out', 'Subscriptions'].map(
-    (text) => ({ text, key: text.toLowerCase() }),
-);
-const TAGS: DropdownItem[] = ['Essential', 'Shared', 'Work', 'Treat', 'Annual'].map((text) => ({
+const CATEGORIES = [
+    { value: 'salary', label: 'Salary', group: 'Income', budget: 0 },
+    { value: 'rent', label: 'Rent', group: 'Essentials', budget: 185000 },
+    { value: 'groceries', label: 'Groceries', group: 'Essentials', budget: 60000 },
+    { value: 'transport', label: 'Transport', group: 'Essentials', budget: 12000 },
+    { value: 'dining', label: 'Dining out', group: 'Lifestyle', budget: 15000 },
+    { value: 'subscriptions', label: 'Subscriptions', group: 'Lifestyle', budget: 4000 },
+    { value: 'travel', label: 'Travel', group: 'Lifestyle', budget: 30000 },
+] as const;
+const categoryOf = (key: CategoryKey) => CATEGORIES.find((c) => c.value === key)!;
+
+const TAGS: DropdownItem[] = ['Essential', 'Shared', 'Work', 'Treat', 'Annual', 'Reimbursable', 'Cash'].map((text) => ({
     text,
     key: text.toLowerCase(),
 }));
-const MONTHS: DropdownItem[] = ['July 2026', 'August 2026', 'September 2026'].map((text) => ({ text, key: text }));
-
-const category = (key: string) => CATEGORIES.find((c) => c.key === key)!;
-const tag = (key: string) => TAGS.find((t) => t.key === key)!;
 
 const INITIAL: Entry[] = [
-    {
-        id: 1,
-        label: 'Paycheck',
-        amount: 8450,
-        kind: 'income',
-        category: category('salary'),
-        tags: [tag('work')],
-        recurring: true,
-    },
+    { id: 1, label: 'Paycheck', amount: 845000, kind: 'income', category: 'salary', tags: ['Work'], recurring: true },
     {
         id: 2,
         label: 'Rent',
-        amount: 1850,
+        amount: 185000,
         kind: 'expense',
-        category: category('rent'),
-        tags: [tag('essential'), tag('shared')],
+        category: 'rent',
+        tags: ['Essential', 'Shared'],
         recurring: true,
     },
     {
         id: 3,
         label: 'Weekly shop',
-        amount: 164,
+        amount: 16450,
         kind: 'expense',
-        category: category('groceries'),
-        tags: [tag('essential')],
+        category: 'groceries',
+        tags: ['Essential', 'Shared', 'Cash', 'Reimbursable'],
         recurring: false,
     },
     {
         id: 4,
-        label: 'Train pass',
-        amount: 92,
+        label: 'Farmers market',
+        amount: 4200,
         kind: 'expense',
-        category: category('transport'),
-        tags: [tag('work')],
-        recurring: true,
-    },
-    {
-        id: 5,
-        label: 'Dinner with Sam',
-        amount: 78,
-        kind: 'expense',
-        category: category('dining out'),
-        tags: [tag('treat')],
+        category: 'groceries',
+        tags: ['Cash'],
         recurring: false,
     },
     {
-        id: 6,
-        label: 'Music streaming',
-        amount: 12,
+        id: 5,
+        label: 'Train pass',
+        amount: 9200,
         kind: 'expense',
-        category: category('subscriptions'),
+        category: 'transport',
+        tags: ['Work'],
+        recurring: true,
+    },
+    {
+        id: 6,
+        label: 'Dinner with Sam',
+        amount: 7800,
+        kind: 'expense',
+        category: 'dining',
+        tags: ['Treat'],
+        recurring: false,
+    },
+    {
+        id: 7,
+        label: 'Birthday lunch',
+        amount: 9150,
+        kind: 'expense',
+        category: 'dining',
+        tags: ['Treat', 'Shared'],
+        recurring: false,
+    },
+    {
+        id: 8,
+        label: 'Music streaming',
+        amount: 1199,
+        kind: 'expense',
+        category: 'subscriptions',
         tags: [],
         recurring: true,
     },
+    {
+        id: 9,
+        label: 'Flights to Lisbon',
+        amount: 41200,
+        kind: 'expense',
+        category: 'travel',
+        tags: ['Treat', 'Annual'],
+        recurring: false,
+    },
+    {
+        id: 10,
+        label: 'Freelance invoice',
+        amount: 120000,
+        kind: 'income',
+        category: 'salary',
+        tags: ['Work'],
+        recurring: false,
+    },
 ];
 
-const money = (n: number) =>
-    n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const CURRENCY = 'USD';
+const LOCALE = 'en-US';
+const money = (m: Money) => formatMoney(m, CURRENCY, LOCALE, { showDecimals: false });
+const signed = (e: Entry) => (e.kind === 'income' ? e.amount : -e.amount);
 
 function Budget({ nav }: { nav: boolean }) {
     const toast = useToast();
     const [entries, setEntries] = useState(INITIAL);
-    const [month, setMonth] = useState(MONTHS[2]);
+    const [month, setMonth] = useState<Month | null>('2026-09');
     const [adding, setAdding] = useState(false);
     const [deleting, setDeleting] = useState<Entry | null>(null);
     const [resetting, setResetting] = useState(false);
@@ -130,12 +207,14 @@ function Budget({ nav }: { nav: boolean }) {
 
     const income = entries.filter((e) => e.kind === 'income').reduce((sum, e) => sum + e.amount, 0);
     const spent = entries.filter((e) => e.kind === 'expense').reduce((sum, e) => sum + e.amount, 0);
+    const update = (id: number, patch: Partial<Entry>) =>
+        setEntries((es) => es.map((e) => (e.id === id ? { ...e, ...patch } : e)));
 
     const refresh = () => {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-            toast('Up to date', { description: `Rates and totals for ${month.text} refreshed.`, tone: 'success' });
+            toast('Up to date', { description: 'Totals refreshed.', tone: 'success' });
         }, 1400);
     };
 
@@ -148,74 +227,97 @@ function Budget({ nav }: { nav: boolean }) {
     };
 
     return (
-        <div className="rise mx-auto flex max-w-6xl flex-col gap-6 p-6 md:p-10">
-            {nav && <AppNav />}
-            <header className="flex flex-wrap items-end justify-between gap-4">
-                <div>
-                    <p className="text-muted-foreground text-xs tracking-[0.1em] uppercase">Budget</p>
-                    <h1 className="text-aurora mt-1 text-4xl">Month overview</h1>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Dropdown items={MONTHS} selected={month} onChange={setMonth} className="w-48" />
-                    <Button variant="outline" loading={loading} onClick={refresh}>
-                        {loading ? 'Refreshing' : 'Refresh'}
-                    </Button>
-                    <Button onClick={() => setAdding(true)}>Add entry</Button>
-                    <ActionsMenu
-                        label="Budget actions"
-                        actions={[
-                            { label: 'Export CSV', onClick: () => toast('Export started', { tone: 'info' }) },
-                            { label: 'Reset month', onClick: () => setResetting(true), destructive: true },
-                        ]}
-                    />
-                </div>
-            </header>
-
-            <StatRow>
-                {loading ? (
-                    [0, 1, 2].map((i) => (
-                        <div key={i} className="glass glow-edge flex flex-col gap-2 rounded-xl p-4">
-                            <Skeleton className="h-3 w-20" />
-                            <Skeleton className="h-7 w-28" />
-                        </div>
-                    ))
-                ) : (
-                    <>
-                        <Stat label="Income" value={money(income)} hint="+4% on last month" />
-                        <Stat label="Spent" value={money(spent)} tone="negative" />
-                        <Stat
-                            label="Net this month"
-                            value={money(income - spent)}
-                            tone={income >= spent ? 'positive' : 'negative'}
+        <>
+            {nav && <AppHeader />}
+            <div className="rise mx-auto flex max-w-6xl flex-col gap-6 p-6 pb-28 md:p-10">
+                <PageHeader
+                    eyebrow="Budget"
+                    title="Month overview"
+                    lead="Where the money went, and what's left. Click an amount to change it."
+                >
+                    <div className="flex flex-wrap items-center gap-2">
+                        <MonthPicker
+                            aria-label="Month"
+                            value={month}
+                            onChange={setMonth}
+                            locale={LOCALE}
+                            className="w-40"
                         />
-                    </>
-                )}
-            </StatRow>
+                        <Button variant="outline" loading={loading} onClick={refresh}>
+                            {loading ? 'Refreshing' : 'Refresh'}
+                        </Button>
+                        <Button onClick={() => setAdding(true)}>Add entry</Button>
+                        <ActionsMenu
+                            label="Budget actions"
+                            actions={[
+                                { label: 'Export CSV', onClick: () => toast('Export started', { tone: 'info' }) },
+                                { label: 'Reset month', onClick: () => setResetting(true), destructive: true },
+                            ]}
+                        />
+                    </div>
+                </PageHeader>
 
-            <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-                <Card title="Entries" action={<Badge variant="secondary">{entries.length} this month</Badge>}>
-                    <Tabs defaultValue="all">
-                        <TabList variant="pills">
-                            <Tab value="all">All</Tab>
-                            <Tab value="expense">Expenses</Tab>
-                            <Tab value="income">Income</Tab>
-                        </TabList>
-                        {(['all', 'expense', 'income'] as const).map((filter) => (
-                            <TabPanel key={filter} value={filter}>
-                                <EntryList
-                                    entries={entries.filter((e) => filter === 'all' || e.kind === filter)}
-                                    onDelete={setDeleting}
-                                />
-                            </TabPanel>
-                        ))}
-                    </Tabs>
-                </Card>
+                <StatRow>
+                    {loading ? (
+                        [0, 1, 2].map((i) => (
+                            <div key={i} className="glass glow-edge flex flex-col gap-2 rounded-xl p-4">
+                                <Skeleton className="h-3 w-20" />
+                                <Skeleton className="h-7 w-28" />
+                            </div>
+                        ))
+                    ) : (
+                        <>
+                            <Stat
+                                label="Income"
+                                value={<AnimatedMoney value={income} currency={CURRENCY} locale={LOCALE} />}
+                                hint="+4% on last month"
+                            />
+                            <Stat
+                                label="Spent"
+                                value={<AnimatedMoney value={spent} currency={CURRENCY} locale={LOCALE} />}
+                                tone="negative"
+                            />
+                            <Stat
+                                label="Net this month"
+                                value={<AnimatedMoney value={income - spent} currency={CURRENCY} locale={LOCALE} />}
+                                tone={income >= spent ? 'positive' : 'negative'}
+                            />
+                        </>
+                    )}
+                </StatRow>
 
-                <div className="flex flex-col gap-6">
-                    <Goals />
-                    <Appearance />
+                <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
+                    <div className="flex min-w-0 flex-col gap-6">
+                        <Card title="Entries" action={<Badge variant="secondary">{entries.length} this month</Badge>}>
+                            <Tabs defaultValue="all">
+                                <TabList variant="pills">
+                                    <Tab value="all">All</Tab>
+                                    <Tab value="expense">Expenses</Tab>
+                                    <Tab value="income">Income</Tab>
+                                </TabList>
+                                {(['all', 'expense', 'income'] as const).map((filter) => (
+                                    <TabPanel key={filter} value={filter}>
+                                        <EntryTable
+                                            entries={entries.filter((e) => filter === 'all' || e.kind === filter)}
+                                            onAmount={(id, amount) => update(id, { amount })}
+                                            onDelete={setDeleting}
+                                        />
+                                    </TabPanel>
+                                ))}
+                            </Tabs>
+                        </Card>
+                        <SpendingByGroup entries={entries} />
+                    </div>
+
+                    <div className="flex flex-col gap-6">
+                        <BudgetMeters entries={entries} />
+                        <Goals />
+                        <Appearance />
+                    </div>
                 </div>
             </div>
+
+            {nav && <AppTabBar />}
 
             <AddEntryDialog
                 open={adding}
@@ -246,19 +348,21 @@ function Budget({ nav }: { nav: boolean }) {
                     toast('Month reset', { tone: 'info' });
                 }}
             />
-        </div>
+        </>
     );
 }
 
-const PAGES = ['Month', 'Planner', 'Loans', 'Goals', 'Trends'];
+// ── Navigation ──
+
+const PAGES = ['Month', 'Planner', 'Goals', 'Settings'];
 
 /** The app's top bar. A router would set the current page; here clicks just move it. */
-function AppNav() {
+function AppHeader() {
     const [page, setPage] = useState('Month');
     return (
-        <div className="flex items-center justify-between gap-4">
+        <Header>
             <span className="text-lg font-semibold tracking-tight">Zen</span>
-            <NavPills aria-label="Main">
+            <NavPills aria-label="Main" className="max-md:hidden">
                 <NavPillIndicator />
                 {PAGES.map((p) => (
                     <NavPill
@@ -274,53 +378,292 @@ function AppNav() {
                     </NavPill>
                 ))}
             </NavPills>
+            <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <Avatar name="Rin" className="size-8 text-xs" />
+            </div>
+        </Header>
+    );
+}
+
+const icon = (d: string) => (
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden
+    >
+        <path d={d} />
+    </svg>
+);
+const TAB_ICONS: Record<string, ReactNode> = {
+    Month: icon('M4 6h16M4 12h16M4 18h10'),
+    Planner: icon('M4 4h16v16H4zM4 10h16M10 4v16'),
+    Goals: icon('M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-5a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z'),
+    Settings: icon('M4 7h10M18 7h2M4 17h4M12 17h8M14 5v4M8 15v4'),
+};
+
+/** Phone navigation, in place of the top bar's pills. */
+function AppTabBar() {
+    const [page, setPage] = useState('Month');
+    return (
+        <TabBar aria-label="Main">
+            {PAGES.map((p) => (
+                <TabBarItem
+                    key={p}
+                    href={`#${p.toLowerCase()}`}
+                    icon={TAB_ICONS[p]}
+                    active={p === page}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setPage(p);
+                    }}
+                >
+                    {p}
+                </TabBarItem>
+            ))}
+        </TabBar>
+    );
+}
+
+// ── Entries ──
+
+const COMPARE = {
+    label: (a: Entry, b: Entry) => a.label.localeCompare(b.label),
+    amount: (a: Entry, b: Entry) => signed(a) - signed(b),
+};
+
+/** Sortable, with amounts edited in place and tags that collapse to "+N". */
+function EntryTable({
+    entries,
+    onAmount,
+    onDelete,
+}: {
+    entries: Entry[];
+    onAmount: (id: number, amount: Money) => void;
+    onDelete: (entry: Entry) => void;
+}) {
+    const { rows, headProps } = useSort(entries, COMPARE);
+    const total = entries.reduce((sum, e) => sum + signed(e), 0);
+    return (
+        <TableContainer label="Entries" className="mt-4 max-h-96">
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead {...headProps('label')}>Entry</TableHead>
+                        <TableHead className="max-sm:hidden">Tags</TableHead>
+                        <TableHead numeric {...headProps('amount')}>
+                            Amount
+                        </TableHead>
+                        <TableHead>
+                            <span className="sr-only">Actions</span>
+                        </TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {rows.length === 0 && <TableEmpty colSpan={4} />}
+                    {rows.map((e) => (
+                        <TableRow key={e.id}>
+                            <TableCell>
+                                <div className="flex flex-col">
+                                    <span className="font-medium">{e.label}</span>
+                                    <span className="text-muted-foreground text-xs">
+                                        {categoryOf(e.category).label}
+                                        {e.recurring && ' · monthly'}
+                                    </span>
+                                </div>
+                            </TableCell>
+                            <TableCell className="w-48 max-sm:hidden">
+                                <TagList tags={e.tags} />
+                            </TableCell>
+                            <TableCell numeric className="w-36 py-1.5">
+                                <EditableCell
+                                    label={`${e.label}: ${money(e.amount)}`}
+                                    className={e.kind === 'income' ? 'text-primary text-glow' : undefined}
+                                    editor={(close) => (
+                                        <MoneyInput
+                                            compact
+                                            autoFocus
+                                            aria-label={e.label}
+                                            value={e.amount}
+                                            currency={CURRENCY}
+                                            locale={LOCALE}
+                                            onChange={(v) => {
+                                                if (v !== null && v > 0) onAmount(e.id, v);
+                                                close();
+                                            }}
+                                            onCancel={close}
+                                        />
+                                    )}
+                                >
+                                    {e.kind === 'income' ? '+' : '−'}
+                                    {money(e.amount)}
+                                </EditableCell>
+                            </TableCell>
+                            <TableCell className="w-10 px-1">
+                                <ActionsMenu
+                                    label={`Actions for ${e.label}`}
+                                    actions={[{ label: 'Delete', onClick: () => onDelete(e), destructive: true }]}
+                                />
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        <TableFooterCell colSpan={2}>Net</TableFooterCell>
+                        <TableFooterCell numeric className={total >= 0 ? 'text-primary' : 'text-destructive'}>
+                            {total >= 0 ? '+' : '−'}
+                            {money(Math.abs(total))}
+                        </TableFooterCell>
+                        <TableFooterCell />
+                    </TableRow>
+                </TableFooter>
+            </Table>
+        </TableContainer>
+    );
+}
+
+/** As many tags as fit on one line; the rest behind "+N". */
+function TagList({ tags }: { tags: string[] }) {
+    const ref = useRef<HTMLDivElement>(null);
+    return (
+        <div ref={ref} className="flex items-center gap-1">
+            <Collapse items={tags} parentRef={ref}>
+                {(t) => (
+                    <Badge key={t} variant="secondary">
+                        {t}
+                    </Badge>
+                )}
+            </Collapse>
         </div>
     );
 }
 
-function EntryList({ entries, onDelete }: { entries: Entry[]; onDelete: (entry: Entry) => void }) {
-    if (!entries.length) return <p className="text-muted-foreground py-8 text-center text-sm">Nothing here yet.</p>;
+// ── Spending ──
+
+interface GroupRow {
+    name: string;
+    spent: Money;
+    budget: Money;
+    children?: GroupRow[];
+}
+
+/** Groups of categories in a tree; each row's meter shows spend against its budget. */
+function SpendingByGroup({ entries }: { entries: Entry[] }) {
+    const groups = useMemo(() => {
+        const out: GroupRow[] = [];
+        for (const c of CATEGORIES) {
+            if (c.group === 'Income') continue;
+            const spent = entries
+                .filter((e) => e.kind === 'expense' && e.category === c.value)
+                .reduce((sum, e) => sum + e.amount, 0);
+            let group = out.find((g) => g.name === c.group);
+            if (!group) out.push((group = { name: c.group, spent: 0, budget: 0, children: [] }));
+            group.children!.push({ name: c.label, spent, budget: c.budget });
+            group.spent += spent;
+            group.budget += c.budget;
+        }
+        return out;
+    }, [entries]);
+    const tree = useTree({ items: groups, getKey: (g) => g.name, getChildren: (g) => g.children });
+
     return (
-        <ul className="divide-tint/[0.07] -mx-1 flex flex-col divide-y">
-            {entries.map((e) => (
-                <li key={e.id} className="flex items-center gap-3 px-1 py-2.5">
-                    <div className="flex min-w-0 flex-1 flex-col gap-1">
-                        <span className="truncate text-sm font-medium">{e.label}</span>
-                        <div className="flex flex-wrap items-center gap-1.5">
-                            <span className="text-muted-foreground text-xs">{e.category.text}</span>
-                            {e.recurring && <Badge variant="outline">Monthly</Badge>}
-                            {e.tags.map((t) => (
-                                <Badge key={t.key} variant="secondary">
-                                    {t.text}
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                    <span className={e.kind === 'income' ? 'text-primary text-glow tabular-nums' : 'tabular-nums'}>
-                        {e.kind === 'income' ? '+' : '−'}
-                        {money(e.amount)}
-                    </span>
-                    <ActionsMenu
-                        label={`Actions for ${e.label}`}
-                        actions={[{ label: 'Delete', onClick: () => onDelete(e), destructive: true }]}
-                    />
-                </li>
-            ))}
-        </ul>
+        <Card title="Spending by group">
+            <TableContainer className="-mx-1">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Category</TableHead>
+                            <TableHead numeric>Spent</TableHead>
+                            <TableHead numeric className="max-sm:hidden">
+                                Budget
+                            </TableHead>
+                            <TableHead className="w-2/5">Used</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {tree.rows.map((row) => (
+                            <TreeRow key={row.key} row={row} tree={tree}>
+                                <TreeCell className={row.hasChildren ? 'font-medium' : undefined}>
+                                    <TreeLabel row={row} tree={tree}>
+                                        {row.item.name}
+                                    </TreeLabel>
+                                </TreeCell>
+                                <TreeCell numeric>{money(row.item.spent)}</TreeCell>
+                                <TreeCell numeric className="text-muted-foreground max-sm:hidden">
+                                    {money(row.item.budget)}
+                                </TreeCell>
+                                <TreeCell>
+                                    <Meter
+                                        className="w-full"
+                                        value={row.item.spent}
+                                        max={row.item.budget}
+                                        valueText={`${money(row.item.spent)} of ${money(row.item.budget)}`}
+                                    />
+                                </TreeCell>
+                            </TreeRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Card>
     );
 }
 
+/** The categories closest to their limit. */
+function BudgetMeters({ entries }: { entries: Entry[] }) {
+    const rows = CATEGORIES.filter((c) => c.budget > 0)
+        .map((c) => ({
+            ...c,
+            spent: entries
+                .filter((e) => e.kind === 'expense' && e.category === c.value)
+                .reduce((sum, e) => sum + e.amount, 0),
+        }))
+        .sort((a, b) => b.spent / b.budget - a.spent / a.budget)
+        .slice(0, 3);
+    return (
+        <Card title="Watch list">
+            <div className="flex flex-col gap-5">
+                {rows.map((c) => {
+                    const over = c.spent > c.budget;
+                    const status = over ? `${money(c.spent - c.budget)} over` : `${money(c.budget - c.spent)} left`;
+                    return (
+                        <Meter
+                            key={c.value}
+                            label={c.label}
+                            value={c.spent}
+                            max={c.budget}
+                            detail={`${money(c.spent)} / ${money(c.budget)}`}
+                            hint={status}
+                            valueText={`${money(c.spent)} of ${money(c.budget)}, ${status}`}
+                        />
+                    );
+                })}
+            </div>
+        </Card>
+    );
+}
+
+// ── Goals ──
+
 function Goals() {
+    const [monthly, setMonthly] = useState(400);
     const goals = [
-        { name: 'Emergency fund', saved: 6400, target: 10000 },
-        { name: 'New laptop', saved: 560, target: 2000 },
+        { name: 'Emergency fund', saved: 640000, target: 1000000 },
+        { name: 'New laptop', saved: 56000, target: 200000 },
     ];
+    const left = goals.reduce((sum, g) => sum + g.target - g.saved, 0);
+    const months = Math.ceil(left / (monthly * 100));
     return (
         <Card title="Goals">
             <div className="flex flex-col gap-4">
                 {goals.map((g) => (
                     <div key={g.name} className="flex items-center gap-4">
-                        <ProgressRing value={g.saved / g.target} size={64} stroke={6} label={g.name}>
+                        <ProgressRing value={g.saved / g.target} size={56} stroke={5} label={g.name}>
                             <span className="text-xs font-semibold tabular-nums">
                                 {Math.round((g.saved / g.target) * 100)}%
                             </span>
@@ -333,27 +676,50 @@ function Goals() {
                         </div>
                     </div>
                 ))}
+                <div className="border-tint/[0.07] flex flex-col gap-2 border-t pt-4">
+                    <div className="flex justify-between text-sm">
+                        <span className="font-medium">Put aside each month</span>
+                        <span className="text-muted-foreground tabular-nums">{money(monthly * 100)}</span>
+                    </div>
+                    <Slider
+                        aria-label="Put aside each month"
+                        min={50}
+                        max={1500}
+                        step={50}
+                        value={monthly}
+                        onValueChange={setMonthly}
+                        valueText={(v) => money(v * 100)}
+                    />
+                    <p className="text-muted-foreground mt-0! text-xs">Both goals reached in about {months} months.</p>
+                </div>
             </div>
         </Card>
     );
 }
 
-const GLOW = { off: '0', soft: '0.55', bright: '1' } as const;
+// ── Appearance ──
 
-/** Live controls for the theme's glow and motion. */
+const HUES = `linear-gradient(to right, ${Array.from({ length: 13 }, (_, i) => `oklch(0.72 0.13 ${i * 30})`).join(', ')})`;
+
+/** A live theme editor: presets, any hue, glow and motion, in dark and light. */
 function Appearance() {
-    const [glow, setGlow] = useState<keyof typeof GLOW>('soft');
+    const [theme, setTheme] = useState<ThemeSettings>(DEFAULT_THEME);
     const [reduceMotion, setReduceMotion] = useState(false);
 
     useEffect(() => {
         const root = document.documentElement;
-        root.style.setProperty('--glow-strength', GLOW[glow]);
-        root.classList.toggle('reduce-motion', reduceMotion);
-        return () => {
-            root.style.removeProperty('--glow-strength');
-            root.classList.remove('reduce-motion');
-        };
-    }, [glow, reduceMotion]);
+        const apply = () => applyTheme(theme, { appearance: root.classList.contains('light') ? 'light' : 'dark' });
+        apply();
+        // ThemeToggle flips <html> between .dark and .light: re-apply for the new appearance.
+        const watch = new MutationObserver(apply);
+        watch.observe(root, { attributes: true, attributeFilter: ['class'] });
+        return () => watch.disconnect();
+    }, [theme]);
+    useEffect(() => () => resetTheme(), []);
+    useEffect(() => {
+        document.documentElement.classList.toggle('reduce-motion', reduceMotion);
+        return () => document.documentElement.classList.remove('reduce-motion');
+    }, [reduceMotion]);
 
     return (
         <Card
@@ -363,7 +729,7 @@ function Appearance() {
                     trigger="hover"
                     content={
                         <p className="text-muted-foreground mt-0! max-w-56 p-3 text-xs leading-5">
-                            Glow lights focus rings, primary buttons and card edges near the pointer.
+                            Every colour comes from these few settings, and stays readable in both themes.
                         </p>
                     }
                 >
@@ -372,17 +738,38 @@ function Appearance() {
             }
         >
             <div className="flex flex-col gap-5">
+                <Field label="Preset">
+                    <Select
+                        value={theme.preset === 'custom' ? null : theme.preset}
+                        placeholder="Custom"
+                        options={PRESETS.map((p) => ({ value: p.id, label: p.label }))}
+                        onChange={(id: PresetId) => setTheme((t) => applyPreset(t, id))}
+                    />
+                </Field>
+                <div className="flex flex-col gap-2">
+                    <span className="text-sm font-medium">Hue</span>
+                    <Slider
+                        aria-label="Hue"
+                        min={0}
+                        max={359}
+                        value={theme.hue}
+                        onValueChange={(hue) => setTheme((t) => customize(t, { hue }))}
+                        trackBackground={HUES}
+                        thumbColor={`oklch(0.72 0.13 ${theme.hue})`}
+                        valueText={(v) => `Hue ${v} degrees`}
+                    />
+                </div>
                 <Segmented
                     label="Glow"
-                    value={glow}
-                    onChange={setGlow}
+                    value={theme.glow}
+                    onChange={(glow) => setTheme((t) => ({ ...t, glow }))}
                     options={[
                         { value: 'off', label: 'Off' },
                         { value: 'soft', label: 'Soft' },
                         { value: 'bright', label: 'Bright' },
                     ]}
                 />
-                <label className="flex items-center justify-between gap-4">
+                <label className="flex items-center justify-between gap-4 text-sm">
                     Reduce motion
                     <Toggle checked={reduceMotion} onChange={setReduceMotion} aria-label="Reduce motion" />
                 </label>
@@ -390,6 +777,8 @@ function Appearance() {
         </Card>
     );
 }
+
+// ── Add entry ──
 
 function AddEntryDialog({
     open,
@@ -403,24 +792,30 @@ function AddEntryDialog({
     const blank = useMemo(
         () => ({
             label: '',
-            amount: '',
+            amount: null as Money | null,
             kind: 'expense' as Kind,
-            category: CATEGORIES[2],
+            category: 'groceries' as CategoryKey,
             tags: [] as DropdownItem[],
+            month: '2026-09' as Month | null,
             recurring: false,
             note: '',
         }),
         [],
     );
     const [form, setForm] = useState(blank);
+    const [submitted, setSubmitted] = useState(false);
     const set = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) =>
         setForm((f) => ({ ...f, [key]: value }));
-    const amount = Number(form.amount);
-    const valid = form.label.trim() !== '' && amount > 0;
+    const errors = {
+        label: form.label.trim() === '' ? 'Describe the entry.' : undefined,
+        amount: !form.amount || form.amount <= 0 ? 'Enter an amount above zero.' : undefined,
+    };
+    const valid = !errors.label && !errors.amount;
 
     const close = () => {
         onOpenChange(false);
         setForm(blank);
+        setSubmitted(false);
     };
 
     return (
@@ -431,16 +826,18 @@ function AddEntryDialog({
             description="Amounts are in US dollars."
         >
             <form
+                noValidate
                 className="flex flex-col gap-4"
                 onSubmit={(e) => {
                     e.preventDefault();
+                    setSubmitted(true);
                     if (!valid) return;
                     onAdd({
                         label: form.label.trim(),
-                        amount,
+                        amount: form.amount!,
                         kind: form.kind,
                         category: form.category,
-                        tags: form.tags,
+                        tags: form.tags.map((t) => t.text),
                         recurring: form.recurring,
                     });
                     close();
@@ -455,53 +852,54 @@ function AddEntryDialog({
                         { value: 'income', label: 'Income' },
                     ]}
                 />
-                <div className="grid grid-cols-[2fr_1fr] gap-3">
-                    <label className="flex flex-col gap-2">
-                        Description
+                <div className="grid gap-3 sm:grid-cols-[3fr_2fr]">
+                    <Field label="Description" error={submitted ? errors.label : undefined}>
                         <Input
                             value={form.label}
                             onChange={(e) => set('label', e.target.value)}
                             placeholder="Weekly shop"
                         />
-                    </label>
-                    <label className="flex flex-col gap-2">
-                        Amount
-                        <Input
+                    </Field>
+                    <Field label="Amount" error={submitted ? errors.amount : undefined}>
+                        <MoneyInput
+                            live
+                            allowEmpty
                             value={form.amount}
-                            onChange={(e) => set('amount', e.target.value)}
-                            inputMode="decimal"
-                            placeholder="0"
-                            className="tabular-nums"
+                            onChange={(v) => set('amount', v)}
+                            currency={CURRENCY}
+                            locale={LOCALE}
                         />
-                    </label>
+                    </Field>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                    <div className="flex flex-col gap-2">
-                        <span className="text-sm font-medium">Category</span>
-                        <Dropdown
-                            items={CATEGORIES}
-                            selected={form.category}
+                <div className="grid gap-3 sm:grid-cols-2">
+                    <Field label="Category">
+                        <Select
+                            value={form.category}
+                            options={CATEGORIES.map((c) => ({ value: c.value, label: c.label }))}
                             onChange={(c) => set('category', c)}
-                            className="w-full"
                         />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        <span className="text-sm font-medium">Tags</span>
-                        <Dropdown
-                            multiple
-                            items={TAGS}
-                            placeholder="None"
-                            selected={form.tags}
-                            onChange={(t) => set('tags', t)}
-                            className="w-full"
-                        />
-                    </div>
+                    </Field>
+                    <Field label="Month">
+                        <MonthPicker value={form.month} onChange={(m) => set('month', m)} locale={LOCALE} />
+                    </Field>
                 </div>
-                <label className="flex flex-col gap-2">
-                    Note
+                <div className="flex flex-col gap-2">
+                    <span className="text-sm font-medium">Tags</span>
+                    <Dropdown
+                        multiple
+                        mutable
+                        items={TAGS}
+                        placeholder="None"
+                        selected={form.tags}
+                        onChange={(t) => set('tags', t)}
+                        onAdd={(t) => set('tags', [...form.tags, t])}
+                        className="w-full"
+                    />
+                </div>
+                <Field label="Note" hint="Only you can see this.">
                     <TextArea value={form.note} onChange={(e) => set('note', e.target.value)} placeholder="Optional" />
-                </label>
-                <label className="flex items-center justify-between gap-4">
+                </Field>
+                <label className="flex items-center justify-between gap-4 text-sm">
                     Repeats every month
                     <Toggle
                         checked={form.recurring}
@@ -509,20 +907,19 @@ function AddEntryDialog({
                         aria-label="Repeats every month"
                     />
                 </label>
+                {submitted && !valid && <FormMessage tone="error">Fix the fields above to add it.</FormMessage>}
                 <div className="flex justify-end gap-2">
-                    <Button type="button" variant="outline" onClick={close}>
+                    <Button variant="outline" onClick={close}>
                         Cancel
                     </Button>
-                    <Button type="submit" disabled={!valid}>
-                        Add entry
-                    </Button>
+                    <Button type="submit">Add entry</Button>
                 </div>
             </form>
         </Dialog>
     );
 }
 
-/** `nav={false}` drops the app's own top bar, for pages that already have one. */
+/** `nav={false}` drops the app's own top bar and tab bar, for pages that already have one. */
 export default function BudgetApp({ nav = true }: { nav?: boolean }) {
     return (
         <ToastProvider>
