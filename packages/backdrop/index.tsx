@@ -1,5 +1,5 @@
 import { applyGraphicsMode } from '@zen/utils/graphics';
-import { CSSProperties, useEffect } from 'react';
+import { CSSProperties, useEffect, useRef } from 'react';
 
 /**
  * Fixed page background: slow aurora glows over a faint pattern (topographic
@@ -10,8 +10,11 @@ import { CSSProperties, useEffect } from 'react';
 export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
     const kind = pattern ?? (topoSrc ? 'contours' : 'dots');
 
+    const ref = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         const root = document.documentElement;
+        const backdrop = ref.current;
         let frame = 0;
         let x = -9999;
         let y = -9999;
@@ -23,16 +26,28 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
         // Per frame: read every element's box first, then write (interleaving the two
         // forces a layout per element). Only elements within reach of the light are
         // updated; the rest are parked once, so they aren't repainted every frame.
+        // Values are only written when they change: scrolling fires this every
+        // frame, and each write restyles and repaints the element.
         const REACH = 400; // the edge glow's gradient radius is 360px
         const parked = new WeakSet<HTMLElement>();
         let out = true;
+        const written = new WeakMap<HTMLElement, string>();
+        const write = (el: HTMLElement, gx: string, gy: string, xName = '--gx', yName = '--gy') => {
+            const key = gx + ' ' + gy;
+            if (written.get(el) === key) return;
+            written.set(el, key);
+            el.style.setProperty(xName, gx);
+            el.style.setProperty(yName, gy);
+        };
         const apply = () => {
             frame = 0;
-            // Pointer gone: the background lights fade out where they are (CSS, data-pointer).
-            root.dataset.pointer = out ? 'out' : 'in';
-            if (!out) {
-                root.style.setProperty('--mx', `${x}px`);
-                root.style.setProperty('--my', `${y}px`);
+            // The backdrop's own light: its variables live on the backdrop (not <html>,
+            // where a change would restyle the whole page). Pointer gone: the lights
+            // fade out where they are (CSS, data-pointer).
+            if (backdrop) {
+                const state = out ? 'out' : 'in';
+                if (backdrop.dataset.pointer !== state) backdrop.dataset.pointer = state;
+                if (!out) write(backdrop, `${x}px`, `${y}px`, '--mx', '--my');
             }
             const els = Array.from(document.querySelectorAll<HTMLElement>('.glow-edge'));
             const rects = els.map((el) => el.getBoundingClientRect());
@@ -40,12 +55,10 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
                 const r = rects[i];
                 const near = x > r.left - REACH && x < r.right + REACH && y > r.top - REACH && y < r.bottom + REACH;
                 if (near) {
-                    el.style.setProperty('--gx', `${x - r.left}px`);
-                    el.style.setProperty('--gy', `${y - r.top}px`);
+                    write(el, `${Math.round(x - r.left)}px`, `${Math.round(y - r.top)}px`);
                     parked.delete(el);
                 } else if (!parked.has(el)) {
-                    el.style.setProperty('--gx', '-9999px');
-                    el.style.setProperty('--gy', '-9999px');
+                    write(el, '-9999px', '-9999px');
                     parked.add(el);
                 }
             });
@@ -84,6 +97,7 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
 
     return (
         <div
+            ref={ref}
             className="zen-backdrop"
             aria-hidden
             style={topoSrc ? ({ '--zen-topo': `url("${topoSrc}")` } as CSSProperties) : undefined}

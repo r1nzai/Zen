@@ -200,12 +200,8 @@ html[data-zen-graphics='lite'] :is(.zen-topo--lit, .zen-dots--lit) {
  * Sticky table cells: clear glass at rest; frosted while content passes under
  * their edge (TableContainer sets data-under-*), so it blurs instead of showing
  * through. Where there's no blur (no GPU, touch, reduced transparency), solid.
+ * No transition: animating every sticky cell's frost costs frames mid-scroll.
  */
-.zen__table-container :is(.zen__sticky-top, .zen__sticky-left, .zen__sticky-bottom) {
-    transition:
-        background-color 200ms,
-        backdrop-filter 200ms;
-}
 .zen__table-container[data-under-top] .zen__sticky-top,
 .zen__table-container[data-under-left] .zen__sticky-left,
 .zen__table-container[data-under-bottom] .zen__sticky-bottom {
@@ -366,8 +362,8 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     transition: opacity 200ms;
 }
 /* Pointer left the window: the lights fade out where they are. */
-html[data-pointer='out'] .zen-dots--lit,
-html[data-pointer='out'] .zen-topo--lit {
+.zen-backdrop[data-pointer='out'] .zen-dots--lit,
+.zen-backdrop[data-pointer='out'] .zen-topo--lit {
     opacity: 0;
 }
 

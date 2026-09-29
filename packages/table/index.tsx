@@ -1,17 +1,21 @@
+import ChevronDown from '@zen/icons/chevron-down';
+import ChevronUp from '@zen/icons/chevron-up';
 import { cx } from '@zen/utils/cx';
 import { ComponentProps, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 /*
- * Sticky cells (header, first column, footer) are clear glass at rest, and
- * frost only while content passes under them: TableContainer marks the panel
- * with data-under-top/left/bottom as it scrolls, and the zen__sticky-* rules in
- * theme.css frost (or, without blur, fill) the cells on that edge.
+ * Sticky parts (the header row, the footer row, a first column) are clear glass
+ * at rest, and frost only while content passes under them: TableContainer marks
+ * the scroller with data-under-top/left/bottom, and the zen__sticky-* rules in
+ * theme.css frost (or, without blur, fill) that edge. Header and footer frost
+ * as whole rows, so the blur has no seams between columns.
  */
 
 /**
  * The panel a table scrolls in: glass with an edge that catches the pointer
- * light, like a Card. Give it a max height to scroll vertically; it scrolls sideways when
- * the table is wider. With `label`, it's a focusable region, so keyboard users
+ * light, like a Card. Give it a max height (className) to scroll vertically;
+ * it scrolls sideways when the table is wider. `ref` and scroll events are the
+ * scrolling element's. With `label`, it's a focusable region, so keyboard users
  * can scroll it too.
  */
 export function TableContainer({ label, className, ref, onScroll, ...rest }: TableContainerProps) {
@@ -21,7 +25,8 @@ export function TableContainer({ label, className, ref, onScroll, ...rest }: Tab
     const mark = useCallback(() => {
         const el = own.current;
         if (!el) return;
-        const set = (name: string, on: boolean) => (on ? el.setAttribute(name, '') : el.removeAttribute(name));
+        // Only on a change: touching the attribute restyles every sticky cell.
+        const set = (name: string, on: boolean) => on !== el.hasAttribute(name) && el.toggleAttribute(name, on);
         set('data-under-top', el.scrollTop > 0);
         set('data-under-left', el.scrollLeft > 0);
         set('data-under-bottom', el.scrollTop + el.clientHeight < el.scrollHeight - 1);
@@ -38,27 +43,34 @@ export function TableContainer({ label, className, ref, onScroll, ...rest }: Tab
         return () => resizes?.disconnect();
     }, [mark]);
 
+    // Two boxes: the glass panel stays put (its glowing edge is drawn on it, and
+    // would scroll away and repaint every frame on a scrolling element), and the
+    // table scrolls inside it, on its own layer (will-change), so scrolling moves
+    // pixels instead of redrawing rows. Size the panel with className (e.g. max-h-80).
     return (
         <div
-            ref={(node) => {
-                own.current = node;
-                if (typeof ref === 'function') ref(node);
-                else if (ref) ref.current = node;
-            }}
-            onScroll={(e) => {
-                mark();
-                onScroll?.(e);
-            }}
-            role={label ? 'region' : undefined}
-            aria-label={label}
-            tabIndex={label ? 0 : undefined}
             className={cx(
-                'zen__table-container glass glow-edge isolate overflow-auto rounded-xl',
-                'focus-visible:ring-ring/30 outline-hidden focus-visible:ring-2',
+                'zen__table-panel glass glow-edge isolate flex flex-col overflow-hidden rounded-xl',
                 className,
             )}
-            {...rest}
-        />
+        >
+            <div
+                ref={(node) => {
+                    own.current = node;
+                    if (typeof ref === 'function') ref(node);
+                    else if (ref) ref.current = node;
+                }}
+                onScroll={(e) => {
+                    mark();
+                    onScroll?.(e);
+                }}
+                role={label ? 'region' : undefined}
+                aria-label={label}
+                tabIndex={label ? 0 : undefined}
+                className="zen__table-container focus-visible:ring-ring/30 min-h-0 overflow-auto rounded-[inherit] outline-hidden will-change-scroll focus-visible:ring-2 focus-visible:ring-inset"
+                {...rest}
+            />
+        </div>
     );
 }
 
@@ -67,8 +79,9 @@ export default function Table({ className, ...rest }: ComponentProps<'table'>) {
     return <table className={cx('zen__table w-full border-separate border-spacing-0 text-sm', className)} {...rest} />;
 }
 
-export function TableHeader(props: ComponentProps<'thead'>) {
-    return <thead {...props} />;
+/** The heading rows: they stay at the top while the body scrolls, frosted as one surface. */
+export function TableHeader({ className, ...rest }: ComponentProps<'thead'>) {
+    return <thead className={cx('zen__sticky-top sticky top-0 z-20', className)} {...rest} />;
 }
 
 export function TableBody(props: ComponentProps<'tbody'>) {
@@ -77,7 +90,7 @@ export function TableBody(props: ComponentProps<'tbody'>) {
 
 /** Rows that stay at the bottom while the body scrolls (totals, balances). */
 export function TableFooter({ className, ...rest }: ComponentProps<'tfoot'>) {
-    return <tfoot className={cx('sticky bottom-0 z-20', className)} {...rest} />;
+    return <tfoot className={cx('zen__sticky-bottom sticky bottom-0 z-20', className)} {...rest} />;
 }
 
 /** A row; its cells light up together on hover. */
@@ -86,7 +99,7 @@ export function TableRow({ className, ...rest }: ComponentProps<'tr'>) {
 }
 
 /**
- * Column heading: small spaced caps, sticky at the top. With `onSort`, it's a
+ * Column heading: small spaced caps (TableHeader keeps the row at the top). With `onSort`, it's a
  * button that shows the direction and announces it (aria-sort).
  */
 export function TableHead({
@@ -104,8 +117,8 @@ export function TableHead({
             scope={scope}
             aria-sort={sortDirection === 'asc' ? 'ascending' : sortDirection === 'desc' ? 'descending' : undefined}
             className={cx(
-                'zen__sticky-top border-tint/[0.07] text-muted-foreground sticky top-0 border-b px-3 py-2.5 align-middle text-xs leading-5 font-medium tracking-wider whitespace-nowrap uppercase',
-                sticky === 'left' ? 'zen__sticky-left left-0 z-30' : 'z-20',
+                'border-tint/[0.07] text-muted-foreground border-b px-3 py-2.5 align-middle text-xs leading-5 font-medium tracking-wider whitespace-nowrap uppercase',
+                sticky === 'left' && 'zen__sticky-left sticky left-0 z-10',
                 numeric ? 'text-right' : 'text-left',
                 className,
             )}
@@ -122,8 +135,12 @@ export function TableHead({
                     )}
                 >
                     {children}
-                    <span aria-hidden className="inline-block w-3 text-xs leading-none">
-                        {sortDirection === 'asc' ? '▲' : sortDirection === 'desc' ? '▼' : ''}
+                    <span aria-hidden className="inline-flex w-3">
+                        {sortDirection === 'asc' ? (
+                            <ChevronUp className="size-3" strokeWidth={2.5} />
+                        ) : sortDirection === 'desc' ? (
+                            <ChevronDown className="size-3" strokeWidth={2.5} />
+                        ) : null}
                     </span>
                 </button>
             ) : (
@@ -154,11 +171,11 @@ export function TableCell({ numeric, sticky, className, ...rest }: TableCellProp
 
 /** A footer cell: sits on the card, above a hairline. Use inside TableFooter. */
 export function TableFooterCell({ numeric, sticky, className, ...rest }: TableCellProps) {
-    // Footer cells frost with the bottom edge (and the first one with the left edge too).
+    // The footer row frosts as one (TableFooter); a left-sticky cell also frosts with the left edge.
     return (
         <td
             className={cx(
-                'zen__sticky-bottom border-tint/[0.07] h-9 border-t px-3 font-medium whitespace-nowrap',
+                'border-tint/[0.07] h-9 border-t px-3 font-medium whitespace-nowrap',
                 sticky === 'left' &&
                     'zen__sticky-left sticky left-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)]',
                 numeric && 'text-right tabular-nums',

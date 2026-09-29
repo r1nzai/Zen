@@ -7,6 +7,8 @@
 @layer base {
     html {
         background: oklch(var(--background));
+        /* Room for the scrollbar is always kept, so the page doesn't jump when one appears. */
+        scrollbar-gutter: stable;
     }
     body {
         /* Transparent: an opaque body would paint over the z-index −1 <Backdrop>. */

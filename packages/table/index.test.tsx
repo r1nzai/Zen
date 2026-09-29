@@ -34,9 +34,11 @@ describe('Table', () => {
                 </Table>
             </TableContainer>,
         );
-        expect(container.firstChild).toHaveClass('glass', 'glow-edge', 'overflow-auto', 'max-h-80');
+        // The glass panel is sized by className; the table scrolls inside it.
+        expect(container.firstChild).toHaveClass('glass', 'glow-edge', 'max-h-80');
+        expect(container.firstChild!.firstChild).toHaveClass('overflow-auto');
         expect(screen.getByRole('table')).toHaveClass('min-w-96');
-        expect(screen.getByRole('columnheader', { name: 'Prop' })).toHaveClass('sticky', 'top-0');
+        expect(screen.getByRole('columnheader', { name: 'Prop' }).closest('thead')).toHaveClass('sticky', 'top-0');
         expect(screen.getByRole('columnheader', { name: 'Amount' })).toHaveClass('text-right');
         expect(screen.getByRole('cell', { name: '12' })).toHaveClass('tabular-nums');
     });
@@ -152,6 +154,6 @@ describe('useSort', () => {
         render(<Sorted />);
         fireEvent.click(screen.getByRole('button', { name: 'Amount' }));
         expect(screen.getByRole('columnheader')).toHaveAttribute('aria-sort', 'ascending');
-        expect(screen.getByRole('columnheader')).toHaveTextContent('▲');
+        expect(screen.getByRole('columnheader').querySelector('svg')).toBeInTheDocument();
     });
 });
