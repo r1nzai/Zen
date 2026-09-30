@@ -24,8 +24,9 @@ export default function DonutChart({
     const r = size / 2;
     const inner = r * (1 - thickness);
     const corner = Math.min(4, (r - inner) / 4);
-    // Each segment gives up this much angle on both sides, for the gap between them.
-    const gap = items.filter((it) => it.value > 0).length > 1 ? 2 / r : 0;
+    // Half the gap between segments, in px. The same width all the way across, so the
+    // gaps have parallel sides (a fixed angle would make wedges, wider at the rim).
+    const halfGap = items.filter((it) => it.value > 0).length > 1 ? 1.5 : 0;
 
     let angle = -Math.PI / 2;
     const arcs = items.map((it, i) => {
@@ -47,10 +48,15 @@ export default function DonutChart({
                 className="overflow-visible"
             >
                 {arcs.map((a, i) => {
-                    if (a.end - a.start <= gap * 2) return null;
                     // The only segment is the whole ring: it has no ends, so no rounding. Its exact shape, with
                     // no rounding stroke, whose start and end would meet in a seam at the top.
                     const whole = a.end - a.start >= Math.PI * 2 - 1e-6;
+                    // Parts shrink by the gap and the corner radius; the stroke adds the corner
+                    // back, rounded.
+                    const d = whole
+                        ? sector(inner, r, a.start, a.end)
+                        : segment(inner + corner, r - corner, a.start, a.end, halfGap + corner);
+                    if (!d) return null;
                     const mid = (a.start + a.end) / 2;
                     const lift = active === i && !whole ? 4 : 0;
                     const pct = total ? Math.round((items[i].value / total) * 100) : 0;
@@ -60,16 +66,7 @@ export default function DonutChart({
                             role="listitem"
                             tabIndex={0}
                             aria-label={`${items[i].label}: ${formatValue(items[i].value)} (${pct}%)`}
-                            d={
-                                whole
-                                    ? sector(inner, r, a.start, a.end)
-                                    : sector(
-                                          inner + corner,
-                                          r - corner,
-                                          a.start + gap + corner / r,
-                                          a.end - gap - corner / r,
-                                      )
-                            }
+                            d={d}
                             strokeWidth={whole ? 0 : corner * 2}
                             strokeLinejoin="round"
                             onPointerEnter={() => setActive(i)}
@@ -123,6 +120,24 @@ function segmentTip(mid: number, r: number): CSSProperties {
     const x = r + Math.cos(mid) * (r + 10);
     const y = r + Math.sin(mid) * (r + 10);
     return Math.cos(mid) >= 0 ? { left: x, top: y } : { right: 2 * r - x, top: y };
+}
+
+/**
+ * A ring segment between two radii and two angles (radians, clockwise from 3
+ * o'clock), with each end cut `inset` px inside its boundary line, parallel to
+ * it: so neighbours are parted by an even gap. Narrow enough that the inner
+ * edge would cross itself, it comes to a point there. Empty if nothing's left.
+ */
+function segment(r0: number, r1: number, a0: number, a1: number, inset: number): string {
+    const within = (rad: number) => Math.asin(Math.min(1, inset / rad));
+    const [o0, o1] = [a0 + within(r1), a1 - within(r1)];
+    if (o1 <= o0) return '';
+    let [i0, i1] = [a0 + within(r0), a1 - within(r0)];
+    if (i1 < i0) i0 = i1 = (a0 + a1) / 2;
+    const p = (rad: number, a: number) => `${rad * Math.cos(a)},${rad * Math.sin(a)}`;
+    const outer = `M${p(r1, o0)}A${r1},${r1} 0 ${o1 - o0 > Math.PI ? 1 : 0} 1 ${p(r1, o1)}`;
+    const back = i1 > i0 ? `L${p(r0, i1)}A${r0},${r0} 0 ${i1 - i0 > Math.PI ? 1 : 0} 0 ${p(r0, i0)}` : `L${p(r0, i0)}`;
+    return `${outer}${back}Z`;
 }
 
 /** An annular sector between two radii and two angles (radians, clockwise from 3 o'clock). */
