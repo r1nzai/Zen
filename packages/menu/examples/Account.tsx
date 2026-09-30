@@ -28,7 +28,7 @@ export default function Account() {
             label="Account menu"
             offset={10}
             trigger={<Avatar name={email} />}
-            triggerClassName="focus-visible:ring-ring/50 data-popup-open:ring-ring/40 rounded-full outline-hidden transition-transform duration-200 hover:scale-105 focus-visible:ring-2 data-popup-open:ring-2"
+            triggerClassName="focus-visible:ring-ring/50 data-popup-open:ring-ring/40 rounded-full outline-hidden transition-transform duration-200 hover:scale-105 data-popup-open:scale-105 focus-visible:ring-2 data-popup-open:ring-2"
             className="w-64 shadow-[0_20px_60px_-20px_oklch(0_0_0/0.8)]"
         >
             <MenuHeader>
