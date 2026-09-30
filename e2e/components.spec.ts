@@ -70,6 +70,25 @@ test('toast: appears, is announced, and can be dismissed', async ({ page }) => {
     await expect(page.getByText("Couldn't save")).toHaveCount(0);
 });
 
+test('toast: stacks into a deck that fans out when pointed at, and swipes away', async ({ page }) => {
+    errors = await open(page, '/components/toast/');
+    for (const name of ['Success', 'With action', 'Error'])
+        await page.getByRole('button', { name, exact: true }).click();
+    const deck = page.getByRole('region', { name: 'Notifications' });
+    const saved = deck.getByRole('status').filter({ hasText: 'Saved' });
+    const error = deck.getByRole('alert');
+    const gap = async () => (await error.boundingBox())!.y - (await saved.boundingBox())!.y;
+    await expect.poll(gap).toBeLessThan(40); // collapsed: only an edge peeks out
+    await error.hover();
+    await expect.poll(gap).toBeGreaterThan(150); // fanned out, one above another
+    const box = (await saved.boundingBox())!;
+    await page.mouse.move(box.x + 40, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + 200, box.y + box.height / 2, { steps: 8 });
+    await page.mouse.up();
+    await expect(page.getByText('Your changes are stored.')).toHaveCount(0);
+});
+
 test('table: a heading sorts, and sorts back the other way', async ({ page }) => {
     errors = await open(page, '/components/table/');
     const table = page.getByRole('region', { name: 'Repayment schedule' });

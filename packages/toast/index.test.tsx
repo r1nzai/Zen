@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { useState } from 'react';
 
 import Dialog from '../dialog';
@@ -187,14 +187,89 @@ describe('Toast', () => {
         expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
 
-    it('shows at most three at once, newest kept', () => {
+    it('shows the newest three; older ones wait behind and come back as those go', () => {
+        function Many() {
+            const toast = useToast();
+            return (
+                <button onClick={() => [1, 2, 3, 4, 5].forEach((n) => toast(`Toast ${n}`, { timeout: 0 }))}>
+                    many
+                </button>
+            );
+        }
+        render(
+            <ToastProvider>
+                <Many />
+            </ToastProvider>,
+        );
+        fireEvent.click(screen.getByRole('button', { name: 'many' }));
+        const waiting = () =>
+            screen
+                .getAllByRole('status')
+                .filter((t) => t.hasAttribute('inert'))
+                .map((t) => t.textContent);
+        expect(waiting()).toEqual(['Toast 1', 'Toast 2']);
+        fireEvent.click(
+            within(screen.getByText('Toast 5').closest('[role=status]')!).getByRole('button', { name: 'Dismiss' }),
+        );
+        act(() => vi.advanceTimersByTime(300));
+        expect(waiting()).toEqual(['Toast 1']);
+    });
+
+    it('fans out while pointed at, and waits meanwhile', () => {
+        render(
+            <ToastProvider>
+                <Trigger title="Hi" options={{ timeout: 1000 }} />
+            </ToastProvider>,
+        );
+        show('Hi');
+        show('Hi');
+        const deck = screen.getByRole('region', { name: 'Notifications' });
+        const [back, front] = screen.getAllByRole('status');
+        expect(back).toHaveAttribute('data-behind');
+        expect(back.style.transform).toContain('scale(0.95)');
+        fireEvent.mouseEnter(deck);
+        expect(deck).toHaveAttribute('data-expanded');
+        expect(back).not.toHaveAttribute('data-behind');
+        expect(back.style.transform).toContain('scale(1)');
+        act(() => vi.advanceTimersByTime(5000));
+        expect(front).toBeInTheDocument();
+    });
+
+    it('can be swiped away', () => {
         render(
             <ToastProvider>
                 <Trigger title="Hi" options={{ timeout: 0 }} />
             </ToastProvider>,
         );
-        for (let i = 0; i < 5; i++) show('Hi');
-        expect(screen.getAllByRole('status')).toHaveLength(3);
+        show('Hi');
+        const toast = screen.getByRole('status');
+        toast.setPointerCapture = () => {};
+        fireEvent.pointerDown(toast, { clientX: 0, button: 0, pointerId: 1 });
+        fireEvent.pointerMove(toast, { clientX: 20, pointerId: 1 });
+        expect(toast.style.getPropertyValue('--zen-swipe')).toBe('20px');
+        fireEvent.pointerMove(toast, { clientX: 120, pointerId: 1 });
+        fireEvent.pointerUp(toast, { clientX: 120, pointerId: 1 });
+        expect(toast).toHaveClass('translate-x-full');
+        act(() => vi.advanceTimersByTime(300));
+        expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    });
+
+    it('springs back from a short drag', () => {
+        render(
+            <ToastProvider>
+                <Trigger title="Hi" options={{ timeout: 0 }} />
+            </ToastProvider>,
+        );
+        show('Hi');
+        const toast = screen.getByRole('status');
+        toast.setPointerCapture = () => {};
+        fireEvent.pointerDown(toast, { clientX: 0, button: 0, pointerId: 1 });
+        act(() => vi.advanceTimersByTime(500));
+        fireEvent.pointerMove(toast, { clientX: 20, pointerId: 1 });
+        fireEvent.pointerUp(toast, { clientX: 20, pointerId: 1 });
+        expect(toast.style.getPropertyValue('--zen-swipe')).toBe('0px');
+        act(() => vi.advanceTimersByTime(300));
+        expect(screen.getByRole('status')).toBeInTheDocument();
     });
 
     it('useToast needs a provider', () => {

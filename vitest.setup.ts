@@ -24,3 +24,12 @@ if (typeof HTMLDialogElement !== 'undefined' && !HTMLDialogElement.prototype.sho
 // jsdom has no canvas/WebGL: pin the graphics mode so components don't try to detect it.
 // (utils/graphics.test.ts clears this to test detection itself.)
 if (typeof document !== 'undefined') document.documentElement.setAttribute('data-zen-graphics', 'full');
+
+// Nor ResizeObserver: a no-op, as jsdom lays nothing out to observe.
+if (typeof window !== 'undefined' && !window.ResizeObserver) {
+    window.ResizeObserver = class {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+    };
+}

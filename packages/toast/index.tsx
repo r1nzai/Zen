@@ -3,6 +3,7 @@ import { useGraphicsMode } from '@zen/utils/graphics';
 import {
     createContext,
     CSSProperties,
+    PointerEvent,
     ReactNode,
     RefObject,
     useCallback,
@@ -31,12 +32,21 @@ interface ToastItem extends ToastOptions {
     title: string;
     tone: ToastTone;
     timeout: number;
-    leaving?: boolean;
+    leaving?: 'fade' | 'swipe';
 }
 
 const DEFAULT_TIMEOUT = 5000;
+/** Toasts shown in the deck; older ones wait, hidden, behind them. */
 const LIMIT = 3;
 const EXIT_MS = 300;
+/** How far each card behind peeks out above the one in front, and how much smaller it is. */
+const PEEK = 14;
+const SHRINK = 0.05;
+/** Space between toasts once the deck fans out. */
+const GAP = 10;
+/** A drag this far (px), or this fast (px/ms), throws a toast away. */
+const SWIPE_DISTANCE = 60;
+const SWIPE_SPEED = 0.45;
 
 const ToastContext = createContext<((title: string, options?: ToastOptions) => number) | null>(null);
 
@@ -54,7 +64,12 @@ export interface ToastProviderProps {
     viewportClassName?: string;
 }
 
-/** Mount once near the root; `useToast()` works anywhere inside. */
+/**
+ * Mount once near the root; `useToast()` works anywhere inside. Toasts stack in
+ * a deck in the corner, newest in front with up to two peeking out behind; it
+ * fans out while pointed at or focused, and the countdowns wait meanwhile.
+ * Swipe a toast right to dismiss it.
+ */
 export default function ToastProvider({ children, offset, viewportClassName }: ToastProviderProps) {
     useGraphicsMode();
     const [toasts, setToasts] = useState<ToastItem[]>([]);
@@ -81,10 +96,27 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
     }, []);
     const host = hosts.at(-1) ?? (mounted ? document.body : null);
 
-    const dismiss = useCallback((id: number) => {
-        setToasts((ts) => ts.map((t) => (t.id === id ? { ...t, leaving: true } : t)));
+    // Each toast's natural height, so the deck can fan them out and match the card in front.
+    const [heights, setHeights] = useState<Record<number, number>>({});
+    const setHeight = useCallback(
+        (id: number, h: number) => setHeights((hs) => (hs[id] === h ? hs : { ...hs, [id]: h })),
+        [],
+    );
+
+    // The deck fans out while pointed at or focused, and the countdowns wait meanwhile.
+    const [hovered, setHovered] = useState(false);
+    const [focused, setFocused] = useState(false);
+
+    const dismiss = useCallback((id: number, how: 'fade' | 'swipe' = 'fade') => {
+        setToasts((ts) => ts.map((t) => (t.id === id ? { ...t, leaving: how } : t)));
         setTimeout(() => {
-            setToasts((ts) => ts.filter((t) => t.id !== id));
+            setToasts((ts) => {
+                const rest = ts.filter((t) => t.id !== id);
+                // The deck is gone from under the pointer, so no leave event will come.
+                if (!rest.length) setHovered(false);
+                return rest;
+            });
+            setHeights(({ [id]: _gone, ...hs }) => hs); // eslint-disable-line @typescript-eslint/no-unused-vars
             clocks.current.delete(id);
             entered.current.delete(id);
         }, EXIT_MS);
@@ -104,7 +136,33 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
         return id;
     }, []);
 
-    const visible = toasts.slice(-LIMIT);
+    /*
+     * The deck, newest in front. A toast's place counts the staying toasts newer than
+     * it, so one on its way out keeps its place while the rest close up at once.
+     */
+    const staying = toasts.filter((t) => !t.leaving);
+    const expanded = (hovered || focused) && staying.length > 0;
+    const front = staying.at(-1);
+    const frontHeight = front ? heights[front.id] : undefined;
+    const shown = staying.slice(-LIMIT);
+    const deckHeight = expanded
+        ? shown.reduce((sum, t) => sum + (heights[t.id] ?? 0), 0) + GAP * (shown.length - 1)
+        : (frontHeight ?? 0) + PEEK * (shown.length - 1);
+    const layout = (t: ToastItem): Layout => {
+        const newer = staying.filter((o) => o.id > t.id);
+        const index = newer.length;
+        return {
+            index,
+            front: index === 0,
+            hidden: index >= LIMIT,
+            y: expanded
+                ? -(newer.reduce((sum, o) => sum + (heights[o.id] ?? 0), 0) + GAP * index)
+                : -PEEK * Math.min(index, LIMIT - 1),
+            scale: expanded ? 1 : 1 - SHRINK * Math.min(index, LIMIT - 1),
+            // Collapsed, the cards behind take the front one's size, so only their edges show.
+            height: !expanded && index > 0 ? frontHeight : undefined,
+        };
+    };
 
     return (
         <ToastContext.Provider value={add}>
@@ -115,18 +173,34 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
                         ref={showInTopLayer}
                         popover="manual"
                         aria-label="Notifications"
+                        data-expanded={expanded || undefined}
+                        onMouseEnter={() => setHovered(true)}
+                        onMouseLeave={() => setHovered(false)}
+                        onFocus={() => setFocused(true)}
+                        onBlur={(e) => {
+                            if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false);
+                        }}
                         className={cx(
-                            // The popover's own defaults (centred, bordered, opaque) reset to a plain corner column.
-                            'zen__toast-viewport fixed top-auto right-4 bottom-[calc(var(--zen-toast-offset,1rem)+env(safe-area-inset-bottom))] left-auto z-50 m-0 flex w-[calc(100vw-2rem)] flex-col-reverse gap-2.5 overflow-visible border-0 bg-transparent p-0 text-inherit md:bottom-5 md:w-[24rem]',
+                            // The popover's own defaults (centred, bordered, opaque) reset to a plain corner box.
+                            'zen__toast-viewport fixed top-auto right-4 bottom-[calc(var(--zen-toast-offset,1rem)+env(safe-area-inset-bottom))] left-auto z-50 m-0 w-[calc(100vw-2rem)] overflow-visible border-0 bg-transparent p-0 text-inherit md:bottom-5 md:w-[24rem]',
+                            // Its height follows the deck, so hovering the gaps between fanned-out toasts keeps it open.
+                            'transition-[height] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
                             viewportClassName,
                         )}
-                        style={offset ? ({ '--zen-toast-offset': offset } as CSSProperties) : undefined}
+                        style={{
+                            height: deckHeight,
+                            ...(offset && ({ '--zen-toast-offset': offset } as CSSProperties)),
+                        }}
                     >
-                        {visible.map((t) => (
+                        {toasts.map((t, i) => (
                             <Toast
                                 key={t.id}
                                 toast={t}
-                                onDismiss={() => dismiss(t.id)}
+                                layout={layout(t)}
+                                z={i + 1}
+                                paused={expanded}
+                                onDismiss={(how) => dismiss(t.id, how)}
+                                onHeight={setHeight}
                                 clocks={clocks.current}
                                 entered={entered.current}
                             />
@@ -199,21 +273,43 @@ interface Clock {
     since: number | null;
 }
 
+/** Where a toast sits in the deck. */
+interface Layout {
+    /** 0 for the newest (in front), counting back. */
+    index: number;
+    front: boolean;
+    /** Waiting behind the shown ones. */
+    hidden: boolean;
+    /** Lift from the bottom of the deck, in px. */
+    y: number;
+    scale: number;
+    /** Set on cards behind the front one while collapsed. */
+    height?: number;
+}
+
 function Toast({
     toast,
+    layout,
+    z,
+    paused,
     onDismiss,
+    onHeight,
     clocks,
     entered,
 }: {
     toast: ToastItem;
-    onDismiss: () => void;
+    layout: Layout;
+    z: number;
+    paused: boolean;
+    onDismiss: (how?: 'fade' | 'swipe') => void;
+    onHeight: (id: number, height: number) => void;
     clocks: Map<number, Clock>;
     entered: Set<number>;
 }) {
     const tone = TONE[toast.tone] ?? TONE.info;
     const Icon = tone.icon;
-    const [paused, setPaused] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
+    const body = useRef<HTMLDivElement>(null);
     // Its entrance plays once, not again when it moves to another host.
     const [firstShow] = useState(() => !entered.has(toast.id));
     useEffect(() => {
@@ -225,8 +321,19 @@ function Toast({
     // before the old one's countdown stops).
     const used = clock.spent + (clock.since === null ? 0 : Date.now() - clock.since);
 
-    // Counts down only while not hovered, like the timer bar; the provider keeps the
-    // clock, so moving between hosts doesn't restart it.
+    // Its natural height (the body's; the card itself may be squeezed to the front one's).
+    useEffect(() => {
+        const el = body.current;
+        if (!el) return;
+        const report = () => onHeight(toast.id, el.offsetHeight);
+        report();
+        const observer = new ResizeObserver(report);
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [onHeight, toast.id]);
+
+    // Counts down only while the deck is closed, like the timer bar; the provider keeps
+    // the clock, so moving between hosts doesn't restart it.
     useEffect(() => {
         if (!toast.timeout || paused || toast.leaving) return;
         clock.since = Date.now();
@@ -238,71 +345,127 @@ function Toast({
         };
     }, [paused, toast.timeout, toast.leaving, onDismiss, clock]);
 
+    /*
+     * Swipe right to throw it away. The drag moves the card through a CSS variable,
+     * outside React, and the transition is off meanwhile so it follows the finger.
+     * Dragging left only gives a little, as there's nowhere to go.
+     */
+    // Where it started, and the latest move, whose speed decides a flick.
+    const drag = useRef<{ x: number; dx: number; t: number; speed: number } | null>(null);
+    const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+        if (toast.leaving || e.button !== 0 || (e.target as Element).closest('button')) return;
+        drag.current = { x: e.clientX, dx: 0, t: e.timeStamp, speed: 0 };
+        e.currentTarget.setPointerCapture(e.pointerId);
+        e.currentTarget.dataset.swiping = '';
+    };
+    const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+        if (!drag.current) return;
+        const d = drag.current;
+        const dx = e.clientX - d.x;
+        d.speed = (dx - d.dx) / Math.max(1, e.timeStamp - d.t);
+        d.dx = dx;
+        d.t = e.timeStamp;
+        e.currentTarget.style.setProperty('--zen-swipe', `${dx > 0 ? dx : dx / 6}px`);
+    };
+    const onPointerUp = (e: PointerEvent<HTMLDivElement>) => {
+        const d = drag.current;
+        if (!d) return;
+        drag.current = null;
+        delete e.currentTarget.dataset.swiping;
+        if (d.dx > SWIPE_DISTANCE || (d.dx > 0 && d.speed > SWIPE_SPEED)) onDismiss('swipe');
+        else e.currentTarget.style.setProperty('--zen-swipe', '0px');
+    };
+
     return (
         <div
             ref={ref}
             role={toast.tone === 'error' ? 'alert' : 'status'}
             aria-atomic="true"
-            onMouseEnter={() => setPaused(true)}
-            onMouseLeave={() => setPaused(false)}
+            data-front={layout.front || undefined}
+            data-behind={(!layout.front && layout.height !== undefined) || undefined}
+            inert={layout.hidden || !!toast.leaving}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
             className={cx(
-                'zen__toast group glass glass-blur glow-edge text-card-foreground relative flex items-start gap-3 overflow-hidden rounded-2xl border p-3.5 pr-10 select-none',
-                'transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
-                firstShow && 'starting:translate-y-3 starting:scale-[0.97] starting:opacity-0',
-                toast.leaving && 'translate-x-6 opacity-0',
+                'zen__toast group glass glass-blur glow-edge text-card-foreground absolute! inset-x-0 bottom-0 origin-bottom touch-pan-y overflow-hidden rounded-2xl border select-none',
+                'transition-[transform,translate,opacity,height] duration-400 ease-[cubic-bezier(0.2,0.8,0.2,1)] data-swiping:transition-none',
+                firstShow && 'starting:translate-y-full starting:opacity-0',
+                layout.hidden && 'opacity-0',
+                toast.leaving === 'fade' && 'translate-y-[35%] opacity-0',
+                toast.leaving === 'swipe' && 'translate-x-full opacity-0',
                 tone.ring,
                 tone.glow,
             )}
+            style={{
+                zIndex: z,
+                height: layout.height,
+                transform: `translateX(var(--zen-swipe, 0px)) translateY(${layout.y}px) scale(${layout.scale})`,
+            }}
         >
-            <span className={cx('mt-0.5 grid size-8 shrink-0 place-items-center rounded-full', tone.badge)} aria-hidden>
-                <Icon className="size-4" />
-            </span>
-            <div className="flex min-w-0 flex-1 flex-col gap-0.5 pt-0.5">
-                <div className="text-sm font-semibold">{toast.title}</div>
-                {toast.description && (
-                    <div className="text-muted-foreground text-sm leading-5">{toast.description}</div>
-                )}
-                {toast.action && (
-                    <button
-                        type="button"
-                        onClick={() => {
-                            toast.action?.onClick();
-                            onDismiss();
-                        }}
-                        className="border-tint/10 bg-tint/[0.06] hover:bg-tint/[0.12] focus-visible:ring-ring/50 mt-2 self-start rounded-lg border px-3 py-1 text-xs font-medium outline-hidden transition-colors focus-visible:ring-2"
-                    >
-                        {toast.action.label}
-                    </button>
-                )}
-            </div>
-            <button
-                type="button"
-                aria-label="Dismiss"
-                onClick={onDismiss}
-                className="text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute top-2.5 right-2.5 grid size-7 place-items-center rounded-lg outline-hidden transition-colors focus-visible:ring-2"
+            {/* Faded out on the cards behind, whose edges are all that show. */}
+            <div
+                ref={body}
+                className="flex items-start gap-3 p-3.5 pr-10 transition-opacity duration-300 group-data-behind:opacity-0"
             >
-                <svg
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    className="size-3.5"
+                <span
+                    className={cx('mt-0.5 grid size-8 shrink-0 place-items-center rounded-full', tone.badge)}
                     aria-hidden
                 >
-                    <path d="m4 4 8 8M12 4l-8 8" />
-                </svg>
-            </button>
-            {/* Time left before it goes away; pauses while hovered, like the toast itself. */}
+                    <Icon className="size-4" />
+                </span>
+                <div className="flex min-w-0 flex-1 flex-col gap-0.5 pt-0.5">
+                    <div className="text-sm font-semibold">{toast.title}</div>
+                    {toast.description && (
+                        <div className="text-muted-foreground text-sm leading-5">{toast.description}</div>
+                    )}
+                    {toast.action && (
+                        <button
+                            type="button"
+                            onClick={() => {
+                                toast.action?.onClick();
+                                onDismiss();
+                            }}
+                            className="border-tint/10 bg-tint/[0.06] hover:bg-tint/[0.12] focus-visible:ring-ring/50 mt-2 self-start rounded-lg border px-3 py-1 text-xs font-medium outline-hidden transition-colors focus-visible:ring-2"
+                        >
+                            {toast.action.label}
+                        </button>
+                    )}
+                </div>
+                <button
+                    type="button"
+                    aria-label="Dismiss"
+                    onClick={() => onDismiss()}
+                    className="text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute top-2.5 right-2.5 grid size-7 place-items-center rounded-lg outline-hidden transition-colors focus-visible:ring-2"
+                >
+                    <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        className="size-3.5"
+                        aria-hidden
+                    >
+                        <path d="m4 4 8 8M12 4l-8 8" />
+                    </svg>
+                </button>
+            </div>
+            {/* Time left before it goes away; waits while the deck is open, like the toast itself. */}
             {toast.timeout > 0 && (
                 <span
                     aria-hidden
                     className={cx(
-                        'zen__toast-timer absolute bottom-0 left-0 h-0.5 w-full origin-left opacity-60 group-hover:[animation-play-state:paused]',
+                        'zen__toast-timer absolute bottom-0 left-0 h-0.5 w-full origin-left opacity-60 transition-opacity group-data-behind:opacity-0',
                         tone.bar,
                     )}
                     // Picks up where it was after a move between hosts.
-                    style={{ animationDuration: `${toast.timeout}ms`, animationDelay: `${-used}ms` }}
+                    style={{
+                        animationDuration: `${toast.timeout}ms`,
+                        animationDelay: `${-used}ms`,
+                        animationPlayState: paused ? 'paused' : undefined,
+                    }}
                 />
             )}
         </div>

@@ -327,7 +327,8 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'toast',
         title: 'Toast',
-        description: 'Short messages that confirm an action or report a problem, with an optional action like Undo.',
+        description:
+            'Short messages that confirm an action or report a problem, with an optional action like Undo. They stack into a deck that fans out when pointed at, and swipe away.',
         parts: ['ToastProvider'],
     },
     { slug: 'toggle', title: 'Toggle', description: 'An on/off switch.', parts: ['Toggle'] },
