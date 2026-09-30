@@ -1,5 +1,6 @@
 import { cx } from '@zen/utils/cx';
-import { createContext, ReactNode, useContext, useId, useLayoutEffect, useRef, useState } from 'react';
+import { useIndicator } from '@zen/utils/indicator';
+import { createContext, ReactNode, useContext, useId, useRef } from 'react';
 
 interface SegmentedContextValue {
     name: string;
@@ -14,7 +15,7 @@ const SegmentedContext = createContext<SegmentedContextValue | null>(null);
 /**
  * A small set of mutually exclusive options, shown as a pill row. Native radio
  * inputs underneath, so arrow keys and forms work as for any radio group. The
- * selection slides between options, like NavPills. Fill it with
+ * selection slides between options, like Pills. Fill it with
  * SegmentedItem (any content: text, icons, a disabled option).
  */
 export default function Segmented<V extends string>({
@@ -29,25 +30,8 @@ export default function Segmented<V extends string>({
     const trackRef = useRef<HTMLDivElement>(null);
     // Where the checked option is, for the sliding indicator (null until measured:
     // before then, e.g. in server HTML, the checked option has its own background).
-    const [box, setBox] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
-
-    useLayoutEffect(() => {
-        const track = trackRef.current;
-        if (!track) return;
-        const measure = () => {
-            const checked = track.querySelector<HTMLElement>('label:has(input:checked)');
-            setBox(
-                checked
-                    ? { x: checked.offsetLeft, y: checked.offsetTop, w: checked.offsetWidth, h: checked.offsetHeight }
-                    : null,
-            );
-        };
-        measure();
-        // Labels change width as fonts load, and the row can wrap when it resizes.
-        const resizes = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
-        resizes?.observe(track);
-        return () => resizes?.disconnect();
-    }, [value, children]);
+    // A radio's checked state isn't an attribute, so the value is a dependency.
+    const box = useIndicator(trackRef, 'label:has(input:checked)', [value, children]);
 
     return (
         <div className={cx('zen__segmented flex flex-col gap-2', className)}>

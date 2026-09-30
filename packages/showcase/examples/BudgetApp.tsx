@@ -34,9 +34,9 @@ import {
     Menu,
     MenuItem,
     Meter,
-    NavPill,
-    NavPillIndicator,
-    NavPills,
+    Pill,
+    PillIndicator,
+    Pills,
     PageHeader,
     Popover,
     type PresetId,
@@ -371,22 +371,24 @@ function AppHeader() {
     return (
         <Header>
             <span className="text-lg font-semibold tracking-tight">Zen</span>
-            <NavPills aria-label="Main" className="max-md:hidden">
-                <NavPillIndicator />
-                {PAGES.map((p) => (
-                    <NavPill
-                        key={p}
-                        href={`#${p.toLowerCase()}`}
-                        active={p === page}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setPage(p);
-                        }}
-                    >
-                        {p}
-                    </NavPill>
-                ))}
-            </NavPills>
+            <nav aria-label="Main" className="max-md:hidden">
+                <Pills>
+                    <PillIndicator />
+                    {PAGES.map((p) => (
+                        <Pill
+                            key={p}
+                            href={`#${p.toLowerCase()}`}
+                            active={p === page}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setPage(p);
+                            }}
+                        >
+                            {p}
+                        </Pill>
+                    ))}
+                </Pills>
+            </nav>
             <div className="flex items-center gap-2">
                 <ThemeToggle />
                 <Avatar name="Rin" className="size-8 text-xs" />

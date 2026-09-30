@@ -10,7 +10,7 @@ import { buttonVariants } from '../packages/button';
 import Card, { Stat, StatRow } from '../packages/card';
 import CodeBlock from '../packages/code-block';
 
-/** Storybook's docs id for a component page: "Components/NavPills" → "components-navpills--docs". */
+/** Storybook's docs id for a component page: "Components/MonthPicker" → "components-monthpicker--docs". */
 const docsId = (slug: string) => `components-${slug.replace(/-/g, '')}--docs`;
 
 /** Introduction page, built from Zen's own components (mounted by packages/introduction.mdx). */

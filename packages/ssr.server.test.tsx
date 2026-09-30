@@ -31,9 +31,9 @@ import {
     Meter,
     MoneyInput,
     MonthPicker,
-    NavPill,
-    NavPillIndicator,
-    NavPills,
+    Pill,
+    PillIndicator,
+    Pills,
     PageHeader,
     Popover,
     ProgressRing,
@@ -106,13 +106,15 @@ const components = {
         </Menu>
     ),
     Backdrop: <Backdrop />,
-    NavPills: (
-        <NavPills aria-label="Main">
-            <NavPillIndicator />
-            <NavPill href="/" active>
-                Home
-            </NavPill>
-        </NavPills>
+    Pills: (
+        <nav aria-label="Main">
+            <Pills>
+                <PillIndicator />
+                <Pill href="/" active>
+                    Home
+                </Pill>
+            </Pills>
+        </nav>
     ),
     Card: <Card title="Title">body</Card>,
     ConfirmDialog: <ConfirmDialog open onOpenChange={() => {}} title="Sure?" confirmLabel="Yes" onConfirm={() => {}} />,

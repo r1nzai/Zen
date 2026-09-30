@@ -1,4 +1,4 @@
-import { Button, buttonVariants, Header, NavPill, NavPillIndicator, NavPills, Popover, ThemeToggle } from '@rinzai/zen';
+import { Button, buttonVariants, Header, Pill, PillIndicator, Pills, Popover, ThemeToggle } from '@rinzai/zen';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 
@@ -30,18 +30,20 @@ export function SiteHeader() {
                         v{version}
                     </a>
                 </div>
-                <NavPills aria-label="Main" className="hidden md:block">
-                    <NavPillIndicator />
-                    <NavPill asChild active={section === 'docs'}>
-                        <Link to="/">Docs</Link>
-                    </NavPill>
-                    <NavPill asChild active={section === 'components'}>
-                        <Link to="/components/button/">Components</Link>
-                    </NavPill>
-                    <NavPill asChild active={section === 'showcase'}>
-                        <Link to="/showcase/">Showcase</Link>
-                    </NavPill>
-                </NavPills>
+                <nav aria-label="Main" className="hidden md:block">
+                    <Pills>
+                        <PillIndicator />
+                        <Pill asChild active={section === 'docs'}>
+                            <Link to="/">Docs</Link>
+                        </Pill>
+                        <Pill asChild active={section === 'components'}>
+                            <Link to="/components/button/">Components</Link>
+                        </Pill>
+                        <Pill asChild active={section === 'showcase'}>
+                            <Link to="/showcase/">Showcase</Link>
+                        </Pill>
+                    </Pills>
+                </nav>
                 <div className="flex items-center gap-1">
                     {/* A full page load: Storybook is a separate app served from /storybook. */}
                     <a href="/storybook/" className={buttonVariants({ variant: 'ghost', size: 'sm' })}>

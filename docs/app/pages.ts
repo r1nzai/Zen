@@ -147,16 +147,18 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'Range'],
     },
     {
-        slug: 'nav-pills',
-        title: 'Nav Pills',
-        description: 'Top navigation with a glowing pill that slides to the current page. Works with any router.',
-        parts: ['NavPills', 'NavPill', 'NavPillIndicator'],
-    },
-    {
         slug: 'page-header',
         title: 'Page Header',
         description: 'Eyebrow, aurora title and lead paragraph for the top of a page.',
         parts: ['PageHeader'],
+    },
+    {
+        slug: 'pills',
+        title: 'Pills',
+        description:
+            'A glass track with a glowing pill that slides to the current page. In a nav, it is site navigation; works with any router.',
+        parts: ['Pills', 'Pill', 'PillIndicator'],
+        examples: ['Navigation'],
     },
     {
         slug: 'popover',
@@ -244,7 +246,8 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'tabs',
         title: 'Tabs',
-        description: 'Switch between views, with an underline or a glowing pill that slides to the active tab.',
+        description:
+            'Switch between panels in place, with an underline or a glowing pill that slides to the active tab. To go to another page, use Pills.',
         parts: ['Tabs', 'TabList', 'Tab', 'TabPanel'],
         examples: ['Underline', 'Pills'],
     },

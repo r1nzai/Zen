@@ -30,7 +30,7 @@ export { default as InputGroup, InputGroupAddon, InputGroupInput } from './input
 export { default as Meter, type MeterProps } from './meter';
 export { default as MonthPicker, type MonthPickerProps } from './month-picker';
 export { default as MoneyInput, type MoneyInputOptions, type MoneyInputProps, useMoneyInput } from './money-input';
-export { default as NavPills, NavPill, NavPillIndicator } from './nav-pills';
+export { default as Pills, Pill, PillIndicator } from './pills';
 export { default as PageHeader } from './page-header';
 export { default as Popover } from './popover';
 export { default as ProgressRing } from './progress-ring';

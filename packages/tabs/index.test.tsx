@@ -73,5 +73,26 @@ describe('Tabs', () => {
         );
         expect(screen.getByRole('tablist')).toHaveClass('rounded-full', 'bg-tint/[0.03]');
         expect(screen.getByRole('tab', { name: 'A' })).toHaveClass('rounded-full', 'z-10');
+        expect(screen.getByRole('tablist').querySelector('[aria-hidden]')).not.toBeNull();
+    });
+
+    it('underline variant: a bar under the active tab', () => {
+        render(<Example />);
+        expect(screen.getByRole('tablist').querySelector('[aria-hidden]')).toHaveClass('bg-primary');
+    });
+
+    it('arrow keys still work with the pills variant', () => {
+        render(
+            <Tabs defaultValue="a">
+                <TabList variant="pills">
+                    <Tab value="a">A</Tab>
+                    <Tab value="b">B</Tab>
+                </TabList>
+            </Tabs>,
+        );
+        screen.getByRole('tab', { name: 'A' }).focus();
+        fireEvent.keyDown(screen.getByRole('tab', { name: 'A' }), { key: 'ArrowRight' });
+        expect(screen.getByRole('tab', { name: 'B' })).toHaveAttribute('aria-selected', 'true');
+        expect(screen.getByRole('tab', { name: 'B' })).toHaveFocus();
     });
 });
