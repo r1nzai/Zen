@@ -64,7 +64,7 @@ export const buttonVariants = cva(
                 link: 'h-auto! px-0! text-primary underline-offset-4 hover:underline',
                 // Square ghost button for a lone icon (Sora's menu trigger).
                 // Keeps its hover look while the popup it opened is showing (e.g. a Menu's "⋯").
-                icon: 'text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground data-popup-open:bg-tint/[0.06]',
+                icon: 'text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground',
             },
             size: {
                 default: 'h-10 px-4',

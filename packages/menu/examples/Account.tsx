@@ -27,7 +27,7 @@ export default function Account() {
         <Menu>
             <MenuTrigger
                 aria-label="Account menu"
-                className="focus-visible:ring-ring/50 data-popup-open:ring-ring/40 rounded-full outline-hidden transition-transform duration-200 hover:scale-105 focus-visible:ring-2 data-popup-open:scale-105 data-popup-open:ring-2"
+                className="focus-visible:ring-ring/50 data-popup-open:ring-ring/40 rounded-full outline-hidden transition-transform duration-200 hover:scale-105 focus-visible:ring-2 data-popup-open:ring-2"
             >
                 <Avatar name={email} />
             </MenuTrigger>

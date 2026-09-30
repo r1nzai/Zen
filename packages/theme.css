@@ -11,6 +11,22 @@
 @custom-variant light (&:is(.light *, [data-theme='light'] *));
 
 /*
+ * A trigger stays hovered while its popup is open (Zen's popups set
+ * data-popup-open on it): moving the pointer into a menu doesn't drop the
+ * trigger's hover look, or shift a popup anchored to a trigger that scales on hover.
+ */
+@custom-variant hover {
+    @media (hover: hover) {
+        &:hover {
+            @slot;
+        }
+    }
+    &[data-popup-open] {
+        @slot;
+    }
+}
+
+/*
  * inline: utilities use oklch(var(--primary)) directly rather than through
  * --color-primary, so tokens set on any element (applyTheme's target, a .light
  * section) recolour everything inside it, not only when set on :root.
