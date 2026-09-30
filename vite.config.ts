@@ -27,7 +27,7 @@ function stylesheets(): Plugin {
  *     @import '@rinzai/zen/tailwind.css';
  */
 @import './theme.css';
-@source './zen.js';
+@source './**/*.js';
 `,
             );
         },
@@ -83,7 +83,13 @@ export default defineConfig({
         rollupOptions: {
             external: ['react', 'react-dom', 'react/jsx-runtime'],
             output: {
-                // Components use hooks and browser APIs; mark the bundle as a client module for RSC frameworks
+                // One file per module, so an app's bundler keeps only what it imports: with
+                // "sideEffects" in package.json, files whose exports go unused are skipped
+                // whole, top-level calls (createContext, class-string constants) included.
+                preserveModules: true,
+                preserveModulesRoot: 'packages',
+                entryFileNames: '[name].js',
+                // Components use hooks and browser APIs; mark the modules as client modules for RSC frameworks
                 banner: "'use client';",
                 globals: {
                     react: 'React',
