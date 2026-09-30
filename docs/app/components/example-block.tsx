@@ -2,6 +2,7 @@ import { Card, Tab, TabList, TabPanel, Tabs } from '@rinzai/zen';
 
 import type { Example } from '../examples';
 import { CodeBlock } from './code-block';
+import { DocText } from './doc-text';
 
 /** One example: the live component, and its source, in a glass card. */
 export function ExampleBlock({ example, heading = true }: { example: Example; heading?: boolean }) {
@@ -17,7 +18,7 @@ export function ExampleBlock({ example, heading = true }: { example: Example; he
                         </a>
                     </h3>
                     {example.description && (
-                        <p className="text-muted-foreground mt-0! text-sm leading-6">{example.description}</p>
+                        <DocText text={example.description} className="mt-0! text-sm leading-6" />
                     )}
                 </div>
             )}

@@ -1,6 +1,8 @@
 import { Badge, Table, TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@rinzai/zen';
 import type { ComponentType } from 'react';
 
+import { DocText } from './doc-text';
+
 interface DocgenProp {
     name: string;
     required: boolean;
@@ -49,9 +51,7 @@ export function PropsTable({
                     {name}
                     {'>'}
                 </h3>
-                {info?.description && (
-                    <p className="text-muted-foreground mt-0! text-sm leading-6">{info.description}</p>
-                )}
+                {info?.description && <DocText text={info.description} className="mt-0! text-sm leading-6" />}
             </div>
             {props.length ? (
                 <TableContainer>
@@ -74,9 +74,7 @@ export function PropsTable({
                                             {p.required && <Badge variant="outline">Required</Badge>}
                                         </div>
                                         {p.description && (
-                                            <p className="text-muted-foreground mt-1! text-xs leading-5">
-                                                {p.description}
-                                            </p>
+                                            <DocText text={p.description} className="mt-1! text-xs leading-5" />
                                         )}
                                     </TableCell>
                                     <TableCell>
