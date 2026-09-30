@@ -27,7 +27,7 @@ export default function Default() {
                 ))}
             </ul>
             <Disclosure>
-                <DisclosureTrigger>Past ({PAST.length})</DisclosureTrigger>
+                <DisclosureTrigger className="mt-2">Past ({PAST.length})</DisclosureTrigger>
                 <DisclosureContent>
                     <ul className="border-tint/[0.07] flex flex-col gap-2 border-l pl-4 text-sm">
                         {PAST.map((g) => (

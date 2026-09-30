@@ -34,7 +34,7 @@ export default function Disclosure({ open, defaultOpen = false, onOpenChange, ch
     );
 }
 
-/** The button: your label after a chevron that turns down as the section opens. Lit while open. */
+/** The button: your label after a chevron that turns down as the section opens. Brightens on hover and while open. */
 export function DisclosureTrigger({ className, onClick, children, ...rest }: ComponentProps<'button'>) {
     const { open, setOpen, contentId } = useDisclosure('DisclosureTrigger');
     return (
@@ -47,9 +47,9 @@ export function DisclosureTrigger({ className, onClick, children, ...rest }: Com
                 if (!e.defaultPrevented) setOpen(!open);
             }}
             className={cx(
-                'zen__disclosure group text-muted-foreground -mx-2 flex w-fit items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium outline-hidden',
-                'hover:bg-tint/[0.05] hover:text-foreground aria-expanded:text-foreground transition-colors duration-200',
-                'focus-visible:ring-ring/50 focus-visible:ring-2',
+                'zen__disclosure group text-muted-foreground flex w-fit items-center gap-1.5 rounded-md text-sm font-medium outline-hidden',
+                'hover:text-foreground aria-expanded:text-foreground transition-colors duration-200',
+                'focus-visible:outline-ring/50 focus-visible:outline-2 focus-visible:outline-offset-4',
                 className,
             )}
             {...rest}
