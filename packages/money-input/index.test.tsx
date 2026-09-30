@@ -252,4 +252,31 @@ describe('MoneyInput convert', () => {
         expect(input()).toHaveValue('10');
         expect(await screen.findByText(/1 USD = ₹80\.00/)).toBeInTheDocument();
     });
+
+    it('takes the input’s own props, and runs your handlers as well as its own', () => {
+        const onChange = vi.fn();
+        const onBlur = vi.fn();
+        render(
+            <MoneyInput
+                aria-label="Cost"
+                placeholder="Cost"
+                name="cost"
+                aria-describedby="note"
+                value={null}
+                allowEmpty
+                onChange={onChange}
+                onBlur={onBlur}
+                currency="INR"
+                locale="en-IN"
+            />,
+        );
+        const input = screen.getByRole('textbox', { name: 'Cost' });
+        expect(input).toHaveAttribute('placeholder', 'Cost');
+        expect(input).toHaveAttribute('name', 'cost');
+        expect(input.getAttribute('aria-describedby')).toContain('note');
+        fireEvent.change(input, { target: { value: '1200' } });
+        fireEvent.blur(input);
+        expect(onBlur).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith(120000); // its own blur still commits
+    });
 });

@@ -1,5 +1,5 @@
 import { cx } from '@zen/utils/cx';
-import { ReactNode, useId } from 'react';
+import { ComponentProps, ReactNode, useId } from 'react';
 
 /**
  * A measure against a limit, e.g. spend against a budget: a bar with a label,
@@ -16,6 +16,7 @@ export default function Meter({
     tone = 'auto',
     warnAt = 0.85,
     className,
+    ...rest
 }: MeterProps) {
     const labelId = useId();
     const over = value > max;
@@ -24,8 +25,9 @@ export default function Meter({
     const resolved = tone !== 'auto' ? tone : over ? 'danger' : ratio >= warnAt ? 'warning' : 'default';
     return (
         <div
+            {...rest}
             role="meter"
-            aria-labelledby={label ? labelId : undefined}
+            aria-labelledby={label ? labelId : rest['aria-labelledby']}
             aria-valuemin={0}
             aria-valuemax={max}
             aria-valuenow={Math.min(value, max)}
@@ -74,7 +76,8 @@ export default function Meter({
     );
 }
 
-export interface MeterProps {
+/** Also takes the element's own props, e.g. `aria-label` when there's no visible label. */
+export interface MeterProps extends Omit<ComponentProps<'div'>, 'children'> {
     value: number;
     /** The limit (default 100). Values past it fill the bar and turn it red. */
     max?: number;

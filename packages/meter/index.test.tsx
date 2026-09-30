@@ -36,4 +36,9 @@ describe('Meter', () => {
         const { container } = render(<Meter value={10} tone="danger" />);
         expect(container.querySelector('[style]')).toHaveClass('bg-destructive');
     });
+
+    it('takes its element’s props, e.g. a name without a visible label', () => {
+        render(<Meter value={3} max={10} aria-label="Cockpit share" data-testid="m" />);
+        expect(screen.getByRole('meter', { name: 'Cockpit share' })).toHaveAttribute('data-testid', 'm');
+    });
 });

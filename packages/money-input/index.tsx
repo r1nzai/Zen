@@ -6,7 +6,7 @@ import { FieldChevron } from '@zen/utils/field-chevron';
 import { convertMinor, type ForeignAmount, rateBetween, type RateTable } from '@zen/utils/fx';
 import { currencySymbol, formatAmount, formatMoney, minorDigits, type Money, parseMoneyInput } from '@zen/utils/money';
 import { AlertIcon, InfoIcon } from '@zen/utils/status-icons';
-import { ChangeEvent, KeyboardEvent, ReactNode, useEffect, useId, useRef, useState } from 'react';
+import { ChangeEvent, ComponentProps, KeyboardEvent, ReactNode, useEffect, useId, useRef, useState } from 'react';
 
 /**
  * Amount input in one currency. Shows grouped digits for the locale (1,52,000
@@ -20,17 +20,37 @@ import { ChangeEvent, KeyboardEvent, ReactNode, useEffect, useId, useRef, useSta
  * from useMoneyInput, MoneyCurrencyMenu and MoneyConversionHint.
  */
 export default function MoneyInput({
+    value,
+    onChange,
+    currency,
+    locale,
+    allowNegative,
+    allowEmpty,
+    live,
+    onCancel,
+    convert,
     start,
     end,
     compact = false,
     disabled = false,
-    id,
-    autoFocus,
     className,
-    'aria-label': ariaLabel,
-    ...options
+    onFocus,
+    onBlur,
+    onKeyDown,
+    'aria-describedby': describedBy,
+    ...input
 }: MoneyInputProps) {
-    const money = useMoneyInput(options);
+    const money = useMoneyInput({
+        value,
+        onChange,
+        currency,
+        locale,
+        allowNegative,
+        allowEmpty,
+        live,
+        onCancel,
+        convert,
+    });
     const foreign = !!money.conversion?.foreign;
     return (
         <div className={cx('zen__money-input flex flex-col gap-1', className)}>
@@ -48,11 +68,23 @@ export default function MoneyInput({
                         </InputGroupAddon>
                     ))}
                 <InputGroupInput
+                    {...input}
                     {...money.inputProps}
-                    id={id}
-                    autoFocus={autoFocus}
+                    // Yours run as well as its own.
+                    onFocus={(e) => {
+                        money.inputProps.onFocus();
+                        onFocus?.(e);
+                    }}
+                    onBlur={(e) => {
+                        money.inputProps.onBlur();
+                        onBlur?.(e);
+                    }}
+                    onKeyDown={(e) => {
+                        money.inputProps.onKeyDown(e);
+                        onKeyDown?.(e);
+                    }}
+                    aria-describedby={cx(money.inputProps['aria-describedby'], describedBy) || undefined}
                     disabled={disabled}
-                    aria-label={ariaLabel}
                     className={cx('tabular-nums', compact ? 'text-right' : 'text-left')}
                 />
                 {end}
@@ -483,16 +515,18 @@ export interface MoneyInputOptions {
     convert?: CurrencyConversion;
 }
 
-export interface MoneyInputProps extends MoneyInputOptions {
+/**
+ * Also takes the input's own props (placeholder, name, aria-*, onBlur…), except
+ * the value and its typing, which MoneyInput runs. className goes on the wrapper.
+ */
+export interface MoneyInputProps
+    extends
+        MoneyInputOptions,
+        Omit<ComponentProps<'input'>, keyof MoneyInputOptions | 'defaultValue' | 'type' | 'inputMode' | 'children'> {
     /** Replaces the currency symbol (or the currency switch), e.g. with your own. */
     start?: ReactNode;
     /** Content after the input, e.g. a unit or a clear button. */
     end?: ReactNode;
     /** Smaller, for editing inside table rows. */
     compact?: boolean;
-    disabled?: boolean;
-    id?: string;
-    autoFocus?: boolean;
-    className?: string;
-    'aria-label'?: string;
 }
