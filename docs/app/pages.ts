@@ -122,9 +122,10 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'dialog',
         title: 'Dialog',
-        description: 'Modal dialogs on the native <dialog> element, and a confirmation for destructive actions.',
+        description:
+            'Modal dialogs on the native <dialog> element, sheets that slide in from an edge, and a confirmation for destructive actions.',
         parts: ['Dialog', 'DialogFooter', 'DialogClose', 'ConfirmDialog'],
-        examples: ['Form', 'Pickers', 'Confirm'],
+        examples: ['Form', 'Sheets', 'Pickers', 'Confirm'],
     },
     {
         slug: 'disclosure',

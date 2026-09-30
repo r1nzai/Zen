@@ -18,6 +18,14 @@ describe('Dialog', () => {
         expect(screen.getByText('body')).toBeInTheDocument();
     });
 
+    it('with side, is a sheet on that edge, still a labelled modal dialog', () => {
+        render(<Dialog open side="bottom" title="Filters" />);
+        const sheet = screen.getByRole('dialog', { name: 'Filters' });
+        expect(sheet).toHaveAttribute('data-side', 'bottom');
+        expect(sheet).toHaveClass('rounded-t-2xl');
+        expect(dialogEl().open).toBe(true);
+    });
+
     it('stays closed when not open, and closes when open turns false', () => {
         const { rerender } = render(<Dialog open={false} title="Rename" />);
         expect(dialogEl().open).toBe(false);

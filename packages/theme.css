@@ -783,6 +783,13 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
         display 150ms allow-discrete;
 }
 .zen__dialog {
+    /*
+     * Fixed to the viewport, as the browser places modal dialogs. glow-edge sets
+     * position: relative (so its light has a box), and in the top layer relative
+     * computes to absolute: the dialog would be placed from the top of the
+     * document, off screen once the page is scrolled.
+     */
+    position: fixed;
     transition:
         opacity 200ms var(--ease-out-soft),
         scale 200ms var(--ease-out-soft),
@@ -803,6 +810,26 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
 .zen__dialog:not([open])::backdrop {
     opacity: 0;
 }
+/* Sheets slide from their edge instead of scaling up. */
+.zen__dialog[data-side] {
+    transition:
+        translate 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 200ms,
+        overlay 320ms allow-discrete,
+        display 320ms allow-discrete;
+}
+.zen__dialog[data-side]:not([open]) {
+    scale: none;
+}
+.zen__dialog[data-side='bottom']:not([open]) {
+    translate: 0 100%;
+}
+.zen__dialog[data-side='right']:not([open]) {
+    translate: 100% 0;
+}
+.zen__dialog[data-side='left']:not([open]) {
+    translate: -100% 0;
+}
 @starting-style {
     .zen__popover:popover-open,
     .zen__dialog[open] {
@@ -811,6 +838,18 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     }
     .zen__dialog[open]::backdrop {
         opacity: 0;
+    }
+    .zen__dialog[data-side][open] {
+        scale: none;
+    }
+    .zen__dialog[data-side='bottom'][open] {
+        translate: 0 100%;
+    }
+    .zen__dialog[data-side='right'][open] {
+        translate: 100% 0;
+    }
+    .zen__dialog[data-side='left'][open] {
+        translate: -100% 0;
     }
 }
 /*

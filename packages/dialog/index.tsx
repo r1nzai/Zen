@@ -20,7 +20,9 @@ const CloseContext = createContext<() => void>(() => {});
 /**
  * Modal dialog on the native <dialog> element: focus is trapped and restored,
  * the page behind is inert, and Escape closes it. `dismissible={false}` is for
- * flows the user must finish (no Escape or outside-click close).
+ * flows the user must finish (no Escape or outside-click close). With `side`,
+ * it's a sheet that slides in from that edge: a bottom sheet on phones, a side
+ * panel for filters or details.
  */
 export default function Dialog({
     open,
@@ -31,6 +33,7 @@ export default function Dialog({
     dismissible = true,
     initialFocus,
     size = 'md',
+    side,
     className,
     role,
 }: DialogProps) {
@@ -61,10 +64,15 @@ export default function Dialog({
             role={role}
             aria-labelledby={titleId}
             aria-describedby={description ? descriptionId : undefined}
+            data-side={side}
             className={cx(
-                'zen__dialog glass glass-blur glow-edge text-card-foreground',
-                'bg-card/90! m-auto max-h-[calc(100dvh-2rem)] max-w-[calc(100vw-2rem)] overflow-visible rounded-xl p-0',
-                size === 'lg' ? 'w-[60rem]' : 'w-[28rem]',
+                'zen__dialog glass glass-blur glow-edge text-card-foreground bg-card/90! overflow-visible p-0',
+                !side && 'm-auto max-h-[calc(100dvh-2rem)] max-w-[calc(100vw-2rem)] rounded-xl',
+                !side && (size === 'lg' ? 'w-[60rem]' : 'w-[28rem]'),
+                side === 'bottom' && 'mx-auto mt-auto mb-0 max-h-[85dvh] w-full max-w-2xl rounded-t-2xl',
+                (side === 'left' || side === 'right') && 'my-0 h-dvh max-h-dvh w-[24rem] max-w-[calc(100vw-2.5rem)]',
+                side === 'right' && 'mr-0 ml-auto rounded-l-2xl',
+                side === 'left' && 'mr-auto ml-0 rounded-r-2xl',
                 'backdrop:bg-black/50 backdrop:backdrop-blur-sm pointer-coarse:backdrop:backdrop-blur-none',
                 className,
             )}
@@ -78,7 +86,14 @@ export default function Dialog({
                 if (e.target === e.currentTarget && dismissible) onOpenChange?.(false);
             }}
         >
-            <div className="flex max-h-[calc(100dvh-2rem)] flex-col gap-4 overflow-x-hidden overflow-y-auto p-6">
+            <div
+                className={cx(
+                    'flex flex-col gap-4 overflow-x-hidden overflow-y-auto p-6',
+                    !side ? 'max-h-[calc(100dvh-2rem)]' : side === 'bottom' ? 'max-h-[85dvh] pt-3' : 'h-full',
+                )}
+            >
+                {/* A bottom sheet's grip: says it came up from the edge. */}
+                {side === 'bottom' && <div aria-hidden className="bg-tint/20 mx-auto h-1 w-10 shrink-0 rounded-full" />}
                 <div className="flex flex-col gap-2">
                     <h2 id={titleId} className="text-lg font-semibold tracking-tight">
                         {title}
@@ -128,6 +143,8 @@ export interface DialogProps {
     initialFocus?: RefObject<HTMLElement | null>;
     /** "lg" for dialogs holding a whole tool rather than a short form. */
     size?: 'md' | 'lg';
+    /** Slide in from this edge as a sheet, instead of appearing in the middle. */
+    side?: 'bottom' | 'left' | 'right';
     className?: string;
     role?: ComponentProps<'dialog'>['role'];
 }

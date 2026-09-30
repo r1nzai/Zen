@@ -186,3 +186,17 @@ test('chart: draws after hydration, and the keyboard reads each row', async ({ p
     await page.keyboard.press('End');
     await expect(plot).toContainText('Nov');
 });
+
+test('dialogs and sheets open on screen, even far down a scrolled page', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    errors = await open(page, '/components/dialog/');
+    await page.getByRole('button', { name: 'Bottom sheet' }).click();
+    const sheet = page.getByRole('dialog', { name: 'Filters' });
+    await expect(sheet).toBeVisible();
+    await page.waitForTimeout(500);
+    expect(await page.evaluate(() => scrollY)).toBeGreaterThan(300);
+    const box = (await sheet.boundingBox())!;
+    // Along the bottom edge of the screen, not the top of the document.
+    expect(Math.round(box.y + box.height)).toBe(800);
+    await expect(sheet.getByRole('button', { name: 'Apply' })).toBeInViewport();
+});
