@@ -236,6 +236,13 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    /*
+     * The gradient only paints within the box, and at a tight line height
+     * descenders (g, y) and accents hang outside it and would be cut off. The
+     * box reaches past them; the margins take that back, so layout is unchanged.
+     */
+    padding-block: 0.2em;
+    margin-block: -0.2em;
     /* Light theme: start from the ink colour, since near-white would vanish. */
     &:where(.light *, [data-theme='light'] *) {
         background-image: linear-gradient(100deg, oklch(var(--foreground)), oklch(var(--primary)) 85%);
