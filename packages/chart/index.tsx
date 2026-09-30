@@ -248,6 +248,9 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                         );
                     const at = rows.findIndex((row) => row[x] === r.x);
                     if (at < 0) return null;
+                    // Its label sits left of the line, or right of it where the plot has no room
+                    // on the left (it would run into the y-axis labels).
+                    const right = !!r.label && cx0(at) - 6 - r.label.length * TICK * 0.6 < left;
                     return (
                         <g key={i}>
                             <line
@@ -260,10 +263,10 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                             />
                             {r.label && (
                                 <text
-                                    x={cx0(at) - 6}
+                                    x={cx0(at) + (right ? 6 : -6)}
                                     y={MARGIN.top + 4}
                                     dy="0.7em"
-                                    textAnchor="end"
+                                    textAnchor={right ? 'start' : 'end'}
                                     className="fill-muted-foreground"
                                     style={{ fontSize: TICK }}
                                 >

@@ -113,6 +113,18 @@ describe('Chart', () => {
         expect(Number(bars[3].style.opacity)).toBeLessThan(Number(bars[0].style.opacity));
         expect(screen.getByText('Today')).toBeInTheDocument();
     });
+
+    it("a reference's label sits left of its line, or right where the y-axis labels would be in the way", () => {
+        render(
+            <Chart data={DATA} x="month" label="C">
+                <ChartLine dataKey="income" label="Income" />
+                <ChartReference x="Jan" label="Today" />
+                <ChartReference x="Apr" label="Goal" />
+            </Chart>,
+        );
+        expect(screen.getByText('Today')).toHaveAttribute('text-anchor', 'start');
+        expect(screen.getByText('Goal')).toHaveAttribute('text-anchor', 'end');
+    });
 });
 
 describe('DonutChart', () => {
