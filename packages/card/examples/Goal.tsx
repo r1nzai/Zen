@@ -4,13 +4,13 @@ import {
     Card,
     CardHeader,
     CardTitle,
-    Ellipsis,
     Menu,
     MenuContent,
     MenuItem,
     MenuTrigger,
     ProgressRing,
 } from '@rinzai/zen';
+import Ellipsis from '@zen/icons/ellipsis';
 
 export default function Goal() {
     return (

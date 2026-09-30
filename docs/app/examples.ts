@@ -16,12 +16,48 @@ const sources = import.meta.glob<string>('../../packages/*/examples/*.tsx', {
     import: 'default',
 });
 
+// Zen's own icons (Heroicons, not exported): each file names its source, e.g. "Heroicons 2.2.0, 24/outline/cog-6-tooth.svg".
+const icons = import.meta.glob<string>('../../packages/icons/**/*.tsx', {
+    eager: true,
+    query: '?raw',
+    import: 'default',
+});
+const heroicon = new Map(
+    Object.entries(icons).map(([path, code]) => [
+        path.match(/packages\/(icons\/.+)\.tsx$/)![1],
+        code.match(/Heroicons [\d.]+, \S+\/([\w-]+)\.svg/)?.[1],
+    ]),
+);
+
+/**
+ * The source as shown: examples draw Zen's internal icons, which aren't exported, so
+ * their imports become a pointer to Heroicons, naming each one.
+ */
+function shown(source: string) {
+    const used: string[] = [];
+    const rest = source.replace(/^import (\w+) from '@zen\/(icons\/[\w/-]+)';\n/gm, (_, name: string, path: string) => {
+        used.push(heroicon.get(path) ? `${name} (${heroicon.get(path)})` : name);
+        return '';
+    });
+    if (!used.length) return source;
+    const pointer = `// Icons from Heroicons (https://heroicons.com): ${used.join(', ')}.\n`;
+    // After the last import, where the icon imports stood.
+    const at = [...rest.matchAll(/^import [\s\S]*?;\n/gm)].reduce((_, m) => m.index + m[0].length, 0);
+    return rest.slice(0, at) + pointer + rest.slice(at);
+}
+
 const byFolder = new Map<string, Example[]>();
 for (const [path, mod] of Object.entries(modules)) {
     const [, folder, name] = path.match(/packages\/([^/]+)\/examples\/([^/]+)\.tsx$/)!;
     const source = sources[path];
     const list = byFolder.get(folder) ?? [];
-    list.push({ name, title: titleFor(name), description: docComment(source), Component: mod.default, source });
+    list.push({
+        name,
+        title: titleFor(name),
+        description: docComment(source),
+        Component: mod.default,
+        source: shown(source),
+    });
     byFolder.set(folder, list);
 }
 

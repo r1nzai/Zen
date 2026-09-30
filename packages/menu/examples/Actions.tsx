@@ -1,4 +1,5 @@
-import { buttonVariants, Ellipsis, Menu, MenuContent, MenuItem, MenuTrigger, useToast } from '@rinzai/zen';
+import { buttonVariants, Menu, MenuContent, MenuItem, MenuTrigger, useToast } from '@rinzai/zen';
+import Ellipsis from '@zen/icons/ellipsis';
 
 /** The usual "⋯" menu of actions for one thing: an icon button as the trigger, and a destructive item last. */
 export default function Actions() {

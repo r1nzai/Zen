@@ -1,4 +1,4 @@
-// Writes packages/icons from Heroicons (a pinned dev dependency), so every icon is
+// Writes packages/icons (used by Zen's components and docs, not exported) from Heroicons (a pinned dev dependency), so every icon is
 // Heroicons' own SVG, unchanged but for JSX attribute names. Run: node scripts/icons.mjs
 // Sets: 24/outline for icons drawn at 20px and up; 16/solid (Heroicons' "micro" set,
 // drawn for 16px) for the small glyphs inside components.
@@ -27,12 +27,9 @@ const ICONS = {
     'list-bullet': ['ListBullet', '24/outline/list-bullet'],
     lock: ['Lock', '24/outline/lock-closed'],
     logout: ['Logout', '24/outline/arrow-right-start-on-rectangle'],
-    moon: ['Moon', '24/outline/moon'],
-    plus: ['Plus', '24/outline/plus'],
     search: ['Search', '24/outline/magnifying-glass'],
     settings: ['Settings', '24/outline/cog-6-tooth'],
     squares: ['Squares', '24/outline/squares-2x2'],
-    sun: ['Sun', '24/outline/sun'],
     table: ['TableIcon', '24/outline/table-cells'],
     'x-mark': ['XMark', '24/outline/x-mark'],
     // The small glyphs components draw themselves (not exported from the package).

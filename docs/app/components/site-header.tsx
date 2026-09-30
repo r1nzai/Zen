@@ -1,5 +1,4 @@
 import {
-    Bars,
     Button,
     buttonVariants,
     Header,
@@ -11,6 +10,7 @@ import {
     PopoverTrigger,
     ThemeToggle,
 } from '@rinzai/zen';
+import Bars from '@zen/icons/bars';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 

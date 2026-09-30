@@ -1,16 +1,7 @@
-import {
-    Avatar,
-    Lock,
-    Logout,
-    Menu,
-    MenuContent,
-    MenuHeader,
-    MenuItem,
-    MenuSeparator,
-    MenuTrigger,
-    Settings,
-    useToast,
-} from '@rinzai/zen';
+import { Avatar, Menu, MenuContent, MenuHeader, MenuItem, MenuSeparator, MenuTrigger, useToast } from '@rinzai/zen';
+import Lock from '@zen/icons/lock';
+import Logout from '@zen/icons/logout';
+import Settings from '@zen/icons/settings';
 
 /** Your own trigger (an avatar), a header that isn't a choice, icons, groups, and a destructive item. */
 export default function Account() {

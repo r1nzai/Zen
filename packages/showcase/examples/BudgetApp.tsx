@@ -7,7 +7,6 @@ import {
     Avatar,
     Badge,
     Button,
-    CalendarIcon,
     buttonVariants,
     Card,
     CardHeader,
@@ -23,7 +22,6 @@ import {
     customize,
     DEFAULT_THEME,
     Dialog,
-    Ellipsis,
     EditableCell,
     Field,
     formatMoney,
@@ -85,10 +83,12 @@ import {
     useSort,
     useToast,
     useTree,
-    Flag,
-    Settings,
-    TableIcon,
 } from '@rinzai/zen';
+import CalendarIcon from '@zen/icons/calendar';
+import Ellipsis from '@zen/icons/ellipsis';
+import Flag from '@zen/icons/flag';
+import Settings from '@zen/icons/settings';
+import TableIcon from '@zen/icons/table';
 
 /*
  * A small budget app built only from Zen: a sortable entries table you can

@@ -1,4 +1,5 @@
-import { InputGroup, InputGroupAddon, InputGroupInput, Search } from '@rinzai/zen';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@rinzai/zen';
+import Search from '@zen/icons/search';
 
 export default function Default() {
     return (

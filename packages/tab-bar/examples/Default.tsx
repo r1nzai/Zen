@@ -1,4 +1,8 @@
-import { CalendarIcon, Flag, Settings, TabBar, TabBarItem, TableIcon } from '@rinzai/zen';
+import { TabBar, TabBarItem } from '@rinzai/zen';
+import CalendarIcon from '@zen/icons/calendar';
+import Flag from '@zen/icons/flag';
+import Settings from '@zen/icons/settings';
+import TableIcon from '@zen/icons/table';
 import { useState } from 'react';
 
 const TABS = [

@@ -1,4 +1,7 @@
-import { ChartBarIcon, ListBullet, Segmented, SegmentedItem, Squares } from '@rinzai/zen';
+import { Segmented, SegmentedItem } from '@rinzai/zen';
+import ChartBarIcon from '@zen/icons/chart-bar';
+import ListBullet from '@zen/icons/list-bullet';
+import Squares from '@zen/icons/squares';
 import { useState } from 'react';
 
 /** SegmentedItem holds anything (here an icon and text), and an option can be disabled. */

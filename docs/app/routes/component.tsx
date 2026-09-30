@@ -1,3 +1,5 @@
+import ArrowLeft from '@zen/icons/arrow-left';
+import ArrowRight from '@zen/icons/arrow-right';
 import * as Zen from '@rinzai/zen';
 import type { ComponentType } from 'react';
 import { Link } from 'react-router';
@@ -92,7 +94,7 @@ export default function ComponentPage({ params }: Route.ComponentProps) {
                             to={componentPath(prev.slug)}
                             className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5"
                         >
-                            <Zen.ArrowLeft className="size-4" aria-hidden />
+                            <ArrowLeft className="size-4" aria-hidden />
                             {prev.title}
                         </Link>
                     ) : (
@@ -104,7 +106,7 @@ export default function ComponentPage({ params }: Route.ComponentProps) {
                             className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5"
                         >
                             {next.title}
-                            <Zen.ArrowRight className="size-4" aria-hidden />
+                            <ArrowRight className="size-4" aria-hidden />
                         </Link>
                     )}
                 </nav>

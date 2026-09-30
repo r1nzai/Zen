@@ -1,4 +1,6 @@
-import { AlertTriangle, Button, Check, Spinner, StatusPill, StatusPillAction } from '@rinzai/zen';
+import { Button, Spinner, StatusPill, StatusPillAction } from '@rinzai/zen';
+import AlertTriangle from '@zen/icons/micro/exclamation-triangle';
+import Check from '@zen/icons/micro/check';
 import { useEffect, useState } from 'react';
 
 type Save = 'saving' | 'saved' | 'error';

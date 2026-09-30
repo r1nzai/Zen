@@ -57,7 +57,6 @@ export {
 export { default as Header, type HeaderProps } from './header';
 export { default as Alert, type AlertProps } from './alert';
 export { default as Inset, type InsetProps } from './inset';
-export * from './icons';
 export { default as Input } from './input';
 export { default as InputGroup, InputGroupAddon, InputGroupInput } from './input-group';
 export { default as Meter, type MeterProps } from './meter';
