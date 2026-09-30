@@ -139,9 +139,11 @@ describe('DonutChart', () => {
 
     it('one part is a whole ring, with no notch where its ends would meet', () => {
         render(<DonutChart items={[{ key: 'emi', label: 'EMI', value: 32748 }]} label="Planned" />);
-        const d = screen.getByRole('listitem', { name: /EMI/ }).getAttribute('d')!;
-        // Drawn as two full circles (outer and inner edge), not a sector with rounded ends.
-        expect(d.match(/M/g)).toHaveLength(2);
+        const ring = screen.getByRole('listitem', { name: /EMI/ });
+        // Drawn as two full circles (outer and inner edge), not a sector with rounded ends,
+        // and with no rounding stroke, whose ends would meet in a seam.
+        expect(ring.getAttribute('d')!.match(/M/g)).toHaveLength(2);
+        expect(ring).toHaveAttribute('stroke-width', '0');
     });
 
     it('stacks what you put in the middle together', () => {

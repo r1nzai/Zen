@@ -48,7 +48,8 @@ export default function DonutChart({
             >
                 {arcs.map((a, i) => {
                     if (a.end - a.start <= gap * 2) return null;
-                    // The only segment is the whole ring: no ends to round (that left a notch at the top).
+                    // The only segment is the whole ring: it has no ends, so no rounding. Its exact shape, with
+                    // no rounding stroke, whose start and end would meet in a seam at the top.
                     const whole = a.end - a.start >= Math.PI * 2 - 1e-6;
                     const mid = (a.start + a.end) / 2;
                     const lift = active === i && !whole ? 4 : 0;
@@ -61,7 +62,7 @@ export default function DonutChart({
                             aria-label={`${items[i].label}: ${formatValue(items[i].value)} (${pct}%)`}
                             d={
                                 whole
-                                    ? sector(inner + corner, r - corner, a.start, a.end)
+                                    ? sector(inner, r, a.start, a.end)
                                     : sector(
                                           inner + corner,
                                           r - corner,
@@ -69,7 +70,7 @@ export default function DonutChart({
                                           a.end - gap - corner / r,
                                       )
                             }
-                            strokeWidth={corner * 2}
+                            strokeWidth={whole ? 0 : corner * 2}
                             strokeLinejoin="round"
                             onPointerEnter={() => setActive(i)}
                             onPointerLeave={() => setActive(null)}
