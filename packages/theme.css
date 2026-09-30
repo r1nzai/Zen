@@ -231,6 +231,20 @@
     }
 }
 
+/*
+ * Over the dot grid, the Header is lightly frosted so the dots stay visible
+ * behind it (a heavy blur smears them into a grey band). Only a Header after
+ * that Backdrop (the page's own backdrop comes first in <body>; a backdrop in a
+ * demo frame doesn't reach the page's header). :where keeps this below the
+ * lite-graphics and touch rules that follow.
+ */
+:where(.zen-backdrop[data-pattern='dots'] ~ *) .zen__header,
+:where(.zen-backdrop[data-pattern='dots']) ~ .zen__header {
+    background-color: oklch(var(--background) / 0.75);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
 /* ───────────────────────── Lite graphics ───────────────────────── */
 
 /*

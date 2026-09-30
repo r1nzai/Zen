@@ -1,3 +1,4 @@
+import { cx } from '@zen/utils/cx';
 import { applyGraphicsMode } from '@zen/utils/graphics';
 import { CSSProperties, useEffect, useRef } from 'react';
 
@@ -7,7 +8,7 @@ import { CSSProperties, useEffect, useRef } from 'react';
  * lights `.glow-edge` and `.glow-border` borders (cards, outline buttons,
  * dialogs, fields) near the pointer. Render once, behind everything.
  */
-export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
+export default function Backdrop({ pattern, topoSrc, className, style }: BackdropProps) {
     const kind = pattern ?? (topoSrc ? 'contours' : 'dots');
 
     const ref = useRef<HTMLDivElement>(null);
@@ -170,9 +171,10 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
     return (
         <div
             ref={ref}
-            className="zen-backdrop"
+            className={cx('zen-backdrop', className)}
+            data-pattern={kind}
             aria-hidden
-            style={topoSrc ? ({ '--zen-topo': `url("${topoSrc}")` } as CSSProperties) : undefined}
+            style={{ ...(topoSrc && ({ '--zen-topo': `url("${topoSrc}")` } as CSSProperties)), ...style }}
         >
             <div className="zen-aurora" />
             {kind === 'contours' ? (
@@ -201,4 +203,7 @@ export interface BackdropProps {
     pattern?: 'contours' | 'dots';
     /** URL of a contour-line image (strokes on transparent), used as a mask. */
     topoSrc?: string;
+    /** Classes for the backdrop layer (e.g. a view-transition-name). */
+    className?: string;
+    style?: CSSProperties;
 }

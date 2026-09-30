@@ -126,11 +126,7 @@ export function MenuItem({
         ...rest,
         role: 'menuitem',
         tabIndex: -1,
-        className: cx(
-            ITEM,
-            destructive && 'text-destructive hover:bg-destructive/10 focus:bg-destructive/10',
-            className,
-        ),
+        className: cx(ITEM, destructive && 'text-destructive', className),
         onClick: (e: MouseEvent<HTMLElement>) => {
             onClick?.(e as MouseEvent<HTMLButtonElement>);
             close();
