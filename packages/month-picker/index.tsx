@@ -5,7 +5,7 @@ import { FieldChevron } from '@zen/utils/field-chevron';
 import { formatMonth, type Month, monthNames } from '@zen/utils/month';
 import { POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
-import { useState } from 'react';
+import { ComponentProps, useState } from 'react';
 
 /**
  * Month selector: a field showing "Sep 2026" that opens a year and a 12-month
@@ -24,7 +24,8 @@ export default function MonthPicker({
     placeholder = 'Pick a month',
     onClear,
     clearLabel = 'Clear',
-    'aria-label': ariaLabel,
+    style,
+    ...rest
 }: MonthPickerProps) {
     const [year, setYear] = useState(() => Number((value ?? new Date().toISOString()).slice(0, 4)));
     const popup = useAnchoredPopup<HTMLDivElement>({
@@ -38,10 +39,11 @@ export default function MonthPicker({
         <>
             <button
                 type="button"
+                {...rest}
                 id={id}
                 disabled={disabled}
-                aria-label={ariaLabel}
                 {...popup.triggerProps}
+                style={{ ...popup.triggerProps.style, ...style }}
                 className={cx('zen__month-picker group', TRIGGER, 'w-full', popup.open && TRIGGER_OPEN, className)}
             >
                 <span className={value ? undefined : 'text-muted-foreground'}>
@@ -118,7 +120,8 @@ export default function MonthPicker({
     );
 }
 
-export interface MonthPickerProps {
+/** Also takes the trigger button's props (aria-*, data-*, onBlur…), so Field can wire it up. */
+export interface MonthPickerProps extends Omit<ComponentProps<'button'>, 'value' | 'onChange' | 'defaultValue'> {
     /** "YYYY-MM", or null for none. */
     value: Month | null;
     onChange: (month: Month) => void;
@@ -136,5 +139,4 @@ export interface MonthPickerProps {
     /** Offers a clear option in the popup (shown when a month is set). */
     onClear?: () => void;
     clearLabel?: string;
-    'aria-label'?: string;
 }

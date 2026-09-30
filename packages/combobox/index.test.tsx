@@ -231,6 +231,34 @@ describe('Combobox', () => {
             expect(screen.getByText('Brokerage')).toBeInTheDocument();
         });
 
+        it('chips that don\'t fit go behind "+N", which opens them without opening the list', () => {
+            vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockImplementation(function (this: HTMLElement) {
+                if (this.hasAttribute('data-collapse-item')) return 80;
+                if (this.hasAttribute('data-collapse-more')) return 30;
+                return 0;
+            });
+            vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(120);
+            render(
+                <Combobox
+                    multiple
+                    items={ACCOUNTS}
+                    itemKey={(a) => a.id}
+                    itemText={(a) => a.name}
+                    value={['chk', 'sav', 'crd']}
+                    onValueChange={() => {}}
+                >
+                    <ComboboxTrigger placeholder="None" />
+                    <ComboboxPopup>
+                        <ComboboxList />
+                    </ComboboxPopup>
+                </Combobox>,
+            );
+            const more = screen.getByRole('button', { name: 'Show 2' });
+            fireEvent.click(more);
+            expect(field()).toHaveAttribute('aria-expanded', 'false');
+            vi.restoreAllMocks();
+        });
+
         it('multiple with nothing chosen shows the placeholder', () => {
             render(
                 <Combobox

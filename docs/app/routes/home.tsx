@@ -1,4 +1,4 @@
-import { Badge, buttonVariants, Card, Stat, StatRow } from '@rinzai/zen';
+import { Badge, buttonVariants, Card, CardHeader, CardTitle, Stat, StatRow } from '@rinzai/zen';
 import { Link } from 'react-router';
 
 import { version } from '../../../package.json';
@@ -95,7 +95,7 @@ export default function App() {
     return (
         <>
             <Backdrop />
-            <Card title="Budget">
+            <Card><CardHeader><CardTitle>Budget</CardTitle></CardHeader>
                 <Button>Save changes</Button>
             </Card>
         </>

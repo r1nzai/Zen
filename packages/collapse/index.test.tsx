@@ -1,115 +1,76 @@
 import { render, screen } from '@testing-library/react';
-import { useRef } from 'react';
+
 import Collapse from './index';
-
-// ── Global mocks ──────────────────────────────────────────────────────────────
-
-class MockResizeObserver {
-    observe = vi.fn();
-    unobserve = vi.fn();
-    disconnect = vi.fn();
-}
-globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
-
-HTMLCanvasElement.prototype.getContext = vi.fn(() => ({
-    font: '',
-    measureText: vi.fn(() => ({ width: 50 })),
-})) as never;
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
 
 const ITEMS = ['Alpha', 'Beta', 'Gamma', 'Delta'];
 
-function renderChildren(item: string) {
-    return <span key={item}>{item}</span>;
+/**
+ * jsdom has no layout: give each item a width of 50, the "+N" button 30, and
+ * the row `room`, so the component's measuring sees a real layout.
+ */
+function layout(room: number) {
+    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockImplementation(function (this: HTMLElement) {
+        if (this.hasAttribute('data-collapse-item')) return 50;
+        if (this.hasAttribute('data-collapse-more')) return 30;
+        return 0;
+    });
+    vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(room);
 }
 
-/** Wrapper that provides a real ref whose offsetWidth we can control via a spy. */
-function CollapseWithRef({ width }: { width: number }) {
-    const ref = useRef<HTMLDivElement>(null);
-    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(width);
-    return (
-        <div ref={ref} style={{ width }}>
-            <Collapse items={ITEMS} parentRef={ref} moreItemsLabel="more">
-                {renderChildren}
-            </Collapse>
-        </div>
-    );
-}
-
-// ── Tests ─────────────────────────────────────────────────────────────────────
+const tags = (moreLabel?: string) => (
+    <Collapse items={ITEMS} moreLabel={moreLabel}>
+        {(item) => <span>{item}</span>}
+    </Collapse>
+);
 
 describe('Collapse', () => {
-    afterEach(() => {
-        vi.restoreAllMocks();
+    afterEach(() => vi.restoreAllMocks());
+
+    it('shows every item when they all fit, with no "+N"', () => {
+        layout(200);
+        render(tags());
+        for (const item of ITEMS) expect(screen.getByText(item)).toBeInTheDocument();
+        expect(screen.queryByRole('button')).toBeNull();
     });
 
-    describe('when the container is wide enough', () => {
-        it('renders all items', () => {
-            render(<CollapseWithRef width={9999} />);
-            for (const item of ITEMS) {
-                expect(screen.getByText(item)).toBeInTheDocument();
-            }
-        });
-
-        it('does not render the overflow badge', () => {
-            render(<CollapseWithRef width={9999} />);
-            expect(screen.queryByText(/^\+/)).not.toBeInTheDocument();
-        });
+    it('shows as many as fit beside the "+N" button, the rest behind it', () => {
+        // 2 items (100) + "+N" (30) fit in 140; a third would need 180.
+        layout(140);
+        render(tags());
+        expect(screen.getByText('Alpha')).toBeInTheDocument();
+        expect(screen.getByText('Beta')).toBeInTheDocument();
+        const more = screen.getByRole('button', { name: 'Show 2' });
+        expect(more).toHaveTextContent('+2');
+        // The hidden ones are in its popover.
+        expect(screen.getByRole('dialog', { hidden: true })).toHaveTextContent('GammaDelta');
     });
 
-    describe('when everything fits but a "+N" label would not', () => {
-        it('shows every item instead of collapsing them all', () => {
-            // One item needs 80px (50 measured + 30); the "+more" label would need 90 on top.
-            vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(110);
-            function One() {
-                const ref = useRef<HTMLDivElement>(null);
-                return (
-                    <div ref={ref}>
-                        <Collapse items={['only']} parentRef={ref} moreItemsLabel="more">
-                            {renderChildren}
-                        </Collapse>
-                    </div>
-                );
-            }
-            render(<One />);
-            expect(screen.getByText('only')).toBeInTheDocument();
-            expect(screen.queryByText(/^\+/)).not.toBeInTheDocument();
-        });
+    it('uses the row gap it measures', () => {
+        layout(140);
+        const style = vi.spyOn(window, 'getComputedStyle');
+        style.mockImplementation(() => ({ columnGap: '10px' }) as CSSStyleDeclaration);
+        render(tags());
+        // 50 + 10 + 30 = 90 fits; 50 + 10 + 50 + 10 + 30 = 150 doesn't.
+        expect(screen.getByText('Alpha')).toBeInTheDocument();
+        expect(screen.queryByText('Beta', { selector: '[data-collapse-item] *' })).toBeNull();
+        expect(screen.getByRole('button')).toHaveTextContent('+3');
     });
 
-    describe('when the container is too narrow', () => {
-        it('renders the overflow badge with a count', () => {
-            render(<CollapseWithRef width={1} />);
-            const badge = screen.getByText(/^\+\d/);
-            expect(badge).toBeInTheDocument();
-        });
-
-        it('badge text includes the moreItemsLabel', () => {
-            render(<CollapseWithRef width={1} />);
-            expect(screen.getByText(/more/i)).toBeInTheDocument();
-        });
+    it('puts the label after the count', () => {
+        layout(140);
+        render(tags('tags'));
+        expect(screen.getByRole('button', { name: 'Show 2 tags' })).toHaveTextContent('+2 tags');
     });
 
-    describe('children render prop', () => {
-        it('is called for each visible item', () => {
-            const children = vi.fn((item: string) => <span key={item}>{item}</span>);
-            function Wrapper() {
-                const ref = useRef<HTMLDivElement>(null);
-                vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(9999);
-                return (
-                    <div ref={ref}>
-                        <Collapse items={ITEMS} parentRef={ref}>
-                            {children}
-                        </Collapse>
-                    </div>
-                );
-            }
-            render(<Wrapper />);
-            expect(children.mock.calls.length).toBeGreaterThanOrEqual(ITEMS.length);
-            ITEMS.forEach((item) => {
-                expect(children).toHaveBeenCalledWith(item, expect.any(Number), undefined);
-            });
-        });
+    it('hands each item its index and data', () => {
+        layout(200);
+        const children = vi.fn((item: string) => <span>{item}</span>);
+        render(
+            <Collapse items={['a', 'b']} data={[1, 2]}>
+                {children}
+            </Collapse>,
+        );
+        expect(children).toHaveBeenCalledWith('a', 0, 1);
+        expect(children).toHaveBeenCalledWith('b', 1, 2);
     });
 });

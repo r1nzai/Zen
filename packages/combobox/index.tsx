@@ -1,6 +1,7 @@
 import Badge from '@zen/badge';
 import Button from '@zen/button';
 import Collapse from '@zen/collapse';
+import { useField } from '@zen/field';
 import Search from '@zen/icons/search';
 import XMark from '@zen/icons/x-mark';
 import { InputGroupAddon, InputGroupInput } from '@zen/input-group';
@@ -12,6 +13,7 @@ import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import { useVirtualList } from '@zen/utils/useVirtualList';
 import {
     ChangeEvent,
+    ComponentProps,
     createContext,
     KeyboardEvent,
     ReactNode,
@@ -140,11 +142,14 @@ export function ComboboxTrigger({
     placeholder = 'Select an Item',
     disabled,
     className,
+    style,
     children,
+    ...rest
 }: ComboboxTriggerProps) {
     const box = useCombobox();
     const { popup } = box;
-    const valueRef = useRef<HTMLDivElement>(null);
+    // Inside a Field: its id, label (a div can't be a <label>'s target), hint and error.
+    const field = useField();
     // Whether the panel was open when this press began (a press on the field closes an
     // open panel before the click arrives, so the click mustn't reopen it).
     const wasOpen = useRef(false);
@@ -152,6 +157,11 @@ export function ComboboxTrigger({
 
     return (
         <div
+            id={field?.id}
+            aria-labelledby={rest['aria-label'] ? undefined : field?.labelId}
+            aria-invalid={field?.['aria-invalid']}
+            {...rest}
+            aria-describedby={cx(field?.['aria-describedby'], rest['aria-describedby']).trim() || undefined}
             ref={box.triggerRef}
             role="combobox"
             tabIndex={disabled ? -1 : 0}
@@ -160,9 +170,13 @@ export function ComboboxTrigger({
             aria-controls={popup.id}
             aria-disabled={disabled || undefined}
             data-popup-open={popup.triggerProps['data-popup-open']}
-            style={popup.triggerProps.style}
-            onPointerDown={() => (wasOpen.current = popup.open)}
+            style={{ ...popup.triggerProps.style, ...style }}
+            onPointerDown={(e) => {
+                rest.onPointerDown?.(e);
+                wasOpen.current = popup.open;
+            }}
             onClick={(e) => {
+                rest.onClick?.(e);
                 // Inside a <label>, the click would also go to the list's search input and close the list.
                 e.preventDefault();
                 if (wasOpen.current) popup.setOpen(false);
@@ -170,6 +184,7 @@ export function ComboboxTrigger({
                 wasOpen.current = false;
             }}
             onKeyDown={(e) => {
+                rest.onKeyDown?.(e);
                 if (['Enter', ' ', 'ArrowDown'].includes(e.key)) {
                     e.preventDefault();
                     open();
@@ -185,14 +200,13 @@ export function ComboboxTrigger({
             )}
         >
             <div
-                ref={valueRef}
                 className={cx(
-                    // Takes all the space beside the chevron, whatever its content: Collapse measures this box.
+                    // Takes all the space beside the chevron, whatever its content.
                     'flex min-w-0 flex-1 items-center gap-1 overflow-hidden text-sm',
                     disabled ? 'text-muted-foreground' : 'text-foreground',
                 )}
             >
-                {children ?? <ComboboxValue placeholder={placeholder} valueRef={valueRef} />}
+                {children ?? <ComboboxValue placeholder={placeholder} />}
             </div>
             <FieldChevron open={popup.open} />
         </div>
@@ -200,7 +214,7 @@ export function ComboboxTrigger({
 }
 
 /** The default value display: the chosen item's text, or removable chips when `multiple`. */
-function ComboboxValue({ placeholder, valueRef }: { placeholder: string; valueRef: RefObject<HTMLDivElement | null> }) {
+function ComboboxValue({ placeholder }: { placeholder: string }) {
     const box = useCombobox();
     const byKey = new Map([...box.selectedItems, ...box.items].map((item) => [box.keyOf(item), item]));
     // Chosen items with text to show (an item without text, e.g. an empty "nothing chosen" item, shows the placeholder).
@@ -215,10 +229,9 @@ function ComboboxValue({ placeholder, valueRef }: { placeholder: string; valueRe
         <Collapse
             items={chosen.map((c) => c.text)}
             data={chosen}
-            parentRef={valueRef}
-            estimator={(_, textWidth) => textWidth + 40}
             badgeVariant="secondary"
-            badgeStyles="h-6 min-w-min gap-2"
+            badgeClassName="h-6 min-w-min gap-2"
+            className="w-full gap-1"
         >
             {(text, index, chip) => (
                 <Badge key={chip?.key ?? index} className="flex h-6 min-w-min gap-2 pr-1" variant="secondary">
@@ -439,11 +452,10 @@ export type ComboboxProps<T> = ComboboxBaseProps<T> &
         | { multiple?: false; value: string | null; onValueChange: (key: string) => void }
         | { multiple: true; value: readonly string[]; onValueChange: (keys: string[]) => void }
     );
-export interface ComboboxTriggerProps {
+export interface ComboboxTriggerProps extends Omit<ComponentProps<'div'>, 'children'> {
     /** Shown while nothing is chosen. */
     placeholder?: string;
     disabled?: boolean;
-    className?: string;
     /** Your own display of the value (default: its text, or chips). */
     children?: ReactNode;
 }

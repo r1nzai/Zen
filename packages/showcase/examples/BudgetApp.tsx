@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import {
     AnimatedMoney,
@@ -9,6 +9,8 @@ import {
     Button,
     buttonVariants,
     Card,
+    CardHeader,
+    CardTitle,
     Collapse,
     Combobox,
     ComboboxCreate,
@@ -308,7 +310,11 @@ function Budget({ nav }: { nav: boolean }) {
 
                 <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
                     <div className="flex min-w-0 flex-col gap-6">
-                        <Card title="Entries" action={<Badge variant="secondary">{entries.length} this month</Badge>}>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Entries</CardTitle>
+                                <Badge variant="secondary">{entries.length} this month</Badge>
+                            </CardHeader>
                             <Tabs defaultValue="all">
                                 <TabList variant="pills">
                                     <Tab value="all">All</Tab>
@@ -557,17 +563,10 @@ function EntryTable({
 
 /** As many tags as fit on one line; the rest behind "+N". */
 function TagList({ tags }: { tags: string[] }) {
-    const ref = useRef<HTMLDivElement>(null);
     return (
-        <div ref={ref} className="flex items-center gap-1">
-            <Collapse items={tags} parentRef={ref}>
-                {(t) => (
-                    <Badge key={t} variant="secondary">
-                        {t}
-                    </Badge>
-                )}
-            </Collapse>
-        </div>
+        <Collapse items={tags} className="gap-1">
+            {(t) => <Badge variant="secondary">{t}</Badge>}
+        </Collapse>
     );
 }
 
@@ -600,7 +599,10 @@ function SpendingByGroup({ entries }: { entries: Entry[] }) {
     const tree = useTree({ items: groups, getKey: (g) => g.name, getChildren: (g) => g.children });
 
     return (
-        <Card title="Spending by group">
+        <Card>
+            <CardHeader>
+                <CardTitle>Spending by group</CardTitle>
+            </CardHeader>
             <TableContainer className="-mx-1">
                 <Table>
                     <TableHeader>
@@ -654,7 +656,10 @@ function BudgetMeters({ entries }: { entries: Entry[] }) {
         .sort((a, b) => b.spent / b.budget - a.spent / a.budget)
         .slice(0, 3);
     return (
-        <Card title="Watch list">
+        <Card>
+            <CardHeader>
+                <CardTitle>Watch list</CardTitle>
+            </CardHeader>
             <div className="flex flex-col gap-5">
                 {rows.map((c) => {
                     const over = c.spent > c.budget;
@@ -687,7 +692,10 @@ function Goals() {
     const left = goals.reduce((sum, g) => sum + g.target - g.saved, 0);
     const months = Math.ceil(left / (monthly * 100));
     return (
-        <Card title="Goals">
+        <Card>
+            <CardHeader>
+                <CardTitle>Goals</CardTitle>
+            </CardHeader>
             <div className="flex flex-col gap-4">
                 {goals.map((g) => (
                     <div key={g.name} className="flex items-center gap-4">
@@ -750,9 +758,9 @@ function Appearance() {
     }, [reduceMotion]);
 
     return (
-        <Card
-            title="Appearance"
-            action={
+        <Card>
+            <CardHeader>
+                <CardTitle>Appearance</CardTitle>
                 <Tooltip>
                     <TooltipTrigger aria-label="About appearance" className="rounded-md">
                         <Badge variant="outline">?</Badge>
@@ -763,8 +771,7 @@ function Appearance() {
                         </p>
                     </TooltipContent>
                 </Tooltip>
-            }
-        >
+            </CardHeader>
             <div className="flex flex-col gap-5">
                 <Field label="Preset">
                     <Select

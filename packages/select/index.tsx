@@ -9,11 +9,13 @@ import {
     Fragment,
     isValidElement,
     KeyboardEvent,
+    ComponentProps,
     ReactElement,
     ReactNode,
     useCallback,
     useContext,
     useEffect,
+    useId,
     useLayoutEffect,
     useRef,
     useState,
@@ -46,9 +48,13 @@ export default function Select<V extends string>({
     className,
     listClassName,
     children,
-    'aria-label': ariaLabel,
+    style,
+    onKeyDown,
+    ...rest
 }: SelectProps<V>) {
     const listRef = useRef<HTMLDivElement>(null);
+    const generatedId = useId();
+    const triggerId = id ?? generatedId;
     const [active, setActive] = useState<string | null>(null);
     const typed = useRef({ text: '', at: 0 });
     // Labels of items rendered inside your own components (read once they mount).
@@ -137,12 +143,14 @@ export default function Select<V extends string>({
         <>
             <button
                 type="button"
-                id={id}
+                {...rest}
+                id={triggerId}
                 disabled={disabled}
                 aria-haspopup="listbox"
-                aria-label={ariaLabel}
                 {...popup.triggerProps}
+                style={{ ...popup.triggerProps.style, ...style }}
                 onKeyDown={(e) => {
+                    onKeyDown?.(e);
                     if (['ArrowDown', 'ArrowUp'].includes(e.key) && !popup.open) {
                         e.preventDefault();
                         popup.setOpen(true);
@@ -161,7 +169,9 @@ export default function Select<V extends string>({
                     ref={listRef}
                     role="listbox"
                     tabIndex={-1}
-                    aria-label={ariaLabel}
+                    // Named like its field: its aria-label, or else the field (and so the field's <label>).
+                    aria-label={rest['aria-label']}
+                    aria-labelledby={rest['aria-label'] ? undefined : triggerId}
                     aria-activedescendant={active !== null ? optionId(active) : undefined}
                     onKeyDown={onListKeyDown}
                     className="max-h-72 overflow-y-auto outline-hidden"
@@ -252,7 +262,11 @@ export function SelectSeparator() {
     return <div role="separator" className="bg-tint/[0.07] mx-2 my-1 h-px" />;
 }
 
-export interface SelectProps<V extends string> {
+/** Also takes the trigger button's props (aria-*, data-*, onBlur…), so Field can wire it up. */
+export interface SelectProps<V extends string> extends Omit<
+    ComponentProps<'button'>,
+    'value' | 'onChange' | 'children' | 'defaultValue' | 'name'
+> {
     value: V | null;
     onChange: (value: V) => void;
     /** Shown while nothing is chosen. */
@@ -267,7 +281,6 @@ export interface SelectProps<V extends string> {
     listClassName?: string;
     /** SelectItem, SelectGroup and SelectSeparator. */
     children: ReactNode;
-    'aria-label'?: string;
 }
 
 export interface SelectItemProps {

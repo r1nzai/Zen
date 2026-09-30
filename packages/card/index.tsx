@@ -1,22 +1,30 @@
 import { cx } from '@zen/utils/cx';
+import { Slot } from '@zen/utils/slot';
 import { ComponentProps, ReactNode } from 'react';
 
-/** Glass panel whose border catches the pointer light. */
-export default function Card({ title, action, children, className, ...rest }: CardProps) {
+/**
+ * Glass panel whose border catches the pointer light. For a title with an
+ * action beside it, start it with a CardHeader holding a CardTitle and the action.
+ */
+export default function Card({ className, ...rest }: CardProps) {
     return (
         <section
             className={cx('zen__card glass glow-edge text-card-foreground rounded-xl p-4 md:p-5', className)}
             {...rest}
-        >
-            {(title || action) && (
-                <header className="mb-4 flex items-center justify-between gap-4">
-                    {title && <h4 className="text-base font-semibold tracking-tight">{title}</h4>}
-                    {action}
-                </header>
-            )}
-            {children}
-        </section>
+        />
     );
+}
+
+/** The top row of a Card: its title, and an action (a button, a menu) at the end. */
+export function CardHeader({ className, ...rest }: ComponentProps<'header'>) {
+    return <header className={cx('mb-4 flex items-center justify-between gap-4', className)} {...rest} />;
+}
+
+/** The card's title: an h4 by default; with `asChild`, your own heading (an h2, say) gets its look. */
+export function CardTitle({ asChild, className, children, ...rest }: CardTitleProps) {
+    const props = { ...rest, className: cx('text-base font-semibold tracking-tight', className) };
+    if (asChild) return <Slot {...(props as ComponentProps<'a'>)}>{children}</Slot>;
+    return <h4 {...props}>{children}</h4>;
 }
 
 /** A single figure with a label, e.g. "Revenue  $12,400". */
@@ -55,10 +63,11 @@ export function StatRow({ children, className }: { children: ReactNode; classNam
     );
 }
 
-export interface CardProps extends Omit<ComponentProps<'section'>, 'title'> {
-    title?: ReactNode;
-    /** Shown at the end of the header, e.g. a button or menu. */
-    action?: ReactNode;
+export type CardProps = ComponentProps<'section'>;
+
+export interface CardTitleProps extends ComponentProps<'h4'> {
+    /** Put the title's look on your own heading element instead of an h4. */
+    asChild?: boolean;
 }
 
 export interface StatProps {

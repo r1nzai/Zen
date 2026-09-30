@@ -4,23 +4,33 @@ import Backdrop from '../backdrop';
 import ProgressRing from '../progress-ring';
 import Skeleton from '../skeleton';
 import Spinner from '../spinner';
-import Card, { Stat, StatRow } from './index';
+import Card, { CardHeader, CardTitle, Stat, StatRow } from './index';
 
 describe('Card', () => {
-    it('renders a glass section with an optional header', () => {
+    it('is a glass section; a CardHeader holds the title and an action', () => {
         const { container } = render(
-            <Card title="Budget" action={<button>Edit</button>}>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Budget</CardTitle>
+                    <button>Edit</button>
+                </CardHeader>
                 content
             </Card>,
         );
         expect(container.firstChild).toHaveClass('glass', 'glow-edge');
-        expect(screen.getByRole('heading', { name: 'Budget' })).toBeInTheDocument();
+        expect(container.querySelector('header')).toHaveClass('justify-between');
+        expect(screen.getByRole('heading', { name: 'Budget', level: 4 })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument();
     });
 
-    it('has no header without a title or action', () => {
-        const { container } = render(<Card>content</Card>);
-        expect(container.querySelector('header')).toBeNull();
+    it('CardTitle asChild gives your own heading its look', () => {
+        render(
+            <CardTitle asChild>
+                <h2 className="mine">Budget</h2>
+            </CardTitle>,
+        );
+        const heading = screen.getByRole('heading', { name: 'Budget', level: 2 });
+        expect(heading).toHaveClass('mine', 'font-semibold');
     });
 });
 

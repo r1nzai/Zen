@@ -2,6 +2,8 @@ import {
     Button,
     buttonVariants,
     Card,
+    CardHeader,
+    CardTitle,
     Ellipsis,
     Menu,
     MenuContent,
@@ -12,9 +14,9 @@ import {
 
 export default function Goal() {
     return (
-        <Card
-            title="Emergency fund"
-            action={
+        <Card className="w-full max-w-sm">
+            <CardHeader>
+                <CardTitle>Emergency fund</CardTitle>
                 <Menu>
                     <MenuTrigger
                         aria-label="Goal actions"
@@ -26,9 +28,7 @@ export default function Goal() {
                         <MenuItem>Edit</MenuItem>
                     </MenuContent>
                 </Menu>
-            }
-            className="w-full max-w-sm"
-        >
+            </CardHeader>
             <div className="flex items-center gap-4">
                 <ProgressRing value={0.64} label="Emergency fund">
                     <span className="text-sm font-semibold tabular-nums">64%</span>

@@ -1,11 +1,33 @@
 import { cx } from '@zen/utils/cx';
 import { AlertIcon, CheckIcon, InfoIcon } from '@zen/utils/status-icons';
-import { cloneElement, isValidElement, ReactElement, ReactNode, useId } from 'react';
+import { cloneElement, createContext, isValidElement, ReactElement, ReactNode, useContext, useId } from 'react';
+
+/** What a Field tells the control inside it. */
+export interface FieldControl {
+    /** For the control's id (the label's `for`). */
+    id: string;
+    /** The label's id, for a control that isn't a native form element (aria-labelledby). */
+    labelId: string;
+    'aria-describedby'?: string;
+    'aria-invalid'?: boolean;
+}
+
+const FieldContext = createContext<FieldControl | null>(null);
+
+/**
+ * The ids and state of the Field around a control (null outside one). Field
+ * also puts them on its direct child; this is for a control nested deeper,
+ * such as a ComboboxTrigger inside a Combobox, or your own.
+ */
+export function useField() {
+    return useContext(FieldContext);
+}
 
 /**
  * A labelled form control with an optional hint and error. Links them for
  * screen readers: the control gets an id (if it has none), aria-describedby
- * for the hint and error, and aria-invalid while there's an error.
+ * for the hint and error, and aria-invalid while there's an error. The direct
+ * child gets these as props; a control nested deeper reads them with useField.
  */
 export default function Field({ label, hint, error, children, className }: FieldProps) {
     const baseId = useId();
@@ -14,35 +36,44 @@ export default function Field({ label, hint, error, children, className }: Field
     const hintId = hint ? `${baseId}-hint` : undefined;
     const errorId = error ? `${baseId}-error` : undefined;
     const describedBy = cx(child?.props['aria-describedby'] as string | undefined, hintId, errorId).trim() || undefined;
+    const labelId = `${baseId}-label`;
+    const control: FieldControl = {
+        id: controlId,
+        labelId,
+        'aria-describedby': describedBy,
+        'aria-invalid': error ? true : undefined,
+    };
 
     return (
-        <div className={cx('zen__field flex flex-col gap-2', className)}>
-            <label htmlFor={controlId} className="text-sm leading-none font-medium">
-                {label}
-            </label>
-            {child
-                ? cloneElement(child, {
-                      id: controlId,
-                      'aria-describedby': describedBy,
-                      'aria-invalid': error ? true : child.props['aria-invalid'],
-                  })
-                : children}
-            {hint && (
-                <p id={hintId} className="text-muted-foreground mt-0! text-xs">
-                    {hint}
-                </p>
-            )}
-            {error && (
-                <p
-                    id={errorId}
-                    role="alert"
-                    className="text-destructive mt-0! flex items-center gap-1.5 text-xs font-medium"
-                >
-                    <AlertIcon className="shrink-0" />
-                    {error}
-                </p>
-            )}
-        </div>
+        <FieldContext.Provider value={control}>
+            <div className={cx('zen__field flex flex-col gap-2', className)}>
+                <label id={labelId} htmlFor={controlId} className="text-sm leading-none font-medium">
+                    {label}
+                </label>
+                {child
+                    ? cloneElement(child, {
+                          id: controlId,
+                          'aria-describedby': describedBy,
+                          'aria-invalid': error ? true : child.props['aria-invalid'],
+                      })
+                    : children}
+                {hint && (
+                    <p id={hintId} className="text-muted-foreground mt-0! text-xs">
+                        {hint}
+                    </p>
+                )}
+                {error && (
+                    <p
+                        id={errorId}
+                        role="alert"
+                        className="text-destructive mt-0! flex items-center gap-1.5 text-xs font-medium"
+                    >
+                        <AlertIcon className="shrink-0" />
+                        {error}
+                    </p>
+                )}
+            </div>
+        </FieldContext.Provider>
     );
 }
 

@@ -14,6 +14,8 @@ import {
     Badge,
     Button,
     Card,
+    CardHeader,
+    CardTitle,
     CodeBlock,
     Collapse,
     ConfirmDialog,
@@ -137,7 +139,14 @@ const components = {
             </Pills>
         </nav>
     ),
-    Card: <Card title="Title">body</Card>,
+    Card: (
+        <Card>
+            <CardHeader>
+                <CardTitle>Title</CardTitle>
+            </CardHeader>
+            body
+        </Card>
+    ),
     ConfirmDialog: <ConfirmDialog open onOpenChange={() => {}} title="Sure?" confirmLabel="Yes" onConfirm={() => {}} />,
     Dialog: <Dialog open title="Title" />,
     ProgressRing: <ProgressRing value={0.5} label="Progress" />,
