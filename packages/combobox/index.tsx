@@ -9,7 +9,7 @@ import { cx } from '@zen/utils/cx';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { CheckIcon } from '@zen/utils/status-icons';
 import { POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
-import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
+import { anchoredStyle, useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import { useVirtualList } from '@zen/utils/useVirtualList';
 import {
     ChangeEvent,
@@ -90,7 +90,6 @@ export default function Combobox<T>(props: ComboboxProps<T>) {
     );
 
     const popup = useAnchoredPopup<HTMLDivElement>({
-        offset: 5,
         onOpenChange: (open) => {
             if (open) return;
             // Each opening starts fresh: the whole list, nothing highlighted.
@@ -170,6 +169,7 @@ export function ComboboxTrigger({
             aria-controls={popup.id}
             aria-disabled={disabled || undefined}
             data-popup-open={popup.triggerProps['data-popup-open']}
+            data-zen-anchor={popup.triggerProps['data-zen-anchor']}
             style={{ ...popup.triggerProps.style, ...style }}
             onPointerDown={(e) => {
                 rest.onPointerDown?.(e);
@@ -262,7 +262,8 @@ export function ComboboxPopup({ className, children }: { className?: string; chi
     return (
         <div
             {...popup.popupProps}
-            className={cx('zen__popover', POPUP, 'w-[anchor-size(width)] min-w-0 overflow-visible p-0', className)}
+            style={anchoredStyle(popup.id, { offset: 5, width: 'match' })}
+            className={cx('zen__popover', POPUP, 'overflow-visible p-0', className)}
         >
             <div className="divide-tint/10 flex w-full flex-col divide-y overflow-hidden rounded-xl">{children}</div>
         </div>

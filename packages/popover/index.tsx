@@ -75,12 +75,8 @@ export function PopoverContent({
             role="dialog"
             {...rest}
             {...popup.popupProps}
-            style={{ ...anchoredStyle(popup.id, { align, offset }), ...style }}
-            className={cx(
-                'zen__popover fixed z-50 w-[anchor-size(width)] min-w-max overflow-visible p-0',
-                POPUP,
-                className,
-            )}
+            style={{ ...anchoredStyle(popup.id, { align, offset, width: 'at-least' }), ...style }}
+            className={cx('zen__popover fixed z-50 overflow-visible p-0', POPUP, className)}
         >
             {children}
         </div>

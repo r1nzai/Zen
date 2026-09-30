@@ -107,6 +107,35 @@ test('disclosure: grows open, folds shut, and leaves the page once shut', async 
     await expect(page.getByText('Trip to Goa')).toHaveCount(0);
 });
 
+test('without CSS anchor positioning, popups are still placed at their trigger', async ({ page }) => {
+    // As in Safari before 26: the browser reports no position-area, so Zen places popups itself.
+    await page.addInitScript(() => {
+        const supports = CSS.supports.bind(CSS);
+        CSS.supports = ((...args: [string, string?]) =>
+            args.join(':').includes('position-area') ? false : supports(...args)) as typeof CSS.supports;
+    });
+    errors = await open(page, '/components/dialog/');
+    await page.getByRole('button', { name: 'Add budget' }).click();
+    const dialog = page.locator('dialog[open]');
+    const placement = async (trigger: import('@playwright/test').Locator) => {
+        await trigger.click();
+        const popup = page.locator('.zen__popover:popover-open');
+        await expect(popup).toBeVisible();
+        // Measured once it has finished scaling in.
+        await popup.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
+        const t = (await trigger.boundingBox())!;
+        const p = (await popup.boundingBox())!;
+        await page.keyboard.press('Escape');
+        return { dx: Math.round(p.x - t.x), gap: Math.round(p.y - (t.y + t.height)), width: p.width >= t.width - 1 };
+    };
+    // Select: under its trigger, lined up, at least as wide.
+    expect(await placement(dialog.getByRole('button', { name: 'Category' }))).toEqual({ dx: 0, gap: 4, width: true });
+    // DatePicker: under its trigger, or above it if there's no room below.
+    const date = await placement(dialog.getByRole('button', { name: 'Starts on' }));
+    expect(date.dx).toBe(0);
+    expect(date.gap === 4 || date.gap < -300).toBe(true);
+});
+
 test('table: a heading sorts, and sorts back the other way', async ({ page }) => {
     errors = await open(page, '/components/table/');
     const table = page.getByRole('region', { name: 'Repayment schedule' });

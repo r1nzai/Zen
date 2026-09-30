@@ -2,11 +2,10 @@ import { cx } from '@zen/utils/cx';
 import { useGraphicsMode } from '@zen/utils/graphics';
 import { Slot } from '@zen/utils/slot';
 import { POPUP } from '@zen/utils/styles';
-import { anchoredStyle } from '@zen/utils/useAnchoredPopup';
+import { anchoredStyle, anchorFor, useAnchorFallback } from '@zen/utils/useAnchoredPopup';
 import {
     ComponentProps,
     createContext,
-    CSSProperties,
     ReactNode,
     RefObject,
     useCallback,
@@ -67,6 +66,7 @@ export default function Tooltip({ children }: { children?: ReactNode }) {
         timer.current = window.setTimeout(hide, 100);
     }, [hide]);
     useEffect(() => () => clearTimeout(timer.current), []);
+    useAnchorFallback(ref);
 
     const value = useMemo(() => ({ id, ref, show, hide, hideSoon }), [id, show, hide, hideSoon]);
     return <TooltipContext.Provider value={value}>{children}</TooltipContext.Provider>;
@@ -88,7 +88,8 @@ export function TooltipTrigger({
     const props = {
         'aria-describedby': tip.id,
         ...rest,
-        style: { anchorName: `--${tip.id}`, ...style } as CSSProperties,
+        ...anchorFor(tip.id),
+        style: { ...anchorFor(tip.id).style, ...style },
         onPointerEnter: (e: React.PointerEvent<HTMLButtonElement>) => {
             onPointerEnter?.(e);
             if (e.pointerType === 'mouse') tip.show();
@@ -147,12 +148,8 @@ export function TooltipContent({
                 onPointerLeave?.(e);
                 tip.hideSoon();
             }}
-            style={{ ...anchoredStyle(tip.id, { align, offset }), ...style }}
-            className={cx(
-                'zen__popover fixed z-50 w-[anchor-size(width)] min-w-max overflow-visible p-0',
-                POPUP,
-                className,
-            )}
+            style={{ ...anchoredStyle(tip.id, { align, offset, width: 'at-least' }), ...style }}
+            className={cx('zen__popover fixed z-50 overflow-visible p-0', POPUP, className)}
         >
             {children}
         </div>
