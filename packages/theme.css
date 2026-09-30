@@ -205,14 +205,25 @@
 
 /*
  * Built from Tailwind's backdrop utilities, which emit the standard and -webkit-
- * properties correctly. Phones: a live blur over scrolling content is the main
- * cause of jank, so touch screens get a solid tint instead.
+ * properties correctly. Where there's no live blur, the surface is solid: a
+ * translucent one lets sharp text behind show through (the blur is what hides
+ * it). No blur on touch screens (a live blur over scrolling content is the main
+ * cause of jank), without a GPU (lite graphics) and with the OS's "reduce
+ * transparency". The fallbacks live here, in the utilities layer, where a
+ * surface's own `!` background (a Dialog's) is: an unlayered !important rule
+ * loses to a layered one.
  */
 @utility glass-blur {
     @apply backdrop-blur-[18px] backdrop-saturate-140;
-    /* !: glass's `background` shorthand would otherwise reset the colour. */
-    @apply pointer-coarse:bg-card/96! pointer-coarse:backdrop-filter-none;
-    @apply [@media(hover:none)]:bg-card/96! [@media(hover:none)]:backdrop-filter-none;
+    /*
+     * !: glass's `background` shorthand would otherwise reset the colour. [:root_&]
+     * adds specificity, so each fallback beats a surface's own `!` background (a
+     * Dialog's bg-card/90!) whatever order the rules come in.
+     */
+    @apply pointer-coarse:[:root_&]:bg-card! pointer-coarse:backdrop-filter-none;
+    @apply [@media(hover:none)]:[:root_&]:bg-card! [@media(hover:none)]:backdrop-filter-none;
+    @apply [@media(prefers-reduced-transparency:reduce)]:[:root_&]:bg-card! [@media(prefers-reduced-transparency:reduce)]:backdrop-filter-none;
+    @apply [html[data-zen-graphics='lite']_&]:bg-card! [html[data-zen-graphics='lite']_&]:backdrop-filter-none;
 }
 
 @utility text-glow {
@@ -250,15 +261,10 @@
 /*
  * Without hardware acceleration (html[data-zen-graphics='lite'], set by
  * utils/graphics.ts) every blur, full-screen mask and animation is drawn on the
- * CPU each frame. Keep the look, drop the cost: solid tints instead of live
- * blur (as on phones), a still backdrop, no pointer light. The OS "reduce
- * transparency" setting gets the same tints.
+ * CPU each frame. Keep the look, drop the cost: solid surfaces instead of live
+ * blur (as on phones; see glass-blur), a still backdrop, no pointer light. The
+ * OS "reduce transparency" setting gets the same.
  */
-html[data-zen-graphics='lite'] .glass-blur {
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-    background: oklch(var(--card) / 0.96) !important;
-}
 html[data-zen-graphics='lite'] .zen__header {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -276,11 +282,6 @@ html[data-zen-graphics='lite'] :is(.zen-topo--lit, .zen-dots--lit) {
     display: none;
 }
 @media (prefers-reduced-transparency: reduce) {
-    .glass-blur {
-        -webkit-backdrop-filter: none !important;
-        backdrop-filter: none !important;
-        background: oklch(var(--card) / 0.96) !important;
-    }
     .zen__header {
         -webkit-backdrop-filter: none;
         backdrop-filter: none;

@@ -4,6 +4,7 @@ import {
     DialogClose,
     DialogFooter,
     Combobox,
+    DatePicker,
     ComboboxEmpty,
     ComboboxList,
     ComboboxPopup,
@@ -31,6 +32,7 @@ export default function Pickers() {
     const [open, setOpen] = useState(false);
     const [category, setCategory] = useState<(typeof CATEGORIES)[number]['value'] | null>('groceries');
     const [month, setMonth] = useState<string | null>('2026-09');
+    const [start, setStart] = useState<string | null>('2026-09-30');
     const [tags, setTags] = useState<string[]>([TAGS[0]]);
     return (
         <>
@@ -52,6 +54,10 @@ export default function Pickers() {
                         <MonthPicker aria-label="From" value={month} onChange={setMonth} locale="en-IN" />
                     </label>
                 </div>
+                <label className="flex flex-col gap-2 text-sm">
+                    Starts on
+                    <DatePicker aria-label="Starts on" value={start} onChange={setStart} locale="en-IN" />
+                </label>
                 <div className="flex flex-col gap-2 text-sm">
                     <span>Tags</span>
                     <Combobox
