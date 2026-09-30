@@ -25,3 +25,7 @@ dist-ssr
 storybook-static
 docs/build
 docs/.react-router
+
+# Playwright
+test-results
+playwright-report

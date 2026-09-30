@@ -59,7 +59,7 @@ export default defineConfig({
         environment: 'jsdom',
         globals: true,
         setupFiles: ['./vitest.setup.ts'],
-        exclude: ['**/node_modules/**', '**/dist/**', '**/*.stories.tsx'],
+        exclude: ['**/node_modules/**', '**/dist/**', '**/*.stories.tsx', 'e2e/**'],
         coverage: {
             provider: 'v8',
             include: ['packages/**/*.{ts,tsx}'],

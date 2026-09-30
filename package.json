@@ -59,6 +59,7 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
+        "test:e2e": "playwright test",
         "build": "vite build",
         "lint": "eslint packages/**/*.{ts,tsx}",
         "lint:fix": "eslint --fix packages/**/*.{ts,tsx}",
@@ -72,6 +73,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
+        "@playwright/test": "1.63.0",
         "@storybook/addon-a11y": "^10.6.0",
         "@storybook/addon-docs": "^10.6.0",
         "@storybook/addon-links": "^10.6.0",
