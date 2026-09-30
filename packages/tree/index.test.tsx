@@ -58,6 +58,21 @@ describe('useTree', () => {
         expect(result.current.rows.map((r) => r.key)).not.toContain('groceries');
         vi.useRealTimers();
     });
+
+    it('opening again while it closes keeps it open, and the rows grow back', () => {
+        vi.useFakeTimers();
+        const { result } = renderHook(() => useTree(options));
+        act(() => result.current.toggle('food'));
+        act(() => result.current.toggle('food'));
+        const groceries = () => result.current.rows.find((r) => r.key === 'groceries')!;
+        expect(result.current.rowProps(groceries()).className).toContain('zen__tree-row-enter');
+        // Neither the close animation's end nor its fallback timer closes it now.
+        act(() => result.current.rowProps(groceries()).onAnimationEnd({ animationName: 'zen-row-close' }));
+        act(() => vi.advanceTimersByTime(600));
+        expect(result.current.rows.map((r) => r.key)).toContain('groceries');
+        expect(result.current.isExpanded('food')).toBe(true);
+        vi.useRealTimers();
+    });
 });
 
 describe('Tree parts', () => {

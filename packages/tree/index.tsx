@@ -78,12 +78,20 @@ export function useTree<T>({ items, getKey, getChildren, defaultExpanded = true,
 
     /** Opens or closes a row, animating its children. */
     const toggle = (key: string) => {
-        if (!isExpanded(key)) {
+        const grow = () => {
             const at = Date.now();
             setOpened({ key, at });
-            setExpanded(key, true);
             // Done animating: back to plain rows.
             setTimeout(() => setOpened((o) => (o?.at === at ? null : o)), 320);
+        };
+        if (closing === key) {
+            // Opened again while still closing: stay open, and the rows grow back.
+            finishClose.current = null;
+            setClosing(null);
+            grow();
+        } else if (!isExpanded(key)) {
+            grow();
+            setExpanded(key, true);
         } else if (reducedMotion()) {
             setExpanded(key, false);
         } else {
@@ -91,6 +99,8 @@ export function useTree<T>({ items, getKey, getChildren, defaultExpanded = true,
             // the timer is a fallback in case no animation event arrives.
             setClosing(key);
             const finish = () => {
+                // Opened again meanwhile (or already finished): nothing to do.
+                if (finishClose.current !== finish) return;
                 setExpanded(key, false);
                 setClosing((c) => (c === key ? null : c));
                 finishClose.current = null;
