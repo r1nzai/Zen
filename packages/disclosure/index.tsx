@@ -34,35 +34,64 @@ export default function Disclosure({ open, defaultOpen = false, onOpenChange, ch
     );
 }
 
-/** The button: a chevron (pointing down when open) and your label. */
+/** The button: your label after a chevron that turns down as the section opens. Lit while open. */
 export function DisclosureTrigger({ className, onClick, children, ...rest }: ComponentProps<'button'>) {
     const { open, setOpen, contentId } = useDisclosure('DisclosureTrigger');
     return (
         <button
             type="button"
             aria-expanded={open}
-            aria-controls={open ? contentId : undefined}
+            aria-controls={contentId}
             onClick={(e) => {
                 onClick?.(e);
                 if (!e.defaultPrevented) setOpen(!open);
             }}
             className={cx(
-                'zen__disclosure text-muted-foreground hover:text-foreground focus-visible:ring-ring/40 flex w-fit items-center gap-1.5 rounded text-sm outline-hidden focus-visible:ring-2',
+                'zen__disclosure group text-muted-foreground -mx-2 flex w-fit items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium outline-hidden',
+                'hover:bg-tint/[0.05] hover:text-foreground aria-expanded:text-foreground transition-colors duration-200',
+                'focus-visible:ring-ring/50 focus-visible:ring-2',
                 className,
             )}
             {...rest}
         >
-            <FieldChevron className={cx('text-inherit duration-150', !open && '-rotate-90')} />
+            <FieldChevron
+                className={cx('text-inherit duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]', !open && '-rotate-90')}
+            />
             {children}
         </button>
     );
 }
 
-/** What the trigger shows and hides; not rendered while closed. */
-export function DisclosureContent(props: ComponentProps<'div'>) {
+/**
+ * What the trigger shows and hides. It grows open and folds shut (the height
+ * animates, the content fades and settles); while closed it stays in the page
+ * but inert, so it can't be focused and screen readers skip it. className goes
+ * on the content itself.
+ */
+export function DisclosureContent({ className, children, ...rest }: ComponentProps<'div'>) {
     const { open, contentId } = useDisclosure('DisclosureContent');
-    if (!open) return null;
-    return <div id={contentId} {...props} />;
+    return (
+        <div
+            id={contentId}
+            data-open={open || undefined}
+            inert={!open}
+            className="zen__disclosure-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] data-open:grid-rows-[1fr]"
+        >
+            {/* The grid row sizes this box from 0 to its content's height; overflow clips it on the way. */}
+            <div className="min-h-0 overflow-hidden">
+                <div
+                    className={cx(
+                        '-translate-y-1 pt-2 opacity-0 transition-[opacity,translate] duration-300 ease-out',
+                        'in-data-open:translate-y-0 in-data-open:opacity-100',
+                        className,
+                    )}
+                    {...rest}
+                >
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export interface DisclosureProps {

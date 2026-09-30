@@ -12,13 +12,17 @@ describe('Disclosure', () => {
             </Disclosure>,
         );
         const trigger = screen.getByRole('button', { name: 'Past (2)' });
+        const content = document.getElementById(trigger.getAttribute('aria-controls')!)!;
+        // Closed: in the page (so it can animate) but inert.
         expect(trigger).toHaveAttribute('aria-expanded', 'false');
-        expect(screen.queryByText('old goals')).toBeNull();
+        expect(content).toHaveAttribute('inert');
+        expect(content).toContainElement(screen.getByText('old goals'));
         fireEvent.click(trigger);
         expect(trigger).toHaveAttribute('aria-expanded', 'true');
-        expect(trigger).toHaveAttribute('aria-controls', screen.getByText('old goals').id);
+        expect(content).not.toHaveAttribute('inert');
+        expect(content).toHaveAttribute('data-open');
         fireEvent.click(trigger);
-        expect(screen.queryByText('old goals')).toBeNull();
+        expect(content).toHaveAttribute('inert');
     });
 
     it('can follow your state', () => {
@@ -35,9 +39,9 @@ describe('Disclosure', () => {
             );
         }
         render(<Controlled />);
-        expect(screen.getByText('loans')).toBeInTheDocument();
+        expect(screen.getByText('loans').closest('[inert]')).toBeNull();
         fireEvent.click(screen.getByRole('button', { name: 'Repaid' }));
         expect(screen.getByText('hidden')).toBeInTheDocument();
-        expect(screen.queryByText('loans')).toBeNull();
+        expect(screen.getByText('loans').closest('[inert]')).not.toBeNull();
     });
 });
