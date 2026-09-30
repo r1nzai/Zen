@@ -5,12 +5,15 @@ import { Children, ComponentProps, ReactNode } from 'react';
 /**
  * Phone navigation: a glass bar fixed to the bottom, clear of the home
  * indicator, hidden from `hideFrom` up (default md). Fill it with TabBarItems.
+ * Inside a rounded frame, round the bar to match (className, e.g.
+ * rounded-b-[15px]): with GPU compositing, Chrome doesn't clip a blurred
+ * backdrop to an ancestor's rounded corners, only to the element's own.
  */
 export default function TabBar({ hideFrom = 'md', className, children, ...rest }: TabBarProps) {
     return (
         <nav
             className={cx(
-                'zen__tab-bar glass glass-blur fixed inset-x-0 bottom-0 z-40 rounded-none! border-x-0! border-b-0! pb-[env(safe-area-inset-bottom)]',
+                'zen__tab-bar glass glass-blur fixed inset-x-0 bottom-0 z-40 rounded-none border-x-0! border-b-0! pb-[env(safe-area-inset-bottom)]',
                 hideFrom === 'sm' && 'sm:hidden',
                 hideFrom === 'md' && 'md:hidden',
                 hideFrom === 'lg' && 'lg:hidden',

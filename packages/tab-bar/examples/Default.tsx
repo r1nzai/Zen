@@ -36,7 +36,7 @@ export default function Default() {
     return (
         <div className="border-tint/10 relative h-72 w-80 [transform:translateZ(0)] overflow-hidden rounded-2xl border">
             <p className="text-muted-foreground p-4 text-sm">{current}</p>
-            <TabBar aria-label="Main" hideFrom={false} className="absolute!">
+            <TabBar aria-label="Main" hideFrom={false} className="absolute! rounded-b-[15px]">
                 {TABS.map((t) => (
                     <TabBarItem
                         key={t.label}
