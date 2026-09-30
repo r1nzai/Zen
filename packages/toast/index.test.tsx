@@ -235,6 +235,29 @@ describe('Toast', () => {
         expect(front).toBeInTheDocument();
     });
 
+    it('keeps its timer bar steady while others come and go', () => {
+        render(
+            <ToastProvider>
+                <Trigger title="Hi" options={{ timeout: 5000 }} />
+            </ToastProvider>,
+        );
+        show('Hi');
+        act(() => vi.advanceTimersByTime(1000));
+        show('Hi');
+        const [first, second] = screen.getAllByRole('status');
+        const bar = first.querySelector<HTMLElement>('.zen__toast-timer')!;
+        const delay = bar.style.animationDelay;
+        act(() => vi.advanceTimersByTime(1000));
+        fireEvent.click(within(second).getByRole('button', { name: 'Dismiss' }));
+        act(() => vi.advanceTimersByTime(300));
+        expect(bar.style.animationDelay).toBe(delay);
+        // And its countdown carried on rather than starting over: 5 s in all.
+        act(() => vi.advanceTimersByTime(5000 - 2300 - 1));
+        expect(first).toBeInTheDocument();
+        act(() => vi.advanceTimersByTime(1 + 300));
+        expect(first).not.toBeInTheDocument();
+    });
+
     it('can be swiped away', () => {
         render(
             <ToastProvider>

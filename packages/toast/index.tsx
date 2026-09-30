@@ -199,7 +199,7 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
                                 layout={layout(t)}
                                 z={i + 1}
                                 paused={expanded}
-                                onDismiss={(how) => dismiss(t.id, how)}
+                                onDismiss={dismiss}
                                 onHeight={setHeight}
                                 clocks={clocks.current}
                                 entered={entered.current}
@@ -301,7 +301,8 @@ function Toast({
     layout: Layout;
     z: number;
     paused: boolean;
-    onDismiss: (how?: 'fade' | 'swipe') => void;
+    /** The provider's, the same function every render, so the countdown isn't restarted by others coming and going. */
+    onDismiss: (id: number, how?: 'fade' | 'swipe') => void;
     onHeight: (id: number, height: number) => void;
     clocks: Map<number, Clock>;
     entered: Set<number>;
@@ -317,9 +318,10 @@ function Toast({
     }, [entered, toast.id]);
     if (!clocks.has(toast.id)) clocks.set(toast.id, { spent: 0, since: null });
     const clock = clocks.get(toast.id)!;
-    // Time used so far, including a stretch still running (a move renders the new copy
-    // before the old one's countdown stops).
-    const used = clock.spent + (clock.since === null ? 0 : Date.now() - clock.since);
+    // Time used when this copy mounted, including a stretch still running (a move renders
+    // the new copy before the old one's countdown stops). Fixed from then on: the timer
+    // bar's animation runs from it, and a changed delay would make the bar jump.
+    const [usedAtMount] = useState(() => clock.spent + (clock.since === null ? 0 : Date.now() - clock.since));
 
     // Its natural height (the body's; the card itself may be squeezed to the front one's).
     useEffect(() => {
@@ -337,13 +339,13 @@ function Toast({
     useEffect(() => {
         if (!toast.timeout || paused || toast.leaving) return;
         clock.since = Date.now();
-        const timer = setTimeout(onDismiss, Math.max(0, toast.timeout - clock.spent));
+        const timer = setTimeout(() => onDismiss(toast.id), Math.max(0, toast.timeout - clock.spent));
         return () => {
             clearTimeout(timer);
             if (clock.since !== null) clock.spent += Date.now() - clock.since;
             clock.since = null;
         };
-    }, [paused, toast.timeout, toast.leaving, onDismiss, clock]);
+    }, [paused, toast.id, toast.timeout, toast.leaving, onDismiss, clock]);
 
     /*
      * Swipe right to throw it away. The drag moves the card through a CSS variable,
@@ -372,7 +374,7 @@ function Toast({
         if (!d) return;
         drag.current = null;
         delete e.currentTarget.dataset.swiping;
-        if (d.dx > SWIPE_DISTANCE || (d.dx > 0 && d.speed > SWIPE_SPEED)) onDismiss('swipe');
+        if (d.dx > SWIPE_DISTANCE || (d.dx > 0 && d.speed > SWIPE_SPEED)) onDismiss(toast.id, 'swipe');
         else e.currentTarget.style.setProperty('--zen-swipe', '0px');
     };
 
@@ -425,7 +427,7 @@ function Toast({
                             type="button"
                             onClick={() => {
                                 toast.action?.onClick();
-                                onDismiss();
+                                onDismiss(toast.id);
                             }}
                             className="border-tint/10 bg-tint/[0.06] hover:bg-tint/[0.12] focus-visible:ring-ring/50 mt-2 self-start rounded-lg border px-3 py-1 text-xs font-medium outline-hidden transition-colors focus-visible:ring-2"
                         >
@@ -436,7 +438,7 @@ function Toast({
                 <button
                     type="button"
                     aria-label="Dismiss"
-                    onClick={() => onDismiss()}
+                    onClick={() => onDismiss(toast.id)}
                     className="text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute top-2.5 right-2.5 grid size-7 place-items-center rounded-lg outline-hidden transition-colors focus-visible:ring-2"
                 >
                     <svg
@@ -463,7 +465,7 @@ function Toast({
                     // Picks up where it was after a move between hosts.
                     style={{
                         animationDuration: `${toast.timeout}ms`,
-                        animationDelay: `${-used}ms`,
+                        animationDelay: `${-usedAtMount}ms`,
                         animationPlayState: paused ? 'paused' : undefined,
                     }}
                 />
