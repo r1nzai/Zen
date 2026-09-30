@@ -56,12 +56,12 @@ export default function App() {
 
 ## What's inside
 
-- **Surfaces:** Card, Stat, Dialog, ConfirmDialog, Popover, Toast, Backdrop (aurora, contours or dots, and a pointer light)
-- **Inputs:** Button, Input, TextArea, InputGroup, MoneyInput, Select, Combobox, MonthPicker, Segmented, Slider, Toggle, Field
-- **Data:** composable Table with sticky edges and sorting, tree rows, editable cells, virtual rows, Meter, ProgressRing, AnimatedNumber
+- **Surfaces:** Card, Inset, Stat, Dialog (and sheets from an edge), ConfirmDialog, Popover, Tooltip, Toast (a stacked deck), Disclosure, Backdrop (aurora, contours or dots, and a pointer light)
+- **Inputs:** Button, Input, TextArea, InputGroup, MoneyInput (with currency conversion), Select, Combobox, Calendar, DatePicker, DateRangePicker, MonthPicker, Checkbox, RadioGroup, RadioCards, Segmented, Slider, Toggle, Chip, Field
+- **Data:** Chart (areas, lines, bars) and DonutChart in plain SVG, composable Table with sticky edges and sorting, tree rows, editable cells, virtual rows, Meter, ProgressRing, AnimatedNumber, Skeleton, Spinner
 - **Navigation:** Header, Pills, Tabs, TabBar, SideNav, TableOfContents, Menu
 - **Theming:** dark and light, OKLCH tokens, and a theme generator (presets or any hue) that keeps contrast readable
-- **Hooks and utilities:** `useAnchoredPopup`, `useVirtualList`, `useTree`, `useSort`, money and month helpers, `cx` (Tailwind-aware class merging), `cva`
+- **Hooks and utilities:** `useAnchoredPopup`, `useVirtualList`, `useTree`, `useSort`, money, currency, month and date helpers, `cx` (Tailwind-aware class merging), `cva`
 
 Every component takes `className`, and a class you pass always overrides the component's default.
 
@@ -83,6 +83,14 @@ import { applyPreset, applyTheme, DEFAULT_THEME } from '@rinzai/zen';
 
 applyTheme(applyPreset(DEFAULT_THEME, 'ocean'));
 ```
+
+## Browser support
+
+Chrome and Edge 114+, Safari 17+ and Firefox 128+: the versions with the native Popover API that popups, menus and toasts are built on, and with what Tailwind v4 needs.
+
+- **Popups** are placed with CSS anchor positioning where the browser has it (Chrome 129+, Safari 26+, recent Firefox). Elsewhere Zen places them itself, the same way.
+- **Glass** is blurred live where there's a GPU and a mouse. On touch screens, without hardware acceleration, and with the OS's "reduce transparency", surfaces are solid instead.
+- **Motion** such as entry animations is left out where a browser lacks it, and for anyone who prefers reduced motion.
 
 ## Development
 

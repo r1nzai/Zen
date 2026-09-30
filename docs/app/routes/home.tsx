@@ -22,6 +22,7 @@ const TOC = [
     { id: 'usage', label: 'Usage' },
     { id: 'background', label: 'Background' },
     { id: 'theming', label: 'Theming' },
+    { id: 'browsers', label: 'Browser support' },
     { id: 'components', label: 'Components' },
 ];
 
@@ -150,6 +151,29 @@ body {
     --glow-strength: 1; /* 0 turns every glow off */
 }`}
                     />
+                </section>
+
+                <section className="flex flex-col gap-4">
+                    <h2 id="browsers">Browser support</h2>
+                    <p>
+                        Chrome and Edge 114+, Safari 17+ and Firefox 128+: the versions with the native Popover API that
+                        popups, menus and toasts are built on, and with what Tailwind v4 needs.
+                    </p>
+                    <ul className="text-muted-foreground flex list-disc flex-col gap-2 pl-5">
+                        <li>
+                            Popups are placed with CSS anchor positioning where the browser has it (Chrome 129+, Safari
+                            26+, recent Firefox). Elsewhere Zen places them itself, the same way.
+                        </li>
+                        <li>
+                            Glass is blurred live where there&rsquo;s a GPU and a mouse. On touch screens, without
+                            hardware acceleration, and with the OS&rsquo;s &ldquo;reduce transparency&rdquo;, surfaces
+                            are solid instead.
+                        </li>
+                        <li>
+                            Motion such as entry animations is left out where a browser lacks it, and for anyone who
+                            prefers reduced motion.
+                        </li>
+                    </ul>
                 </section>
 
                 <section className="flex flex-col gap-4">
