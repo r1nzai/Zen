@@ -1,9 +1,11 @@
+import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { FIELD } from '@zen/utils/styles';
 import { ComponentProps } from 'react';
 
 export default function Textarea(props: TextAreaProps) {
     const { className, ...rest } = props;
+    const field = useFieldProps(rest);
     return (
         <textarea
             className={cx(
@@ -14,6 +16,7 @@ export default function Textarea(props: TextAreaProps) {
                 className,
             )}
             {...rest}
+            {...field}
         />
     );
 }

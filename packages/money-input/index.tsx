@@ -25,7 +25,7 @@ export default function MoneyInput({
     const money = useMoneyInput(options);
     return (
         <div className={cx('zen__money-input flex flex-col gap-1', className)}>
-            <InputGroup invalid={!!money.error} className={cx(compact && 'h-7! border!')}>
+            <InputGroup invalid={!!money.error} className={cx(compact && 'h-7')}>
                 {start ?? (
                     <InputGroupAddon aria-hidden data-slot="symbol">
                         {money.symbol}

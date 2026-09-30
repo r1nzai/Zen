@@ -1,3 +1,4 @@
+import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { FIELD_WITHIN } from '@zen/utils/styles';
 import { ComponentProps } from 'react';
@@ -15,8 +16,9 @@ export default function InputGroup({ invalid, className, onMouseDown, ...rest }:
             className={cx(
                 'zen__input-group cursor-text',
                 FIELD_WITHIN,
-                'has-disabled:bg-muted! has-disabled:text-muted-foreground has-disabled:cursor-not-allowed',
-                invalid && 'border-destructive! focus-within:shadow-[0_0_0_3px_oklch(var(--destructive)/0.16)]!',
+                'has-disabled:bg-muted has-disabled:text-muted-foreground has-disabled:cursor-not-allowed',
+                // Red, focused or not: the focused state is named too, so it outranks the field's focus glow.
+                'data-invalid:border-destructive data-invalid:focus-within:border-destructive data-invalid:focus-within:shadow-[0_0_0_3px_oklch(var(--destructive)/0.16)]',
                 className,
             )}
             onMouseDown={(e) => {
@@ -37,6 +39,7 @@ export default function InputGroup({ invalid, className, onMouseDown, ...rest }:
 
 /** The input inside an InputGroup: borderless, filling the space between the addons. */
 export function InputGroupInput({ className, ...rest }: ComponentProps<'input'>) {
+    const field = useFieldProps(rest);
     return (
         <input
             className={cx(
@@ -44,6 +47,7 @@ export function InputGroupInput({ className, ...rest }: ComponentProps<'input'>)
                 className,
             )}
             {...rest}
+            {...field}
         />
     );
 }

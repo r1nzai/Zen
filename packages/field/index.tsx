@@ -23,24 +23,47 @@ export function useField() {
     return useContext(FieldContext);
 }
 
+/** Space-separated ids, each once. */
+const joinIds = (...lists: (string | undefined)[]) =>
+    [...new Set(lists.flatMap((l) => l?.split(/\s+/) ?? []).filter(Boolean))].join(' ') || undefined;
+
+/**
+ * For Zen's own controls: the Field's hint, error and invalid state, when the
+ * control is the one its label points at (its `id` is the Field's). Merged with
+ * the control's own props, so a direct child (which Field already passes them
+ * to) and a control nested in other markup end up the same.
+ */
+export function useFieldProps(props: { id?: string; 'aria-describedby'?: string; 'aria-invalid'?: unknown }) {
+    const field = useField();
+    if (!field || props.id !== field.id) return {};
+    return {
+        'aria-describedby': joinIds(props['aria-describedby'], field['aria-describedby']),
+        'aria-invalid': (props['aria-invalid'] as boolean | undefined) ?? field['aria-invalid'],
+    };
+}
+
 /**
  * A labelled form control with an optional hint and error. Links them for
  * screen readers: the control gets an id (if it has none), aria-describedby
- * for the hint and error, and aria-invalid while there's an error. The direct
- * child gets these as props; a control nested deeper reads them with useField.
+ * for the hint or error, and aria-invalid while there's an error. The error
+ * shows in place of the hint until it's fixed.
+ *
+ * The direct child gets these as props. When the control sits inside other
+ * markup (e.g. an amount beside a unit select), give it an id and pass the
+ * same id as `htmlFor`: Zen's controls with that id pick them up themselves.
  */
-export default function Field({ label, hint, error, children, className }: FieldProps) {
+export default function Field({ label, hint, error, htmlFor, children, className }: FieldProps) {
     const baseId = useId();
-    const child = isValidElement(children) ? (children as ReactElement<Record<string, unknown>>) : null;
-    const controlId = (child?.props.id as string | undefined) ?? `${baseId}-control`;
-    const hintId = hint ? `${baseId}-hint` : undefined;
+    // Linked through htmlFor: the child is a wrapper, not the control.
+    const child = !htmlFor && isValidElement(children) ? (children as ReactElement<Record<string, unknown>>) : null;
+    const controlId = htmlFor ?? (child?.props.id as string | undefined) ?? `${baseId}-control`;
+    const hintId = hint && !error ? `${baseId}-hint` : undefined;
     const errorId = error ? `${baseId}-error` : undefined;
-    const describedBy = cx(child?.props['aria-describedby'] as string | undefined, hintId, errorId).trim() || undefined;
     const labelId = `${baseId}-label`;
     const control: FieldControl = {
         id: controlId,
         labelId,
-        'aria-describedby': describedBy,
+        'aria-describedby': joinIds(hintId, errorId),
         'aria-invalid': error ? true : undefined,
     };
 
@@ -53,11 +76,14 @@ export default function Field({ label, hint, error, children, className }: Field
                 {child
                     ? cloneElement(child, {
                           id: controlId,
-                          'aria-describedby': describedBy,
+                          'aria-describedby': joinIds(
+                              child.props['aria-describedby'] as string | undefined,
+                              control['aria-describedby'],
+                          ),
                           'aria-invalid': error ? true : child.props['aria-invalid'],
                       })
                     : children}
-                {hint && (
+                {hintId && (
                     <p id={hintId} className="text-muted-foreground mt-0! text-xs">
                         {hint}
                     </p>
@@ -102,8 +128,10 @@ export interface FieldProps {
     label: ReactNode;
     /** Help text under the control. */
     hint?: ReactNode;
-    /** Error under the control; marks it invalid. */
+    /** Error under the control, in place of the hint; marks it invalid. */
     error?: ReactNode;
+    /** The control's id, when it isn't the direct child (it's inside other markup). */
+    htmlFor?: string;
     /** One control (Input, Select, MoneyInput…), or anything else (then link it yourself). */
     children: ReactNode;
     className?: string;

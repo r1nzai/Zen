@@ -1,3 +1,4 @@
+import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { CheckIcon } from '@zen/utils/status-icons';
@@ -55,6 +56,7 @@ export default function Select<V extends string>({
     const listRef = useRef<HTMLDivElement>(null);
     const generatedId = useId();
     const triggerId = id ?? generatedId;
+    const field = useFieldProps({ ...rest, id });
     const [active, setActive] = useState<string | null>(null);
     const typed = useRef({ text: '', at: 0 });
     // Labels of items rendered inside your own components (read once they mount).
@@ -144,6 +146,7 @@ export default function Select<V extends string>({
             <button
                 type="button"
                 {...rest}
+                {...field}
                 id={triggerId}
                 disabled={disabled}
                 aria-haspopup="listbox"

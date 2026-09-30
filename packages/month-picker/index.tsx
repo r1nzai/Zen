@@ -1,5 +1,6 @@
 import ChevronLeft from '@zen/icons/chevron-left';
 import ChevronRight from '@zen/icons/chevron-right';
+import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { formatMonth, type Month, monthNames } from '@zen/utils/month';
@@ -32,6 +33,7 @@ export default function MonthPicker({
         // Opening shows the chosen month's year.
         onOpenChange: (open) => open && value && setYear(Number(value.slice(0, 4))),
     });
+    const field = useFieldProps({ ...rest, id });
     const names = monthNames(locale);
     const inRange = (m: Month) => (!min || m >= min) && (!max || m <= max);
 
@@ -40,6 +42,7 @@ export default function MonthPicker({
             <button
                 type="button"
                 {...rest}
+                {...field}
                 id={id}
                 disabled={disabled}
                 {...popup.triggerProps}

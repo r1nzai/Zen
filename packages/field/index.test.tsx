@@ -51,7 +51,7 @@ describe('Field with Zen controls', () => {
             </Field>,
         );
         const field = screen.getByRole('button', { name: 'Currency' });
-        expect(field).toHaveAccessibleDescription('Used for every amount. Pick one.');
+        expect(field).toHaveAccessibleDescription('Pick one.');
         expect(field).toHaveAttribute('aria-invalid', 'true');
     });
 
@@ -84,5 +84,54 @@ describe('Field with Zen controls', () => {
         const field = screen.getByRole('combobox', { name: 'Account' });
         expect(field).toHaveAccessibleDescription('Choose an account.');
         expect(field).toHaveAttribute('aria-invalid', 'true');
+    });
+});
+
+describe('Field hint and error', () => {
+    it('shows the error in place of the hint until it is fixed', () => {
+        const { rerender } = render(
+            <Field label="Amount" hint="In rupees." error="Enter an amount.">
+                <Input />
+            </Field>,
+        );
+        expect(screen.queryByText('In rupees.')).toBeNull();
+        expect(screen.getByLabelText('Amount')).toHaveAccessibleDescription('Enter an amount.');
+        rerender(
+            <Field label="Amount" hint="In rupees.">
+                <Input />
+            </Field>,
+        );
+        expect(screen.getByLabelText('Amount')).toHaveAccessibleDescription('In rupees.');
+    });
+
+    it('htmlFor links a control inside other markup, and only that one', () => {
+        render(
+            <Field label="Tenure" hint="Up to 30 years." error="Too long." htmlFor="tenure">
+                <div>
+                    <Input id="tenure" />
+                    <Select aria-label="Unit" value="years" onChange={() => {}}>
+                        <SelectItem value="years">years</SelectItem>
+                    </Select>
+                </div>
+            </Field>,
+        );
+        const tenure = screen.getByLabelText('Tenure');
+        expect(tenure).toHaveAttribute('id', 'tenure');
+        expect(tenure).toHaveAccessibleDescription('Too long.');
+        expect(tenure).toHaveAttribute('aria-invalid', 'true');
+        const unit = screen.getByRole('button', { name: 'Unit' });
+        expect(unit).not.toHaveAttribute('aria-describedby');
+        expect(unit).not.toHaveAttribute('aria-invalid');
+    });
+
+    it("doesn't repeat ids for a direct child that also reads the Field", () => {
+        render(
+            <Field label="Note" hint="Optional.">
+                <Input aria-describedby="extra" />
+            </Field>,
+        );
+        const ids = screen.getByLabelText('Note').getAttribute('aria-describedby')!.split(' ');
+        expect(new Set(ids).size).toBe(ids.length);
+        expect(ids).toContain('extra');
     });
 });

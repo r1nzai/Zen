@@ -51,7 +51,10 @@ describe('InputGroup', () => {
             </InputGroup>,
         );
         expect(container.firstChild).toHaveAttribute('data-invalid');
-        expect(container.firstChild).toHaveClass('border-destructive!');
+        expect(container.firstChild).toHaveClass(
+            'data-invalid:border-destructive',
+            'data-invalid:focus-within:border-destructive',
+        );
     });
 
     it('keeps FIELD_WITHIN in step with FIELD (written out for Tailwind, so check they match)', async () => {

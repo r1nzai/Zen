@@ -1,9 +1,11 @@
+import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { FIELD } from '@zen/utils/styles';
 import { ComponentProps } from 'react';
 
 export default function Input(props: InputProps) {
     const { className, ...rest } = props;
+    const field = useFieldProps(rest);
     return (
         <input
             className={cx(
@@ -16,6 +18,7 @@ export default function Input(props: InputProps) {
                 className,
             )}
             {...rest}
+            {...field}
         />
     );
 }
