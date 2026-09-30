@@ -50,8 +50,14 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'card',
         title: 'Card',
         description: 'Glass panels for grouping content, and stats for single figures.',
-        parts: ['Card', 'Stat', 'StatRow'],
+        parts: ['Card', 'CardHeader', 'CardTitle', 'CardDescription', 'Stat', 'StatRow'],
         examples: ['Goal', 'Stats'],
+    },
+    {
+        slug: 'chip',
+        title: 'Chip',
+        description: 'Small pressable buttons for quick picks beside a field, like common tenures.',
+        parts: ['Chip'],
     },
     {
         slug: 'code-block',
@@ -90,6 +96,12 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Form', 'Pickers', 'Confirm'],
     },
     {
+        slug: 'disclosure',
+        title: 'Disclosure',
+        description: 'A button that shows and hides a section, like finished goals under a list.',
+        parts: ['Disclosure', 'DisclosureTrigger', 'DisclosureContent'],
+    },
+    {
         slug: 'editable-cell',
         title: 'Editable Cell',
         description: 'A value edited in place: shows the value, swaps in any editor on click or Enter.',
@@ -107,6 +119,13 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Header',
         description: 'A sticky glass bar across the top of the page.',
         parts: ['Header'],
+    },
+    {
+        slug: 'inset',
+        title: 'Inset',
+        description:
+            'A faint box set into a card: a tile for one figure, or a bordered panel for a result, tinted for good or bad news.',
+        parts: ['Inset'],
     },
     { slug: 'input', title: 'Input', description: 'Text fields in faint glass that glow on focus.', parts: ['Input'] },
     {
@@ -173,6 +192,12 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Progress Ring',
         description: 'Circular progress with room for a label in the middle.',
         parts: ['ProgressRing'],
+    },
+    {
+        slug: 'radio-cards',
+        title: 'Radio Cards',
+        description: 'Choose one of a few cards that each show their option, like a colour palette.',
+        parts: ['RadioCards', 'RadioCard'],
     },
     {
         slug: 'segmented',

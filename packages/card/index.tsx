@@ -20,6 +20,11 @@ export function CardHeader({ className, ...rest }: ComponentProps<'header'>) {
     return <header className={cx('mb-4 flex items-center justify-between gap-4', className)} {...rest} />;
 }
 
+/** A line under the CardTitle: what the card is about, or a figure's context ("₹12L at 8.5% · 20 years"). */
+export function CardDescription({ className, ...rest }: ComponentProps<'p'>) {
+    return <p className={cx('text-muted-foreground text-xs', className)} {...rest} />;
+}
+
 /** The card's title: an h4 by default; with `asChild`, your own heading (an h2, say) gets its look. */
 export function CardTitle({ asChild, className, children, ...rest }: CardTitleProps) {
     const props = { ...rest, className: cx('text-base font-semibold tracking-tight', className) };

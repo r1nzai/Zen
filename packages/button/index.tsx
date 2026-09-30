@@ -71,6 +71,8 @@ export const buttonVariants = cva(
                 sm: 'h-8 px-3 text-xs',
                 lg: 'h-11 px-6',
                 icon: 'size-9',
+                // A small square for a lone icon inside a row (e.g. "add item").
+                'icon-sm': 'size-6 rounded-md',
             },
         },
         defaultVariants: {

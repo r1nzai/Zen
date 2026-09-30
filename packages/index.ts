@@ -16,8 +16,18 @@ export { default as Avatar, type AvatarProps, cropImageToSquare, ImageCropError 
 export { default as Backdrop } from './backdrop';
 export { default as Badge } from './badge';
 export { default as Button, buttonVariants } from './button';
-export { default as Card, CardHeader, type CardProps, CardTitle, type CardTitleProps, Stat, StatRow } from './card';
+export {
+    default as Card,
+    CardDescription,
+    CardHeader,
+    type CardProps,
+    CardTitle,
+    type CardTitleProps,
+    Stat,
+    StatRow,
+} from './card';
 export { default as CodeBlock } from './code-block';
+export { default as Chip, type ChipProps } from './chip';
 export { default as Collapse } from './collapse';
 export {
     default as Combobox,
@@ -33,6 +43,7 @@ export {
 export { default as ConfirmDialog } from './confirm-dialog';
 export { default as Dialog, DialogClose, DialogFooter, type DialogProps } from './dialog';
 export { default as EditableCell, type EditableCellProps } from './editable-cell';
+export { default as Disclosure, DisclosureContent, type DisclosureProps, DisclosureTrigger } from './disclosure';
 export {
     default as Field,
     type FieldControl,
@@ -40,14 +51,17 @@ export {
     FormMessage,
     type FormMessageProps,
     useField,
+    useFieldProps,
 } from './field';
 export { default as Header } from './header';
+export { default as Inset, type InsetProps } from './inset';
 export * from './icons';
 export { default as Input } from './input';
 export { default as InputGroup, InputGroupAddon, InputGroupInput } from './input-group';
 export { default as Meter, type MeterProps } from './meter';
 export { default as MonthPicker, type MonthPickerProps } from './month-picker';
 export { default as MoneyInput, type MoneyInputOptions, type MoneyInputProps, useMoneyInput } from './money-input';
+export { RadioCard, type RadioCardProps, default as RadioCards, type RadioCardsProps } from './radio-cards';
 export { default as Pills, Pill, PillIndicator } from './pills';
 export { default as PageHeader } from './page-header';
 export {
