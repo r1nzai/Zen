@@ -12,7 +12,7 @@ export default function Header({ className, children, ...rest }: ComponentProps<
     return (
         <header
             className={cx(
-                'zen__header border-tint/5 bg-background/60 sticky top-0 z-40 border-b pt-[env(safe-area-inset-top)] backdrop-blur-xl',
+                'zen__header glow-edge border-tint/5 bg-background/60 sticky top-0 z-40 border-b pt-[env(safe-area-inset-top)] backdrop-blur-xl',
                 'pointer-coarse:bg-background/95 pointer-coarse:backdrop-blur-none',
                 className,
             )}

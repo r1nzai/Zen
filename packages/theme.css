@@ -122,22 +122,29 @@
         --gx: inherit;
         --gy: inherit;
         position: absolute;
-        /* Inside the box (over its 1px border), so it never causes overflow or scrollbars. */
+        /* Inside the box (along its border), so it never causes overflow or scrollbars. */
         inset: 0;
         border-radius: inherit;
-        padding: 1px;
+        /*
+         * A ring as wide as the element's own border on each side: a bar with
+         * only a bottom border (Header) lights only that line.
+         */
+        border-width: inherit;
+        border-style: solid;
+        border-color: transparent;
         background: radial-gradient(
             360px circle at var(--gx, -999px) var(--gy, -999px),
             oklch(var(--glow) / calc(0.7 * var(--glow-strength))),
             oklch(var(--glow-2) / calc(0.2 * var(--glow-strength))) 40%,
             transparent 65%
         );
+        background-origin: border-box;
         -webkit-mask:
-            linear-gradient(#000 0 0) content-box,
+            linear-gradient(#000 0 0) padding-box,
             linear-gradient(#000 0 0);
         -webkit-mask-composite: xor;
         mask:
-            linear-gradient(#000 0 0) content-box exclude,
+            linear-gradient(#000 0 0) padding-box exclude,
             linear-gradient(#000 0 0);
         pointer-events: none;
         z-index: 1;

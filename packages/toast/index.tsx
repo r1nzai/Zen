@@ -246,7 +246,7 @@ function Toast({
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             className={cx(
-                'zen__toast group glass glass-blur text-card-foreground relative flex items-start gap-3 overflow-hidden rounded-2xl border p-3.5 pr-10 select-none',
+                'zen__toast group glass glass-blur glow-edge text-card-foreground relative flex items-start gap-3 overflow-hidden rounded-2xl border p-3.5 pr-10 select-none',
                 'transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
                 firstShow && 'starting:translate-y-3 starting:scale-[0.97] starting:opacity-0',
                 toast.leaving && 'translate-x-6 opacity-0',

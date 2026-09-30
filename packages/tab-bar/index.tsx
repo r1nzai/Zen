@@ -13,7 +13,7 @@ export default function TabBar({ hideFrom = 'md', className, children, ...rest }
     return (
         <nav
             className={cx(
-                'zen__tab-bar glass glass-blur fixed inset-x-0 bottom-0 z-40 rounded-none border-x-0! border-b-0! pb-[env(safe-area-inset-bottom)]',
+                'zen__tab-bar glass glass-blur glow-edge fixed inset-x-0 bottom-0 z-40 rounded-none border-x-0! border-b-0! pb-[env(safe-area-inset-bottom)]',
                 hideFrom === 'sm' && 'sm:hidden',
                 hideFrom === 'md' && 'md:hidden',
                 hideFrom === 'lg' && 'lg:hidden',
