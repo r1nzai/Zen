@@ -46,11 +46,16 @@ export default function Pills({ className, ref, children, ...rest }: PillsProps)
 /** The glowing pill under the active item. Place it inside Pills; hidden while none is active. */
 export function PillIndicator({ className }: { className?: string }) {
     const box = useContext(PillContext);
-    if (!box) return null;
+    // Not measured yet (server HTML, before hydration): the active item wears the
+    // pill itself (.zen__pill-indicator[data-pending] in theme.css), so it shows at once.
+    if (!box) return <span key="pending" aria-hidden data-pending className="zen__pill-indicator hidden" />;
+    // Its own key: a new element that starts where it belongs, rather than the
+    // marker's, whose width and place would slide in from nothing.
     return (
         <span
+            key="measured"
             aria-hidden
-            className={cx(PILL_INDICATOR, className)}
+            className={cx('zen__pill-indicator', PILL_INDICATOR, className)}
             style={{ translate: `${box.x}px 0`, width: box.w }}
         />
     );

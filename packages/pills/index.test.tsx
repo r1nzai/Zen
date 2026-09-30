@@ -1,7 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { ComponentProps } from 'react';
+import { renderToString } from 'react-dom/server';
 
 import Pills, { Pill, PillIndicator } from './index';
+
+// The sliding pill, once measured (before that, only a pending marker).
+const DRAWN = '.zen__pill-indicator:not([data-pending])';
 
 describe('Pills', () => {
     it('adds no role of its own: wrapped in a nav, it is navigation with the current page marked', () => {
@@ -30,14 +34,14 @@ describe('Pills', () => {
                 </Pill>
             </Pills>,
         );
-        expect(container.querySelector('[aria-hidden]')).toBeNull();
+        expect(container.querySelector(DRAWN)).toBeNull();
         rerender(
             <Pills>
                 <PillIndicator />
                 <Pill href="/a">A</Pill>
             </Pills>,
         );
-        await waitFor(() => expect(container.querySelector('[aria-hidden]')).toBeNull());
+        await waitFor(() => expect(container.querySelector(DRAWN)).toBeNull());
         rerender(
             <Pills>
                 <PillIndicator />
@@ -46,7 +50,20 @@ describe('Pills', () => {
                 </Pill>
             </Pills>,
         );
-        await waitFor(() => expect(container.querySelector('[aria-hidden]')).not.toBeNull());
+        await waitFor(() => expect(container.querySelector(DRAWN)).not.toBeNull());
+    });
+
+    it('before it is measured, leaves a marker for the active item to wear the pill (server HTML)', () => {
+        const html = renderToString(
+            <Pills>
+                <PillIndicator />
+                <Pill href="/a" active>
+                    A
+                </Pill>
+            </Pills>,
+        );
+        expect(html).toContain('data-pending');
+        expect(html).not.toContain('translate');
     });
 
     it('follows a current page set outside React (a router flipping aria-current)', async () => {
@@ -58,10 +75,10 @@ describe('Pills', () => {
                 </Pill>
             </Pills>,
         );
-        expect(container.querySelector('[aria-hidden]')).toBeNull();
+        expect(container.querySelector(DRAWN)).toBeNull();
         screen.getByRole('link', { name: 'A' }).setAttribute('aria-current', 'page');
         // Noticed through a MutationObserver, which reports asynchronously.
-        await waitFor(() => expect(container.querySelector('[aria-hidden]')).not.toBeNull());
+        await waitFor(() => expect(container.querySelector(DRAWN)).not.toBeNull());
     });
 
     it('styles a custom link with asChild, keeping its own props', () => {
