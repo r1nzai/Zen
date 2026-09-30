@@ -62,7 +62,7 @@ export default function App() {
 - **Navigation:** Header, Pills, Tabs, TabBar, SideNav, TableOfContents, Menu
 - **Icons:** outline, on a 24px grid in the current text colour: Plus, CalendarIcon, Sun, Moon, Lock, Logout, Settings, Search, XMark, Ellipsis, chevrons, and the status icons (Check, AlertTriangle, InfoCircle)
 - **Theming:** dark and light, OKLCH tokens, and a theme generator (presets or any hue) that keeps contrast readable
-- **Hooks and utilities:** `themeWave` (the theme spreads from the switch like a drop falling into water: ripples, glints and a rainbow edge, drawn on the GPU), `useAnchoredPopup`, `useVirtualList`, `useTree`, `useSort`, money, currency, month and date helpers, `cx` (Tailwind-aware class merging), `cva`
+- **Hooks and utilities:** `themeWave` (the theme spreads from the switch like a drop falling into water: ripples, glints and a rainbow edge, drawn on the GPU; `prepareThemeWave` readies it when the pointer reaches your own switch), `useAnchoredPopup`, `useVirtualList`, `useTree`, `useSort`, money, currency, month and date helpers, `cx` (Tailwind-aware class merging), `cva`
 
 Every component takes `className`, and a class you pass always overrides the component's default.
 

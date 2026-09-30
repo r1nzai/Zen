@@ -1,5 +1,5 @@
 import { cx } from '@zen/utils/cx';
-import { themeWave } from '@zen/utils/theme-wave';
+import { prepareThemeWave, themeWave } from '@zen/utils/theme-wave';
 import { useSyncExternalStore } from 'react';
 import { flushSync } from 'react-dom';
 
@@ -46,6 +46,8 @@ export default function ThemeToggle({ storageKey = 'theme', className }: ThemeTo
         <button
             type="button"
             aria-label={`Switch to ${next} theme`}
+            onPointerEnter={prepareThemeWave}
+            onFocus={prepareThemeWave}
             onClick={(e) =>
                 themeWave(() => {
                     const root = document.documentElement;

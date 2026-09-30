@@ -197,6 +197,26 @@ function srgb(triplet: string): number[] {
     return oklchToLinearRgb(triplet).map((c) => (c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055));
 }
 
+/** Whether a switch draws the water; otherwise the theme just changes (see themeWave). */
+function wavy(): boolean {
+    const reduced =
+        window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ||
+        document.documentElement.classList.contains('reduce-motion');
+    return !reduced && !!document.startViewTransition && applyGraphicsMode() !== 'lite';
+}
+
+/**
+ * Gets the water ready before a switch, e.g. when the pointer or focus reaches
+ * the button: its shader is compiled and drawn once, off the page. The GPU
+ * driver otherwise finishes that work on the first frame of the first switch,
+ * which then hitches.
+ */
+export function prepareThemeWave(): void {
+    if (water !== undefined || !wavy()) return;
+    const gpu = waterCanvas();
+    gpu?.gl.drawArrays(gpu.gl.TRIANGLES, 0, 3);
+}
+
 /**
  * Changes the theme (`change` swaps the classes or variables) like a drop
  * falling into water at `from` (an element's centre, or a point; the screen's
@@ -206,13 +226,12 @@ function srgb(triplet: string): number[] {
  * drawn on the GPU, over the page, which itself doesn't bend. Without a GPU
  * (lite graphics, or no WebGL), without view transitions, or with reduced
  * motion (the OS setting or html.reduce-motion), the theme just changes: drawn
- * on the CPU, even a plain full-screen circle stutters.
+ * on the CPU, even a plain full-screen circle stutters. Call prepareThemeWave
+ * when the pointer or focus reaches the switch, so the first switch is smooth.
  */
 export function themeWave(change: () => void, from?: Element | { x: number; y: number } | null): void {
     const root = document.documentElement;
-    const reduced =
-        window.matchMedia?.('(prefers-reduced-motion: reduce)').matches || root.classList.contains('reduce-motion');
-    const gpu = reduced || !document.startViewTransition || applyGraphicsMode() === 'lite' ? null : waterCanvas();
+    const gpu = wavy() ? waterCanvas() : null;
     if (!gpu) {
         change();
         return;

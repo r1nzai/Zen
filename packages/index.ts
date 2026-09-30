@@ -181,7 +181,7 @@ export {
     type ThemeSettings,
     themeVars,
 } from './utils/theme';
-export { themeWave } from './utils/theme-wave';
+export { prepareThemeWave, themeWave } from './utils/theme-wave';
 export { useHydrated } from './utils/useHydrated';
 export {
     addMonths,

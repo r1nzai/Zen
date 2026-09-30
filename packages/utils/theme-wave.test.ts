@@ -133,4 +133,25 @@ describe('themeWave', () => {
         themeWave(into('0.15 0 0'), { x: 100, y: 200 });
         expect(inOldPage).toBe(false);
     });
+
+    it('readies the water ahead of a switch: compiled and drawn once, off the page, and only when a switch would draw it', async () => {
+        vi.resetModules(); // a page that hasn't made the water yet
+        const { prepareThemeWave } = await import('./theme-wave');
+        const drawArrays = vi.fn();
+        const gl = new Proxy({}, { get: (_, key) => (key === 'drawArrays' ? drawArrays : () => ({})) });
+        const getContext = vi
+            .spyOn(HTMLCanvasElement.prototype, 'getContext')
+            .mockReturnValue(gl as unknown as RenderingContext);
+
+        document.documentElement.setAttribute('data-zen-graphics', 'lite');
+        prepareThemeWave();
+        expect(getContext).not.toHaveBeenCalled();
+
+        document.documentElement.setAttribute('data-zen-graphics', 'full');
+        prepareThemeWave();
+        prepareThemeWave();
+        expect(getContext).toHaveBeenCalledOnce();
+        expect(drawArrays).toHaveBeenCalledOnce();
+        expect((getContext.mock.contexts[0] as HTMLCanvasElement).isConnected).toBe(false);
+    });
 });
