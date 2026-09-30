@@ -1,6 +1,6 @@
 import { cx } from '@zen/utils/cx';
 import { FieldChevron } from '@zen/utils/field-chevron';
-import { ComponentProps, createContext, ReactNode, useContext, useId, useState } from 'react';
+import { ComponentProps, createContext, ReactNode, useContext, useEffect, useId, useRef, useState } from 'react';
 
 interface DisclosureContextValue {
     open: boolean;
@@ -41,7 +41,8 @@ export function DisclosureTrigger({ className, onClick, children, ...rest }: Com
         <button
             type="button"
             aria-expanded={open}
-            aria-controls={contentId}
+            // The content is only in the page while open (or folding shut).
+            aria-controls={open ? contentId : undefined}
             onClick={(e) => {
                 onClick?.(e);
                 if (!e.defaultPrevented) setOpen(!open);
@@ -64,18 +65,49 @@ export function DisclosureTrigger({ className, onClick, children, ...rest }: Com
 
 /**
  * What the trigger shows and hides. It grows open and folds shut (the height
- * animates, the content fades and settles); while closed it stays in the page
- * but inert, so it can't be focused and screen readers skip it. className goes
- * on the content itself.
+ * animates, the content fades and settles). While closed it isn't rendered at
+ * all, so what's inside costs nothing and can't be found, focused or read; it
+ * mounts as it opens and unmounts once it has folded shut. className goes on
+ * the content itself.
  */
 export function DisclosureContent({ className, children, ...rest }: ComponentProps<'div'>) {
     const { open, contentId } = useDisclosure('DisclosureContent');
+    const ref = useRef<HTMLDivElement>(null);
+    // In the page while open, and while folding shut after.
+    const [present, setPresent] = useState(open);
+    // Mounted by opening (not open from the start), so it grows in rather than appearing.
+    const [grows, setGrows] = useState(false);
+    if (open && !present) {
+        setPresent(true);
+        setGrows(true);
+    }
+
+    // Once closed, leave when its own transitions end (at once without any, e.g. reduced
+    // motion off in a browser without them). Reopening meanwhile cancels them and keeps it.
+    useEffect(() => {
+        const el = ref.current;
+        if (open || !present || !el) return;
+        let live = true;
+        Promise.all((el.getAnimations?.() ?? []).map((a) => a.finished)).then(
+            () => live && setPresent(false),
+            () => {},
+        );
+        return () => {
+            live = false;
+        };
+    }, [open, present]);
+
+    if (!present) return null;
     return (
         <div
+            ref={ref}
             id={contentId}
             data-open={open || undefined}
             inert={!open}
-            className="zen__disclosure-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] data-open:grid-rows-[1fr]"
+            className={cx(
+                'zen__disclosure-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] data-open:grid-rows-[1fr]',
+                grows && 'data-open:starting:grid-rows-[0fr]',
+            )}
         >
             {/* The grid row sizes this box from 0 to its content's height; overflow clips it on the way. */}
             <div className="min-h-0 overflow-hidden">
@@ -83,6 +115,7 @@ export function DisclosureContent({ className, children, ...rest }: ComponentPro
                     className={cx(
                         '-translate-y-1 pt-2 opacity-0 transition-[opacity,translate] duration-300 ease-out',
                         'in-data-open:translate-y-0 in-data-open:opacity-100',
+                        grows && 'in-data-open:starting:-translate-y-1 in-data-open:starting:opacity-0',
                         className,
                     )}
                     {...rest}

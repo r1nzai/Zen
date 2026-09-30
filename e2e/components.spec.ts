@@ -89,6 +89,24 @@ test('toast: stacks into a deck that fans out when pointed at, and swipes away',
     await expect(page.getByText('Your changes are stored.')).toHaveCount(0);
 });
 
+test('disclosure: grows open, folds shut, and leaves the page once shut', async ({ page }) => {
+    errors = await open(page, '/components/disclosure/');
+    const trigger = page.getByRole('button', { name: /Past/ }).first();
+    await expect(page.getByText('Trip to Goa')).toHaveCount(0);
+    await trigger.click();
+    const content = page.locator('.zen__disclosure-content');
+    const heights: number[] = [];
+    for (let i = 0; i < 8; i++) {
+        heights.push((await content.boundingBox())?.height ?? 0);
+        await page.waitForTimeout(40);
+    }
+    expect(heights[0]).toBeLessThan(heights.at(-1)!); // grew, rather than appearing at full height
+    await expect(page.getByText('Trip to Goa')).toBeVisible();
+    await trigger.click();
+    await expect(content).toHaveAttribute('inert', ''); // still there while it folds
+    await expect(page.getByText('Trip to Goa')).toHaveCount(0);
+});
+
 test('table: a heading sorts, and sorts back the other way', async ({ page }) => {
     errors = await open(page, '/components/table/');
     const table = page.getByRole('region', { name: 'Repayment schedule' });
