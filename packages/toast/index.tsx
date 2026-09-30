@@ -107,6 +107,23 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
     const [hovered, setHovered] = useState(false);
     const [focused, setFocused] = useState(false);
 
+    // F8 moves focus to the notifications (while there are any), as in Radix and native apps:
+    // a keyboard user can reach a toast's action or close button from anywhere.
+    const viewport = useRef<HTMLElement | null>(null);
+    const setViewport = useCallback((el: HTMLElement | null) => {
+        viewport.current = el;
+        showInTopLayer(el);
+    }, []);
+    useEffect(() => {
+        const onKeyDown = (e: globalThis.KeyboardEvent) => {
+            if (e.key !== 'F8' || !viewport.current?.querySelector('.zen__toast:not([inert])')) return;
+            e.preventDefault();
+            viewport.current.focus();
+        };
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+    }, []);
+
     const dismiss = useCallback((id: number, how: 'fade' | 'swipe' = 'fade') => {
         setToasts((ts) => ts.map((t) => (t.id === id ? { ...t, leaving: how } : t)));
         setTimeout(() => {
@@ -170,9 +187,10 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
             {host &&
                 createPortal(
                     <section
-                        ref={showInTopLayer}
+                        ref={setViewport}
                         popover="manual"
-                        aria-label="Notifications"
+                        tabIndex={-1}
+                        aria-label="Notifications (F8)"
                         data-expanded={expanded || undefined}
                         onMouseEnter={() => setHovered(true)}
                         onMouseLeave={() => setHovered(false)}
@@ -182,7 +200,7 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
                         }}
                         className={cx(
                             // The popover's own defaults (centred, bordered, opaque) reset to a plain corner box.
-                            'zen__toast-viewport fixed top-auto right-4 bottom-[calc(var(--zen-toast-offset,1rem)+env(safe-area-inset-bottom))] left-auto z-50 m-0 w-[calc(100vw-2rem)] overflow-visible border-0 bg-transparent p-0 text-inherit md:bottom-5 md:w-[24rem]',
+                            'zen__toast-viewport fixed top-auto right-4 bottom-[calc(var(--zen-toast-offset,1rem)+env(safe-area-inset-bottom))] left-auto z-50 m-0 w-[calc(100vw-2rem)] overflow-visible border-0 bg-transparent p-0 text-inherit outline-hidden md:bottom-5 md:w-[24rem]',
                             // Its height follows the deck, so hovering the gaps between fanned-out toasts keeps it open.
                             'transition-[height] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
                             viewportClassName,
@@ -316,6 +334,17 @@ function Toast({
     useEffect(() => {
         if (ref.current?.isConnected) entered.add(toast.id);
     }, [entered, toast.id]);
+    /*
+     * Read out by a live region of its own, empty when it mounts and filled a frame
+     * later: screen readers miss text that arrives together with its live region.
+     * Once: not again when it moves to another host.
+     */
+    const [announced, setAnnounced] = useState(false);
+    useEffect(() => {
+        if (!firstShow) return;
+        let frame = requestAnimationFrame(() => (frame = requestAnimationFrame(() => setAnnounced(true))));
+        return () => cancelAnimationFrame(frame);
+    }, [firstShow]);
     if (!clocks.has(toast.id)) clocks.set(toast.id, { spent: 0, since: null });
     const clock = clocks.get(toast.id)!;
     // Time used when this copy mounted, including a stretch still running (a move renders
@@ -379,97 +408,103 @@ function Toast({
     };
 
     return (
-        <div
-            ref={ref}
-            role={toast.tone === 'error' ? 'alert' : 'status'}
-            aria-atomic="true"
-            data-front={layout.front || undefined}
-            data-behind={(!layout.front && layout.height !== undefined) || undefined}
-            inert={layout.hidden || !!toast.leaving}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerCancel={onPointerUp}
-            className={cx(
-                'zen__toast group glass glass-blur glow-edge text-card-foreground absolute! inset-x-0 bottom-0 origin-bottom touch-pan-y overflow-hidden rounded-2xl border select-none',
-                'transition-[transform,translate,opacity,height] duration-400 ease-[cubic-bezier(0.2,0.8,0.2,1)] data-swiping:transition-none',
-                firstShow && 'starting:translate-y-full starting:opacity-0',
-                layout.hidden && 'opacity-0',
-                toast.leaving === 'fade' && 'translate-y-[35%] opacity-0',
-                toast.leaving === 'swipe' && 'translate-x-full opacity-0',
-                tone.ring,
-                tone.glow,
-            )}
-            style={{
-                zIndex: z,
-                height: layout.height,
-                transform: `translateX(var(--zen-swipe, 0px)) translateY(${layout.y}px) scale(${layout.scale})`,
-            }}
-        >
-            {/* Faded out on the cards behind, whose edges are all that show. */}
+        <>
             <div
-                ref={body}
-                className="flex items-start gap-3 p-3.5 pr-10 transition-opacity duration-300 group-data-behind:opacity-0"
+                ref={ref}
+                role={toast.tone === 'error' ? 'alert' : 'status'}
+                // Announced by the live region beside it instead (see above).
+                aria-live="off"
+                data-front={layout.front || undefined}
+                data-behind={(!layout.front && layout.height !== undefined) || undefined}
+                inert={layout.hidden || !!toast.leaving}
+                onPointerDown={onPointerDown}
+                onPointerMove={onPointerMove}
+                onPointerUp={onPointerUp}
+                onPointerCancel={onPointerUp}
+                className={cx(
+                    'zen__toast group glass glass-blur glow-edge text-card-foreground absolute! inset-x-0 bottom-0 origin-bottom touch-pan-y overflow-hidden rounded-2xl border select-none',
+                    'transition-[transform,translate,opacity,height] duration-400 ease-[cubic-bezier(0.2,0.8,0.2,1)] data-swiping:transition-none',
+                    firstShow && 'starting:translate-y-full starting:opacity-0',
+                    layout.hidden && 'opacity-0',
+                    toast.leaving === 'fade' && 'translate-y-[35%] opacity-0',
+                    toast.leaving === 'swipe' && 'translate-x-full opacity-0',
+                    tone.ring,
+                    tone.glow,
+                )}
+                style={{
+                    zIndex: z,
+                    height: layout.height,
+                    transform: `translateX(var(--zen-swipe, 0px)) translateY(${layout.y}px) scale(${layout.scale})`,
+                }}
             >
-                <span
-                    className={cx('mt-0.5 grid size-8 shrink-0 place-items-center rounded-full', tone.badge)}
-                    aria-hidden
+                {/* Faded out on the cards behind, whose edges are all that show. */}
+                <div
+                    ref={body}
+                    className="flex items-start gap-3 p-3.5 pr-10 transition-opacity duration-300 group-data-behind:opacity-0"
                 >
-                    <Icon className="size-4" />
-                </span>
-                <div className="flex min-w-0 flex-1 flex-col gap-0.5 pt-0.5">
-                    <div className="text-sm font-semibold">{toast.title}</div>
-                    {toast.description && (
-                        <div className="text-muted-foreground text-sm leading-5">{toast.description}</div>
-                    )}
-                    {toast.action && (
-                        <button
-                            type="button"
-                            onClick={() => {
-                                toast.action?.onClick();
-                                onDismiss(toast.id);
-                            }}
-                            className="border-tint/10 bg-tint/[0.06] hover:bg-tint/[0.12] focus-visible:ring-ring/50 mt-2 self-start rounded-lg border px-3 py-1 text-xs font-medium outline-hidden transition-colors focus-visible:ring-2"
-                        >
-                            {toast.action.label}
-                        </button>
-                    )}
-                </div>
-                <button
-                    type="button"
-                    aria-label="Dismiss"
-                    onClick={() => onDismiss(toast.id)}
-                    className="text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute top-2.5 right-2.5 grid size-7 place-items-center rounded-lg outline-hidden transition-colors focus-visible:ring-2"
-                >
-                    <svg
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        className="size-3.5"
+                    <span
+                        className={cx('mt-0.5 grid size-8 shrink-0 place-items-center rounded-full', tone.badge)}
                         aria-hidden
                     >
-                        <path d="m4 4 8 8M12 4l-8 8" />
-                    </svg>
-                </button>
+                        <Icon className="size-4" />
+                    </span>
+                    <div className="flex min-w-0 flex-1 flex-col gap-0.5 pt-0.5">
+                        <div className="text-sm font-semibold">{toast.title}</div>
+                        {toast.description && (
+                            <div className="text-muted-foreground text-sm leading-5">{toast.description}</div>
+                        )}
+                        {toast.action && (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    toast.action?.onClick();
+                                    onDismiss(toast.id);
+                                }}
+                                className="border-tint/10 bg-tint/[0.06] hover:bg-tint/[0.12] focus-visible:ring-ring/50 mt-2 cursor-pointer self-start rounded-lg border px-3 py-1 text-xs font-medium outline-hidden transition-colors focus-visible:ring-2"
+                            >
+                                {toast.action.label}
+                            </button>
+                        )}
+                    </div>
+                    <button
+                        type="button"
+                        aria-label="Dismiss"
+                        onClick={() => onDismiss(toast.id)}
+                        className="text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute top-2.5 right-2.5 grid size-7 cursor-pointer place-items-center rounded-lg outline-hidden transition-colors focus-visible:ring-2"
+                    >
+                        <svg
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            className="size-3.5"
+                            aria-hidden
+                        >
+                            <path d="m4 4 8 8M12 4l-8 8" />
+                        </svg>
+                    </button>
+                </div>
+                {/* Time left before it goes away; waits while the deck is open, like the toast itself. */}
+                {toast.timeout > 0 && (
+                    <span
+                        aria-hidden
+                        className={cx(
+                            'zen__toast-timer absolute bottom-0 left-0 h-0.5 w-full origin-left opacity-60 transition-opacity group-data-behind:opacity-0',
+                            tone.bar,
+                        )}
+                        // Picks up where it was after a move between hosts.
+                        style={{
+                            animationDuration: `${toast.timeout}ms`,
+                            animationDelay: `${-usedAtMount}ms`,
+                            animationPlayState: paused ? 'paused' : undefined,
+                        }}
+                    />
+                )}
             </div>
-            {/* Time left before it goes away; waits while the deck is open, like the toast itself. */}
-            {toast.timeout > 0 && (
-                <span
-                    aria-hidden
-                    className={cx(
-                        'zen__toast-timer absolute bottom-0 left-0 h-0.5 w-full origin-left opacity-60 transition-opacity group-data-behind:opacity-0',
-                        tone.bar,
-                    )}
-                    // Picks up where it was after a move between hosts.
-                    style={{
-                        animationDuration: `${toast.timeout}ms`,
-                        animationDelay: `${-usedAtMount}ms`,
-                        animationPlayState: paused ? 'paused' : undefined,
-                    }}
-                />
-            )}
-        </div>
+            <span className="sr-only" aria-live={toast.tone === 'error' ? 'assertive' : 'polite'} aria-atomic="true">
+                {announced && [toast.title, toast.description].filter(Boolean).join('. ')}
+            </span>
+        </>
     );
 }

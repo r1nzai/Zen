@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { useTypeahead } from '@zen/utils/typeahead';
 import { useGraphicsMode } from '@zen/utils/graphics';
 import { Slot } from '@zen/utils/slot';
 import { anchoredStyle, useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
@@ -59,7 +60,7 @@ export function MenuTrigger({ asChild, style, children, ...rest }: MenuTriggerPr
     };
     if (asChild) return <Slot {...(props as ComponentProps<'a'>)}>{children}</Slot>;
     return (
-        <button type="button" {...props}>
+        <button type="button" {...props} className={cx('cursor-pointer', props.className)}>
             {children}
         </button>
     );
@@ -68,11 +69,20 @@ export function MenuTrigger({ asChild, style, children, ...rest }: MenuTriggerPr
 /** The menu panel: glass, below the button (above it if there's no room), lined up with its end edge by default. */
 export function MenuContent({ align = 'end', offset = 6, className, style, children, ...rest }: MenuContentProps) {
     const { popup, triggerId } = useMenu('MenuContent');
+    const typeahead = useTypeahead();
 
     const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-        const items = Array.from(popup.popupRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []);
+        const items = Array.from(
+            popup.popupRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not(:disabled)') ?? [],
+        );
         const i = items.indexOf(document.activeElement as HTMLElement);
         const last = items.length - 1;
+        // Type to jump to the first item whose label starts with what's typed.
+        const text = typeahead(e);
+        if (text) {
+            items.find((item) => item.textContent?.trim().toLowerCase().startsWith(text))?.focus();
+            return;
+        }
         // Nothing focused yet (just opened): Down starts at the top, Up at the bottom.
         const next = { ArrowDown: i + 1, ArrowUp: i === -1 ? last : i - 1, Home: 0, End: last }[e.key];
         if (next === undefined) return;
@@ -103,7 +113,7 @@ export function MenuContent({ align = 'end', offset = 6, className, style, child
 }
 
 const ITEM =
-    'flex w-full cursor-default items-center gap-3 rounded-lg px-3 py-2 text-left text-sm outline-hidden select-none hover:bg-tint/[0.07] focus:bg-tint/[0.07]';
+    'flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-left text-sm outline-hidden select-none hover:bg-tint/[0.07] focus:bg-tint/[0.07] disabled:cursor-not-allowed disabled:opacity-50';
 
 /**
  * One choice in a Menu: closes the menu, then runs `onSelect`. An `icon` sits

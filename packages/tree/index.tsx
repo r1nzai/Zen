@@ -1,6 +1,16 @@
 import { TableCell, TableCellProps, TableRow } from '@zen/table';
 import { cx } from '@zen/utils/cx';
-import { ComponentProps, CSSProperties, ReactNode, useCallback, useMemo, useRef, useState } from 'react';
+import {
+    ComponentProps,
+    CSSProperties,
+    FocusEvent,
+    KeyboardEvent,
+    ReactNode,
+    useCallback,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 
 /** One visible row of a tree. */
 export interface TreeRowData<T> {
@@ -11,12 +21,20 @@ export interface TreeRowData<T> {
     parentKey: string | null;
     hasChildren: boolean;
     expanded: boolean;
+    /** Its place among its siblings (1-based), and how many siblings there are. */
+    position: number;
+    siblings: number;
 }
 
 /**
  * Headless tree for tables and lists: turns nested items into the rows that
  * are visible (children of collapsed rows are skipped), and expands/collapses
  * them. With the Tree* parts, children grow in and shrink away smoothly.
+ *
+ * Put `tree.tableProps` on the Table: it's then a tree grid (WAI-ARIA), one tab
+ * stop whose rows the keyboard moves between. Up and Down go row to row, Home
+ * and End to the first and last, Right opens a row (or goes to its first
+ * child), Left closes it (or goes to its parent).
  */
 export function useTree<T>({ items, getKey, getChildren, defaultExpanded = true, rowHeight = 36 }: UseTreeOptions<T>) {
     // Rows whose expanded state differs from the default.
@@ -31,14 +49,23 @@ export function useTree<T>({ items, getKey, getChildren, defaultExpanded = true,
     const rows = useMemo(() => {
         const out: TreeRowData<T>[] = [];
         const walk = (list: readonly T[], depth: number, parentKey: string | null) => {
-            for (const item of list) {
+            list.forEach((item, i) => {
                 const key = getKey(item);
                 const children = getChildren(item);
                 const hasChildren = !!children?.length;
                 const expanded = hasChildren && isExpanded(key);
-                out.push({ item, key, depth, parentKey, hasChildren, expanded });
+                out.push({
+                    item,
+                    key,
+                    depth,
+                    parentKey,
+                    hasChildren,
+                    expanded,
+                    position: i + 1,
+                    siblings: list.length,
+                });
                 if (expanded) walk(children!, depth + 1, key);
-            }
+            });
         };
         walk(items, 0, null);
         return out;
@@ -110,12 +137,48 @@ export function useTree<T>({ items, getKey, getChildren, defaultExpanded = true,
         }
     };
 
-    /** Props for a row's <tr>: tree semantics and the open/close animation. */
+    // The row the grid's one tab stop is on: the last one focused, while it's still shown.
+    const [current, setCurrent] = useState<string | null>(null);
+    const tabStop = rows.some((r) => r.key === current) ? current : (rows[0]?.key ?? null);
+    const open = (row: TreeRowData<T>) => row.expanded && closing !== row.key;
+
+    /** Keyboard for a focused row (keys pressed inside its cells, e.g. in an input, are left alone). */
+    const onRowKeyDown = (row: TreeRowData<T>, e: KeyboardEvent<HTMLElement>) => {
+        if (e.target !== e.currentTarget) return;
+        const i = rows.indexOf(row);
+        let to: TreeRowData<T> | undefined;
+        if (e.key === 'ArrowDown') to = rows[i + 1];
+        else if (e.key === 'ArrowUp') to = rows[i - 1];
+        else if (e.key === 'Home') to = rows[0];
+        else if (e.key === 'End') to = rows.at(-1);
+        else if (e.key === 'ArrowRight' && row.hasChildren) {
+            if (!open(row)) toggle(row.key);
+            else to = rows[i + 1];
+        } else if (e.key === 'ArrowLeft') {
+            if (open(row)) toggle(row.key);
+            else to = rows.find((r) => r.key === row.parentKey);
+        } else return;
+        e.preventDefault();
+        if (!to) return;
+        const grid = e.currentTarget.closest('[role="treegrid"], table');
+        grid?.querySelector<HTMLElement>(`[data-tree-key="${CSS.escape(to.key)}"]`)?.focus();
+    };
+
+    /** Props for a row's <tr>: tree semantics, keyboard and the open/close animation. */
     const rowProps = (row: TreeRowData<T>) => ({
         'aria-level': row.depth + 1,
-        'aria-expanded': row.hasChildren ? row.expanded : undefined,
+        'aria-expanded': row.hasChildren ? open(row) : undefined,
+        'aria-posinset': row.position,
+        'aria-setsize': row.siblings,
         'data-depth': row.depth,
+        'data-tree-key': row.key,
+        tabIndex: row.key === tabStop ? 0 : -1,
+        onFocus: (e: FocusEvent<HTMLElement>) => {
+            if (e.target === e.currentTarget) setCurrent(row.key);
+        },
+        onKeyDown: (e: KeyboardEvent<HTMLElement>) => onRowKeyDown(row, e),
         className: cx(
+            'outline-hidden focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring/60',
             opened && row.parentKey === opened.key && 'zen__tree-row-enter',
             closing && row.parentKey === closing && 'zen__tree-row-exit',
         ),
@@ -126,10 +189,11 @@ export function useTree<T>({ items, getKey, getChildren, defaultExpanded = true,
         },
     });
 
-    /** Props for a row's TreeToggle. */
+    /** Props for a row's TreeToggle: for the pointer (the keyboard opens rows with the arrows). */
     const toggleProps = (row: TreeRowData<T>) => ({
-        expanded: row.expanded && closing !== row.key,
+        expanded: open(row),
         onToggle: () => toggle(row.key),
+        tabIndex: -1,
     });
 
     return {
@@ -142,6 +206,8 @@ export function useTree<T>({ items, getKey, getChildren, defaultExpanded = true,
         expandAll: () => setToggled(defaultExpanded ? new Set() : new Set(parentKeys())),
         /** Closes every row. */
         collapseAll: () => setToggled(defaultExpanded ? new Set(parentKeys()) : new Set()),
+        /** For the Table: a tree grid. */
+        tableProps: { role: 'treegrid' as const },
         rowProps,
         toggleProps,
         rowHeight,
@@ -150,10 +216,25 @@ export function useTree<T>({ items, getKey, getChildren, defaultExpanded = true,
 
 export type Tree<T> = ReturnType<typeof useTree<T>>;
 
-/** A table row wired to useTree: tree semantics (aria-level, aria-expanded) and the open/close animation. */
-export function TreeRow<T>({ row, tree, className, style, ...rest }: TreeRowProps<T>) {
+/** A table row wired to useTree: tree semantics, the keyboard and the open/close animation. */
+export function TreeRow<T>({ row, tree, className, style, onFocus, onKeyDown, ...rest }: TreeRowProps<T>) {
     const p = tree.rowProps(row);
-    return <TableRow {...rest} {...p} className={cx(p.className, className)} style={{ ...p.style, ...style }} />;
+    return (
+        <TableRow
+            {...rest}
+            {...p}
+            onFocus={(e) => {
+                onFocus?.(e);
+                p.onFocus(e);
+            }}
+            onKeyDown={(e) => {
+                onKeyDown?.(e);
+                if (!e.defaultPrevented) p.onKeyDown(e);
+            }}
+            className={cx(p.className, className)}
+            style={{ ...p.style, ...style }}
+        />
+    );
 }
 
 /** A cell in a TreeRow: its content sits in a box whose height animates as groups open and close. */
@@ -189,7 +270,7 @@ export function TreeToggle({ expanded, onToggle, className, ...rest }: TreeToggl
             aria-label={expanded ? 'Collapse' : 'Expand'}
             aria-expanded={expanded}
             className={cx(
-                'text-muted-foreground hover:bg-tint/[0.08] hover:text-foreground focus-visible:ring-ring/50 -ml-1 grid size-6 shrink-0 place-items-center rounded-md outline-hidden transition-colors focus-visible:ring-2',
+                'text-muted-foreground hover:bg-tint/[0.08] hover:text-foreground focus-visible:ring-ring/50 -ml-1 grid size-6 shrink-0 cursor-pointer place-items-center rounded-md outline-hidden transition-colors focus-visible:ring-2',
                 className,
             )}
             {...rest}

@@ -3,6 +3,7 @@ import { cx } from '@zen/utils/cx';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { CheckIcon } from '@zen/utils/status-icons';
 import { POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
+import { useTypeahead } from '@zen/utils/typeahead';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import {
     Children,
@@ -58,7 +59,7 @@ export default function Select<V extends string>({
     const triggerId = id ?? generatedId;
     const field = useFieldProps({ ...rest, id });
     const [active, setActive] = useState<string | null>(null);
-    const typed = useRef({ text: '', at: 0 });
+    const typeahead = useTypeahead();
     // Labels of items rendered inside your own components (read once they mount).
     const [registered, setRegistered] = useState<ReadonlyMap<string, string>>(new Map());
 
@@ -129,11 +130,8 @@ export default function Select<V extends string>({
             keys[e.key]();
             return;
         }
-        // Type to jump: letters typed quickly in a row search together.
-        if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-            const now = Date.now();
-            const text = (now - typed.current.at < 700 ? typed.current.text : '') + e.key.toLowerCase();
-            typed.current = { text, at: now };
+        const text = typeahead(e);
+        if (text) {
             const match = items().find((o) => !o.disabled && o.label.toLowerCase().startsWith(text));
             if (match) setActive(match.value);
         }

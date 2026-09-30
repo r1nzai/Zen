@@ -29,7 +29,7 @@ export default function TabBar({ hideFrom = 'md', className, children, ...rest }
 }
 
 const ITEM = cx(
-    'flex flex-col items-center gap-1 py-2.5 text-[0.7rem] outline-hidden transition-colors duration-200 focus-visible:bg-tint/5',
+    'flex flex-col items-center gap-1 py-2.5 text-[0.7rem] outline-hidden transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-inset',
     'text-muted-foreground aria-[current=page]:text-primary [&_svg]:size-5 aria-[current=page]:[&_svg]:drop-shadow-[0_0_8px_oklch(var(--glow)/0.8)]',
 );
 

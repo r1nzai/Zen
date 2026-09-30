@@ -42,7 +42,7 @@ export default function Basic() {
     const tree = useTree({ items: FILES, getKey: (n) => n.name + n.size, getChildren: (n) => n.children });
     return (
         <TableContainer className="w-full max-w-md">
-            <Table>
+            <Table {...tree.tableProps}>
                 <TableHeader>
                     <TableRow>
                         <TableHead>Name</TableHead>

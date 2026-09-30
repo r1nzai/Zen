@@ -91,7 +91,7 @@ export default function Planner() {
 
     return (
         <TableContainer ref={scrollRef} label="Budget plan" className="max-h-80 w-full">
-            <Table className="w-max min-w-full">
+            <Table {...tree.tableProps} className="w-max min-w-full">
                 <TableHeader>
                     <TableRow>
                         <TableHead sticky="left" className="min-w-44">

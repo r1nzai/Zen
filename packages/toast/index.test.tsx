@@ -29,7 +29,7 @@ describe('Toast', () => {
             </ToastProvider>,
         );
         show('Saved');
-        expect(screen.getByRole('region', { name: 'Notifications' })).toHaveAttribute('popover', 'manual');
+        expect(screen.getByRole('region', { name: 'Notifications (F8)' })).toHaveAttribute('popover', 'manual');
     });
 
     it('renders inside an open Dialog, and back on the page after it closes', () => {
@@ -135,6 +135,34 @@ describe('Toast', () => {
         expect(screen.getByRole('alert')).toHaveTextContent('Failed');
     });
 
+    it('is read out by a live region that exists before its text arrives', () => {
+        render(
+            <ToastProvider>
+                <Trigger title="Failed" options={{ tone: 'error', description: 'Try again' }} />
+            </ToastProvider>,
+        );
+        show('Failed');
+        const region = screen.getByRole('alert').nextElementSibling!;
+        expect(region).toHaveAttribute('aria-live', 'assertive');
+        expect(region).toBeEmptyDOMElement();
+        act(() => vi.advanceTimersByTime(50));
+        expect(region).toHaveTextContent('Failed. Try again');
+    });
+
+    it('takes focus on F8 while there are toasts', () => {
+        render(
+            <ToastProvider>
+                <Trigger title="Saved" />
+            </ToastProvider>,
+        );
+        const viewport = screen.getByRole('region', { name: 'Notifications (F8)' });
+        fireEvent.keyDown(document, { key: 'F8' });
+        expect(viewport).not.toHaveFocus();
+        show('Saved');
+        fireEvent.keyDown(document, { key: 'F8' });
+        expect(viewport).toHaveFocus();
+    });
+
     it('goes away after its timeout', () => {
         render(
             <ToastProvider>
@@ -223,7 +251,7 @@ describe('Toast', () => {
         );
         show('Hi');
         show('Hi');
-        const deck = screen.getByRole('region', { name: 'Notifications' });
+        const deck = screen.getByRole('region', { name: 'Notifications (F8)' });
         const [back, front] = screen.getAllByRole('status');
         expect(back).toHaveAttribute('data-behind');
         expect(back.style.transform).toContain('scale(0.95)');
@@ -306,7 +334,7 @@ describe('Toast', () => {
                 app
             </ToastProvider>,
         );
-        const viewport = screen.getByRole('region', { name: 'Notifications' });
+        const viewport = screen.getByRole('region', { name: 'Notifications (F8)' });
         expect(viewport.style.getPropertyValue('--zen-toast-offset')).toBe('5.5rem');
         expect(viewport).toHaveClass('left-4');
     });

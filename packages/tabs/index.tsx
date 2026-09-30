@@ -93,12 +93,17 @@ function UnderlineTrack({ ref, className, children, ...rest }: ComponentProps<'d
             {...rest}
         >
             {children}
-            {box && (
+            {box ? (
+                // Its own key, like PillIndicator's: it starts in place instead of sliding in.
                 <span
+                    key="measured"
                     aria-hidden
-                    className="bg-primary absolute bottom-[-1px] left-0 h-0.5 transition-[translate,width] duration-150 ease-in-out"
+                    className="zen__tab-bar bg-primary absolute bottom-[-1px] left-0 h-0.5 transition-[translate,width] duration-150 ease-in-out"
                     style={{ width: box.w, translate: `${box.x}px 0` }}
                 />
+            ) : (
+                // Not measured yet: the active tab draws the bar itself (see theme.css).
+                <span key="pending" aria-hidden data-pending className="zen__tab-bar hidden" />
             )}
         </div>
     );
@@ -124,7 +129,7 @@ export function Tab({ value, className, onClick, ...rest }: TabProps) {
             className={cx(
                 variant === 'pills'
                     ? PILL
-                    : 'focus-visible:ring-ring text-muted-foreground hover:text-foreground data-active:text-foreground px-3 py-2 text-sm whitespace-nowrap outline-hidden select-none focus-visible:ring-1',
+                    : 'focus-visible:ring-ring text-muted-foreground hover:text-foreground data-active:text-foreground cursor-pointer px-3 py-2 text-sm whitespace-nowrap outline-hidden select-none focus-visible:ring-1 disabled:cursor-not-allowed',
                 className,
             )}
             {...rest}
@@ -141,7 +146,10 @@ export function TabPanel({ value, className, ...rest }: TabPanelProps) {
             id={idFor('panel', value)}
             aria-labelledby={idFor('tab', value)}
             tabIndex={0}
-            className={cx('outline-hidden', className)}
+            className={cx(
+                'focus-visible:outline-ring/50 outline-hidden focus-visible:outline-2 focus-visible:outline-offset-4',
+                className,
+            )}
             {...rest}
         />
     );
