@@ -48,6 +48,8 @@ describe('date helpers', () => {
     it('formats for the locale, never shifting the day', () => {
         expect(formatDate('2026-09-30', 'en-US')).toBe('Sep 30, 2026');
         expect(formatDate('2026-09-30', 'en-GB', 'long')).toBe('30 September 2026');
+        expect(formatDate('2026-09-03', 'en-US', 'day')).toBe('Sep 3');
+        expect(formatDateRange('2026-09-03', '2026-10-10', 'en-US', 'day')).toBe('Sep 3 – Oct 10');
         // Plain spaces whatever the engine's ICU, so server and browser render the same text.
         expect(formatDateRange('2026-09-03', '2026-09-10', 'en-US')).toBe('Sep 3 – 10, 2026');
         expect(formatDateRange('2026-10-05', '2026-10-12', 'en-GB')).toBe('5 – 12 Oct 2026');

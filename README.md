@@ -56,12 +56,13 @@ export default function App() {
 
 ## What's inside
 
-- **Surfaces:** Card, Inset, Stat, Dialog (and sheets from an edge), ConfirmDialog, Popover, Tooltip, Toast (a stacked deck), Disclosure, Backdrop (aurora, contours or dots, and a pointer light)
+- **Surfaces:** Card, Inset, Alert, Stat, Dialog (and sheets from an edge), ConfirmDialog, Popover, Tooltip, Toast (a stacked deck), Disclosure, Backdrop (aurora, contours or dots, and a pointer light)
 - **Inputs:** Button, Input, TextArea, InputGroup, MoneyInput (with currency conversion), Select, Combobox, Calendar, DatePicker, DateRangePicker, MonthPicker, Checkbox, RadioGroup, RadioCards, Segmented, Slider, Toggle, Chip, Field
-- **Data:** Chart (areas, lines, bars) and DonutChart in plain SVG, composable Table with sticky edges and sorting, tree rows, editable cells, virtual rows, Meter, ProgressRing, AnimatedNumber, Skeleton, Spinner
+- **Data:** Chart (areas, lines, bars) and DonutChart in plain SVG, composable Table with sticky edges and sorting, tree rows, editable cells, virtual rows, Meter, ProgressRing, AnimatedNumber, Badge, StatusPill (a live save status), Skeleton, Spinner
 - **Navigation:** Header, Pills, Tabs, TabBar, SideNav, TableOfContents, Menu
+- **Icons:** outline, on a 24px grid in the current text colour: Plus, CalendarIcon, Sun, Moon, Lock, Logout, Settings, Search, XMark, Ellipsis, chevrons, and the status icons (Check, AlertTriangle, InfoCircle)
 - **Theming:** dark and light, OKLCH tokens, and a theme generator (presets or any hue) that keeps contrast readable
-- **Hooks and utilities:** `useAnchoredPopup`, `useVirtualList`, `useTree`, `useSort`, money, currency, month and date helpers, `cx` (Tailwind-aware class merging), `cva`
+- **Hooks and utilities:** `themeWave` (the theme spreads from the switch like a drop falling into water: ripples, glints and a rainbow edge, drawn on the GPU), `useAnchoredPopup`, `useVirtualList`, `useTree`, `useSort`, money, currency, month and date helpers, `cx` (Tailwind-aware class merging), `cva`
 
 Every component takes `className`, and a class you pass always overrides the component's default.
 

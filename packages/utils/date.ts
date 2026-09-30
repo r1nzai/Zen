@@ -62,18 +62,21 @@ export function daysBetween(from: DateString, to: DateString): number {
     return dayIndex(to) - dayIndex(from);
 }
 
-/**
- * "Sep 30, 2026" (or the locale's equivalent) by default; `short` is
- * "9/30/26", `long` "September 30, 2026", `full` adds the weekday.
- */
-export function formatDate(
-    date: DateString,
-    locale: string,
-    style: 'short' | 'medium' | 'long' | 'full' = 'medium',
-): string {
-    return plainSpaces(
-        new Intl.DateTimeFormat(locale, { dateStyle: style, timeZone: 'UTC' }).format(dayIndex(date) * 86400000),
+/** How much of a date to show; `day` is the day and month without the year ("Sep 3"), for dates within the year. */
+export type DateStyle = 'day' | 'short' | 'medium' | 'long' | 'full';
+
+const dateFormat = (locale: string, style: DateStyle) =>
+    new Intl.DateTimeFormat(
+        locale,
+        style === 'day' ? { day: 'numeric', month: 'short', timeZone: 'UTC' } : { dateStyle: style, timeZone: 'UTC' },
     );
+
+/**
+ * "Sep 30, 2026" (or the locale's equivalent) by default; `day` is "Sep 30",
+ * `short` "9/30/26", `long` "September 30, 2026", `full` adds the weekday.
+ */
+export function formatDate(date: DateString, locale: string, style: DateStyle = 'medium'): string {
+    return plainSpaces(dateFormat(locale, style).format(dayIndex(date) * 86400000));
 }
 
 /** Short weekday names for a locale, Sunday first. */
@@ -111,10 +114,9 @@ export function formatDateRange(
     start: DateString,
     end: DateString,
     locale: string,
-    style: 'short' | 'medium' | 'long' = 'medium',
+    style: Exclude<DateStyle, 'full'> = 'medium',
 ): string {
-    const fmt = new Intl.DateTimeFormat(locale, { dateStyle: style, timeZone: 'UTC' });
-    return plainSpaces(fmt.formatRange(dayIndex(start) * 86400000, dayIndex(end) * 86400000));
+    return plainSpaces(dateFormat(locale, style).formatRange(dayIndex(start) * 86400000, dayIndex(end) * 86400000));
 }
 
 /**

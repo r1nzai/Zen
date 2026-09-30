@@ -17,6 +17,14 @@ export interface ComponentDoc {
 
 export const COMPONENTS: ComponentDoc[] = [
     {
+        slug: 'alert',
+        title: 'Alert',
+        description:
+            'A notice, warning or failure beside what it is about: a tinted box, or a plain line in a form or card.',
+        parts: ['Alert'],
+        examples: ['Default', 'Plain'],
+    },
+    {
         slug: 'animated-number',
         title: 'Animated Number',
         description: 'Numbers and amounts that count smoothly to each new value.',
@@ -44,7 +52,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Button',
         description: 'Actions, from the one glowing primary action to quiet ghost buttons.',
         parts: ['Button'],
-        examples: ['Variants', 'Sizes', 'Loading', 'AsLink'],
+        examples: ['Variants', 'Sizes', 'Tones', 'Loading', 'AsLink'],
     },
     {
         slug: 'card',
@@ -286,6 +294,14 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Tab Bar',
         description: 'Phone navigation fixed to the bottom of the screen. Works with any router.',
         parts: ['TabBar', 'TabBarItem'],
+    },
+    {
+        slug: 'status-pill',
+        title: 'Status Pill',
+        description:
+            'A small status that changes in place, such as Saving…, Saved or Not saved with a Retry, and fades back once the news is old.',
+        parts: ['StatusPill', 'StatusPillAction'],
+        examples: ['Save'],
     },
     {
         slug: 'table',

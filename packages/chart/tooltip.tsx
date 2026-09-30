@@ -27,8 +27,21 @@ export function ChartTooltipCard({ title, rows, className }: ChartTooltipCardPro
     );
 }
 
-/** A series' key: a short line for lines (dashed if the series is), a rounded swatch for bars and areas. */
-export function Key({ color, dashed, kind = 'line' }: { color: string; dashed?: boolean; kind?: Kind }) {
+/**
+ * A series' key: a short line for lines (dashed if the series is), a rounded swatch for
+ * bars and areas; `faded` as a bar's dimmed rows are drawn.
+ */
+export function Key({
+    color,
+    dashed,
+    kind = 'line',
+    faded,
+}: {
+    color: string;
+    dashed?: boolean;
+    kind?: Kind;
+    faded?: boolean;
+}) {
     if (kind === 'line' || dashed)
         return (
             <svg viewBox="0 0 12 4" aria-hidden className="h-1 w-3 shrink-0 overflow-visible">
@@ -44,7 +57,13 @@ export function Key({ color, dashed, kind = 'line' }: { color: string; dashed?: 
                 />
             </svg>
         );
-    return <span aria-hidden className="size-2.5 shrink-0 rounded-[3px]" style={{ background: color }} />;
+    return (
+        <span
+            aria-hidden
+            className={cx('size-2.5 shrink-0 rounded-[3px]', faded && 'opacity-40')}
+            style={{ background: color }}
+        />
+    );
 }
 
 export interface ChartTooltipCardProps {

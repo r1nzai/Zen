@@ -1,5 +1,6 @@
 import { cx } from '@zen/utils/cx';
 
+import { type ChartPalette, paletteColor } from './palette';
 import { ChartTooltipCard, Key, type Kind } from './tooltip';
 import {
     Children,
@@ -48,6 +49,7 @@ interface Series extends ChartSeriesProps {
     color: string;
     curve?: ChartAreaProps['curve'];
     dim?: ChartBarProps['dim'];
+    dimLabel?: ChartBarProps['dimLabel'];
 }
 
 const MARGIN = { top: 12, right: 8, bottom: 26 };
@@ -73,6 +75,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
     formatTooltipX,
     renderTooltip,
     legend,
+    palette = 'chart',
     className,
     children,
 }: ChartProps<T, X>) {
@@ -90,7 +93,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
      */
     const geo = useMemo(() => {
         const parts = Children.toArray(children).filter(isValidElement) as ReactElement<Record<string, unknown>>[];
-        let slot = 0;
+        const count = parts.filter((p) => KINDS.has(p.type as ComponentType)).length;
         const series: Series[] = [];
         const refs: ChartReferenceProps[] = [];
         for (const p of parts) {
@@ -98,8 +101,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
             const kind = KINDS.get(p.type as ComponentType);
             if (!kind) continue;
             const given = p.props as unknown as Series;
-            slot++;
-            series.push({ ...given, kind, color: given.color ?? `var(--chart-${Math.min(slot, 8)})` });
+            series.push({ ...given, kind, color: given.color ?? paletteColor(palette, series.length, count) });
         }
 
         const rows = data as readonly Row[];
@@ -280,7 +282,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
         );
 
         return { series, rows, n, bars, banded, step, left, plotH, cx0, cy, base, barW, barX, back, front };
-    }, [children, data, x, width, height, formatX, formatY, id]);
+    }, [children, data, x, width, height, formatX, formatY, id, palette]);
 
     const { series, rows, n, bars, banded, step, left, plotH, cx0, cy, base, barW, barX } = geo;
 
@@ -371,7 +373,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
         setActive((a) => (a === null ? (next > 0 ? 0 : n - 1) : Math.min(n - 1, Math.max(0, a + next))));
     };
 
-    const showLegend = legend ?? series.length > 1;
+    const showLegend = legend ?? (series.length > 1 || series.some((s) => s.dimLabel));
     const row = active === null ? null : rows[active];
     const tipX = active === null ? 0 : cx0(active);
     const tipY = pointer?.y ?? MARGIN.top;
@@ -477,12 +479,20 @@ function value(row: Row, key: string) {
 }
 
 function Legend({ series }: { series: Series[] }) {
+    // After the series, a faded key for each name given to faded bars (once, however many series share it).
+    const faded = series.filter((s, i) => s.dimLabel && series.findIndex((o) => o.dimLabel === s.dimLabel) === i);
     return (
         <ul className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs" aria-label="Legend">
             {series.map((s) => (
                 <li key={s.dataKey} className="flex items-center gap-1.5">
                     <Key color={s.color} dashed={s.dashed} kind={s.kind} />
                     {s.label}
+                </li>
+            ))}
+            {faded.map((s) => (
+                <li key={`faded-${s.dimLabel}`} className="flex items-center gap-1.5">
+                    <Key color={s.color} kind="bar" faded />
+                    {s.dimLabel}
                 </li>
             ))}
         </ul>
@@ -600,6 +610,8 @@ export type ChartLineProps = ChartAreaProps;
 export interface ChartBarProps extends Omit<ChartSeriesProps, 'dashed'> {
     /** Rows whose bar is faded, e.g. months still to come. */
     dim?: (row: Row, index: number) => boolean;
+    /** What the faded bars mean, e.g. "Planned": the legend gets a faded key for it (and shows, even for one series). */
+    dimLabel?: string;
 }
 
 export interface ChartReferenceProps {
@@ -634,7 +646,9 @@ export interface ChartProps<T extends Row, X extends keyof T & string = keyof T 
     formatY?: (value: number) => string;
     /** Your own tooltip for a row (build it from ChartTooltipCard). */
     renderTooltip?: (row: T, index: number) => ReactNode;
-    /** Show the legend. Defaults to on for two or more series. */
+    /** Colours for series that don't give their own: the categorical palette (default), or shades of the theme's glow. */
+    palette?: ChartPalette;
+    /** Show the legend. Defaults to on for two or more series, or a bar's `dimLabel`. */
     legend?: boolean;
     className?: string;
     /** ChartArea, ChartLine, ChartBar and ChartReference parts. */
@@ -643,3 +657,4 @@ export interface ChartProps<T extends Row, X extends keyof T & string = keyof T 
 
 export { ChartTooltipCard, type ChartTooltipCardProps } from './tooltip';
 export { default as DonutChart, type DonutChartProps } from './donut';
+export type { ChartPalette } from './palette';

@@ -201,4 +201,39 @@ describe('Button', () => {
             expect(link).not.toHaveClass('rounded-lg');
         });
     });
+
+    // ── tones ───────────────────────────────────────────────────────────────
+
+    it('link: inline in the text, truncating, in the accent colour or a tone', () => {
+        const { rerender } = render(<Button variant="link">Edit</Button>);
+        const link = screen.getByRole('button');
+        expect(link).toHaveClass('inline-block', 'truncate', 'text-primary');
+        expect(link).not.toHaveClass('inline-flex', 'text-sm');
+        rerender(
+            <Button variant="link" tone="muted">
+                Use a password instead
+            </Button>,
+        );
+        // Muted, it's always underlined, so it still reads as a link.
+        expect(link).toHaveClass('text-muted-foreground', 'underline');
+        rerender(
+            <Button variant="link" tone="inherit">
+                Groceries
+            </Button>,
+        );
+        expect(link).toHaveClass('text-current');
+        expect(link).not.toHaveClass('text-primary');
+    });
+
+    it('icon, destructive: turns red when pointed at', () => {
+        render(
+            <Button variant="icon" size="icon-sm" tone="destructive" aria-label="Remove">
+                ×
+            </Button>,
+        );
+        expect(screen.getByRole('button', { name: 'Remove' })).toHaveClass(
+            'hover:text-destructive',
+            'hover:bg-destructive/10',
+        );
+    });
 });

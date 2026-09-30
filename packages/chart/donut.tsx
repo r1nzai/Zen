@@ -1,6 +1,7 @@
 import { cx } from '@zen/utils/cx';
 import { CSSProperties, ReactNode, useState } from 'react';
 
+import { type ChartPalette, paletteColor } from './palette';
 import { ChartTooltipCard } from './tooltip';
 
 /**
@@ -15,6 +16,7 @@ export default function DonutChart({
     label,
     size = 200,
     thickness = 0.32,
+    palette = 'chart',
     formatValue = String,
     children,
     className,
@@ -31,7 +33,7 @@ export default function DonutChart({
     let angle = -Math.PI / 2;
     const arcs = items.map((it, i) => {
         const sweep = total ? (Math.max(0, it.value) / total) * Math.PI * 2 : 0;
-        const a = { start: angle, end: angle + sweep, color: it.color ?? `var(--chart-${Math.min(i + 1, 8)})` };
+        const a = { start: angle, end: angle + sweep, color: it.color ?? paletteColor(palette, i, items.length) };
         angle += sweep;
         return a;
     });
@@ -175,6 +177,8 @@ export interface DonutChartProps {
     thickness?: number;
     /** Values in the tooltip and for screen readers. */
     formatValue?: (value: number) => string;
+    /** Colours for items that don't give their own: the categorical palette (default), or shades of the theme's glow. */
+    palette?: ChartPalette;
     /** Content in the middle, e.g. the total. */
     children?: ReactNode;
     className?: string;

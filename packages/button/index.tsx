@@ -12,6 +12,7 @@ export default function Button({
     className,
     variant,
     size,
+    tone,
     loading = false,
     disabled,
     type = 'button',
@@ -21,7 +22,7 @@ export default function Button({
 }: ButtonProps) {
     if (asChild) {
         return (
-            <Slot {...(rest as ComponentProps<'a'>)} className={buttonVariants({ variant, size, className })}>
+            <Slot {...(rest as ComponentProps<'a'>)} className={buttonVariants({ variant, size, tone, className })}>
                 {children}
             </Slot>
         );
@@ -32,7 +33,7 @@ export default function Button({
             type={type}
             disabled={disabled || loading}
             aria-busy={loading || undefined}
-            className={buttonVariants({ variant, size, className })}
+            className={buttonVariants({ variant, size, tone, className })}
             {...rest}
         >
             {loading && <Spinner />}
@@ -42,7 +43,7 @@ export default function Button({
 }
 
 export const buttonVariants = cva(
-    'zen__button inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap outline-hidden select-none ' +
+    'zen__button inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap outline-hidden select-none ' +
         'transition-[background-color,border-color,box-shadow,color,transform] duration-200 ease-out active:scale-[0.97] ' +
         'focus-visible:ring-2 focus-visible:ring-glow/50 disabled:pointer-events-none disabled:opacity-50',
     {
@@ -61,7 +62,8 @@ export const buttonVariants = cva(
                 ghost: 'text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground',
                 destructive:
                     'bg-destructive/90 text-destructive-foreground shadow-[0_0_0_1px_oklch(var(--destructive)/0.6),0_0_22px_-8px_oklch(var(--destructive)/0.7)] hover:bg-destructive',
-                link: 'h-auto! px-0! text-primary underline-offset-4 hover:underline',
+                // Inline in running text (no padding, sits on the line) and truncates in a tight cell.
+                link: 'inline-block h-auto! max-w-full truncate rounded-sm px-0! text-left align-bottom text-[length:inherit] text-primary underline-offset-4 hover:underline active:scale-100',
                 // Square ghost button for a lone icon (Sora's menu trigger).
                 // Keeps its hover look while the popup it opened is showing (e.g. a Menu's "⋯").
                 icon: 'text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground',
@@ -74,10 +76,26 @@ export const buttonVariants = cva(
                 // A small square for a lone icon inside a row (e.g. "add item").
                 'icon-sm': 'size-6 rounded-md',
             },
+            // Colours for the quiet variants (link, ghost, icon); the filled ones have their own.
+            tone: { default: '', muted: '', inherit: '', destructive: '' },
         },
+        compoundVariants: [
+            // A secondary action in words ("Use a password instead"): muted, so always underlined to read as a link.
+            { variant: 'link', tone: 'muted', class: 'text-muted-foreground underline hover:text-foreground' },
+            // In the surrounding text's colour, e.g. a name in a table that opens its editor.
+            { variant: 'link', tone: 'inherit', class: 'text-current' },
+            { variant: 'link', tone: 'destructive', class: 'text-destructive' },
+            // Muted until pointed at, then red: e.g. a row's remove button.
+            {
+                variant: ['ghost', 'icon'],
+                tone: 'destructive',
+                class: 'hover:bg-destructive/10 hover:text-destructive focus-visible:ring-destructive/40',
+            },
+        ],
         defaultVariants: {
             variant: 'default',
             size: 'default',
+            tone: 'default',
         },
     },
 );

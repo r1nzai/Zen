@@ -15,6 +15,7 @@ export { default as AnimatedNumber, AnimatedMoney, type AnimatedNumberProps } fr
 export { default as Avatar, type AvatarProps, cropImageToSquare, ImageCropError } from './avatar';
 export { default as Backdrop } from './backdrop';
 export { default as Badge } from './badge';
+export { default as StatusPill, StatusPillAction, type StatusPillProps } from './status-pill';
 export { default as Button, buttonVariants } from './button';
 export {
     default as Card,
@@ -53,7 +54,8 @@ export {
     useField,
     useFieldProps,
 } from './field';
-export { default as Header } from './header';
+export { default as Header, type HeaderProps } from './header';
+export { default as Alert, type AlertProps } from './alert';
 export { default as Inset, type InsetProps } from './inset';
 export * from './icons';
 export { default as Input } from './input';
@@ -71,6 +73,7 @@ export {
     type ChartLineProps,
     type ChartProps,
     ChartReference,
+    type ChartPalette,
     type ChartReferenceProps,
     type ChartSeriesProps,
     ChartTooltipCard,
@@ -178,6 +181,7 @@ export {
     type ThemeSettings,
     themeVars,
 } from './utils/theme';
+export { themeWave } from './utils/theme-wave';
 export { useHydrated } from './utils/useHydrated';
 export {
     addMonths,
@@ -196,6 +200,7 @@ export {
     addMonthsToDate,
     type DateRange,
     type DateString,
+    type DateStyle,
     dayIndex,
     dayOfWeek,
     daysBetween,

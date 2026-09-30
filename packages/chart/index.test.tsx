@@ -59,6 +59,37 @@ describe('Chart', () => {
         expect(screen.queryByRole('list', { name: 'Legend' })).toBeNull();
     });
 
+    it('explains faded bars in the legend, once, even for one series', () => {
+        const future = (_: unknown, i: number) => i > 1;
+        const { rerender } = render(
+            <Chart data={DATA} x="month" label="C">
+                <ChartBar dataKey="income" label="Income" dim={future} dimLabel="Planned" />
+            </Chart>,
+        );
+        const items = () => within(screen.getByRole('list', { name: 'Legend' })).getAllByRole('listitem');
+        expect(items().map((li) => li.textContent)).toEqual(['Income', 'Planned']);
+        rerender(
+            <Chart data={DATA} x="month" label="C">
+                <ChartBar dataKey="income" label="Income" dim={future} dimLabel="Planned" />
+                <ChartBar dataKey="spending" label="Spending" dim={future} dimLabel="Planned" />
+            </Chart>,
+        );
+        expect(items().map((li) => li.textContent)).toEqual(['Income', 'Spending', 'Planned']);
+    });
+
+    it('colours in shades of the theme glow with palette="glow"', () => {
+        const { container } = render(
+            <Chart data={DATA} x="month" label="C" palette="glow">
+                <ChartLine dataKey="income" label="Income" />
+                <ChartLine dataKey="spending" label="Spending" />
+            </Chart>,
+        );
+        const [first, last] = container.querySelectorAll<SVGPathElement>('svg path[fill="none"]');
+        // First to second glow colour, the later ones deeper.
+        expect(first.getAttribute('style')).toContain('var(--glow)), oklch(var(--glow-2)) 0%');
+        expect(last.getAttribute('style')).toContain('oklch(var(--glow-2)) 100%), oklch(var(--background)) 45%');
+    });
+
     it('colours series from the palette in order, unless given one', () => {
         const { container } = render(
             <Chart data={DATA} x="month" label="C">
