@@ -58,7 +58,7 @@ export default function Segmented<V extends string>({
                 ref={trackRef}
                 role="radiogroup"
                 aria-labelledby={id}
-                className="border-tint/10 bg-tint/[0.03] relative inline-flex w-fit flex-wrap gap-1 rounded-xl border p-1"
+                className="glow-edge border-tint/10 bg-tint/[0.03] relative inline-flex w-fit flex-wrap gap-1 rounded-xl border p-1"
             >
                 {box && (
                     <span

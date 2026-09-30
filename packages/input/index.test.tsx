@@ -115,7 +115,7 @@ describe('Input', () => {
         const el = container.firstChild as HTMLElement;
         expect(el).toHaveClass('my-input');
         // one of the fixed base classes is always present
-        expect(el).toHaveClass('border-tint/10');
+        expect(el).toHaveClass('glow-border');
     });
 
     it('custom className does not strip core layout classes', () => {

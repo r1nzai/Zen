@@ -4,8 +4,8 @@ import { CSSProperties, useEffect, useRef } from 'react';
 /**
  * Fixed page background: slow aurora glows over a faint pattern (topographic
  * contours or a dot grid), with a light that follows the pointer. It also
- * lights `.glow-edge` borders (cards, outline buttons, dialogs) near the
- * pointer. Render once, behind everything.
+ * lights `.glow-edge` and `.glow-border` borders (cards, outline buttons,
+ * dialogs, fields) near the pointer. Render once, behind everything.
  */
 export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
     const kind = pattern ?? (topoSrc ? 'contours' : 'dots');
@@ -19,7 +19,7 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
         let x = -9999;
         let y = -9999;
         // Moves the backdrop's pointer light (the .zen-light box) and publishes the pointer,
-        // for every .glow-edge element, in that element's own coordinates
+        // for every .glow-edge/.glow-border element, in that element's own coordinates
         // (--gx/--gy). Per-element values stay exact inside transformed, masked
         // or scrolling containers, where viewport-fixed backgrounds don't.
         //
@@ -41,7 +41,7 @@ export default function Backdrop({ pattern, topoSrc }: BackdropProps) {
         };
         const apply = () => {
             frame = 0;
-            const els = Array.from(document.querySelectorAll<HTMLElement>('.glow-edge'));
+            const els = Array.from(document.querySelectorAll<HTMLElement>('.glow-edge, .glow-border'));
             const rects = els.map((el) => el.getBoundingClientRect());
             const box = backdrop?.getBoundingClientRect();
             // The backdrop's own light is a small box moved to the pointer: only the

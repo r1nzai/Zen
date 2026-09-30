@@ -1,16 +1,16 @@
 import { cx } from './cx';
 
-/** Shared field look: faint glass, hairline border, violet glow on focus. */
+/** Shared field look: faint glass, hairline border lit by the pointer, violet glow on focus. */
 export const FIELD =
-    'h-10 rounded-lg border border-tint/10 bg-tint/[0.035] px-3 text-sm text-foreground ' +
-    'shadow-[inset_0_1px_0_hsl(0_0%_100%/0.04)] transition-[border-color,background-color,box-shadow] duration-200 ' +
-    'placeholder:text-muted-foreground hover:border-tint/20 ' +
-    'focus-visible:border-glow/60 focus-visible:bg-tint/[0.05] focus-visible:shadow-[0_0_0_3px_oklch(var(--glow)/0.16),0_0_24px_-6px_oklch(var(--glow)/0.6)] focus-visible:outline-hidden ' +
+    'glow-border h-10 rounded-lg border [--glow-border-color:oklch(var(--tint)/0.1)] bg-tint/[0.035] px-3 text-sm text-foreground ' +
+    'shadow-[inset_0_1px_0_hsl(0_0%_100%/0.04)] transition-[border-color,background-color,box-shadow,--glow-border-color] duration-200 ' +
+    'placeholder:text-muted-foreground hover:[--glow-border-color:oklch(var(--tint)/0.2)] ' +
+    'focus-visible:border-glow/60 focus-visible:[--glow-border-color:transparent] focus-visible:bg-tint/[0.05] focus-visible:shadow-[0_0_0_3px_oklch(var(--glow)/0.16),0_0_24px_-6px_oklch(var(--glow)/0.6)] focus-visible:outline-hidden ' +
     'disabled:cursor-not-allowed disabled:opacity-50';
 
 /** Glow a trigger carries while its popup is open. */
 export const TRIGGER_OPEN =
-    'border-glow/60 shadow-[0_0_0_3px_oklch(var(--glow)/0.16),0_0_24px_-6px_oklch(var(--glow)/0.6)]';
+    'border-glow/60 [--glow-border-color:transparent] shadow-[0_0_0_3px_oklch(var(--glow)/0.16),0_0_24px_-6px_oklch(var(--glow)/0.6)]';
 
 /** Trigger for popup fields (dropdown): a field that glows while open. */
 export const TRIGGER = cx(FIELD, 'inline-flex items-center justify-between gap-2 whitespace-nowrap');
@@ -20,7 +20,7 @@ export const POPUP =
     'glass glass-blur rounded-xl text-foreground shadow-[var(--popup-shadow),0_0_40px_-20px_oklch(var(--glow)/0.5)] outline-hidden';
 
 /** Sora's nav pills (NavPills, TabList variant="pills"): a glass track… */
-export const PILL_TRACK = 'relative flex w-fit items-center gap-1 rounded-full border border-tint/5 bg-tint/[0.03] p-1';
+export const PILL_TRACK = 'glow-edge relative flex w-fit items-center gap-1 rounded-full border border-tint/5 bg-tint/[0.03] p-1';
 
 /** …a glowing pill that slides to the active item… */
 export const PILL_INDICATOR =
@@ -36,8 +36,8 @@ export const PILL_ITEM =
  * Tailwind only generates classes that appear literally in the source.
  */
 export const FIELD_WITHIN =
-    'flex w-full items-center gap-1.5 h-10 rounded-lg border border-tint/10 bg-tint/[0.035] px-3 text-sm text-foreground ' +
-    'shadow-[inset_0_1px_0_hsl(0_0%_100%/0.04)] transition-[border-color,background-color,box-shadow] duration-200 ' +
-    'placeholder:text-muted-foreground hover:border-tint/20 ' +
-    'focus-within:border-glow/60 focus-within:bg-tint/[0.05] focus-within:shadow-[0_0_0_3px_oklch(var(--glow)/0.16),0_0_24px_-6px_oklch(var(--glow)/0.6)] focus-within:outline-hidden ' +
+    'glow-border flex w-full items-center gap-1.5 h-10 rounded-lg border [--glow-border-color:oklch(var(--tint)/0.1)] bg-tint/[0.035] px-3 text-sm text-foreground ' +
+    'shadow-[inset_0_1px_0_hsl(0_0%_100%/0.04)] transition-[border-color,background-color,box-shadow,--glow-border-color] duration-200 ' +
+    'placeholder:text-muted-foreground hover:[--glow-border-color:oklch(var(--tint)/0.2)] ' +
+    'focus-within:border-glow/60 focus-within:[--glow-border-color:transparent] focus-within:bg-tint/[0.05] focus-within:shadow-[0_0_0_3px_oklch(var(--glow)/0.16),0_0_24px_-6px_oklch(var(--glow)/0.6)] focus-within:outline-hidden ' +
     'disabled:cursor-not-allowed disabled:opacity-50';

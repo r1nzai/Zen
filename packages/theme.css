@@ -145,6 +145,43 @@
 }
 
 /*
+ * The same pointer light, painted into the element's own border instead of a
+ * ::before layer, for fields: <input> and <textarea> can't have pseudo-elements.
+ * The border colour (--glow-border-color) is painted as a layer beneath the
+ * light, as glow-edge's light sits above a card's border; a real border would
+ * be drawn over the light and wash it out. The trailing `none` layer keeps the
+ * background colour clipped as before. Browsers without border-area keep a
+ * plain border. In the components layer, so a border colour utility (focus,
+ * an error state) still wins, drawn over it all.
+ */
+@property --glow-border-color {
+    syntax: '<color>';
+    inherits: false;
+    initial-value: transparent;
+}
+@layer components {
+    .glow-border {
+        border-color: var(--glow-border-color);
+    }
+    @supports (background-clip: border-area) {
+        .glow-border {
+            border-color: transparent;
+            background-image:
+                radial-gradient(
+                    360px circle at var(--gx, -999px) var(--gy, -999px),
+                    oklch(var(--glow) / calc(0.7 * var(--glow-strength))),
+                    oklch(var(--glow-2) / calc(0.2 * var(--glow-strength))) 40%,
+                    transparent 65%
+                ),
+                linear-gradient(var(--glow-border-color) 0 0),
+                none;
+            background-origin: border-box;
+            background-clip: border-area, border-area, border-box;
+        }
+    }
+}
+
+/*
  * Built from Tailwind's backdrop utilities, which emit the standard and -webkit-
  * properties correctly. Phones: a live blur over scrolling content is the main
  * cause of jank, so touch screens get a solid tint instead.
