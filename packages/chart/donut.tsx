@@ -1,5 +1,5 @@
 import { cx } from '@zen/utils/cx';
-import { CSSProperties, ReactNode, useState } from 'react';
+import { ReactNode, useLayoutEffect, useRef, useState } from 'react';
 
 import { type ChartPalette, paletteColor } from './palette';
 import { ChartTooltipCard } from './tooltip';
@@ -39,8 +39,41 @@ export default function DonutChart({
     });
 
     const tip = active === null ? null : items[active];
+    const tipAngle = active === null ? null : (arcs[active].start + arcs[active].end) / 2;
+    const root = useRef<HTMLDivElement>(null);
+    const tipRef = useRef<HTMLDivElement>(null);
+
+    // The tooltip is in the top layer, placed against the ring, so no container that
+    // clips its overflow cuts it off; it follows the ring when the page scrolls.
+    useLayoutEffect(() => {
+        const el = tipRef.current;
+        if (tipAngle === null || !el || !root.current) return;
+        try {
+            el.showPopover?.();
+        } catch {
+            // Already showing.
+        }
+        const place = () => {
+            const box = root.current!.getBoundingClientRect();
+            const x = box.left + r + Math.cos(tipAngle) * (r + 10);
+            const y = box.top + r + Math.sin(tipAngle) * (r + 10);
+            const w = el.offsetWidth;
+            const h = el.offsetHeight;
+            const clamp = (v: number, max: number) => Math.max(EDGE, Math.min(v, max - EDGE));
+            el.style.left = `${clamp(Math.cos(tipAngle) >= 0 ? x : x - w, document.documentElement.clientWidth - w)}px`;
+            el.style.top = `${clamp(y - h / 2, window.innerHeight - h)}px`;
+        };
+        place();
+        window.addEventListener('scroll', place, { passive: true, capture: true });
+        window.addEventListener('resize', place, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', place, { capture: true });
+            window.removeEventListener('resize', place);
+        };
+    }, [tipAngle, r]);
+
     return (
-        <div className={cx('zen__donut relative shrink-0', className)} style={{ width: size, height: size }}>
+        <div ref={root} className={cx('zen__donut relative shrink-0', className)} style={{ width: size, height: size }}>
             <svg
                 width={size}
                 height={size}
@@ -96,10 +129,11 @@ export default function DonutChart({
                 </div>
             )}
             {tip && active !== null && (
-                // Beside the segment, on the side it faces, so it never covers the middle or leaves the chart.
+                // Beside the segment, on the side it faces, so it never covers the middle.
                 <div
-                    className="pointer-events-none absolute z-10 -translate-y-1/2"
-                    style={segmentTip((arcs[active].start + arcs[active].end) / 2, r)}
+                    ref={tipRef}
+                    popover="manual"
+                    className="pointer-events-none fixed inset-auto m-0 overflow-visible border-0 bg-transparent p-0"
                 >
                     <ChartTooltipCard
                         title={tip.label}
@@ -117,12 +151,7 @@ export default function DonutChart({
     );
 }
 
-/** Where a segment's tooltip goes: just outside the ring at the segment's middle, extending away from the centre. */
-function segmentTip(mid: number, r: number): CSSProperties {
-    const x = r + Math.cos(mid) * (r + 10);
-    const y = r + Math.sin(mid) * (r + 10);
-    return Math.cos(mid) >= 0 ? { left: x, top: y } : { right: 2 * r - x, top: y };
-}
+const EDGE = 8; // the tooltip is kept this far inside the viewport
 
 /**
  * A point at a radius and angle, for a path. Rounded to a thousandth of a pixel:
