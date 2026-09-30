@@ -11,13 +11,14 @@ async function open(page: Page, path: string) {
 }
 
 /** The example whose heading is `title` (the first example has none: `null`). */
+// An example's own section: the nearest round its heading (or first Preview tab), not the
+// one holding all the examples, which has them too, and the other examples' content
+// (e.g. a calendar showing the same day).
 const example = (page: Page, title: string | null) =>
-    title === null
-        ? page
-              .locator('main section')
-              .filter({ has: page.getByRole('tab', { name: 'Preview' }) })
-              .first()
-        : page.locator('main section').filter({ has: page.getByRole('heading', { name: title, exact: true }) });
+    (title === null
+        ? page.getByRole('tab', { name: 'Preview' }).first()
+        : page.getByRole('heading', { name: title, exact: true })
+    ).locator('xpath=ancestor::section[1]');
 
 let errors: string[] = [];
 test.afterEach(() => expect(errors, 'console errors').toEqual([]));
