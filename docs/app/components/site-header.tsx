@@ -14,6 +14,8 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 
 import { version } from '../../../package.json';
+
+import { COMPONENTS, componentPath } from '../pages';
 import { Sidebar } from './sidebar';
 
 const GITHUB = 'https://github.com/r1nzai/Zen';
@@ -48,7 +50,7 @@ export function SiteHeader() {
                             <Link to="/">Docs</Link>
                         </Pill>
                         <Pill asChild active={section === 'components'}>
-                            <Link to="/components/button/">Components</Link>
+                            <Link to={componentPath(COMPONENTS[0].slug)}>Components</Link>
                         </Pill>
                         <Pill asChild active={section === 'showcase'}>
                             <Link to="/showcase/">Showcase</Link>
