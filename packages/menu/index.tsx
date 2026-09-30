@@ -103,7 +103,7 @@ export function MenuContent({ align = 'end', offset = 6, className, style, child
 }
 
 const ITEM =
-    'flex w-full cursor-default items-center gap-3 rounded-lg px-3 py-2 text-sm outline-hidden select-none hover:bg-tint/[0.07] focus:bg-tint/[0.07]';
+    'flex w-full cursor-default items-center gap-3 rounded-lg px-3 py-2 text-left text-sm outline-hidden select-none hover:bg-tint/[0.07] focus:bg-tint/[0.07]';
 
 /**
  * One choice in a Menu: closes the menu, then runs `onSelect`. An `icon` sits

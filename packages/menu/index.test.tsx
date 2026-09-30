@@ -68,6 +68,11 @@ describe('Menu', () => {
         expect(screen.getByRole('menuitem', { name: 'Log out', hidden: true })).toHaveClass('text-destructive');
     });
 
+    it('items are left-aligned (a button centres its text), so fixed-width columns line up', () => {
+        render(<Account />);
+        expect(screen.getByRole('menuitem', { name: 'Settings', hidden: true })).toHaveClass('text-left');
+    });
+
     it('arrow keys move between items only, wrapping', () => {
         render(<Account />);
         const menu = screen.getByRole('menu', { hidden: true });
