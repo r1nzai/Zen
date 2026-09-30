@@ -137,6 +137,23 @@ describe('DonutChart', () => {
         expect(screen.getByText('Total')).toBeInTheDocument();
     });
 
+    it('one part is a whole ring, with no notch where its ends would meet', () => {
+        render(<DonutChart items={[{ key: 'emi', label: 'EMI', value: 32748 }]} label="Planned" />);
+        const d = screen.getByRole('listitem', { name: /EMI/ }).getAttribute('d')!;
+        // Drawn as two full circles (outer and inner edge), not a sector with rounded ends.
+        expect(d.match(/M/g)).toHaveLength(2);
+    });
+
+    it('stacks what you put in the middle together', () => {
+        render(
+            <DonutChart items={ITEMS} label="Spending">
+                <div>Planned</div>
+                <div>₹32.7K</div>
+            </DonutChart>,
+        );
+        expect(screen.getByText('Planned').parentElement).toHaveClass('flex-col', 'justify-center');
+    });
+
     it('focusing a segment shows its tooltip', () => {
         render(<DonutChart items={ITEMS} label="Spending" formatValue={(v) => `₹${v}`} />);
         fireEvent.focus(screen.getByRole('listitem', { name: /Food/ }));

@@ -48,8 +48,10 @@ export default function DonutChart({
             >
                 {arcs.map((a, i) => {
                     if (a.end - a.start <= gap * 2) return null;
+                    // The only segment is the whole ring: no ends to round (that left a notch at the top).
+                    const whole = a.end - a.start >= Math.PI * 2 - 1e-6;
                     const mid = (a.start + a.end) / 2;
-                    const lift = active === i ? 4 : 0;
+                    const lift = active === i && !whole ? 4 : 0;
                     const pct = total ? Math.round((items[i].value / total) * 100) : 0;
                     return (
                         <path
@@ -57,7 +59,16 @@ export default function DonutChart({
                             role="listitem"
                             tabIndex={0}
                             aria-label={`${items[i].label}: ${formatValue(items[i].value)} (${pct}%)`}
-                            d={sector(inner + corner, r - corner, a.start + gap + corner / r, a.end - gap - corner / r)}
+                            d={
+                                whole
+                                    ? sector(inner + corner, r - corner, a.start, a.end)
+                                    : sector(
+                                          inner + corner,
+                                          r - corner,
+                                          a.start + gap + corner / r,
+                                          a.end - gap - corner / r,
+                                      )
+                            }
                             strokeWidth={corner * 2}
                             strokeLinejoin="round"
                             onPointerEnter={() => setActive(i)}
@@ -79,7 +90,8 @@ export default function DonutChart({
                 })}
             </svg>
             {children && (
-                <div className="pointer-events-none absolute inset-0 grid place-items-center text-center">
+                // Stacked together in the middle, however many elements you pass.
+                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
                     {children}
                 </div>
             )}
