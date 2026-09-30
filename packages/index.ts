@@ -60,7 +60,16 @@ export { default as Input } from './input';
 export { default as InputGroup, InputGroupAddon, InputGroupInput } from './input-group';
 export { default as Meter, type MeterProps } from './meter';
 export { default as MonthPicker, type MonthPickerProps } from './month-picker';
-export { default as MoneyInput, type MoneyInputOptions, type MoneyInputProps, useMoneyInput } from './money-input';
+export {
+    type CurrencyConversion,
+    default as MoneyInput,
+    MoneyConversionHint,
+    MoneyCurrencyMenu,
+    type MoneyInputOptions,
+    type MoneyInputProps,
+    type MoneyInputState,
+    useMoneyInput,
+} from './money-input';
 export { RadioCard, type RadioCardProps, default as RadioCards, type RadioCardsProps } from './radio-cards';
 export { default as Pills, Pill, PillIndicator } from './pills';
 export { default as PageHeader } from './page-header';
@@ -173,6 +182,14 @@ export {
     parseMoney,
     parseMoneyInput,
 } from './utils/money';
+export {
+    convertMinor,
+    type ForeignAmount,
+    isRateTable,
+    rateBetween,
+    type RateTable,
+    RateUnavailableError,
+} from './utils/fx';
 
 declare module 'react' {
     interface CSSProperties {

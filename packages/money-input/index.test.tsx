@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { useState } from 'react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { StrictMode, useState } from 'react';
 
 import InputGroup, { InputGroupAddon, InputGroupInput } from '../input-group';
 import MoneyInput, { MoneyInputProps, useMoneyInput } from './index';
@@ -126,5 +126,130 @@ describe('useMoneyInput', () => {
         fireEvent.blur(input());
         expect(onChange).toHaveBeenCalledWith(250000);
         expect(input()).toHaveValue('2,500');
+    });
+});
+
+describe('MoneyInput convert', () => {
+    const TABLE = { base: 'EUR', date: '2026-09-29', rates: { INR: 100, USD: 1.25 } };
+    // 1 USD = 80 INR.
+    function Converting(
+        props: Partial<MoneyInputProps> & {
+            onValue?: (v: number | null) => void;
+            onForeign?: (f: unknown) => void;
+            load?: () => unknown;
+        },
+    ) {
+        const [value, setValue] = useState<number | null>(props.value ?? null);
+        return (
+            <MoneyInput
+                aria-label="Amount"
+                currency="INR"
+                locale="en-IN"
+                allowEmpty
+                {...props}
+                value={value}
+                onChange={(v) => {
+                    setValue(v);
+                    props.onValue?.(v);
+                }}
+                convert={{
+                    currencies: ['USD', 'GBP'],
+                    loadRates: (props.load as never) ?? (() => Promise.resolve(TABLE)),
+                    source: 'ECB',
+                    onForeign: props.onForeign,
+                }}
+            />
+        );
+    }
+    const pick = async (code: string) => {
+        fireEvent.click(screen.getByRole('button', { name: /^Currency:/ }));
+        fireEvent.click(screen.getByRole('menuitem', { name: new RegExp(`^${code}`), hidden: true }));
+    };
+
+    it('offers only currencies the rates have, once loaded', async () => {
+        render(<Converting />);
+        await pick('USD');
+        await screen.findByText(/1 USD = ₹80\.00 \(ECB/);
+        fireEvent.click(screen.getByRole('button', { name: /^Currency:/ }));
+        expect(screen.queryByRole('menuitem', { name: /^GBP/, hidden: true })).toBeNull();
+        expect(screen.getByRole('menuitem', { name: /^INR/, hidden: true })).toBeInTheDocument();
+    });
+
+    it('converts on commit and keeps the original', async () => {
+        const onValue = vi.fn();
+        const onForeign = vi.fn();
+        render(<Converting onValue={onValue} onForeign={onForeign} />);
+        await pick('USD');
+        await screen.findByText(/1 USD =/);
+        type('10');
+        expect(screen.getByText(/≈ ₹800\.00/)).toBeInTheDocument();
+        fireEvent.blur(input());
+        expect(onValue).toHaveBeenLastCalledWith(80000);
+        expect(onForeign).toHaveBeenLastCalledWith({ currency: 'USD', amount: 1000, rate: 80, date: '2026-09-29' });
+        expect(input()).toHaveValue('800');
+        expect(input()).toHaveAccessibleDescription(/Converted from \$10\.00 at 80\.0000/);
+    });
+
+    it('live mode reports the converted amount, and only once the rate is here', async () => {
+        const onValue = vi.fn();
+        let resolve: (t: typeof TABLE) => void = () => {};
+        const load = () => new Promise((r) => (resolve = r));
+        render(<Converting live onValue={onValue} load={load} />);
+        type('10');
+        expect(onValue).toHaveBeenLastCalledWith(1000);
+        await pick('USD');
+        expect(onValue).toHaveBeenLastCalledWith(null);
+        expect(screen.getByText(/Getting today’s rate/)).toBeInTheDocument();
+        await act(async () => resolve(TABLE));
+        expect(onValue).toHaveBeenLastCalledWith(80000);
+    });
+
+    it("won't commit without a rate, and says why", async () => {
+        const onValue = vi.fn();
+        render(<Converting onValue={onValue} load={() => null} />);
+        await pick('USD');
+        await screen.findByText(/Couldn’t get exchange rates/);
+        type('10');
+        fireEvent.blur(input());
+        expect(onValue).not.toHaveBeenCalled();
+        expect(screen.getByRole('alert')).toHaveTextContent("Couldn't get today's exchange rate.");
+    });
+
+    it('Escape goes back to the home currency', async () => {
+        render(<Converting value={5000} />);
+        await pick('USD');
+        type('10');
+        fireEvent.keyDown(input(), { key: 'Escape' });
+        expect(input()).toHaveValue('50');
+        expect(screen.getByRole('button', { name: /^Currency: INR/ })).toBeInTheDocument();
+    });
+
+    it('loads the rate under StrictMode (effects mounted twice)', async () => {
+        render(
+            <StrictMode>
+                <Converting />
+            </StrictMode>,
+        );
+        await pick('USD');
+        expect(await screen.findByText(/1 USD = ₹80\.00/)).toBeInTheDocument();
+    });
+
+    it('opens on a saved foreign amount', async () => {
+        render(
+            <MoneyInput
+                aria-label="Amount"
+                value={80000}
+                onChange={() => {}}
+                currency="INR"
+                locale="en-IN"
+                convert={{
+                    currencies: ['USD'],
+                    loadRates: () => TABLE,
+                    initial: { currency: 'USD', amount: 1000, rate: 80, date: '2026-09-29' },
+                }}
+            />,
+        );
+        expect(input()).toHaveValue('10');
+        expect(await screen.findByText(/1 USD = ₹80\.00/)).toBeInTheDocument();
     });
 });

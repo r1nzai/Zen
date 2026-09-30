@@ -153,9 +153,9 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'money-input',
         title: 'Money Input',
         description:
-            'Amounts in any currency and locale, with shorthand like 1.5L or 10k, exact to the paisa. Built on Input Group.',
-        parts: ['MoneyInput'],
-        examples: ['Default', 'Dollars', 'CurrencyMenu', 'Compact'],
+            'Amounts in any currency and locale, with shorthand like 1.5L or 10k, exact to the paisa, and typed in other currencies, converted at your rates. Built on Input Group.',
+        parts: ['MoneyInput', 'MoneyCurrencyMenu', 'MoneyConversionHint'],
+        examples: ['Default', 'Dollars', 'Convert', 'Compact'],
     },
     {
         slug: 'month-picker',

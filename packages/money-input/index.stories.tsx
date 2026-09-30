@@ -1,7 +1,7 @@
 import preview from '../../.storybook/preview';
 import DefaultExample from './examples/Default';
 import DollarsExample from './examples/Dollars';
-import CurrencyMenuExample from './examples/CurrencyMenu';
+import ConvertExample from './examples/Convert';
 import CompactExample from './examples/Compact';
 import MoneyInput from './index';
 
@@ -14,6 +14,6 @@ export const Default = meta.story({ render: () => <DefaultExample /> });
 
 export const Dollars = meta.story({ render: () => <DollarsExample /> });
 
-export const CurrencyMenu = meta.story({ render: () => <CurrencyMenuExample /> });
+export const Convert = meta.story({ render: () => <ConvertExample /> });
 
 export const Compact = meta.story({ render: () => <CompactExample /> });
