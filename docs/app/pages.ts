@@ -62,6 +62,14 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'Range', 'Limits'],
     },
     {
+        slug: 'chart',
+        title: 'Chart',
+        description:
+            'Areas, lines and bars on one axis, and a donut: plain SVG that draws itself in, with a crosshair tooltip, keyboard reading, a legend and a table for screen readers.',
+        parts: ['Chart', 'ChartArea', 'ChartLine', 'ChartBar', 'ChartReference', 'ChartTooltipCard', 'DonutChart'],
+        examples: ['Balance', 'Cashflow', 'Lines', 'Donut'],
+    },
+    {
         slug: 'checkbox',
         title: 'Checkbox',
         description: 'A native checkbox whose tick draws itself in, with a label, a description and a mixed state.',

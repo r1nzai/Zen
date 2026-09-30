@@ -61,6 +61,24 @@ export { default as InputGroup, InputGroupAddon, InputGroupInput } from './input
 export { default as Meter, type MeterProps } from './meter';
 export { default as MonthPicker, type MonthPickerProps } from './month-picker';
 export { default as Checkbox, type CheckboxProps } from './checkbox';
+export {
+    default as Chart,
+    ChartArea,
+    type ChartAreaProps,
+    ChartBar,
+    type ChartBarProps,
+    ChartLine,
+    type ChartLineProps,
+    type ChartProps,
+    ChartReference,
+    type ChartReferenceProps,
+    type ChartSeriesProps,
+    ChartTooltipCard,
+    type ChartTooltipCardProps,
+    DonutChart,
+    type DonutChartProps,
+    niceTicks,
+} from './chart';
 export { Radio, default as RadioGroup, type RadioGroupProps, type RadioProps } from './radio-group';
 export { default as Calendar, type CalendarProps, type CalendarRangeProps, type CalendarSingleProps } from './calendar';
 export { default as DatePicker, type DatePickerProps, DateRangePicker, type DateRangePickerProps } from './date-picker';

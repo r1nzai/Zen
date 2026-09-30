@@ -174,3 +174,15 @@ test('calendar: a range previews while pointing, across months', async ({ page }
     await range.locator('[data-date="2026-11-03"]').click();
     await expect(range.getByText(/20 Oct\s*–\s*3 Nov 2026 · 15 days/)).toBeVisible();
 });
+
+test('chart: draws after hydration, and the keyboard reads each row', async ({ page }) => {
+    errors = await open(page, '/components/chart/');
+    const plot = page.getByLabel('Income and spending by month: use the arrow keys to read values');
+    await expect(plot.locator('path.zen__chart-grow')).toHaveCount(16);
+    await plot.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(plot).toContainText('Apr');
+    await expect(plot).toContainText('Income');
+    await page.keyboard.press('End');
+    await expect(plot).toContainText('Nov');
+});

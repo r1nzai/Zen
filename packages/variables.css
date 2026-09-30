@@ -48,6 +48,19 @@
     --toast-shadow: 0 18px 50px -20px oklch(0 0 0 / 0.8);
     --backdrop-scrim: oklch(0 0 0 / 0.5);
     --topo-strength: 0.55;
+    /*
+     * Chart series, in this order (full colours, not L C H triplets). Validated as a
+     * set on the dark and light surfaces: lightness band, chroma, colour-blind
+     * separation of neighbours, contrast. Assign in order; never cycle past 8.
+     */
+    --chart-1: #3987e5;
+    --chart-2: #d95926;
+    --chart-3: #199e70;
+    --chart-4: #c98500;
+    --chart-5: #d55181;
+    --chart-6: #008300;
+    --chart-7: #9085e9;
+    --chart-8: #e66767;
     --mx: -9999px; /* pointer position, set by <Backdrop> */
     --my: -9999px;
 }
@@ -87,4 +100,13 @@
     --toast-shadow: 0 18px 50px -20px oklch(0.3 0.05 295 / 0.35);
     --backdrop-scrim: oklch(0.21 0.02 295 / 0.3);
     --topo-strength: 0.55;
+
+    --chart-1: #2a78d6;
+    --chart-2: #eb6834;
+    --chart-3: #1baf7a;
+    --chart-4: #eda100;
+    --chart-5: #e87ba4;
+    --chart-6: #008300;
+    --chart-7: #4a3aa7;
+    --chart-8: #e34948;
 }

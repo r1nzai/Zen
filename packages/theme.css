@@ -941,6 +941,41 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     }
 }
 
+/* Charts: lines draw themselves in, bars grow from the baseline, fills and donut segments fade up. */
+.zen__chart-draw {
+    stroke-dasharray: 1;
+    animation: zen-chart-draw 0.9s cubic-bezier(0.3, 0.7, 0.2, 1) both;
+}
+@keyframes zen-chart-draw {
+    from {
+        stroke-dashoffset: 1;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+.zen__chart-grow {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: zen-chart-grow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.zen__chart-grow[data-negative] {
+    transform-origin: top;
+}
+@keyframes zen-chart-grow {
+    from {
+        transform: scaleY(0);
+    }
+}
+.zen__chart-fade {
+    animation: zen-chart-fade 0.8s ease-out both;
+}
+@keyframes zen-chart-fade {
+    from {
+        opacity: 0;
+    }
+}
+
 /* Reduced motion: the OS setting, or opt in with html.reduce-motion. */
 @media (prefers-reduced-motion: reduce) {
     .zen-backdrop *,
