@@ -123,6 +123,16 @@ function segmentTip(mid: number, r: number): CSSProperties {
 }
 
 /**
+ * A point at a radius and angle, for a path. Rounded to a thousandth of a pixel:
+ * engines' trigonometry differs in the last digits (Node's and Chrome's do), and
+ * the path drawn on the server must match the browser's to hydrate.
+ */
+function point(rad: number, a: number) {
+    const round = (v: number) => Math.round(v * 1000) / 1000;
+    return `${round(rad * Math.cos(a))},${round(rad * Math.sin(a))}`;
+}
+
+/**
  * A ring segment between two radii and two angles (radians, clockwise from 3
  * o'clock), with each end cut `inset` px inside its boundary line, parallel to
  * it: so neighbours are parted by an even gap. Narrow enough that the inner
@@ -134,9 +144,11 @@ function segment(r0: number, r1: number, a0: number, a1: number, inset: number):
     if (o1 <= o0) return '';
     let [i0, i1] = [a0 + within(r0), a1 - within(r0)];
     if (i1 < i0) i0 = i1 = (a0 + a1) / 2;
-    const p = (rad: number, a: number) => `${rad * Math.cos(a)},${rad * Math.sin(a)}`;
-    const outer = `M${p(r1, o0)}A${r1},${r1} 0 ${o1 - o0 > Math.PI ? 1 : 0} 1 ${p(r1, o1)}`;
-    const back = i1 > i0 ? `L${p(r0, i1)}A${r0},${r0} 0 ${i1 - i0 > Math.PI ? 1 : 0} 0 ${p(r0, i0)}` : `L${p(r0, i0)}`;
+    const outer = `M${point(r1, o0)}A${r1},${r1} 0 ${o1 - o0 > Math.PI ? 1 : 0} 1 ${point(r1, o1)}`;
+    const back =
+        i1 > i0
+            ? `L${point(r0, i1)}A${r0},${r0} 0 ${i1 - i0 > Math.PI ? 1 : 0} 0 ${point(r0, i0)}`
+            : `L${point(r0, i0)}`;
     return `${outer}${back}Z`;
 }
 
@@ -144,13 +156,12 @@ function segment(r0: number, r1: number, a0: number, a1: number, inset: number):
 function sector(r0: number, r1: number, a0: number, a1: number): string {
     if (a1 <= a0) return '';
     const large = a1 - a0 > Math.PI ? 1 : 0;
-    const p = (r: number, a: number) => `${r * Math.cos(a)},${r * Math.sin(a)}`;
     // A full ring can't be one arc: split it in two.
     if (a1 - a0 >= Math.PI * 2 - 1e-6) {
         const m = a0 + Math.PI;
-        return `M${p(r1, a0)}A${r1},${r1} 0 1 1 ${p(r1, m)}A${r1},${r1} 0 1 1 ${p(r1, a0)}M${p(r0, a0)}A${r0},${r0} 0 1 0 ${p(r0, m)}A${r0},${r0} 0 1 0 ${p(r0, a0)}Z`;
+        return `M${point(r1, a0)}A${r1},${r1} 0 1 1 ${point(r1, m)}A${r1},${r1} 0 1 1 ${point(r1, a0)}M${point(r0, a0)}A${r0},${r0} 0 1 0 ${point(r0, m)}A${r0},${r0} 0 1 0 ${point(r0, a0)}Z`;
     }
-    return `M${p(r1, a0)}A${r1},${r1} 0 ${large} 1 ${p(r1, a1)}L${p(r0, a1)}A${r0},${r0} 0 ${large} 0 ${p(r0, a0)}Z`;
+    return `M${point(r1, a0)}A${r1},${r1} 0 ${large} 1 ${point(r1, a1)}L${point(r0, a1)}A${r0},${r0} 0 ${large} 0 ${point(r0, a0)}Z`;
 }
 
 export interface DonutChartProps {
