@@ -1,3 +1,4 @@
+import XMarkMicro from '@zen/icons/micro/x-mark';
 import { cx } from '@zen/utils/cx';
 import { useGraphicsMode } from '@zen/utils/graphics';
 import {
@@ -472,17 +473,7 @@ function Toast({
                         onClick={() => onDismiss(toast.id)}
                         className="text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute top-2.5 right-2.5 grid size-7 cursor-pointer place-items-center rounded-lg outline-hidden transition-colors focus-visible:ring-2"
                     >
-                        <svg
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.8"
-                            strokeLinecap="round"
-                            className="size-3.5"
-                            aria-hidden
-                        >
-                            <path d="m4 4 8 8M12 4l-8 8" />
-                        </svg>
+                        <XMarkMicro className="size-3.5" />
                     </button>
                 </div>
                 {/* Time left before it goes away; waits while the deck is open, like the toast itself. */}

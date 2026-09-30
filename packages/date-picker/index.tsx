@@ -1,3 +1,4 @@
+import CalendarMicro from '@zen/icons/micro/calendar';
 import Calendar from '@zen/calendar';
 import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
@@ -157,18 +158,7 @@ function PickerField({
 
 function CalendarIcon() {
     return (
-        <svg
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            aria-hidden
-            className="text-muted-foreground group-data-popup-open:text-foreground size-4 shrink-0 transition-colors"
-        >
-            <rect x="2.5" y="3.5" width="11" height="10" rx="2" />
-            <path d="M2.5 6.5h11M5.5 2v3M10.5 2v3" />
-        </svg>
+        <CalendarMicro className="text-muted-foreground group-data-popup-open:text-foreground size-4 shrink-0 transition-colors" />
     );
 }
 

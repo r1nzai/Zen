@@ -1,3 +1,5 @@
+import CheckMicro from '@zen/icons/micro/check';
+import MinusMicro from '@zen/icons/micro/minus';
 import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { ComponentProps, ReactNode, useEffect, useRef } from 'react';
@@ -45,28 +47,9 @@ export default function Checkbox({
                     'aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50',
                 )}
             />
-            <svg
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden
-                className="text-primary-foreground pointer-events-none absolute size-3 opacity-0 transition-opacity duration-150 peer-checked:opacity-100 peer-indeterminate:hidden [&>path]:transition-[stroke-dashoffset] [&>path]:duration-300 [&>path]:ease-out [&>path]:[stroke-dasharray:16] [&>path]:[stroke-dashoffset:16] peer-checked:[&>path]:[stroke-dashoffset:0]"
-            >
-                <path d="m3.5 8.5 3 3 6-7" />
-            </svg>
-            <svg
-                viewBox="0 0 16 16"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                aria-hidden
-                className="text-primary-foreground pointer-events-none absolute hidden size-3 peer-indeterminate:block"
-            >
-                <path d="M4 8h8" />
-            </svg>
+            {/* The tick is uncovered from left to right, as if drawn, as the box is checked. */}
+            <CheckMicro className="text-primary-foreground pointer-events-none absolute size-3.5 opacity-0 transition-[opacity,clip-path] duration-300 ease-out [clip-path:inset(0_100%_0_0)] peer-checked:opacity-100 peer-checked:[clip-path:inset(0)] peer-indeterminate:hidden" />
+            <MinusMicro className="text-primary-foreground pointer-events-none absolute hidden size-3.5 peer-indeterminate:block" />
         </span>
     );
     if (!children) return box;

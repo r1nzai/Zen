@@ -1,3 +1,4 @@
+import ChevronRightMicro from '@zen/icons/micro/chevron-right';
 import { TableCell, TableCellProps, TableRow } from '@zen/table';
 import { cx } from '@zen/utils/cx';
 import {
@@ -275,18 +276,9 @@ export function TreeToggle({ expanded, onToggle, className, ...rest }: TreeToggl
             )}
             {...rest}
         >
-            <svg
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden
+            <ChevronRightMicro
                 className={cx('size-4 transition-transform duration-200 ease-out', expanded && 'rotate-90')}
-            >
-                <path d="m6 3.5 4.5 4.5L6 12.5" />
-            </svg>
+            />
         </button>
     );
 }

@@ -7,6 +7,7 @@ import {
     Avatar,
     Badge,
     Button,
+    CalendarIcon,
     buttonVariants,
     Card,
     CardHeader,
@@ -84,6 +85,9 @@ import {
     useSort,
     useToast,
     useTree,
+    Flag,
+    Settings,
+    TableIcon,
 } from '@rinzai/zen';
 
 /*
@@ -414,24 +418,11 @@ function AppHeader() {
     );
 }
 
-const icon = (d: string) => (
-    <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden
-    >
-        <path d={d} />
-    </svg>
-);
 const TAB_ICONS: Record<string, ReactNode> = {
-    Month: icon('M4 6h16M4 12h16M4 18h10'),
-    Planner: icon('M4 4h16v16H4zM4 10h16M10 4v16'),
-    Goals: icon('M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-5a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z'),
-    Settings: icon('M4 7h10M18 7h2M4 17h4M12 17h8M14 5v4M8 15v4'),
+    Month: <CalendarIcon />,
+    Planner: <TableIcon />,
+    Goals: <Flag />,
+    Settings: <Settings />,
 };
 
 /** Phone navigation, in place of the top bar's pills. */

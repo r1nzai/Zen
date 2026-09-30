@@ -60,7 +60,7 @@ export default function App() {
 - **Inputs:** Button, Input, TextArea, InputGroup, MoneyInput (with currency conversion), Select, Combobox, Calendar, DatePicker, DateRangePicker, MonthPicker, Checkbox, RadioGroup, RadioCards, Segmented, Slider, Toggle, Chip, Field
 - **Data:** Chart (areas, lines, bars) and DonutChart in plain SVG, composable Table with sticky edges and sorting, tree rows, editable cells, virtual rows, Meter, ProgressRing, AnimatedNumber, Badge, StatusPill (a live save status), Skeleton, Spinner
 - **Navigation:** Header, Pills, Tabs, TabBar, SideNav, TableOfContents, Menu
-- **Icons:** outline, on a 24px grid in the current text colour: Plus, CalendarIcon, Sun, Moon, Lock, Logout, Settings, Search, XMark, Ellipsis, chevrons, and the status icons (Check, AlertTriangle, InfoCircle)
+- **Icons:** [Heroicons](https://heroicons.com) (24px outline; Ellipsis and the status icons are from their 16px set), generated from the `heroicons` package by `scripts/icons.mjs`, in the current text colour: Plus, CalendarIcon, TableIcon, ChartBarIcon, ListBullet, Squares, Flag, Bars, Sun, Moon, Lock, Logout, Settings, Search, XMark, Ellipsis, arrows, chevrons, and the status icons (Check, AlertTriangle, InfoCircle)
 - **Theming:** dark and light, OKLCH tokens, and a theme generator (presets or any hue) that keeps contrast readable
 - **Hooks and utilities:** `themeWave` (the theme spreads from the switch like a drop falling into water: ripples, glints and a rainbow edge, drawn on the GPU; `prepareThemeWave` readies it when the pointer reaches your own switch), `useAnchoredPopup`, `useVirtualList`, `useTree`, `useSort`, money, currency, month and date helpers, `cx` (Tailwind-aware class merging), `cva`
 

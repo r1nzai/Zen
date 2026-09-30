@@ -88,15 +88,23 @@ export default function ComponentPage({ params }: Route.ComponentProps) {
                     aria-label="Pagination"
                 >
                     {prev ? (
-                        <Link to={componentPath(prev.slug)} className="text-muted-foreground hover:text-foreground">
-                            ← {prev.title}
+                        <Link
+                            to={componentPath(prev.slug)}
+                            className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5"
+                        >
+                            <Zen.ArrowLeft className="size-4" aria-hidden />
+                            {prev.title}
                         </Link>
                     ) : (
                         <span />
                     )}
                     {next && (
-                        <Link to={componentPath(next.slug)} className="text-muted-foreground hover:text-foreground">
-                            {next.title} →
+                        <Link
+                            to={componentPath(next.slug)}
+                            className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5"
+                        >
+                            {next.title}
+                            <Zen.ArrowRight className="size-4" aria-hidden />
                         </Link>
                     )}
                 </nav>
