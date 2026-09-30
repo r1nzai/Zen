@@ -940,23 +940,36 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     animation-delay: 200ms;
 }
 
-/* Loading placeholders: a soft light sweeping across. */
+/*
+ * Loading placeholders: a soft light sweeping across. The light is a layer
+ * three times as wide sliding through the placeholder, moved by transform so
+ * the compositor runs it: animating background-position repainted every
+ * placeholder on every frame.
+ */
 .zen__skeleton {
-    background: linear-gradient(
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 300%;
+        background: linear-gradient(
             100deg,
             oklch(var(--tint) / 0.04) 30%,
             oklch(var(--tint) / 0.09) 50%,
             oklch(var(--tint) / 0.04) 70%
-        )
-        0 0 / 300% 100%;
-    animation: zen-shimmer 1.6s ease-in-out infinite;
+        );
+        animation: zen-shimmer 1.6s ease-in-out infinite;
+    }
 }
 @keyframes zen-shimmer {
     from {
-        background-position: 100% 0;
+        transform: translateX(-66.6667%);
     }
     to {
-        background-position: 0 0;
+        transform: translateX(0);
     }
 }
 

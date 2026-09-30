@@ -12,6 +12,7 @@ import {
     ReactNode,
     useEffect,
     useId,
+    useMemo,
     useRef,
     useState,
 } from 'react';
@@ -79,64 +80,278 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
     const wrap = useRef<HTMLDivElement>(null);
     const width = useWidth(wrap);
     const [active, setActive] = useState<number | null>(null);
-    const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
+    const [pointer, setPointer] = useState<{ y: number } | null>(null);
 
-    const parts = Children.toArray(children).filter(isValidElement) as ReactElement<Record<string, unknown>>[];
-    let slot = 0;
-    const series: Series[] = [];
-    const refs: ChartReferenceProps[] = [];
-    for (const p of parts) {
-        if (p.type === ChartReference) refs.push(p.props as unknown as ChartReferenceProps);
-        const kind = KINDS.get(p.type as ComponentType);
-        if (!kind) continue;
-        const given = p.props as unknown as Series;
-        slot++;
-        series.push({ ...given, kind, color: given.color ?? `var(--chart-${Math.min(slot, 8)})` });
-    }
+    /*
+     * Everything drawn from the data is worked out and rendered once per data,
+     * size or series change, not on every pointer move: hovering only redraws
+     * the crosshair, markers and tooltip (and the bars' dimming when the row
+     * under the pointer changes).
+     */
+    const geo = useMemo(() => {
+        const parts = Children.toArray(children).filter(isValidElement) as ReactElement<Record<string, unknown>>[];
+        let slot = 0;
+        const series: Series[] = [];
+        const refs: ChartReferenceProps[] = [];
+        for (const p of parts) {
+            if (p.type === ChartReference) refs.push(p.props as unknown as ChartReferenceProps);
+            const kind = KINDS.get(p.type as ComponentType);
+            if (!kind) continue;
+            const given = p.props as unknown as Series;
+            slot++;
+            series.push({ ...given, kind, color: given.color ?? `var(--chart-${Math.min(slot, 8)})` });
+        }
 
-    const rows = data as readonly Row[];
-    const value = (row: Row, key: string) => {
-        const v = row[key];
-        return typeof v === 'number' && Number.isFinite(v) ? v : null;
-    };
+        const rows = data as readonly Row[];
 
-    // Y: every value drawn, and the baseline when something is filled down to it.
-    const values = series.flatMap((s) => rows.map((r) => value(r, s.dataKey))).filter((v): v is number => v !== null);
-    for (const r of refs) if (r.y !== undefined) values.push(r.y);
-    if (series.some((s) => s.kind !== 'line')) values.push(0);
-    const ticks = niceTicks(values.length ? Math.min(...values) : 0, values.length ? Math.max(...values) : 1);
-    const [lo, hi] = [ticks[0], ticks[ticks.length - 1]];
-    const tickLabels = ticks.map((t) => formatY(t));
-    const left = Math.ceil(Math.max(...tickLabels.map((l) => l.length)) * TICK * 0.62) + 10;
+        // Y: every value drawn, and the baseline when something is filled down to it.
+        const values = series
+            .flatMap((s) => rows.map((r) => value(r, s.dataKey)))
+            .filter((v): v is number => v !== null);
+        for (const r of refs) if (r.y !== undefined) values.push(r.y);
+        if (series.some((s) => s.kind !== 'line')) values.push(0);
+        const ticks = niceTicks(values.length ? Math.min(...values) : 0, values.length ? Math.max(...values) : 1);
+        const [lo, hi] = [ticks[0], ticks[ticks.length - 1]];
+        const tickLabels = ticks.map((t) => formatY(t));
+        const left = Math.ceil(Math.max(...tickLabels.map((l) => l.length)) * TICK * 0.62) + 10;
 
-    const plotW = Math.max(0, width - left - MARGIN.right);
-    const plotH = Math.max(0, height - MARGIN.top - MARGIN.bottom);
-    const n = rows.length;
-    const bars = series.filter((s) => s.kind === 'bar');
-    // With bars, each row gets a band; without, points run edge to edge.
-    const step = n ? (bars.length || n === 1 ? plotW / n : plotW / (n - 1)) : 0;
-    const cx0 = (i: number) => left + (bars.length || n === 1 ? (i + 0.5) * step : i * step);
-    const cy = (v: number) => MARGIN.top + (hi === lo ? plotH / 2 : ((hi - v) / (hi - lo)) * plotH);
-    const base = cy(Math.min(Math.max(0, lo), hi));
+        const plotW = Math.max(0, width - left - MARGIN.right);
+        const plotH = Math.max(0, height - MARGIN.top - MARGIN.bottom);
+        const n = rows.length;
+        const bars = series.filter((s) => s.kind === 'bar');
+        // With bars, each row gets a band; without, points run edge to edge.
+        const banded = bars.length > 0 || n === 1;
+        const step = n ? (banded ? plotW / n : plotW / (n - 1)) : 0;
+        const cx0 = (i: number) => left + (banded ? (i + 0.5) * step : i * step);
+        const cy = (v: number) => MARGIN.top + (hi === lo ? plotH / 2 : ((hi - v) / (hi - lo)) * plotH);
+        const base = cy(Math.min(Math.max(0, lo), hi));
 
-    const barW = bars.length ? Math.max(2, Math.min(24, (step * 0.72) / bars.length - 2)) : 0;
-    const barX = (i: number, k: number) => cx0(i) - (bars.length * (barW + 2) - 2) / 2 + k * (barW + 2);
+        const barW = bars.length ? Math.max(2, Math.min(24, (step * 0.72) / bars.length - 2)) : 0;
+        const barX = (i: number, k: number) => cx0(i) - (bars.length * (barW + 2) - 2) / 2 + k * (barW + 2);
 
-    // X labels: as many as fit without touching.
-    const xLabels = rows.map((r) => formatX(r[x] as never));
-    const widest = Math.max(1, ...xLabels.map((l) => l.length)) * TICK * 0.6 + 12;
-    const every = step ? Math.max(1, Math.ceil(widest / step)) : 1;
+        // X labels: as many as fit without touching.
+        const xLabels = rows.map((r) => formatX(r[x] as never));
+        const widest = Math.max(1, ...xLabels.map((l) => l.length)) * TICK * 0.6 + 12;
+        const every = step ? Math.max(1, Math.ceil(widest / step)) : 1;
+
+        // Behind the hover band: gradients, grid and axis labels.
+        const back = (
+            <>
+                <defs>
+                    {series.map((s, k) =>
+                        s.kind === 'area' ? (
+                            <linearGradient key={k} id={`${id}-fill-${k}`} x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" style={{ stopColor: s.color }} stopOpacity={s.dashed ? 0.16 : 0.32} />
+                                <stop offset="100%" style={{ stopColor: s.color }} stopOpacity={0} />
+                            </linearGradient>
+                        ) : null,
+                    )}
+                </defs>
+
+                {/* Grid and axes: hairlines one step off the surface. */}
+                {ticks.map((t, i) => (
+                    <g key={t}>
+                        <line
+                            x1={left}
+                            x2={left + plotW}
+                            y1={cy(t)}
+                            y2={cy(t)}
+                            className="stroke-tint/[0.07]"
+                            shapeRendering="crispEdges"
+                        />
+                        <text
+                            x={left - 8}
+                            y={cy(t)}
+                            dy="0.32em"
+                            textAnchor="end"
+                            className="fill-muted-foreground tabular-nums"
+                            style={{ fontSize: TICK }}
+                        >
+                            {tickLabels[i]}
+                        </text>
+                    </g>
+                ))}
+                {xLabels.map((l, i) =>
+                    i % every === 0 ? (
+                        <text
+                            key={i}
+                            x={cx0(i)}
+                            y={height - 8}
+                            textAnchor={
+                                !bars.length && n > 1 && i === 0
+                                    ? 'start'
+                                    : !bars.length && i === n - 1
+                                      ? 'end'
+                                      : 'middle'
+                            }
+                            className="fill-muted-foreground"
+                            style={{ fontSize: TICK }}
+                        >
+                            {l}
+                        </text>
+                    ) : null,
+                )}
+            </>
+        );
+
+        // Above the bars: lines, areas and reference markers.
+        const front = (
+            <>
+                {series.map((s, k) => {
+                    if (s.kind === 'bar') return null;
+                    const pts = rows.map((r, i) => {
+                        const v = value(r, s.dataKey);
+                        return v === null ? null : ([cx0(i), cy(v)] as const);
+                    });
+                    return segments(pts).map((seg, j) => {
+                        const d = (s.curve === 'linear' ? linearPath : monotonePath)(seg);
+                        return (
+                            <g key={`${k}-${j}`}>
+                                {s.kind === 'area' && (
+                                    <path
+                                        d={`${d}L${seg[seg.length - 1][0]},${base}L${seg[0][0]},${base}Z`}
+                                        fill={`url(#${id}-fill-${k})`}
+                                        className="zen__chart-fade"
+                                    />
+                                )}
+                                <path
+                                    d={d}
+                                    fill="none"
+                                    strokeWidth={s.kind === 'area' && !s.dashed ? 2.5 : 2}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    // Solid lines draw themselves in; dashed ones (their dashes are the pattern) fade in.
+                                    pathLength={s.dashed ? undefined : 1}
+                                    strokeDasharray={s.dashed ? '5 5' : undefined}
+                                    className={s.dashed ? 'zen__chart-fade' : 'zen__chart-draw'}
+                                    style={{ stroke: s.color }}
+                                />
+                            </g>
+                        );
+                    });
+                })}
+
+                {refs.map((r, i) => {
+                    const tone = r.tone === 'destructive' ? 'stroke-destructive/45' : 'stroke-muted-foreground/60';
+                    if (r.y !== undefined)
+                        return (
+                            <line
+                                key={i}
+                                x1={left}
+                                x2={left + plotW}
+                                y1={cy(r.y)}
+                                y2={cy(r.y)}
+                                className={tone}
+                                strokeDasharray={r.dashed ? '3 4' : undefined}
+                                shapeRendering="crispEdges"
+                            />
+                        );
+                    const at = rows.findIndex((row) => row[x] === r.x);
+                    if (at < 0) return null;
+                    return (
+                        <g key={i}>
+                            <line
+                                x1={cx0(at)}
+                                x2={cx0(at)}
+                                y1={MARGIN.top}
+                                y2={MARGIN.top + plotH}
+                                className={tone}
+                                strokeDasharray={r.dashed === false ? undefined : '3 4'}
+                            />
+                            {r.label && (
+                                <text
+                                    x={cx0(at) - 6}
+                                    y={MARGIN.top + 4}
+                                    dy="0.7em"
+                                    textAnchor="end"
+                                    className="fill-muted-foreground"
+                                    style={{ fontSize: TICK }}
+                                >
+                                    {r.label}
+                                </text>
+                            )}
+                        </g>
+                    );
+                })}
+            </>
+        );
+
+        return { series, rows, n, bars, banded, step, left, plotH, cx0, cy, base, barW, barX, back, front };
+    }, [children, data, x, width, height, formatX, formatY, id]);
+
+    const { series, rows, n, bars, banded, step, left, plotH, cx0, cy, base, barW, barX } = geo;
+
+    // Bars dim beside the row under the pointer, so they're redrawn only when that row changes.
+    const barMarks = useMemo(
+        () =>
+            bars.map((s, k) =>
+                rows.map((r, i) => {
+                    const v = value(r, s.dataKey);
+                    if (v === null) return null;
+                    const y = cy(v);
+                    const h = Math.abs(base - y);
+                    const neg = v < 0;
+                    return (
+                        <path
+                            key={`${k}-${i}`}
+                            d={barPath(barX(i, k), neg ? base : y, barW, h, neg)}
+                            data-negative={neg || undefined}
+                            className="zen__chart-grow transition-opacity duration-200"
+                            style={{
+                                fill: s.color,
+                                opacity: (s.dim?.(r, i) ? 0.35 : 0.9) * (active !== null && active !== i ? 0.7 : 1),
+                                animationDelay: `${Math.min(i * 25, 400)}ms`,
+                            }}
+                        />
+                    );
+                }),
+            ),
+        [bars, rows, cy, base, barX, barW, active],
+    );
+
+    // The screen-reader table only changes with the data.
+    const table = useMemo(
+        () => (
+            <table className="sr-only">
+                <caption>{label}</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">{String(x)}</th>
+                        {series.map((s) => (
+                            <th key={s.dataKey} scope="col">
+                                {s.label}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows.map((r, i) => (
+                        <tr key={i}>
+                            <th scope="row">{(formatTooltipX ?? formatX)(r[x] as never)}</th>
+                            {series.map((s) => {
+                                const v = value(r, s.dataKey);
+                                return <td key={s.dataKey}>{v === null ? '' : formatY(v)}</td>;
+                            })}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        ),
+        [label, x, series, rows, formatTooltipX, formatX, formatY],
+    );
 
     const indexAt = (px: number) => {
         if (!n || !step) return null;
-        const i = bars.length || n === 1 ? Math.floor((px - left) / step) : Math.round((px - left) / step);
+        const i = banded ? Math.floor((px - left) / step) : Math.round((px - left) / step);
         return Math.min(n - 1, Math.max(0, i));
     };
     const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
         const box = e.currentTarget.getBoundingClientRect();
         const px = e.clientX - box.left;
+        const py = Math.round(e.clientY - box.top);
         setActive(indexAt(px));
-        setPointer({ x: px, y: e.clientY - box.top });
+        // Kept as the same object when unchanged, so a sideways move within a row renders nothing.
+        setPointer((p) => (p?.y === py ? p : { y: py }));
     };
     const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
         if (!n) return;
@@ -177,64 +392,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
             >
                 {width > 0 && (
                     <svg width={width} height={height} aria-hidden className="block overflow-visible">
-                        <defs>
-                            {series.map((s, k) =>
-                                s.kind === 'area' ? (
-                                    <linearGradient key={k} id={`${id}-fill-${k}`} x1="0" y1="0" x2="0" y2="1">
-                                        <stop
-                                            offset="0%"
-                                            style={{ stopColor: s.color }}
-                                            stopOpacity={s.dashed ? 0.16 : 0.32}
-                                        />
-                                        <stop offset="100%" style={{ stopColor: s.color }} stopOpacity={0} />
-                                    </linearGradient>
-                                ) : null,
-                            )}
-                        </defs>
-
-                        {/* Grid and axes: hairlines one step off the surface. */}
-                        {ticks.map((t, i) => (
-                            <g key={t}>
-                                <line
-                                    x1={left}
-                                    x2={left + plotW}
-                                    y1={cy(t)}
-                                    y2={cy(t)}
-                                    className="stroke-tint/[0.07]"
-                                    shapeRendering="crispEdges"
-                                />
-                                <text
-                                    x={left - 8}
-                                    y={cy(t)}
-                                    dy="0.32em"
-                                    textAnchor="end"
-                                    className="fill-muted-foreground tabular-nums"
-                                    style={{ fontSize: TICK }}
-                                >
-                                    {tickLabels[i]}
-                                </text>
-                            </g>
-                        ))}
-                        {xLabels.map((l, i) =>
-                            i % every === 0 ? (
-                                <text
-                                    key={i}
-                                    x={cx0(i)}
-                                    y={height - 8}
-                                    textAnchor={
-                                        !bars.length && n > 1 && i === 0
-                                            ? 'start'
-                                            : !bars.length && i === n - 1
-                                              ? 'end'
-                                              : 'middle'
-                                    }
-                                    className="fill-muted-foreground"
-                                    style={{ fontSize: TICK }}
-                                >
-                                    {l}
-                                </text>
-                            ) : null,
-                        )}
+                        {geo.back}
 
                         {/* The row under the pointer: a band behind bars, else a crosshair. */}
                         {active !== null &&
@@ -256,108 +414,8 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                                 />
                             ))}
 
-                        {bars.map((s, k) =>
-                            rows.map((r, i) => {
-                                const v = value(r, s.dataKey);
-                                if (v === null) return null;
-                                const y = cy(v);
-                                const h = Math.abs(base - y);
-                                const neg = v < 0;
-                                return (
-                                    <path
-                                        key={`${k}-${i}`}
-                                        d={barPath(barX(i, k), neg ? base : y, barW, h, neg)}
-                                        data-negative={neg || undefined}
-                                        className="zen__chart-grow transition-opacity duration-200"
-                                        style={{
-                                            fill: s.color,
-                                            opacity:
-                                                (s.dim?.(r, i) ? 0.35 : 0.9) *
-                                                (active !== null && active !== i ? 0.7 : 1),
-                                            animationDelay: `${Math.min(i * 25, 400)}ms`,
-                                        }}
-                                    />
-                                );
-                            }),
-                        )}
-
-                        {series.map((s, k) => {
-                            if (s.kind === 'bar') return null;
-                            const pts = rows.map((r, i) => {
-                                const v = value(r, s.dataKey);
-                                return v === null ? null : ([cx0(i), cy(v)] as const);
-                            });
-                            return segments(pts).map((seg, j) => {
-                                const d = (s.curve === 'linear' ? linearPath : monotonePath)(seg);
-                                return (
-                                    <g key={`${k}-${j}`}>
-                                        {s.kind === 'area' && (
-                                            <path
-                                                d={`${d}L${seg[seg.length - 1][0]},${base}L${seg[0][0]},${base}Z`}
-                                                fill={`url(#${id}-fill-${k})`}
-                                                className="zen__chart-fade"
-                                            />
-                                        )}
-                                        <path
-                                            d={d}
-                                            fill="none"
-                                            strokeWidth={s.kind === 'area' && !s.dashed ? 2.5 : 2}
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            // Solid lines draw themselves in; dashed ones (their dashes are the pattern) fade in.
-                                            pathLength={s.dashed ? undefined : 1}
-                                            strokeDasharray={s.dashed ? '5 5' : undefined}
-                                            className={s.dashed ? 'zen__chart-fade' : 'zen__chart-draw'}
-                                            style={{ stroke: s.color }}
-                                        />
-                                    </g>
-                                );
-                            });
-                        })}
-
-                        {refs.map((r, i) => {
-                            const tone =
-                                r.tone === 'destructive' ? 'stroke-destructive/45' : 'stroke-muted-foreground/60';
-                            if (r.y !== undefined)
-                                return (
-                                    <line
-                                        key={i}
-                                        x1={left}
-                                        x2={left + plotW}
-                                        y1={cy(r.y)}
-                                        y2={cy(r.y)}
-                                        className={tone}
-                                        strokeDasharray={r.dashed ? '3 4' : undefined}
-                                        shapeRendering="crispEdges"
-                                    />
-                                );
-                            const at = rows.findIndex((row) => row[x] === r.x);
-                            if (at < 0) return null;
-                            return (
-                                <g key={i}>
-                                    <line
-                                        x1={cx0(at)}
-                                        x2={cx0(at)}
-                                        y1={MARGIN.top}
-                                        y2={MARGIN.top + plotH}
-                                        className={tone}
-                                        strokeDasharray={r.dashed === false ? undefined : '3 4'}
-                                    />
-                                    {r.label && (
-                                        <text
-                                            x={cx0(at) - 6}
-                                            y={MARGIN.top + 4}
-                                            dy="0.7em"
-                                            textAnchor="end"
-                                            className="fill-muted-foreground"
-                                            style={{ fontSize: TICK }}
-                                        >
-                                            {r.label}
-                                        </text>
-                                    )}
-                                </g>
-                            );
-                        })}
+                        {barMarks}
+                        {geo.front}
 
                         {/* Markers where the crosshair meets each line, ringed in the surface colour. */}
                         {active !== null &&
@@ -381,7 +439,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                 )}
                 {row && active !== null && (
                     <div
-                        className="pointer-events-none absolute z-10 transition-[left,top] duration-75"
+                        className="pointer-events-none absolute top-0 z-10 transition-[translate] duration-75"
                         style={tooltipPosition(tipX, tipY, width, height)}
                     >
                         {renderTooltip ? (
@@ -404,32 +462,15 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                 )}
             </div>
             {summary && <figcaption className="sr-only">{summary}</figcaption>}
-            <table className="sr-only">
-                <caption>{label}</caption>
-                <thead>
-                    <tr>
-                        <th scope="col">{String(x)}</th>
-                        {series.map((s) => (
-                            <th key={s.dataKey} scope="col">
-                                {s.label}
-                            </th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {rows.map((r, i) => (
-                        <tr key={i}>
-                            <th scope="row">{(formatTooltipX ?? formatX)(r[x] as never)}</th>
-                            {series.map((s) => {
-                                const v = value(r, s.dataKey);
-                                return <td key={s.dataKey}>{v === null ? '' : formatY(v)}</td>;
-                            })}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            {table}
         </figure>
     );
+}
+
+/** A row's value for a series, or null where there's none to draw. */
+function value(row: Row, key: string) {
+    const v = row[key];
+    return typeof v === 'number' && Number.isFinite(v) ? v : null;
 }
 
 function Legend({ series }: { series: Series[] }) {
@@ -448,11 +489,12 @@ function Legend({ series }: { series: Series[] }) {
 /** Keeps the tooltip beside the crosshair and inside the chart. */
 function tooltipPosition(x: number, y: number, width: number, height: number): CSSProperties {
     const flip = x > width / 2;
-    return {
-        left: flip ? undefined : x + 12,
-        right: flip ? width - x + 12 : undefined,
-        top: Math.min(Math.max(0, y - 20), height - 80),
-    };
+    // Moved by translate, not left/top, so following the pointer needs no layout; whole
+    // pixels keep its text crisp. Flipped, it's anchored by its right edge instead.
+    const ty = Math.round(Math.min(Math.max(0, y - 20), height - 80));
+    return flip
+        ? { right: 0, translate: `${Math.round(x - 12 - width)}px ${ty}px` }
+        : { left: 0, translate: `${Math.round(x + 12)}px ${ty}px` };
 }
 
 /** Width of an element, following resizes (0 until measured, so nothing is drawn at a wrong size). */
