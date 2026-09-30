@@ -130,7 +130,7 @@ export function TableHead({
                     onClick={onSort}
                     // Buttons reset text-transform: keep sortable headings uppercase like the rest.
                     className={cx(
-                        'hover:text-foreground inline-flex items-center gap-1 align-middle leading-5 tracking-wider uppercase',
+                        'hover:text-foreground inline-flex cursor-pointer items-center gap-1 align-middle leading-5 tracking-wider uppercase',
                         numeric && 'flex-row-reverse',
                     )}
                 >

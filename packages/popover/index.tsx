@@ -50,7 +50,7 @@ export function PopoverTrigger({ asChild, style, children, ...rest }: PopoverTri
     };
     if (asChild) return <Slot {...(props as ComponentProps<'a'>)}>{children}</Slot>;
     return (
-        <button type="button" {...props}>
+        <button type="button" {...props} className={cx('cursor-pointer', props.className)}>
             {children}
         </button>
     );

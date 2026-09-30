@@ -1,6 +1,7 @@
 import ChevronLeft from '@zen/icons/chevron-left';
 import ChevronRight from '@zen/icons/chevron-right';
 import { cx } from '@zen/utils/cx';
+import { PICKER_MONTH, PICKER_MONTH_ON, PICKER_NAV } from '@zen/utils/styles';
 import {
     addDays,
     addMonthsToDate,
@@ -116,7 +117,7 @@ export default function Calendar(props: CalendarProps) {
                 type="button"
                 aria-label={picking === 'days' ? 'Previous month' : 'Previous year'}
                 onClick={() => (picking === 'days' ? step(-1) : setYear((y) => y - 1))}
-                className={NAV}
+                className={PICKER_NAV}
             >
                 <ChevronLeft className="size-4" />
             </button>
@@ -133,7 +134,7 @@ export default function Calendar(props: CalendarProps) {
                     setYear(Number(view.slice(0, 4)));
                     setPicking((p) => (p === 'days' ? 'months' : 'days'));
                 }}
-                className="hover:bg-tint/[0.07] focus-visible:ring-ring/50 rounded-md px-2 py-1 text-sm font-semibold tabular-nums outline-hidden transition-colors focus-visible:ring-2"
+                className="hover:bg-tint/[0.07] focus-visible:ring-ring/50 cursor-pointer rounded-md px-2 py-1 text-sm font-semibold tabular-nums outline-hidden transition-colors focus-visible:ring-2"
             >
                 {picking === 'days'
                     ? months === 1
@@ -145,7 +146,7 @@ export default function Calendar(props: CalendarProps) {
                 type="button"
                 aria-label={picking === 'days' ? 'Next month' : 'Next year'}
                 onClick={() => (picking === 'days' ? step(1) : setYear((y) => y + 1))}
-                className={NAV}
+                className={PICKER_NAV}
             >
                 <ChevronRight className="size-4" />
             </button>
@@ -174,11 +175,7 @@ export default function Calendar(props: CalendarProps) {
                                     setActive(addMonthsToDate(active, monthsBetween(active.slice(0, 7), month)));
                                     setPicking('days');
                                 }}
-                                className={cx(
-                                    'rounded-lg py-2 text-sm outline-hidden transition-colors disabled:cursor-not-allowed disabled:opacity-35',
-                                    'focus-visible:ring-ring/50 focus-visible:ring-2',
-                                    month === view ? 'bg-primary text-primary-foreground' : 'hover:bg-tint/[0.07]',
-                                )}
+                                className={cx(PICKER_MONTH, month === view && PICKER_MONTH_ON)}
                             >
                                 {name}
                             </button>
@@ -303,10 +300,8 @@ export default function Calendar(props: CalendarProps) {
     );
 }
 
-const NAV =
-    'text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 grid size-8 place-items-center rounded-md outline-hidden transition-colors focus-visible:ring-2';
 const DAY =
-    'relative grid size-9 place-items-center rounded-lg text-sm tabular-nums outline-hidden transition-[background-color,color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-ring/60';
+    'relative grid size-9 cursor-pointer place-items-center rounded-lg text-sm tabular-nums outline-hidden transition-[background-color,color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-ring/60';
 
 interface CalendarBaseProps {
     /** Decides month and weekday names, and the first day of the week, e.g. "en-IN". */

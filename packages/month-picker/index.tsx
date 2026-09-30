@@ -4,7 +4,7 @@ import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { formatMonth, type Month, monthNames } from '@zen/utils/month';
-import { POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
+import { PICKER_MONTH, PICKER_MONTH_ON, PICKER_NAV, POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import { ComponentProps, useState } from 'react';
 
@@ -65,7 +65,7 @@ export default function MonthPicker({
                         type="button"
                         aria-label="Previous year"
                         onClick={() => setYear((y) => y - 1)}
-                        className="hover:bg-muted rounded p-1.5"
+                        className={PICKER_NAV}
                     >
                         <ChevronLeft className="size-4" />
                     </button>
@@ -76,7 +76,7 @@ export default function MonthPicker({
                         type="button"
                         aria-label="Next year"
                         onClick={() => setYear((y) => y + 1)}
-                        className="hover:bg-muted rounded p-1.5"
+                        className={PICKER_NAV}
                     >
                         <ChevronRight className="size-4" />
                     </button>
@@ -96,10 +96,7 @@ export default function MonthPicker({
                                     onChange(month);
                                     popup.setOpen(false);
                                 }}
-                                className={cx(
-                                    'rounded-sm py-2 text-sm disabled:cursor-not-allowed disabled:opacity-40',
-                                    selected ? 'bg-primary text-primary-foreground' : 'hover:bg-muted',
-                                )}
+                                className={cx(PICKER_MONTH, selected && PICKER_MONTH_ON)}
                             >
                                 {name}
                             </button>
@@ -113,7 +110,7 @@ export default function MonthPicker({
                             onClear();
                             popup.setOpen(false);
                         }}
-                        className="border-tint/[0.06] text-muted-foreground hover:text-foreground focus-visible:ring-ring/40 mt-2 w-full rounded-lg border-t px-2 pt-2.5 pb-1.5 text-sm outline-hidden focus-visible:ring-2"
+                        className="border-tint/[0.06] text-muted-foreground hover:text-foreground focus-visible:ring-ring/40 mt-2 w-full cursor-pointer rounded-lg border-t px-2 pt-2.5 pb-1.5 text-sm outline-hidden focus-visible:ring-2"
                     >
                         {clearLabel}
                     </button>

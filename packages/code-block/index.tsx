@@ -51,7 +51,7 @@ export default function CodeBlock({
                         setCopied(true);
                     }}
                     className={cx(
-                        'text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute top-2.5 right-2.5 rounded-lg px-2.5 py-1 text-xs font-medium outline-hidden transition-[opacity,background-color,color] focus-visible:ring-2',
+                        'text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute top-2.5 right-2.5 cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium outline-hidden transition-[opacity,background-color,color] focus-visible:ring-2',
                         'opacity-0 group-hover:opacity-100 focus-visible:opacity-100',
                         copied && 'text-primary opacity-100',
                     )}

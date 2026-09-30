@@ -48,7 +48,7 @@ export function DisclosureTrigger({ className, onClick, children, ...rest }: Com
                 if (!e.defaultPrevented) setOpen(!open);
             }}
             className={cx(
-                'zen__disclosure group text-muted-foreground flex w-fit items-center gap-1.5 rounded-md text-sm font-medium outline-hidden',
+                'zen__disclosure group text-muted-foreground flex w-fit cursor-pointer items-center gap-1.5 rounded-md text-sm font-medium outline-hidden',
                 'hover:text-foreground aria-expanded:text-foreground transition-colors duration-200',
                 'focus-visible:outline-ring/50 focus-visible:outline-2 focus-visible:outline-offset-4',
                 className,

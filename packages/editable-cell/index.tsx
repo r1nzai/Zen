@@ -39,7 +39,7 @@ export default function EditableCell({
             aria-label={label ? `${label}. Edit` : undefined}
             onClick={() => setEditing(true)}
             className={cx(
-                'zen__editable-cell hover:bg-primary/10 focus-visible:ring-ring/50 w-full rounded-md px-1.5 py-0.5 text-right tabular-nums transition-colors focus-visible:ring-2 focus-visible:outline-hidden',
+                'zen__editable-cell hover:bg-primary/10 focus-visible:ring-ring/50 w-full cursor-pointer rounded-md px-1.5 py-0.5 text-right tabular-nums transition-colors focus-visible:ring-2 focus-visible:outline-hidden',
                 className,
             )}
         >

@@ -1,5 +1,6 @@
+import Alert from '@zen/alert';
 import { cx } from '@zen/utils/cx';
-import { AlertIcon, CheckIcon, InfoIcon } from '@zen/utils/status-icons';
+import { AlertIcon } from '@zen/utils/status-icons';
 import { cloneElement, createContext, isValidElement, ReactElement, ReactNode, useContext, useId } from 'react';
 
 /** What a Field tells the control inside it. */
@@ -103,24 +104,16 @@ export default function Field({ label, hint, error, htmlFor, children, className
     );
 }
 
-/** A message for a form as a whole: an error in a tinted box, or a quiet note. */
+/** A message for a form as a whole: an error or success in a tinted box, or a quiet note. An Alert, set for forms. */
 export function FormMessage({ tone = 'info', children, className }: FormMessageProps) {
-    const Icon = tone === 'error' ? AlertIcon : tone === 'success' ? CheckIcon : InfoIcon;
     return (
-        <p
-            role={tone === 'error' ? 'alert' : 'status'}
-            className={cx(
-                'mt-0! flex items-start gap-2 text-sm',
-                tone === 'error' &&
-                    'border-destructive/35 bg-destructive/10 text-destructive rounded-lg border px-3 py-2',
-                tone === 'success' && 'border-primary/30 bg-primary/10 text-primary rounded-lg border px-3 py-2',
-                tone === 'info' && 'text-muted-foreground',
-                className,
-            )}
+        <Alert
+            tone={tone === 'error' ? 'negative' : tone === 'success' ? 'positive' : 'default'}
+            plain={tone === 'info'}
+            className={cx('mt-0!', className)}
         >
-            <Icon className="mt-0.5 shrink-0" />
-            <span>{children}</span>
-        </p>
+            {children}
+        </Alert>
     );
 }
 
