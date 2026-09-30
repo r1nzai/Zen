@@ -816,7 +816,17 @@ html.zen-theme-closing::view-transition-old(root) {
     }
 }
 
-/* Popovers scale and fade in from their top-layer entry, and back out. */
+/*
+ * Popovers scale and fade in from their top-layer entry, and back out. They
+ * stay on a GPU layer of their own after too: while animating they're drawn as
+ * one, and a popup at a fractional position (under a trigger that is) would
+ * otherwise be repainted when the animation ends, its icons snapping a pixel
+ * away from the text.
+ */
+.zen__popover,
+.zen__dialog {
+    will-change: scale;
+}
 .zen__popover {
     transition:
         opacity 150ms,
@@ -859,6 +869,9 @@ html.zen-theme-closing::view-transition-old(root) {
         opacity 200ms,
         overlay 320ms allow-discrete,
         display 320ms allow-discrete;
+}
+.zen__dialog[data-side] {
+    will-change: translate;
 }
 .zen__dialog[data-side]:not([open]) {
     scale: none;
