@@ -29,3 +29,6 @@ docs/.react-router
 # Playwright
 test-results
 playwright-report
+
+# Claude Code (local, per person)
+.claude/
