@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import ThemeToggle, { themeScript } from './index';
 
@@ -22,6 +22,25 @@ describe('ThemeToggle', () => {
     it('starts from the theme already on <html>', () => {
         document.documentElement.className = 'light';
         render(<ThemeToggle />);
+        expect(screen.getByRole('button', { name: 'Switch to dark theme' })).toBeInTheDocument();
+    });
+
+    it('keeps every toggle on the page in step', () => {
+        render(
+            <>
+                <ThemeToggle />
+                <ThemeToggle />
+            </>,
+        );
+        fireEvent.click(screen.getAllByRole('button', { name: 'Switch to light theme' })[0]);
+        expect(screen.getAllByRole('button', { name: 'Switch to dark theme' })).toHaveLength(2);
+    });
+
+    it('follows the theme when something else changes it', async () => {
+        render(<ThemeToggle />);
+        await act(async () => {
+            document.documentElement.className = 'light';
+        });
         expect(screen.getByRole('button', { name: 'Switch to dark theme' })).toBeInTheDocument();
     });
 

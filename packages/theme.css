@@ -440,6 +440,47 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
 }
 
 /*
+ * A track's sliding indicator is placed by measuring, which can't happen until
+ * the page's script runs. Until then (server HTML, before hydration) the active
+ * item wears the indicator's look itself, in the same place, so it shows at
+ * once: the pill of Pills (and TabList variant="pills"), the bar of underline tabs.
+ */
+:has(> .zen__pill-indicator[data-pending]) :is([aria-current='page'], [aria-selected='true']) {
+    background-color: color-mix(in oklab, var(--color-primary) 15%, transparent);
+    box-shadow:
+        inset 0 0 0 1px oklch(var(--glow) / 0.35),
+        0 0 24px -4px oklch(var(--glow) / 0.6);
+}
+:has(> .zen__tab-bar[data-pending]) > [role='tab'][aria-selected='true'] {
+    /* The bar straddles the track's bottom border: 1px above its edge, 1px below. */
+    box-shadow:
+        inset 0 -1px 0 var(--color-primary),
+        0 1px 0 var(--color-primary);
+}
+
+/* The page's <main>, focused by Header's skip link: no ring round the whole page. */
+main[data-zen-skip-target]:focus {
+    outline: none;
+}
+
+/*
+ * themeWave() (utils/theme-wave.ts): the new theme spreads over the old one,
+ * which holds still, through a clip on the new page (or, into a dark theme,
+ * the old one closes in over the new). The water is a canvas
+ * drawn over both, in a layer of its own that shows as it is (no fade).
+ */
+html.zen-theme-waving::view-transition-old(root),
+html.zen-theme-waving::view-transition-new(root),
+html.zen-theme-waving::view-transition-new(zen-theme-water) {
+    animation: none;
+    mix-blend-mode: normal;
+}
+/* Into a dark theme, the old one closes in over the new. */
+html.zen-theme-closing::view-transition-old(root) {
+    z-index: 1;
+}
+
+/*
  * Contour lines (image from <Backdrop topoSrc>), faint everywhere… The image
  * is used as a mask over the tint, so its strokes are white on dark and ink
  * on light.
