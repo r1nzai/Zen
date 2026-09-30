@@ -39,6 +39,7 @@ function titleFor(name: string) {
 
 /** The JSDoc right above `export default`, as the example's description. */
 function docComment(source: string) {
-    const match = source.match(/\/\*\*\s*([\s\S]*?)\s*\*\/\s*export default/);
+    // The body can't contain `*/`, so an earlier comment (on a field, say) isn't swept in.
+    const match = source.match(/\/\*\*((?:(?!\*\/)[\s\S])*)\*\/\s*export default/);
     return match?.[1].replace(/^\s*\* ?/gm, '').trim();
 }
