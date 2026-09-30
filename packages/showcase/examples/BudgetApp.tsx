@@ -32,13 +32,14 @@ import {
     type Month,
     MonthPicker,
     Menu,
+    MenuContent,
     MenuItem,
+    MenuTrigger,
     Meter,
     Pill,
     PillIndicator,
     Pills,
     PageHeader,
-    Popover,
     type PresetId,
     PRESETS,
     ProgressRing,
@@ -72,6 +73,9 @@ import {
     type ThemeSettings,
     ToastProvider,
     Toggle,
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
     TreeCell,
     TreeLabel,
     TreeRow,
@@ -257,11 +261,18 @@ function Budget({ nav }: { nav: boolean }) {
                             {loading ? 'Refreshing' : 'Refresh'}
                         </Button>
                         <Button onClick={() => setAdding(true)}>Add entry</Button>
-                        <Menu label="Budget actions" triggerClassName={MORE} trigger={<Ellipsis />}>
-                            <MenuItem onSelect={() => toast('Export started', { tone: 'info' })}>Export CSV</MenuItem>
-                            <MenuItem destructive onSelect={() => setResetting(true)}>
-                                Reset month
-                            </MenuItem>
+                        <Menu>
+                            <MenuTrigger aria-label="Budget actions" className={MORE}>
+                                <Ellipsis />
+                            </MenuTrigger>
+                            <MenuContent>
+                                <MenuItem onSelect={() => toast('Export started', { tone: 'info' })}>
+                                    Export CSV
+                                </MenuItem>
+                                <MenuItem destructive onSelect={() => setResetting(true)}>
+                                    Reset month
+                                </MenuItem>
+                            </MenuContent>
                         </Menu>
                     </div>
                 </PageHeader>
@@ -515,10 +526,15 @@ function EntryTable({
                                 </EditableCell>
                             </TableCell>
                             <TableCell className="w-10 px-1">
-                                <Menu label={`Actions for ${e.label}`} triggerClassName={MORE} trigger={<Ellipsis />}>
-                                    <MenuItem destructive onSelect={() => onDelete(e)}>
-                                        Delete
-                                    </MenuItem>
+                                <Menu>
+                                    <MenuTrigger aria-label={`Actions for ${e.label}`} className={MORE}>
+                                        <Ellipsis />
+                                    </MenuTrigger>
+                                    <MenuContent>
+                                        <MenuItem destructive onSelect={() => onDelete(e)}>
+                                            Delete
+                                        </MenuItem>
+                                    </MenuContent>
                                 </Menu>
                             </TableCell>
                         </TableRow>
@@ -737,16 +753,16 @@ function Appearance() {
         <Card
             title="Appearance"
             action={
-                <Popover
-                    trigger="hover"
-                    content={
+                <Tooltip>
+                    <TooltipTrigger aria-label="About appearance" className="rounded-md">
+                        <Badge variant="outline">?</Badge>
+                    </TooltipTrigger>
+                    <TooltipContent>
                         <p className="text-muted-foreground mt-0! max-w-56 p-3 text-xs leading-5">
                             Every colour comes from these few settings, and stays readable in both themes.
                         </p>
-                    }
-                >
-                    <Badge variant="outline">?</Badge>
-                </Popover>
+                    </TooltipContent>
+                </Tooltip>
             }
         >
             <div className="flex flex-col gap-5">

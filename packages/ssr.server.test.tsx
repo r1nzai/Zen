@@ -3,7 +3,9 @@ import { renderToString } from 'react-dom/server';
 
 import {
     Menu,
+    MenuContent,
     MenuItem,
+    MenuTrigger,
     SegmentedItem,
     SelectItem,
     AnimatedNumber,
@@ -36,6 +38,8 @@ import {
     Pills,
     PageHeader,
     Popover,
+    PopoverContent,
+    PopoverTrigger,
     ProgressRing,
     Segmented,
     Select,
@@ -67,6 +71,9 @@ import {
     ThemeToggle,
     ToastProvider,
     Toggle,
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
 } from '.';
 
 const items = [
@@ -97,12 +104,26 @@ const components = {
         </Combobox>
     ),
     Input: <Input />,
-    Popover: <Popover content={<span>content</span>}>trigger</Popover>,
+    Popover: (
+        <Popover>
+            <PopoverTrigger>trigger</PopoverTrigger>
+            <PopoverContent>content</PopoverContent>
+        </Popover>
+    ),
+    Tooltip: (
+        <Tooltip>
+            <TooltipTrigger>trigger</TooltipTrigger>
+            <TooltipContent>hint</TooltipContent>
+        </Tooltip>
+    ),
     TextArea: <TextArea />,
     Toggle: <Toggle />,
     Menu: (
-        <Menu label="Actions" trigger="⋯">
-            <MenuItem>Edit</MenuItem>
+        <Menu>
+            <MenuTrigger aria-label="Actions">⋯</MenuTrigger>
+            <MenuContent>
+                <MenuItem>Edit</MenuItem>
+            </MenuContent>
         </Menu>
     ),
     Backdrop: <Backdrop />,

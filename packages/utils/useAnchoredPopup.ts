@@ -62,23 +62,39 @@ export function useAnchoredPopup<T extends HTMLElement = HTMLDivElement>({
         ref: popupRef,
         id,
         popover: 'auto' as const,
-        style: {
-            positionAnchor: `--${id}`,
-            // Below the trigger, lined up with its start (or end) edge; above it if there's no room below.
-            positionArea: align === 'start' ? 'block-end span-inline-end' : 'block-end span-inline-start',
-            positionTryFallbacks: 'flip-block',
-            inset: 'auto',
-            margin: `${offset}px 0`,
-            ...(matchWidth && { minWidth: 'anchor-size(width)' }),
-        } as CSSProperties,
+        style: anchoredStyle(id, { align, offset, matchWidth }),
     };
 
     return { id, open, setOpen, triggerProps, popupProps, popupRef };
 }
 
+/**
+ * The popup's position: below the trigger (above it if there's no room below),
+ * lined up with its start or end edge, or centred on it. For parts that take
+ * their own `align`/`offset` (PopoverContent, MenuContent).
+ */
+export function anchoredStyle(
+    id: string,
+    { align = 'start', offset = 4, matchWidth = false }: Omit<AnchoredPopupOptions, 'onOpenChange'> = {},
+): CSSProperties {
+    const area = {
+        start: 'block-end span-inline-end',
+        end: 'block-end span-inline-start',
+        center: 'block-end center',
+    }[align];
+    return {
+        positionAnchor: `--${id}`,
+        positionArea: area,
+        positionTryFallbacks: 'flip-block',
+        inset: 'auto',
+        margin: `${offset}px 0`,
+        ...(matchWidth && { minWidth: 'anchor-size(width)' }),
+    } as CSSProperties;
+}
+
 export interface AnchoredPopupOptions {
-    /** Line the popup up with the trigger's start (default) or end edge. */
-    align?: 'start' | 'end';
+    /** Line the popup up with the trigger's start (default) or end edge, or centre it. */
+    align?: 'start' | 'end' | 'center';
     /** Gap below the trigger, in px. */
     offset?: number;
     /** At least as wide as the trigger (e.g. a select's list). */

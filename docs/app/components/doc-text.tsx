@@ -37,7 +37,10 @@ export function DocText({ text, className }: { text: string; className?: string 
         .map((b, i) => {
             if (b.code) {
                 const indent = Math.min(...b.lines.filter((l) => l.trim()).map((l) => l.search(/\S/)));
-                const code = b.lines.map((l) => l.slice(indent)).join('\n').trimEnd();
+                const code = b.lines
+                    .map((l) => l.slice(indent))
+                    .join('\n')
+                    .trimEnd();
                 return <CodeBlock key={i} code={code} variant="plain" className="my-2 text-xs" />;
             }
             return (

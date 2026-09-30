@@ -1,25 +1,22 @@
-import { Button, Popover } from '@rinzai/zen';
+import { Button, Popover, PopoverClose, PopoverContent, PopoverTrigger } from '@rinzai/zen';
 import { useState } from 'react';
 
-/** `triggerType="manual"`: your state decides when it shows. */
+/** Follow your own state with `open`; `onOpenChange` hears every open and close (outside clicks, Escape…). */
 export default function Controlled() {
-    const [show, setShow] = useState(false);
+    const [open, setOpen] = useState(false);
     return (
-        <Popover
-            triggerType="manual"
-            show={show}
-            setShow={setShow}
-            role="dialog"
-            content={
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <Button>{open ? 'Hide' : 'Show'} popover</Button>
+            </PopoverTrigger>
+            <PopoverContent aria-label="Controlled">
                 <div className="flex flex-col gap-2 p-3 text-sm">
                     <p className="font-medium">Manually controlled</p>
-                    <Button size="sm" variant="secondary" onClick={() => setShow(false)}>
+                    <PopoverClose size="sm" variant="secondary">
                         Close
-                    </Button>
+                    </PopoverClose>
                 </div>
-            }
-        >
-            <Button>{show ? 'Hide' : 'Show'} popover</Button>
+            </PopoverContent>
         </Popover>
     );
 }

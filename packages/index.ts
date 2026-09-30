@@ -1,5 +1,16 @@
 import 'react';
-export { default as Menu, MenuHeader, MenuItem, type MenuItemProps, type MenuProps, MenuSeparator } from './menu';
+export {
+    default as Menu,
+    MenuContent,
+    type MenuContentProps,
+    MenuHeader,
+    MenuItem,
+    type MenuItemProps,
+    type MenuProps,
+    MenuSeparator,
+    MenuTrigger,
+    type MenuTriggerProps,
+} from './menu';
 export { default as AnimatedNumber, AnimatedMoney, type AnimatedNumberProps } from './animated-number';
 export { default as Avatar, type AvatarProps, cropImageToSquare, ImageCropError } from './avatar';
 export { default as Backdrop } from './backdrop';
@@ -32,7 +43,15 @@ export { default as MonthPicker, type MonthPickerProps } from './month-picker';
 export { default as MoneyInput, type MoneyInputOptions, type MoneyInputProps, useMoneyInput } from './money-input';
 export { default as Pills, Pill, PillIndicator } from './pills';
 export { default as PageHeader } from './page-header';
-export { default as Popover } from './popover';
+export {
+    default as Popover,
+    PopoverClose,
+    PopoverContent,
+    type PopoverContentProps,
+    type PopoverProps,
+    PopoverTrigger,
+    type PopoverTriggerProps,
+} from './popover';
 export { default as ProgressRing } from './progress-ring';
 export { default as Segmented, SegmentedItem, type SegmentedItemProps, type SegmentedProps } from './segmented';
 export {
@@ -79,6 +98,13 @@ export {
     useToastHost,
 } from './toast';
 export { default as Toggle } from './toggle';
+export {
+    default as Tooltip,
+    TooltipContent,
+    type TooltipContentProps,
+    TooltipTrigger,
+    type TooltipTriggerProps,
+} from './tooltip';
 export { FieldChevron } from './utils/field-chevron';
 export { default as ThemeToggle, ThemeScript, themeScript } from './theme-toggle';
 export { cva, type VariantProps } from './utils/cva';

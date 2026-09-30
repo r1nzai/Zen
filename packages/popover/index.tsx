@@ -1,161 +1,127 @@
+import Button, { ButtonProps } from '@zen/button';
 import { cx } from '@zen/utils/cx';
 import { useGraphicsMode } from '@zen/utils/graphics';
+import { Slot } from '@zen/utils/slot';
 import { POPUP } from '@zen/utils/styles';
-import { ComponentProps, MouseEvent, useEffect, useId, useRef, useState } from 'react';
+import { anchoredStyle, useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
+import { ComponentProps, createContext, MouseEvent, ReactNode, useContext, useEffect } from 'react';
 
-export default function Popover(props: PopoverProps) {
-    const {
-        className,
-        content,
-        children,
-        role = 'tooltip',
-        triggerType = 'auto',
-        trigger = 'click',
-        gap = '5px',
-        triggerClassName,
-        show,
-        setShow,
-        style,
-        onOpen,
-        onClose,
-        ...rest
-    } = props;
+type Popup = ReturnType<typeof useAnchoredPopup<HTMLDivElement>>;
 
-    // useId is stable between server and client renders; strip characters invalid in CSS idents
-    const rootId = useId().replace(/[^\w-]/g, '');
+const PopoverContext = createContext<Popup | null>(null);
 
+function usePopover(part: string) {
+    const popup = useContext(PopoverContext);
+    if (!popup) throw new Error(`<${part}> must be inside <Popover>`);
+    return popup;
+}
+
+/**
+ * A panel that opens from a button: a small form, a profile card, settings. A
+ * native popover, so outside clicks and Escape close it and focus returns to
+ * the button. Put a PopoverTrigger and a PopoverContent inside. Opens and closes
+ * on its own, or follows `open` (with `onOpenChange` to hear the user close it).
+ * For a hint on hover or focus, use Tooltip; for a list of actions, Menu.
+ */
+export default function Popover({ open, defaultOpen = false, onOpenChange, children }: PopoverProps) {
     useGraphicsMode();
-    const [isOpen, setIsOpen] = useState(false);
-    const popoverRef = useRef<HTMLDivElement>(null);
+    const popup = useAnchoredPopup<HTMLDivElement>({ onOpenChange });
+    const { setOpen } = popup;
 
     useEffect(() => {
-        const popoverEl = popoverRef.current;
-        if (!popoverEl) return;
-
-        // The browser's toggle event covers every way it opens or closes (click, Escape, light dismiss).
-        const handleToggle = (e: Event) => {
-            const open = (e as ToggleEvent).newState === 'open';
-            setIsOpen(open);
-            if (open) onOpen?.();
-            else onClose?.();
-        };
-        popoverEl.addEventListener('toggle', handleToggle);
-        return () => popoverEl.removeEventListener('toggle', handleToggle);
-    }, [onOpen, onClose]);
-
+        if (open !== undefined) setOpen(open);
+    }, [open, setOpen]);
     useEffect(() => {
-        if (triggerType === 'manual') {
-            if (show) {
-                popoverRef.current?.showPopover?.();
-            } else {
-                popoverRef.current?.hidePopover?.();
-            }
-        }
-    }, [show, triggerType]);
+        // Only when it first appears.
+        if (defaultOpen) setOpen(true);
+    }, []);
 
+    return <PopoverContext.Provider value={popup}>{children}</PopoverContext.Provider>;
+}
+
+/** The button that opens and closes the popover. With `asChild`, your own button (e.g. a Button) instead. */
+export function PopoverTrigger({ asChild, style, children, ...rest }: PopoverTriggerProps) {
+    const popup = usePopover('PopoverTrigger');
+    const props = {
+        ...popup.triggerProps,
+        'aria-haspopup': 'dialog' as const,
+        ...rest,
+        style: { ...popup.triggerProps.style, ...style },
+    };
+    if (asChild) return <Slot {...(props as ComponentProps<'a'>)}>{children}</Slot>;
     return (
-        <div>
-            <div
-                aria-expanded={isOpen}
-                className={cx('max-w-fit min-w-fit', triggerClassName)}
-                style={
-                    {
-                        anchorName: `--zen-popover-anchor-${rootId}`,
-                    } as React.CSSProperties
-                }
-                popoverTarget={`zen__popover-${rootId}`}
-                popoverTargetAction="toggle"
-                onClick={
-                    trigger === 'click'
-                        ? (e: MouseEvent) => {
-                              e.stopPropagation();
-                              e.nativeEvent.stopImmediatePropagation();
-                              switch (triggerType) {
-                                  case 'auto':
-                                      popoverRef.current?.togglePopover?.();
-                                      break;
-                                  case 'manual':
-                                      setShow?.(!show);
-                                      break;
-                              }
-                          }
-                        : undefined
-                }
-                onMouseEnter={
-                    trigger === 'hover'
-                        ? (e) => {
-                              e.stopPropagation();
-                              popoverRef.current?.showPopover?.();
-                          }
-                        : undefined
-                }
-                onMouseLeave={
-                    trigger === 'hover'
-                        ? (e) => {
-                              e.stopPropagation();
-                              popoverRef.current?.hidePopover?.();
-                          }
-                        : undefined
-                }
-            >
-                {children}
-            </div>
-            <div
-                {...rest}
-                ref={popoverRef}
-                role={role}
-                popover={triggerType}
-                id={`zen__popover-${rootId}`}
-                className={cx(
-                    'zen__popover fixed z-50 w-[anchor-size(width)] min-w-max [justify-self:anchor-center] overflow-visible p-0 [position-area:block-end_center]',
-                    POPUP,
-                    className,
-                )}
-                style={
-                    {
-                        ...style,
-                        '--gap': gap,
-                        top: `calc(anchor(bottom) + var(--gap))`,
-                        left: `calc(anchor(center) - 50%)`,
-                        positionAnchor: `--zen-popover-anchor-${rootId}`,
-                    } as React.CSSProperties
-                }
-            >
-                {content}
-            </div>
+        <button type="button" {...props}>
+            {children}
+        </button>
+    );
+}
+
+/**
+ * The panel: glass, below the trigger (above it if there's no room), centred on
+ * it by default. A dialog to assistive tech; give it `aria-label` or a heading
+ * it's labelled by when it holds a form.
+ */
+export function PopoverContent({
+    align = 'center',
+    offset = 5,
+    className,
+    style,
+    children,
+    ...rest
+}: PopoverContentProps) {
+    const popup = usePopover('PopoverContent');
+    return (
+        <div
+            role="dialog"
+            {...rest}
+            {...popup.popupProps}
+            style={{ ...anchoredStyle(popup.id, { align, offset }), ...style }}
+            className={cx(
+                'zen__popover fixed z-50 w-[anchor-size(width)] min-w-max overflow-visible p-0',
+                POPUP,
+                className,
+            )}
+        >
+            {children}
         </div>
     );
 }
 
-export interface PopoverProps extends Omit<ComponentProps<'div'>, 'content'> {
-    placement?: Placement;
-    className?: string;
-    children?: React.ReactNode;
-    trigger?: 'hover' | 'click';
-    triggerType?: 'auto' | 'manual';
-    content?: React.ReactNode;
-    onOpen?: () => void;
-    onClose?: () => void;
-    disabled?: boolean;
-    show?: boolean;
-    setShow?: (show: boolean) => void;
-    role?: AriaRole | ComponentRole;
-    gap?: string;
-    /** Classes for the element wrapping `children` (it fits its content by default). */
-    triggerClassName?: string;
+/**
+ * A button that closes its popover (after its own onClick, unless that calls
+ * preventDefault). Takes every Button prop: variant, size, asChild…
+ */
+export function PopoverClose({ onClick, ...rest }: ButtonProps) {
+    const popup = usePopover('PopoverClose');
+    return (
+        <Button
+            {...rest}
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                onClick?.(e);
+                if (!e.defaultPrevented) popup.setOpen(false);
+            }}
+        />
+    );
 }
-type AriaRole = 'tooltip' | 'dialog' | 'alertdialog' | 'menu' | 'listbox' | 'grid' | 'tree';
-type ComponentRole = 'select' | 'label' | 'combobox';
-type Placement =
-    | 'top'
-    | 'top-start'
-    | 'top-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end';
+
+export interface PopoverProps {
+    /** Open or close it from your state; leave it out to let the trigger do it. */
+    open?: boolean;
+    /** Open when it first appears. */
+    defaultOpen?: boolean;
+    /** Every open and close: the trigger, outside clicks, Escape, PopoverClose. */
+    onOpenChange?: (open: boolean) => void;
+    children?: ReactNode;
+}
+
+export interface PopoverTriggerProps extends ComponentProps<'button'> {
+    /** Put the trigger's props on your own button element instead of rendering one. */
+    asChild?: boolean;
+}
+
+export interface PopoverContentProps extends ComponentProps<'div'> {
+    /** Centred on the trigger (default), or lined up with its start or end edge. */
+    align?: 'start' | 'end' | 'center';
+    /** Gap from the trigger, in px. */
+    offset?: number;
+}

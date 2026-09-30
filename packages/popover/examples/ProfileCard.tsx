@@ -1,10 +1,16 @@
-import { Badge, Button, Popover } from '@rinzai/zen';
+import { Badge, Button, Popover, PopoverContent, PopoverTrigger } from '@rinzai/zen';
 
+/** Your own trigger: here an avatar button. */
 export default function ProfileCard() {
     return (
-        <Popover
-            role="dialog"
-            content={
+        <Popover>
+            <PopoverTrigger
+                aria-label="Alex Johnson"
+                className="bg-primary text-primary-foreground flex size-9 items-center justify-center rounded-full text-sm font-bold"
+            >
+                AJ
+            </PopoverTrigger>
+            <PopoverContent aria-label="Alex Johnson">
                 <div className="flex w-64 flex-col gap-3 p-4">
                     <div className="flex items-center gap-3">
                         <div className="bg-primary text-primary-foreground flex size-10 items-center justify-center rounded-full text-sm font-bold">
@@ -31,11 +37,7 @@ export default function ProfileCard() {
                         </Button>
                     </div>
                 </div>
-            }
-        >
-            <button className="bg-primary text-primary-foreground flex size-9 items-center justify-center rounded-full text-sm font-bold">
-                AJ
-            </button>
+            </PopoverContent>
         </Popover>
     );
 }

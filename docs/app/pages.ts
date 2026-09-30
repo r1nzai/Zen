@@ -121,7 +121,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Menu',
         description:
             'A button that opens a menu, with your own trigger, a header, icons, groups and destructive items.',
-        parts: ['Menu', 'MenuItem', 'MenuSeparator', 'MenuHeader'],
+        parts: ['Menu', 'MenuTrigger', 'MenuContent', 'MenuItem', 'MenuSeparator', 'MenuHeader'],
         examples: ['Account', 'Actions'],
     },
     {
@@ -163,9 +163,10 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'popover',
         title: 'Popover',
-        description: 'Floating glass panels on the native Popover API: tooltips, menus and small forms.',
-        parts: ['Popover'],
-        examples: ['Tooltip', 'ProfileCard', 'FeedbackForm', 'Settings', 'Controlled'],
+        description:
+            'A glass panel that opens from a button, on the native Popover API: small forms, cards and settings. For hints use Tooltip; for actions, Menu.',
+        parts: ['Popover', 'PopoverTrigger', 'PopoverContent', 'PopoverClose'],
+        examples: ['ProfileCard', 'FeedbackForm', 'Settings', 'Controlled'],
     },
     {
         slug: 'progress-ring',
@@ -265,6 +266,12 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['ToastProvider'],
     },
     { slug: 'toggle', title: 'Toggle', description: 'An on/off switch.', parts: ['Toggle'] },
+    {
+        slug: 'tooltip',
+        title: 'Tooltip',
+        description: 'A short glass hint on hover or keyboard focus, describing its trigger to screen readers.',
+        parts: ['Tooltip', 'TooltipTrigger', 'TooltipContent'],
+    },
     {
         slug: 'theming',
         title: 'Theming & styling',

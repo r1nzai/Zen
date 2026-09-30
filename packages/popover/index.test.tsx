@@ -1,146 +1,126 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import Popover from './index';
+
+import Button from '../button';
+import Popover, { PopoverClose, PopoverContent, PopoverTrigger } from './index';
+
+const panel = () => screen.getByRole('dialog', { hidden: true });
 
 describe('Popover', () => {
-    describe('rendering', () => {
-        it('renders children inside the trigger wrapper', () => {
-            render(<Popover content={<span>content</span>}>trigger text</Popover>);
-            expect(screen.getByText('trigger text')).toBeInTheDocument();
-        });
+    beforeEach(() => vi.clearAllMocks());
 
-        it('renders content inside the popover panel', () => {
-            render(<Popover content={<span>popover content</span>}>trigger</Popover>);
-            expect(screen.getByText('popover content')).toBeInTheDocument();
-        });
-
-        it('popover panel has the zen__popover class', () => {
-            render(<Popover content={<span>content</span>}>trigger</Popover>);
-            const panel = screen.getByRole('tooltip', { hidden: true });
-            expect(panel).toHaveClass('zen__popover');
-        });
-
-        it('popover panel has role="tooltip" by default', () => {
-            render(<Popover content={<span>content</span>}>trigger</Popover>);
-            expect(screen.getByRole('tooltip', { hidden: true })).toBeInTheDocument();
-        });
-
-        it('accepts a custom className on the popover panel', () => {
-            render(
-                <Popover className="my-panel" content={<span>content</span>}>
-                    trigger
-                </Popover>,
-            );
-            expect(screen.getByRole('tooltip', { hidden: true })).toHaveClass('my-panel');
-        });
+    it('is a button controlling a dialog popover', () => {
+        render(
+            <Popover>
+                <PopoverTrigger>Open</PopoverTrigger>
+                <PopoverContent aria-label="Details" className="my-panel">
+                    content
+                </PopoverContent>
+            </Popover>,
+        );
+        const button = screen.getByRole('button', { name: 'Open' });
+        expect(button).toHaveAttribute('popovertarget', panel().id);
+        expect(button).toHaveAttribute('aria-haspopup', 'dialog');
+        expect(button).toHaveAttribute('aria-expanded', 'false');
+        expect(panel()).toHaveAttribute('popover', 'auto');
+        expect(panel()).toHaveAttribute('aria-label', 'Details');
+        expect(panel()).toHaveClass('zen__popover', 'my-panel');
+        expect(panel()).toHaveTextContent('content');
     });
 
-    describe('click trigger (auto)', () => {
-        it('calls togglePopover when the trigger is clicked', () => {
-            render(
-                <Popover trigger="click" triggerType="auto" content={<span>content</span>}>
-                    <button>open</button>
-                </Popover>,
-            );
-            fireEvent.click(screen.getByText('open'));
-            expect(HTMLElement.prototype.togglePopover).toHaveBeenCalled();
-        });
+    it('asChild: your own button gets the wiring, keeping its own props', () => {
+        render(
+            <Popover>
+                <PopoverTrigger asChild>
+                    <Button variant="outline" className="mine">
+                        Open
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent>content</PopoverContent>
+            </Popover>,
+        );
+        const button = screen.getByRole('button', { name: 'Open' });
+        expect(button).toHaveClass('mine', 'glow-edge');
+        expect(button).toHaveAttribute('popovertarget', panel().id);
+        expect(button.style.getPropertyValue('anchor-name')).toBe(`--${panel().id}`);
     });
 
-    describe('hover trigger', () => {
-        it('calls showPopover on mouseenter', () => {
-            render(
-                <Popover trigger="hover" triggerType="auto" content={<span>content</span>}>
-                    <span>hover me</span>
-                </Popover>,
-            );
-            // The trigger wrapper is the parent of the children text
-            const trigger = screen.getByText('hover me').parentElement!;
-            fireEvent.mouseEnter(trigger);
-            expect(HTMLElement.prototype.showPopover).toHaveBeenCalled();
-        });
-
-        it('calls hidePopover on mouseleave', () => {
-            render(
-                <Popover trigger="hover" triggerType="auto" content={<span>content</span>}>
-                    <span>hover me</span>
-                </Popover>,
-            );
-            const trigger = screen.getByText('hover me').parentElement!;
-            fireEvent.mouseLeave(trigger);
-            expect(HTMLElement.prototype.hidePopover).toHaveBeenCalled();
-        });
+    it('reports opening and closing, however it happens', () => {
+        const onOpenChange = vi.fn();
+        render(
+            <Popover onOpenChange={onOpenChange}>
+                <PopoverTrigger>Open</PopoverTrigger>
+                <PopoverContent>content</PopoverContent>
+            </Popover>,
+        );
+        panel().dispatchEvent(Object.assign(new Event('toggle'), { newState: 'open' }));
+        expect(onOpenChange).toHaveBeenLastCalledWith(true);
+        panel().dispatchEvent(Object.assign(new Event('toggle'), { newState: 'closed' }));
+        expect(onOpenChange).toHaveBeenLastCalledWith(false);
     });
 
-    describe('manual triggerType', () => {
-        it('calls setShow with toggled value when trigger is clicked', () => {
-            const setShow = vi.fn();
-            render(
-                <Popover
-                    trigger="click"
-                    triggerType="manual"
-                    show={false}
-                    setShow={setShow}
-                    content={<span>content</span>}
-                >
-                    <button>open</button>
-                </Popover>,
-            );
-            fireEvent.click(screen.getByText('open'));
-            expect(setShow).toHaveBeenCalledWith(true);
-        });
-
-        it('calls showPopover when show becomes true', () => {
-            const { rerender } = render(
-                <Popover triggerType="manual" show={false} content={<span>content</span>}>
-                    trigger
-                </Popover>,
-            );
-            rerender(
-                <Popover triggerType="manual" show={true} content={<span>content</span>}>
-                    trigger
-                </Popover>,
-            );
-            expect(HTMLElement.prototype.showPopover).toHaveBeenCalled();
-        });
-
-        it('calls hidePopover when show becomes false', () => {
-            const { rerender } = render(
-                <Popover triggerType="manual" show={true} content={<span>content</span>}>
-                    trigger
-                </Popover>,
-            );
-            rerender(
-                <Popover triggerType="manual" show={false} content={<span>content</span>}>
-                    trigger
-                </Popover>,
-            );
-            expect(HTMLElement.prototype.hidePopover).toHaveBeenCalled();
-        });
+    it('follows `open`', () => {
+        const { rerender } = render(
+            <Popover open={false}>
+                <PopoverTrigger>Open</PopoverTrigger>
+                <PopoverContent>content</PopoverContent>
+            </Popover>,
+        );
+        rerender(
+            <Popover open>
+                <PopoverTrigger>Open</PopoverTrigger>
+                <PopoverContent>content</PopoverContent>
+            </Popover>,
+        );
+        expect(panel().showPopover).toHaveBeenCalled();
+        expect(screen.getByRole('button', { name: 'Open' })).toHaveAttribute('aria-expanded', 'true');
+        rerender(
+            <Popover open={false}>
+                <PopoverTrigger>Open</PopoverTrigger>
+                <PopoverContent>content</PopoverContent>
+            </Popover>,
+        );
+        expect(panel().hidePopover).toHaveBeenCalled();
     });
 
-    describe('event callbacks', () => {
-        it('calls onOpen when the panel toggles open', () => {
-            const onOpen = vi.fn();
-            render(
-                <Popover onOpen={onOpen} content={<span>content</span>}>
-                    trigger
-                </Popover>,
-            );
-            const panel = screen.getByRole('tooltip', { hidden: true });
-            panel.dispatchEvent(Object.assign(new Event('toggle'), { oldState: 'closed', newState: 'open' }));
-            expect(onOpen).toHaveBeenCalledTimes(1);
-        });
+    it('PopoverClose closes it after its own onClick, unless that prevents it', () => {
+        const onOpenChange = vi.fn();
+        render(
+            <Popover defaultOpen onOpenChange={onOpenChange}>
+                <PopoverTrigger>Open</PopoverTrigger>
+                <PopoverContent>
+                    <PopoverClose onClick={(e) => e.preventDefault()}>Keep</PopoverClose>
+                    <PopoverClose>Close</PopoverClose>
+                </PopoverContent>
+            </Popover>,
+        );
+        expect(onOpenChange).toHaveBeenLastCalledWith(true);
+        fireEvent.click(screen.getByRole('button', { name: 'Keep', hidden: true }));
+        expect(onOpenChange).toHaveBeenLastCalledWith(true);
+        fireEvent.click(screen.getByRole('button', { name: 'Close', hidden: true }));
+        expect(onOpenChange).toHaveBeenLastCalledWith(false);
+    });
 
-        it('calls onClose when the panel toggles closed', () => {
-            const onClose = vi.fn();
-            render(
-                <Popover onClose={onClose} content={<span>content</span>}>
-                    trigger
-                </Popover>,
-            );
-            const panel = screen.getByRole('tooltip', { hidden: true });
-            panel.dispatchEvent(Object.assign(new Event('toggle'), { oldState: 'open', newState: 'closed' }));
-            expect(onClose).toHaveBeenCalledTimes(1);
-        });
+    it('centres under the trigger by default; align lines it up with an edge', () => {
+        const { rerender } = render(
+            <Popover>
+                <PopoverTrigger>Open</PopoverTrigger>
+                <PopoverContent>content</PopoverContent>
+            </Popover>,
+        );
+        expect(panel().style.getPropertyValue('position-area')).toBe('block-end center');
+        rerender(
+            <Popover>
+                <PopoverTrigger>Open</PopoverTrigger>
+                <PopoverContent align="start">content</PopoverContent>
+            </Popover>,
+        );
+        expect(panel().style.getPropertyValue('position-area')).toBe('block-end span-inline-end');
+    });
+
+    it('parts outside a Popover say so', () => {
+        vi.spyOn(console, 'error').mockImplementation(() => {});
+        expect(() => render(<PopoverContent>content</PopoverContent>)).toThrow(
+            '<PopoverContent> must be inside <Popover>',
+        );
     });
 });

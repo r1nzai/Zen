@@ -1,31 +1,38 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import Menu, { MenuHeader, MenuItem, MenuSeparator } from './index';
+import Menu, { MenuContent, MenuHeader, MenuItem, MenuSeparator, MenuTrigger } from './index';
 
 const Icon = () => <svg data-testid="icon" className="size-4" />;
 
 function Account({ onSettings = () => {}, onLogout = () => {} }: { onSettings?: () => void; onLogout?: () => void }) {
     return (
-        <Menu label="Account menu" trigger={<span>R</span>} triggerClassName="rounded-full" className="w-64">
-            <MenuHeader>Signed in as r@example.com</MenuHeader>
-            <MenuSeparator />
-            <MenuItem icon={<Icon />} onSelect={onSettings}>
-                Settings
-            </MenuItem>
-            <MenuItem>Lock now</MenuItem>
-            <MenuSeparator />
-            <MenuItem destructive icon={<Icon />} onSelect={onLogout}>
-                Log out
-            </MenuItem>
+        <Menu>
+            <MenuTrigger aria-label="Account menu" className="rounded-full">
+                <span>R</span>
+            </MenuTrigger>
+            <MenuContent className="w-64">
+                <MenuHeader>Signed in as r@example.com</MenuHeader>
+                <MenuSeparator />
+                <MenuItem icon={<Icon />} onSelect={onSettings}>
+                    Settings
+                </MenuItem>
+                <MenuItem>Lock now</MenuItem>
+                <MenuSeparator />
+                <MenuItem destructive icon={<Icon />} onSelect={onLogout}>
+                    Log out
+                </MenuItem>
+            </MenuContent>
         </Menu>
     );
 }
 
 describe('Menu', () => {
-    it('is your trigger content in a labelled button controlling a menu popover', () => {
+    it('is your trigger content in a labelled button controlling a menu popover named after it', () => {
         render(<Account />);
         const button = screen.getByRole('button', { name: 'Account menu' });
         const menu = screen.getByRole('menu', { hidden: true });
+        // Named after its button (not computed here: jsdom hides closed popovers).
+        expect(menu).toHaveAttribute('aria-labelledby', button.id);
         expect(button).toHaveTextContent('R');
         expect(button).toHaveClass('rounded-full');
         expect(button).toHaveAttribute('aria-haspopup', 'menu');
@@ -76,15 +83,39 @@ describe('Menu', () => {
     it('asChild puts the item on your own element, e.g. a link', () => {
         const onSelect = vi.fn();
         render(
-            <Menu label="Go" trigger="Go">
-                <MenuItem asChild onSelect={onSelect}>
-                    <a href="#settings">Settings</a>
-                </MenuItem>
+            <Menu>
+                <MenuTrigger>Go</MenuTrigger>
+                <MenuContent>
+                    <MenuItem asChild onSelect={onSelect}>
+                        <a href="#settings">Settings</a>
+                    </MenuItem>
+                </MenuContent>
             </Menu>,
         );
         const link = screen.getByRole('menuitem', { name: 'Settings', hidden: true });
         expect(link.tagName).toBe('A');
         fireEvent.click(link);
         expect(onSelect).toHaveBeenCalledTimes(1);
+    });
+
+    it('asChild on the trigger: your own button gets the popup wiring', () => {
+        render(
+            <Menu>
+                <MenuTrigger asChild>
+                    <button className="mine">Open</button>
+                </MenuTrigger>
+                <MenuContent>
+                    <MenuItem>Edit</MenuItem>
+                </MenuContent>
+            </Menu>,
+        );
+        const button = screen.getByRole('button', { name: 'Open' });
+        expect(button).toHaveClass('mine');
+        expect(button).toHaveAttribute('popovertarget', screen.getByRole('menu', { hidden: true }).id);
+    });
+
+    it('parts outside a Menu say so', () => {
+        vi.spyOn(console, 'error').mockImplementation(() => {});
+        expect(() => render(<MenuTrigger>Go</MenuTrigger>)).toThrow('<MenuTrigger> must be inside <Menu>');
     });
 });

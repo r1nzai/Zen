@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import Badge, { BadgeProps } from '@zen/badge';
 import { cx } from '@zen/utils/cx';
-import Popover from '@zen/popover';
+import Popover, { PopoverContent, PopoverTrigger } from '@zen/popover';
 
 export default function Collapse<TData>(props: CollapseProps<TData>) {
     const {
@@ -88,11 +88,17 @@ export default function Collapse<TData>(props: CollapseProps<TData>) {
         <>
             {renderItems.visible?.map((item, index) => children(item, index, data?.[index]))}
             {renderItems.hidden?.length > 0 && (
-                <Popover
-                    trigger="click"
-                    // A flex box, so the trigger is just the badge (no line box around it) and centres with the others.
-                    triggerClassName="flex rounded-md"
-                    content={
+                <Popover>
+                    {/* A flex box, so the trigger is just the badge (no line box around it) and centres with the others. */}
+                    <PopoverTrigger
+                        className="flex rounded-md"
+                        aria-label={`Show ${renderItems.hidden.length} more ${moreItemsLabel}`.trim()}
+                    >
+                        <Badge className={cx('cursor-pointer', badgeStyles)} variant={badgeVariant}>
+                            <span>{`+${renderItems.hidden.length} ${moreItemsLabel}`}</span>
+                        </Badge>
+                    </PopoverTrigger>
+                    <PopoverContent aria-label={`${renderItems.hidden.length} more ${moreItemsLabel}`.trim()}>
                         <div className="grid max-h-60 grid-flow-row grid-cols-2 gap-3 overflow-auto p-2">
                             {renderItems.hidden.map((section, index) =>
                                 children(
@@ -102,16 +108,7 @@ export default function Collapse<TData>(props: CollapseProps<TData>) {
                                 ),
                             )}
                         </div>
-                    }
-                >
-                    <Badge
-                        className={cx('cursor-pointer', badgeStyles)}
-                        key={'more_items_button'}
-                        variant={badgeVariant}
-                        aria-label={`Show ${renderItems.hidden.length} more ${moreItemsLabel}`}
-                    >
-                        <span>{`+${renderItems.hidden.length} ${moreItemsLabel}`}</span>
-                    </Badge>
+                    </PopoverContent>
                 </Popover>
             )}
         </>

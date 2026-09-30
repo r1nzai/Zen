@@ -1,16 +1,30 @@
-import { Button, buttonVariants, Card, Ellipsis, Menu, MenuItem, ProgressRing } from '@rinzai/zen';
+import {
+    Button,
+    buttonVariants,
+    Card,
+    Ellipsis,
+    Menu,
+    MenuContent,
+    MenuItem,
+    MenuTrigger,
+    ProgressRing,
+} from '@rinzai/zen';
 
 export default function Goal() {
     return (
         <Card
             title="Emergency fund"
             action={
-                <Menu
-                    label="Goal actions"
-                    triggerClassName={buttonVariants({ variant: 'icon', size: 'icon' })}
-                    trigger={<Ellipsis />}
-                >
-                    <MenuItem>Edit</MenuItem>
+                <Menu>
+                    <MenuTrigger
+                        aria-label="Goal actions"
+                        className={buttonVariants({ variant: 'icon', size: 'icon' })}
+                    >
+                        <Ellipsis />
+                    </MenuTrigger>
+                    <MenuContent>
+                        <MenuItem>Edit</MenuItem>
+                    </MenuContent>
                 </Menu>
             }
             className="w-full max-w-sm"

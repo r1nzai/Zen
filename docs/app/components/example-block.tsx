@@ -17,9 +17,7 @@ export function ExampleBlock({ example, heading = true }: { example: Example; he
                             {example.title}
                         </a>
                     </h3>
-                    {example.description && (
-                        <DocText text={example.description} className="mt-0! text-sm leading-6" />
-                    )}
+                    {example.description && <DocText text={example.description} className="mt-0! text-sm leading-6" />}
                 </div>
             )}
             <Card className="overflow-hidden p-0!">

@@ -1,4 +1,15 @@
-import { Button, buttonVariants, Header, Pill, PillIndicator, Pills, Popover, ThemeToggle } from '@rinzai/zen';
+import {
+    Button,
+    buttonVariants,
+    Header,
+    Pill,
+    PillIndicator,
+    Pills,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+    ThemeToggle,
+} from '@rinzai/zen';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 
@@ -67,35 +78,33 @@ export function SiteHeader() {
 
 /** Phones: the sidebar in a popover. */
 function MobileMenu() {
-    const [show, setShow] = useState(false);
+    const [open, setOpen] = useState(false);
     const { pathname } = useLocation();
-    useEffect(() => setShow(false), [pathname]);
+    // Following a link closes it.
+    useEffect(() => setOpen(false), [pathname]);
     return (
         <div className="md:hidden">
-            <Popover
-                triggerType="manual"
-                show={show}
-                setShow={setShow}
-                role="dialog"
-                content={
+            <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                    <Button variant="icon" size="icon" aria-label="Menu">
+                        <svg
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            className="size-4"
+                            aria-hidden
+                        >
+                            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11" />
+                        </svg>
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent aria-label="Site navigation">
                     <div className="max-h-[70vh] w-64 overflow-y-auto p-3">
                         <Sidebar />
                     </div>
-                }
-            >
-                <Button variant="icon" size="icon" aria-label="Menu">
-                    <svg
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        className="size-4"
-                        aria-hidden
-                    >
-                        <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11" />
-                    </svg>
-                </Button>
+                </PopoverContent>
             </Popover>
         </div>
     );

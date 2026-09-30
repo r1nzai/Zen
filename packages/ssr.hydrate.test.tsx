@@ -13,8 +13,13 @@ import {
     ComboboxTrigger,
     Input,
     Popover,
+    PopoverContent,
+    PopoverTrigger,
     TextArea,
     Toggle,
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
 } from '.';
 
 // Tell React this environment supports act(); jsdom lacks ResizeObserver (used by Collapse).
@@ -53,7 +58,18 @@ const components = {
         </Combobox>
     ),
     Input: <Input />,
-    Popover: <Popover content={<span>content</span>}>trigger</Popover>,
+    Popover: (
+        <Popover>
+            <PopoverTrigger>trigger</PopoverTrigger>
+            <PopoverContent>content</PopoverContent>
+        </Popover>
+    ),
+    Tooltip: (
+        <Tooltip>
+            <TooltipTrigger>trigger</TooltipTrigger>
+            <TooltipContent>hint</TooltipContent>
+        </Tooltip>
+    ),
     TextArea: <TextArea />,
     Toggle: <Toggle />,
 };

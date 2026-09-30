@@ -1,4 +1,4 @@
-import { Button, Popover, Toggle } from '@rinzai/zen';
+import { Button, Popover, PopoverContent, PopoverTrigger, Toggle } from '@rinzai/zen';
 import { useState } from 'react';
 
 export default function Settings() {
@@ -9,9 +9,11 @@ export default function Settings() {
         { key: 'autoSave', label: 'Auto-save' },
     ] as const;
     return (
-        <Popover
-            role="dialog"
-            content={
+        <Popover>
+            <PopoverTrigger asChild>
+                <Button variant="outline">Preferences</Button>
+            </PopoverTrigger>
+            <PopoverContent aria-label="Preferences">
                 <div className="flex w-60 flex-col gap-3 p-4">
                     <p className="text-sm font-semibold">Preferences</p>
                     {rows.map(({ key, label }) => (
@@ -24,9 +26,7 @@ export default function Settings() {
                         </label>
                     ))}
                 </div>
-            }
-        >
-            <Button variant="outline">Preferences</Button>
+            </PopoverContent>
         </Popover>
     );
 }
