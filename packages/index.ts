@@ -60,6 +60,8 @@ export { default as Input } from './input';
 export { default as InputGroup, InputGroupAddon, InputGroupInput } from './input-group';
 export { default as Meter, type MeterProps } from './meter';
 export { default as MonthPicker, type MonthPickerProps } from './month-picker';
+export { default as Checkbox, type CheckboxProps } from './checkbox';
+export { Radio, default as RadioGroup, type RadioGroupProps, type RadioProps } from './radio-group';
 export { default as Calendar, type CalendarProps, type CalendarRangeProps, type CalendarSingleProps } from './calendar';
 export { default as DatePicker, type DatePickerProps, DateRangePicker, type DateRangePickerProps } from './date-picker';
 export {

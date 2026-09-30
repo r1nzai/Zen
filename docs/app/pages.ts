@@ -62,6 +62,13 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'Range', 'Limits'],
     },
     {
+        slug: 'checkbox',
+        title: 'Checkbox',
+        description: 'A native checkbox whose tick draws itself in, with a label, a description and a mixed state.',
+        parts: ['Checkbox'],
+        examples: ['Default', 'SelectAll'],
+    },
+    {
         slug: 'chip',
         title: 'Chip',
         description: 'Small pressable buttons for quick picks beside a field, like common tenures.',
@@ -214,6 +221,14 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Radio Cards',
         description: 'Choose one of a few cards that each show their option, like a colour palette.',
         parts: ['RadioCards', 'RadioCard'],
+    },
+    {
+        slug: 'radio-group',
+        title: 'Radio Group',
+        description:
+            'Choose one of a list, each option with a label and a description; native radios, so arrow keys work.',
+        parts: ['RadioGroup', 'Radio'],
+        examples: ['Default', 'Horizontal'],
     },
     {
         slug: 'segmented',
