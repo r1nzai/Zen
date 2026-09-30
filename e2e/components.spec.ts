@@ -147,3 +147,30 @@ test("a menu doesn't move when the pointer leaves its (hover-scaled) trigger for
     await page.waitForTimeout(400);
     expect(await menu.boundingBox()).toEqual(before);
 });
+
+test('date picker: opens focused on the date, the keyboard picks, and it renders the same on server and client', async ({
+    page,
+}) => {
+    // Any hydration mismatch (e.g. from the engine's date formatting) shows up as a console error.
+    errors = await open(page, '/components/date-picker/');
+    const trigger = page.getByRole('button', { name: 'Due date' });
+    await expect(trigger).toHaveText('30 Sept 2026');
+    await trigger.click();
+    await expect(page.getByRole('dialog', { name: 'Choose date' })).toBeVisible();
+    await expect(page.locator(':focus')).toHaveAttribute('data-date', '2026-09-30');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await expect(trigger).toHaveText('7 Oct 2026');
+    await expect(page.getByRole('dialog', { name: 'Choose date' })).toBeHidden();
+    await expect(trigger).toBeFocused();
+});
+
+test('calendar: a range previews while pointing, across months', async ({ page }) => {
+    errors = await open(page, '/components/calendar/');
+    const range = example(page, 'Range');
+    await range.locator('[data-date="2026-10-20"]').click();
+    await range.locator('[data-date="2026-11-03"]').hover();
+    await expect(range.locator('td:has([data-date="2026-10-31"])')).toHaveClass(/bg-primary/);
+    await range.locator('[data-date="2026-11-03"]').click();
+    await expect(range.getByText(/20 Oct\s*–\s*3 Nov 2026 · 15 days/)).toBeVisible();
+});

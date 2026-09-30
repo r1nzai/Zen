@@ -60,6 +60,8 @@ export { default as Input } from './input';
 export { default as InputGroup, InputGroupAddon, InputGroupInput } from './input-group';
 export { default as Meter, type MeterProps } from './meter';
 export { default as MonthPicker, type MonthPickerProps } from './month-picker';
+export { default as Calendar, type CalendarProps, type CalendarRangeProps, type CalendarSingleProps } from './calendar';
+export { default as DatePicker, type DatePickerProps, DateRangePicker, type DateRangePickerProps } from './date-picker';
 export {
     type CurrencyConversion,
     default as MoneyInput,
@@ -169,6 +171,23 @@ export {
     monthRange,
     monthsBetween,
 } from './utils/month';
+export {
+    addDays,
+    addMonthsToDate,
+    type DateRange,
+    type DateString,
+    dayIndex,
+    dayOfWeek,
+    daysBetween,
+    daysInMonth,
+    formatDate,
+    formatDateRange,
+    fromDayIndex,
+    isDate,
+    today,
+    weekdayNames,
+    weekStart,
+} from './utils/date';
 export { type AnchoredPopupOptions, useAnchoredPopup } from './utils/useAnchoredPopup';
 export { useVirtualList, type VirtualItem, type VirtualListOptions } from './utils/useVirtualList';
 export { applyGraphicsMode, detectGraphicsMode, type GraphicsMode } from './utils/graphics';

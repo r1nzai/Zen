@@ -54,6 +54,14 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Goal', 'Stats'],
     },
     {
+        slug: 'calendar',
+        title: 'Calendar',
+        description:
+            'A month grid to pick a date or a range, fully keyboard-driven, with limits, blocked days and a year view to jump far.',
+        parts: ['Calendar'],
+        examples: ['Default', 'Range', 'Limits'],
+    },
+    {
         slug: 'chip',
         title: 'Chip',
         description: 'Small pressable buttons for quick picks beside a field, like common tenures.',
@@ -87,6 +95,14 @@ export const COMPONENTS: ComponentDoc[] = [
             'ComboboxCreate',
         ],
         examples: ['Accounts', 'Tags', 'ManyItems'],
+    },
+    {
+        slug: 'date-picker',
+        title: 'Date Picker',
+        description:
+            'A field that opens a calendar: one date, or a range previewed as you point. Dates are "YYYY-MM-DD" strings, so they never shift with time zones.',
+        parts: ['DatePicker', 'DateRangePicker'],
+        examples: ['Default', 'Range', 'InField'],
     },
     {
         slug: 'dialog',
