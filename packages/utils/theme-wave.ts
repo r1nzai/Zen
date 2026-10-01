@@ -34,9 +34,9 @@ type Bezier = [number, number, number, number];
 
 let running = 0;
 // The target in its own layer, and the view-transition-name it had: given back when its wave ends or is cut short.
-let area: { style: CSSStyleDeclaration; name: string } | null = null;
+let area: { style: CSSStyleDeclaration; name: string; priority: string } | null = null;
 function releaseArea() {
-    if (area) area.style.viewTransitionName = area.name;
+    if (area) area.style.setProperty('view-transition-name', area.name, area.priority);
     area = null;
 }
 
@@ -168,7 +168,7 @@ function waterCanvas(): Water | null {
     water = null;
     const canvas = document.createElement('canvas');
     canvas.setAttribute('aria-hidden', 'true');
-    canvas.style.cssText = `position:fixed;pointer-events:none;z-index:2147483647;view-transition-name:${NAME}`;
+    canvas.style.cssText = `position:fixed;pointer-events:none;z-index:2147483647;view-transition-name:${NAME} !important`;
     const gl = canvas.getContext('webgl', { premultipliedAlpha: true, antialias: false });
     const program = gl?.createProgram();
     if (!gl || !program) return null;
@@ -292,8 +292,13 @@ export function themeWave(
     const layer = scoped ? AREA : 'root';
     if (scoped) {
         const { style } = target as HTMLElement | SVGElement;
-        area = { style, name: style.viewTransitionName };
-        style.viewTransitionName = AREA;
+        area = {
+            style,
+            name: style.getPropertyValue('view-transition-name'),
+            priority: style.getPropertyPriority('view-transition-name'),
+        };
+        // Important, over theme.css's none for every other name while the wave plays.
+        style.setProperty('view-transition-name', AREA, 'important');
     }
     Object.assign(gpu.canvas.style, {
         left: `${left}px`,

@@ -476,7 +476,15 @@ main[data-zen-skip-target]:focus {
  * the old one closes in over the new). The water is a canvas
  * drawn over both, in a layer of its own that shows as it is (no fade). A
  * theme on one element (themeWave's target) changes in its own layer.
+ *
+ * The page is captured whole: an app's own view-transition names (a header,
+ * a backdrop kept still across routes) would put their parts in layers of
+ * their own, outside the clip, cross-fading. themeWave sets its own names inline,
+ * important, over this.
  */
+html.zen-theme-waving * {
+    view-transition-name: none !important;
+}
 html.zen-theme-waving::view-transition-old(root),
 html.zen-theme-waving::view-transition-new(root),
 html.zen-theme-waving::view-transition-group(zen-theme-area),

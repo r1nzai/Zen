@@ -107,7 +107,8 @@ describe('themeWave', () => {
         await Promise.resolve();
         // Added with the new theme, in a view-transition layer of its own.
         const canvas = document.querySelector('canvas');
-        expect(canvas?.getAttribute('style')).toContain('zen-theme-water');
+        expect(canvas?.style.getPropertyValue('view-transition-name')).toBe('zen-theme-water');
+        expect(canvas?.style.getPropertyPriority('view-transition-name')).toBe('important');
         await new Promise((resolve) => setTimeout(resolve));
 
         const keyframes = animate.mock.calls[0][0] as Keyframe[];
@@ -126,12 +127,13 @@ describe('themeWave', () => {
         panel.style.borderRadius = '12px';
         panel.getBoundingClientRect = () => new DOMRect(50, 150, 300, 200);
         document.body.append(panel);
-        let named: string | undefined;
+        let named: string | undefined, priority: string | undefined;
         // The page stays dark; the panel turns light.
         document.documentElement.style.setProperty('--background', '0.15 0 0');
         themeWave(
             () => {
                 named = panel.style.viewTransitionName;
+                priority = panel.style.getPropertyPriority('view-transition-name');
                 panel.style.setProperty('--background', '0.98 0 0');
             },
             { x: 100, y: 200 },
@@ -139,6 +141,8 @@ describe('themeWave', () => {
         );
         await Promise.resolve();
         expect(named).toBe('zen-theme-area');
+        // Over theme.css's none for every other name while the wave plays.
+        expect(priority).toBe('important');
         expect(document.documentElement).not.toHaveClass('zen-theme-closing');
         const canvas = document.querySelector('canvas')!;
         expect(canvas.style).toMatchObject({ left: '50px', top: '150px', width: '300px', height: '200px' });
@@ -161,8 +165,9 @@ describe('themeWave', () => {
                 );
         for (const r of inPanel(frames.at(-1)!.clipPath)) expect(r).toBeGreaterThan(Math.hypot(250, 150));
         await settle();
-        // Its own view-transition-name back.
+        // Its own view-transition-name back, as it was.
         expect(panel.style.viewTransitionName).toBe('card');
+        expect(panel.style.getPropertyPriority('view-transition-name')).toBe('');
         panel.remove();
     });
 
