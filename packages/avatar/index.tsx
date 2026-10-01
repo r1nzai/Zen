@@ -19,7 +19,10 @@ export default function Avatar({ src, name, alt, className }: AvatarProps) {
                 className,
             )}
         >
-            {src ? <img src={src} alt="" className="size-full object-cover" draggable={false} /> : initial}
+            {/* The initial stays under a photo, unseen: the avatar then sits on a line (in a button,
+                next to text) by the initial's baseline either way, not by the photo's bottom edge. */}
+            <span className={src ? 'invisible' : undefined}>{initial}</span>
+            {src && <img src={src} alt="" className="absolute inset-0 size-full object-cover" draggable={false} />}
         </span>
     );
 }

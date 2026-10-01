@@ -15,6 +15,13 @@ describe('Avatar', () => {
         expect(avatar.querySelector('img')).toHaveAttribute('src', '/me.webp');
     });
 
+    it('keeps the initial under a photo, unseen, so it sits on a line the same with or without one', () => {
+        const { container } = render(<Avatar name="rin" src="/me.webp" />);
+        expect(container.querySelector('span > span')).toHaveTextContent('R');
+        expect(container.querySelector('span > span')).toHaveClass('invisible');
+        expect(container.querySelector('img')).toHaveClass('absolute', 'inset-0');
+    });
+
     it('refuses non-images for cropping', async () => {
         await expect(cropImageToSquare(new Blob(['x'], { type: 'text/plain' }))).rejects.toBeInstanceOf(ImageCropError);
     });
