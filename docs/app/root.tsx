@@ -5,9 +5,11 @@ import topo from '../../packages/backdrop/examples/topo.svg';
 import type { Route } from './+types/root';
 import { NotFound } from './components/not-found';
 import { SiteHeader } from './components/site-header';
-import './app.css';
+import appCss from './app.css?url';
 
 export const links: Route.LinksFunction = () => [
+    // A link, not a side-effect import: in dev, too, the page arrives styled (Vite would add it from JS).
+    { rel: 'stylesheet', href: appCss },
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
     { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
     { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap' },
