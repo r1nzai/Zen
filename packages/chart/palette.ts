@@ -7,7 +7,10 @@
  */
 export type ChartPalette = 'chart' | 'glow';
 
-/** The i-th (0-based) of n colours in the palette. */
+/**
+ * The i-th (0-based) of n colours in the palette: what a chart draws its i-th
+ * series or item in, for a legend of your own beside it.
+ */
 export function paletteColor(palette: ChartPalette, i: number, n: number): string {
     if (palette === 'chart') return `var(--chart-${Math.min(i + 1, 8)})`;
     const t = n <= 1 ? 0 : i / (n - 1);

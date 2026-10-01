@@ -79,6 +79,7 @@ export {
     type ChartTooltipCardProps,
     DonutChart,
     type DonutChartProps,
+    paletteColor,
     niceTicks,
 } from './chart';
 export { Radio, default as RadioGroup, type RadioGroupProps, type RadioProps } from './radio-group';

@@ -657,4 +657,4 @@ export interface ChartProps<T extends Row, X extends keyof T & string = keyof T 
 
 export { ChartTooltipCard, type ChartTooltipCardProps } from './tooltip';
 export { default as DonutChart, type DonutChartProps } from './donut';
-export type { ChartPalette } from './palette';
+export { type ChartPalette, paletteColor } from './palette';

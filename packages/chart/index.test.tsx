@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 
-import Chart, { ChartArea, ChartBar, ChartLine, ChartReference, DonutChart, niceTicks } from './index';
+import Chart, { ChartArea, ChartBar, ChartLine, ChartReference, DonutChart, niceTicks, paletteColor } from './index';
 
 // jsdom has no layout: give the chart a width to draw into.
 beforeAll(() => {
@@ -197,6 +197,14 @@ describe('DonutChart', () => {
             </DonutChart>,
         );
         expect(screen.getByText('Planned').parentElement).toHaveClass('flex-col', 'justify-center');
+    });
+
+    it('draws each part in paletteColor, so a legend of your own matches', () => {
+        render(<DonutChart items={ITEMS} label="Spending" palette="glow" />);
+        const parts = screen.getAllByRole('listitem');
+        parts.forEach((part, i) =>
+            expect(part.style.fill).toBe(paletteColor('glow', i, ITEMS.length).replace(/\s+/g, ' ')),
+        );
     });
 
     it('focusing a segment shows its tooltip', () => {
