@@ -306,8 +306,11 @@ export function themeWave(
     });
     let aurora: number[] = [];
     let closing = false;
-    const transition = document.startViewTransition(() => {
+    const transition = document.startViewTransition(async () => {
         change();
+        // Whatever reacts to the change in a microtask (an app's MutationObserver re-applying
+        // colours worked out for .dark or .light) goes first: the new theme is read after it.
+        await Promise.resolve();
         const style = getComputedStyle(scoped ? target : root);
         // Into a dark theme, the old (light) one closes in, drawn over the new.
         closing = Number(style.getPropertyValue('--background').trim().split(' ')[0]) <= 0.5;

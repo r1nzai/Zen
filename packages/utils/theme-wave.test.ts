@@ -18,9 +18,10 @@ describe('themeWave', () => {
         Element.prototype.animate = animate;
         vi.spyOn(window, 'requestAnimationFrame').mockReturnValue(0);
         const finished = new Promise<void>((resolve) => (finish = resolve));
-        document.startViewTransition = ((update: () => void) => {
-            update();
-            return { ready: Promise.resolve(), finished, updateCallbackDone: Promise.resolve(), skipTransition() {} };
+        // As browsers do: ready once the update (which may be async) is done.
+        document.startViewTransition = ((update: () => void | Promise<void>) => {
+            const done = Promise.resolve(update());
+            return { ready: done, finished, updateCallbackDone: done, skipTransition() {} };
         }) as typeof document.startViewTransition;
         Object.assign(window, { innerWidth: 1000, innerHeight: 800 });
     });
@@ -83,6 +84,7 @@ describe('themeWave', () => {
     it('into a dark theme, closes the old one in to the point instead', async () => {
         withGpu();
         themeWave(into('0.15 0 0'), { x: 100, y: 200 });
+        await Promise.resolve(); // the update: the new theme read
         // The old theme is drawn over the new while it closes.
         expect(document.documentElement).toHaveClass('zen-theme-closing');
         await new Promise((resolve) => setTimeout(resolve));
@@ -104,6 +106,7 @@ describe('themeWave', () => {
     it('with a GPU, draws the water over the page in a wavy ring', async () => {
         withGpu();
         themeWave(into('0.98 0 0'), { x: 100, y: 200 });
+        await Promise.resolve();
         // Added with the new theme, in a view-transition layer of its own.
         const canvas = document.querySelector('canvas');
         expect(canvas?.getAttribute('style')).toContain('zen-theme-water');
@@ -136,6 +139,7 @@ describe('themeWave', () => {
             { x: 100, y: 200 },
             panel,
         );
+        await Promise.resolve();
         expect(named).toBe('zen-theme-area');
         expect(document.documentElement).not.toHaveClass('zen-theme-closing');
         const canvas = document.querySelector('canvas')!;
@@ -164,6 +168,25 @@ describe('themeWave', () => {
         panel.remove();
     });
 
+    it('reads the new theme once whatever reacts to the change has, e.g. an observer re-applying its colours', async () => {
+        withGpu();
+        // Like an app whose colours are inline on <html>, worked out for .dark or .light, and
+        // re-applied when a toggle flips the class: a MutationObserver, run in a microtask.
+        const root = document.documentElement;
+        root.style.setProperty('--background', '0.98 0 0');
+        const watch = new MutationObserver(() =>
+            root.style.setProperty('--background', root.classList.contains('dark') ? '0.15 0 0' : '0.98 0 0'),
+        );
+        watch.observe(root, { attributes: true, attributeFilter: ['class'] });
+        themeWave(() => root.classList.add('dark'), { x: 100, y: 200 });
+        await new Promise((resolve) => setTimeout(resolve));
+        watch.disconnect();
+        // Into dark: the old (light) theme closes in.
+        expect(root).toHaveClass('zen-theme-closing');
+        expect(animate.mock.calls[0][1]).toMatchObject({ pseudoElement: '::view-transition-old(root)' });
+        await settle();
+    });
+
     it("a target's layer name is given back when the next wave cuts its wave short", () => {
         withGpu();
         const [a, b] = [0, 1].map(() => {
@@ -178,15 +201,16 @@ describe('themeWave', () => {
         expect(b.style.viewTransitionName).toBe('zen-theme-area');
     });
 
-    it('takes the water off the page before a switch mid-wave is captured', () => {
+    it('takes the water off the page before a switch mid-wave is captured', async () => {
         withGpu();
         themeWave(into('0.98 0 0'), { x: 100, y: 200 });
+        await Promise.resolve();
         const canvas = document.querySelector('canvas')!;
         expect(canvas.isConnected).toBe(true);
         // The browser captures the old page when the transition starts: the water mustn't be in it.
         let inOldPage: boolean | undefined;
         const start = document.startViewTransition!;
-        document.startViewTransition = ((update: () => void) => {
+        document.startViewTransition = ((update: () => void | Promise<void>) => {
             inOldPage = canvas.isConnected;
             return start(update);
         }) as typeof document.startViewTransition;
