@@ -33,6 +33,9 @@ export default defineConfig({
         // In this WSL setup `localhost` resolves to ::1 only, which Windows can't reach
         // (it forwards IPv4 loopback). Loopback only: not exposed on the LAN.
         host: '127.0.0.1',
+        // Not Vite's default 5173: that's Sora's (pinned there), and the two run side by side.
+        port: 5190,
+        strictPort: true,
         fs: { allow: ['..'] },
     },
 });
