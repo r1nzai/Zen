@@ -161,7 +161,7 @@ export {
     type TooltipTriggerProps,
 } from './tooltip';
 export { FieldChevron } from './utils/field-chevron';
-export { default as ThemeToggle, ThemeScript, themeScript } from './theme-toggle';
+export { default as ThemeToggle, ThemeScript, type ThemeToggleProps, themeScript } from './theme-toggle';
 export { cva, type VariantProps } from './utils/cva';
 export { cx } from './utils/cx';
 export {

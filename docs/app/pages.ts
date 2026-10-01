@@ -337,8 +337,10 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'theme-toggle',
         title: 'Theme Toggle',
-        description: 'Switches between the dark and light themes and remembers the choice.',
+        description:
+            'Switches between the dark and light themes, remembering the choice itself or leaving it to your app.',
         parts: ['ThemeToggle', 'ThemeScript'],
+        examples: ['Default', 'YourState'],
     },
     {
         slug: 'toast',
