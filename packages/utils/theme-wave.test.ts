@@ -3,7 +3,6 @@ import { themeWave } from './theme-wave';
 describe('themeWave', () => {
     let animate: ReturnType<typeof vi.fn<Element['animate']>>;
     let finish: () => void;
-    const cancelClip = vi.fn();
 
     beforeEach(() => {
         animate = vi.fn<Element['animate']>(
@@ -12,7 +11,7 @@ describe('themeWave', () => {
                     finished: Promise.resolve(),
                     currentTime: 0,
                     playState: 'running',
-                    cancel: cancelClip,
+                    cancel() {},
                 }) as unknown as Animation,
         );
         Element.prototype.animate = animate;
@@ -95,11 +94,10 @@ describe('themeWave', () => {
         // From past the far corner, (1000, 800), to the point.
         for (const r of reach(frames[0].clipPath)) expect(r).toBeGreaterThan(Math.hypot(900, 600));
         for (const r of reach(frames.at(-1)!.clipPath)) expect(r).toBeLessThan(0.1);
-        // It holds the closed ring to the end, then lets go, so the next change starts clean.
-        expect(options).toMatchObject({ fill: 'forwards' });
-        cancelClip.mockClear();
+        // Not held at the end: closed is the old page's resting style (theme.css), and an
+        // animation held on would clip the next change's pages too.
+        expect(options).not.toHaveProperty('fill');
         await settle();
-        expect(cancelClip).toHaveBeenCalledOnce();
         expect(document.documentElement).not.toHaveClass('zen-theme-closing');
     });
 

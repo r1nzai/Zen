@@ -486,10 +486,15 @@ html.zen-theme-waving::view-transition-new(zen-theme-water) {
     animation: none;
     mix-blend-mode: normal;
 }
-/* Into a dark theme, the old one closes in over the new. */
+/*
+ * Into a dark theme, the old one closes in over the new. Closed is where it
+ * rests: the clip animation only opens it, so no frame between the animation's
+ * end and the transition's (however the browser hands them over) shows it whole.
+ */
 html.zen-theme-closing::view-transition-old(root),
 html.zen-theme-closing::view-transition-old(zen-theme-area) {
     z-index: 1;
+    clip-path: inset(50%);
 }
 
 /*

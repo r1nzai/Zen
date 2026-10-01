@@ -340,15 +340,14 @@ export function themeWave(
                 });
                 return `polygon(${points.join(',')})`;
             };
-            // The edge, sampled finely into keyframes (the shader's ripples ride it). It holds its last frame
-            // until the transition ends (let go, the old page would show whole for a frame),
-            // and no longer: held on, it would clip the next transition's pages too.
+            // The edge, sampled finely into keyframes (the shader's ripples ride it). Not held
+            // at the end: the new page spread out is the whole of it, and the old closed in is
+            // already its resting style (theme.css), so nothing shows when it lets go.
             const keyframes: Keyframe[] = Array.from({ length: FRAMES + 1 }, (_, f) => ({
                 clipPath: ring(f / FRAMES),
                 offset: f / FRAMES,
             }));
-            const clock = root.animate(keyframes, { duration, pseudoElement, fill: 'forwards' });
-            transition.finished.finally(() => clock.cancel());
+            const clock = root.animate(keyframes, { duration, pseudoElement });
 
             const { canvas, gl, uniform } = gpu;
             const dpr = Math.min(window.devicePixelRatio || 1, 2);
