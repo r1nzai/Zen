@@ -474,16 +474,21 @@ main[data-zen-skip-target]:focus {
  * themeWave() (utils/theme-wave.ts): the new theme spreads over the old one,
  * which holds still, through a clip on the new page (or, into a dark theme,
  * the old one closes in over the new). The water is a canvas
- * drawn over both, in a layer of its own that shows as it is (no fade).
+ * drawn over both, in a layer of its own that shows as it is (no fade). A
+ * theme on one element (themeWave's target) changes in its own layer.
  */
 html.zen-theme-waving::view-transition-old(root),
 html.zen-theme-waving::view-transition-new(root),
+html.zen-theme-waving::view-transition-group(zen-theme-area),
+html.zen-theme-waving::view-transition-old(zen-theme-area),
+html.zen-theme-waving::view-transition-new(zen-theme-area),
 html.zen-theme-waving::view-transition-new(zen-theme-water) {
     animation: none;
     mix-blend-mode: normal;
 }
 /* Into a dark theme, the old one closes in over the new. */
-html.zen-theme-closing::view-transition-old(root) {
+html.zen-theme-closing::view-transition-old(root),
+html.zen-theme-closing::view-transition-old(zen-theme-area) {
     z-index: 1;
 }
 

@@ -118,6 +118,66 @@ describe('themeWave', () => {
         expect(document.documentElement).not.toHaveClass('zen-theme-waving');
     });
 
+    it('with a target, plays inside it: its own layer, the water over just it, the theme read from it', async () => {
+        withGpu();
+        const panel = document.createElement('div');
+        panel.style.viewTransitionName = 'card';
+        panel.style.borderRadius = '12px';
+        panel.getBoundingClientRect = () => new DOMRect(50, 150, 300, 200);
+        document.body.append(panel);
+        let named: string | undefined;
+        // The page stays dark; the panel turns light.
+        document.documentElement.style.setProperty('--background', '0.15 0 0');
+        themeWave(
+            () => {
+                named = panel.style.viewTransitionName;
+                panel.style.setProperty('--background', '0.98 0 0');
+            },
+            { x: 100, y: 200 },
+            panel,
+        );
+        expect(named).toBe('zen-theme-area');
+        expect(document.documentElement).not.toHaveClass('zen-theme-closing');
+        const canvas = document.querySelector('canvas')!;
+        expect(canvas.style).toMatchObject({ left: '50px', top: '150px', width: '300px', height: '200px' });
+        expect(canvas.style.clipPath).toContain('round 12px');
+        await new Promise((resolve) => setTimeout(resolve));
+
+        const [keyframes, options] = animate.mock.calls[0];
+        expect(options).toMatchObject({ pseudoElement: '::view-transition-new(zen-theme-area)' });
+        // In the panel's own box: from the point, (50, 50) in it, to past its far corner, (300, 200).
+        const frames = keyframes as Keyframe[];
+        expect(String(frames[0].clipPath)).toMatch(/^polygon\(50(\.0)?px 50(\.0)?px/);
+        const inPanel = (clipPath: unknown) =>
+            String(clipPath)
+                .slice('polygon('.length, -1)
+                .split(',')
+                .map((point) =>
+                    Math.hypot(
+                        ...(point.trim().split(' ').map(parseFloat) as [number, number]).map((v, i) => v - [50, 50][i]),
+                    ),
+                );
+        for (const r of inPanel(frames.at(-1)!.clipPath)) expect(r).toBeGreaterThan(Math.hypot(250, 150));
+        await settle();
+        // Its own view-transition-name back.
+        expect(panel.style.viewTransitionName).toBe('card');
+        panel.remove();
+    });
+
+    it("a target's layer name is given back when the next wave cuts its wave short", () => {
+        withGpu();
+        const [a, b] = [0, 1].map(() => {
+            const panel = document.createElement('div');
+            panel.getBoundingClientRect = () => new DOMRect(0, 0, 200, 100);
+            return panel;
+        });
+        themeWave(into('0.98 0 0'), null, a);
+        expect(a.style.viewTransitionName).toBe('zen-theme-area');
+        themeWave(into('0.15 0 0'), null, b);
+        expect(a.style.viewTransitionName).toBe('');
+        expect(b.style.viewTransitionName).toBe('zen-theme-area');
+    });
+
     it('takes the water off the page before a switch mid-wave is captured', () => {
         withGpu();
         themeWave(into('0.98 0 0'), { x: 100, y: 200 });

@@ -22,13 +22,29 @@ const LOBES = [
 // Keyframes the wavy edge is drawn with, and points round it.
 const FRAMES = 48;
 const POINTS = 72;
+// The ripples' wavelength (px): fixed, as real ripples' is, so a bigger screen has more of them, not bigger ones.
+const WAVELENGTH = 28;
 const CLASS = 'zen-theme-waving';
 const CLOSING = 'zen-theme-closing';
 const NAME = 'zen-theme-water';
+// A theme on one element: its view-transition layer, while it changes.
+const AREA = 'zen-theme-area';
 
 type Bezier = [number, number, number, number];
 
 let running = 0;
+// The target in its own layer, and the view-transition-name it had: given back when its wave ends or is cut short.
+let area: { style: CSSStyleDeclaration; name: string } | null = null;
+function releaseArea() {
+    if (area) area.style.viewTransitionName = area.name;
+    area = null;
+}
+
+/** 0 below a, 1 above b, eased between (GLSL's smoothstep). */
+function smoothstep(a: number, b: number, t: number): number {
+    const x = Math.min(1, Math.max(0, (t - a) / (b - a)));
+    return x * x * (3 - 2 * x);
+}
 
 /** A CSS cubic-bezier easing: progress in time → progress of the value. */
 function bezier([x1, y1, x2, y2]: Bezier, t: number): number {
@@ -82,15 +98,13 @@ float wobble(float a, float r) {
 
 // A train of ripples whose front is x px away (ahead of it when positive, as it moves):
 // a steep front, crests fading out behind it, and running outwards through
-// the train faster than it spreads, as on water.
-float ripples(float x, float wavelength) {
-    float k = 6.2832 / wavelength;
-    float reach = x < 0.0 ? 2.5 * wavelength : 0.35 * wavelength;
-    return exp(-x * x / (2.0 * reach * reach)) * cos(k * x - 7.0 * time) / k;
-}
-
-float height(vec2 p, float a) {
-    return strength * ripples(dir * (distance(p, from) - edge - wobble(a, edge)), 20.0 + 0.02 * edge);
+// the train faster than it spreads, as on water. Its slope (height per px of x): the
+// ripples are a fixed size, as real ones are, however big the water.
+float rippleSlope(float x) {
+    float k = 6.2832 / ${WAVELENGTH.toFixed(1)};
+    float reach = x < 0.0 ? ${(2.5 * WAVELENGTH).toFixed(1)} : ${(0.35 * WAVELENGTH).toFixed(1)};
+    float phase = k * x - 7.0 * time;
+    return exp(-x * x / (2.0 * reach * reach)) * (-x / (reach * reach) * cos(phase) / k - sin(phase));
 }
 
 // Light from the top left. A glint off a surface of this slope, bent a little
@@ -106,8 +120,10 @@ void main() {
     vec2 p = vec2(gl_FragCoord.x, res.y - gl_FragCoord.y) / dpr;
     vec2 v = p - from;
     float a = atan(v.y, v.x);
-    float h = height(p, a);
-    vec2 slope = 0.9 * vec2(height(p + vec2(1.0, 0.0), a) - h, height(p + vec2(0.0, 1.0), a) - h);
+    // How far from the edge (outside it when positive).
+    float e = length(v) - edge - wobble(a, edge);
+    // The ripples' slope: across their rings, outwards.
+    vec2 slope = 0.9 * strength * dir * rippleSlope(dir * e) * v / max(length(v), 0.001);
 
     // Aurora: the glow colours, drifting round the circle.
     float hue = fract(a / 6.2832 + 0.15 * time + length(v) * 0.0008) * 3.0;
@@ -115,8 +131,6 @@ void main() {
         : hue < 2.0 ? mix(aurora[1], aurora[2], hue - 1.0)
         : mix(aurora[2], aurora[0], hue - 2.0);
 
-    // How far from the edge (outside it when positive).
-    float e = length(v) - edge - wobble(a, edge);
     // Iridescence, as on a soap film: the colour turns with the film's thickness,
     // which swells and thins round the ring and over time, slowly, and in soft
     // colours: nothing flickers, or flashes saturated colour (photosensitivity).
@@ -154,7 +168,7 @@ function waterCanvas(): Water | null {
     water = null;
     const canvas = document.createElement('canvas');
     canvas.setAttribute('aria-hidden', 'true');
-    canvas.style.cssText = `position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2147483647;view-transition-name:${NAME}`;
+    canvas.style.cssText = `position:fixed;pointer-events:none;z-index:2147483647;view-transition-name:${NAME}`;
     const gl = canvas.getContext('webgl', { premultipliedAlpha: true, antialias: false });
     const program = gl?.createProgram();
     if (!gl || !program) return null;
@@ -219,8 +233,10 @@ export function prepareThemeWave(): void {
 
 /**
  * Changes the theme (`change` swaps the classes or variables) like a drop
- * falling into water at `from` (an element's centre, or a point; the screen's
- * centre by default). Into a light theme, the new theme spreads in a wavy
+ * falling into water at `from` (an element's centre, or a point; the centre
+ * by default). The water fills the page or, for a theme on one element (a
+ * panel, a preview: `target`, the element whose classes or variables
+ * `change` swaps), just that element. Into a light theme, the new theme spreads in a wavy
  * ring; into a dark one, the old theme is pulled into the point. Ripples trail the ring's edge, glinting in the
  * theme's glow colours, and the edge shimmers like a soap film. The water is
  * drawn on the GPU, over the page, which itself doesn't bend. Without a GPU
@@ -229,18 +245,29 @@ export function prepareThemeWave(): void {
  * on the CPU, even a plain full-screen circle stutters. Call prepareThemeWave
  * when the pointer or focus reaches the switch, so the first switch is smooth.
  */
-export function themeWave(change: () => void, from?: Element | { x: number; y: number } | null): void {
+export function themeWave(
+    change: () => void,
+    from?: Element | { x: number; y: number } | null,
+    target?: Element | null,
+): void {
     const root = document.documentElement;
-    const gpu = wavy() ? waterCanvas() : null;
+    const scoped = !!target && target !== root;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    // The area that changes (the page, or the target), and the part of it on screen, which the water covers.
+    const box = scoped ? target.getBoundingClientRect() : new DOMRect(0, 0, w, h);
+    const left = Math.max(0, box.left);
+    const top = Math.max(0, box.top);
+    const right = Math.min(w, box.right);
+    const bottom = Math.min(h, box.bottom);
+    const gpu = wavy() && right > left && bottom > top ? waterCanvas() : null;
     if (!gpu) {
         change();
         return;
     }
 
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    let x = w / 2;
-    let y = h / 2;
+    let x = (left + right) / 2;
+    let y = (top + bottom) / 2;
     if (from instanceof Element) {
         const r = from.getBoundingClientRect();
         x = r.left + r.width / 2;
@@ -248,7 +275,7 @@ export function themeWave(change: () => void, from?: Element | { x: number; y: n
     } else if (from) {
         ({ x, y } = from);
     }
-    const corner = Math.hypot(Math.max(x, w - x), Math.max(y, h - y));
+    const corner = Math.hypot(Math.max(x - box.left, box.right - x), Math.max(y - box.top, box.bottom - y));
     const seed = Math.random() * 2 * Math.PI;
     // Past the furthest corner, however far the wobble pulls the edge in.
     const radius = corner + MAX_WOBBLE + 2;
@@ -259,12 +286,29 @@ export function themeWave(change: () => void, from?: Element | { x: number; y: n
     // A wave still running is cut short (the browser skips its transition): its water
     // goes first, or the new transition would capture it, still, as part of the old page.
     drain(gpu);
+    releaseArea();
     root.classList.add(CLASS);
+    // A target is captured in a layer of its own (the rest of the page doesn't change), its corners kept.
+    const layer = scoped ? AREA : 'root';
+    if (scoped) {
+        const { style } = target as HTMLElement | SVGElement;
+        area = { style, name: style.viewTransitionName };
+        style.viewTransitionName = AREA;
+    }
+    Object.assign(gpu.canvas.style, {
+        left: `${left}px`,
+        top: `${top}px`,
+        width: `${right - left}px`,
+        height: `${bottom - top}px`,
+        clipPath: scoped
+            ? `inset(${box.top - top}px ${right - box.right}px ${bottom - box.bottom}px ${box.left - left}px round ${getComputedStyle(target).borderRadius})`
+            : '',
+    });
     let aurora: number[] = [];
     let closing = false;
     const transition = document.startViewTransition(() => {
         change();
-        const style = getComputedStyle(root);
+        const style = getComputedStyle(scoped ? target : root);
         // Into a dark theme, the old (light) one closes in, drawn over the new.
         closing = Number(style.getPropertyValue('--background').trim().split(' ')[0]) <= 0.5;
         root.classList.toggle(CLOSING, closing);
@@ -281,14 +325,15 @@ export function themeWave(change: () => void, from?: Element | { x: number; y: n
             // How far the ring's edge is from the point, t of the way through its move.
             const reach = (t: number) => (closing ? 1 - bezier(FALL, t) : bezier(EASE, t)) * radius;
             // The ring is cut out of the new theme as it spreads, or of the old as it closes in.
-            const pseudoElement = closing ? '::view-transition-old(root)' : '::view-transition-new(root)';
+            const pseudoElement = `::view-transition-${closing ? 'old' : 'new'}(${layer})`;
             const ring = (t: number) => {
                 const r = reach(t);
                 const seconds = (t * duration) / 1000;
                 const points = Array.from({ length: POINTS }, (_, i) => {
                     const a = (i / POINTS) * 2 * Math.PI;
                     const out = Math.max(0, r + wobble(a, r, seconds, seed));
-                    return `${(x + out * Math.cos(a)).toFixed(1)}px ${(y + out * Math.sin(a)).toFixed(1)}px`;
+                    // In the layer's own box.
+                    return `${(x - box.left + out * Math.cos(a)).toFixed(1)}px ${(y - box.top + out * Math.sin(a)).toFixed(1)}px`;
                 });
                 return `polygon(${points.join(',')})`;
             };
@@ -304,18 +349,19 @@ export function themeWave(change: () => void, from?: Element | { x: number; y: n
 
             const { canvas, gl, uniform } = gpu;
             const dpr = Math.min(window.devicePixelRatio || 1, 2);
-            canvas.width = Math.round(w * dpr);
-            canvas.height = Math.round(h * dpr);
+            canvas.width = Math.round((right - left) * dpr);
+            canvas.height = Math.round((bottom - top) * dpr);
             gl.viewport(0, 0, canvas.width, canvas.height);
             gl.uniform2f(uniform('res'), canvas.width, canvas.height);
             gl.uniform1f(uniform('dpr'), dpr);
-            gl.uniform2f(uniform('from'), x, y);
+            gl.uniform2f(uniform('from'), x - left, y - top);
             gl.uniform1f(uniform('seed'), seed);
             gl.uniform3fv(uniform('aurora[0]'), aurora);
             gl.uniform1f(uniform('light'), closing ? 0 : 1);
 
-            // Ripples that rise as they break out and fade as they spread, gone at t = 1.
-            const swell = (t: number) => (1 - Math.exp(-t * 14)) * (1 - t) ** 1.5;
+            // Filling, the water comes in calm and its ripples build as more pours in, then
+            // settle as it fills: gone at t = 1. No splash.
+            const swell = (t: number) => 1.6 * smoothstep(0.05, 0.45, t) * (1 - t) ** 1.5;
             const frame = () => {
                 if (id !== running) return;
                 // Nothing left on the canvas while it's still in the page, after the transition.
@@ -348,6 +394,7 @@ export function themeWave(change: () => void, from?: Element | { x: number; y: n
         .catch(() => {});
     transition.finished.finally(() => {
         if (id !== running) return;
+        releaseArea();
         root.classList.remove(CLASS, CLOSING);
         drain(gpu);
     });
