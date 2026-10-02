@@ -7,7 +7,7 @@ export function FieldChevron({ open, className }: { open?: boolean; className?: 
     return (
         <ChevronDownMicro
             className={cx(
-                'text-muted-foreground size-4 shrink-0 transition-transform duration-300',
+                'zen__field-chevron text-muted-foreground size-4 shrink-0 transition-transform duration-300',
                 open && 'rotate-180',
                 className,
             )}

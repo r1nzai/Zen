@@ -4,7 +4,7 @@ import { ComponentProps } from 'react';
 const TONE = {
     default: 'border-tint/10 bg-tint/[0.05] text-muted-foreground',
     positive: 'border-primary/35 bg-primary/12 text-primary',
-    negative: 'border-destructive/40 bg-destructive/15 text-destructive',
+    negative: 'border-destructive/40 bg-destructive/10 text-destructive',
 };
 
 /**
@@ -22,7 +22,7 @@ export default function StatusPill({ tone = 'default', quiet = false, className,
             className={cx(
                 'zen__status-pill inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium whitespace-nowrap [&_svg]:size-3.5 [&_svg]:shrink-0',
                 'transition-[color,background-color,border-color,opacity] duration-300',
-                quiet ? 'text-muted-foreground border-transparent bg-transparent opacity-80' : TONE[tone],
+                quiet ? 'text-muted-foreground border-transparent bg-transparent' : TONE[tone],
                 className,
             )}
         />

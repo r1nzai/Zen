@@ -208,6 +208,10 @@ describe('Combobox', () => {
         it('shows the placeholder for a chosen key it has no text for', () => {
             render(<Plain value="nope" />);
             expect(field()).toHaveTextContent('Pick');
+            // Single choice too: a placeholder is styled as one, not as a chosen value.
+            expect(screen.getByText('Pick')).toHaveClass(
+                'text-[color:oklch(var(--muted-foreground)/var(--zen-placeholder))]',
+            );
         });
 
         it('shows chosen items that are not in items (selectedItems), e.g. just created', () => {

@@ -4,9 +4,16 @@ import { cx } from './cx';
 export const FIELD =
     'glow-border h-10 rounded-lg border [--glow-border-color:oklch(var(--glow)/0.22)] bg-tint/[0.035] px-3 text-sm text-foreground ' +
     'shadow-[inset_0_1px_0_hsl(0_0%_100%/0.04)] transition-[border-color,background-color,box-shadow,--glow-border-color] duration-200 ' +
-    'placeholder:text-muted-foreground hover:[--glow-border-color:oklch(var(--glow)/0.4)] ' +
-    'focus-visible:border-glow/60 focus-visible:[--glow-border-color:transparent] focus-visible:bg-tint/[0.05] focus-visible:shadow-[0_0_0_3px_oklch(var(--glow)/0.16),0_0_24px_-6px_oklch(var(--glow)/0.6)] focus-visible:outline-hidden ' +
+    'placeholder:text-[color:oklch(var(--muted-foreground)/var(--zen-placeholder))] hover:[--glow-border-color:oklch(var(--glow)/0.4)] ' +
+    'focus-visible:border-glow/60 focus-visible:[--glow-border-color:transparent] focus-visible:bg-tint/[0.05] focus-visible:shadow-glow-focus focus-visible:outline-hidden ' +
     'disabled:cursor-not-allowed disabled:opacity-50';
+
+/**
+ * Placeholder text in a trigger that shows one (Select, MonthPicker, DatePicker…). Fields use the same
+ * colours through placeholder: in FIELD. --zen-placeholder dims it on dark glass, so a placeholder can't
+ * pass for a value there (about 4.9:1 against 16.6:1); light mode already separates them.
+ */
+export const PLACEHOLDER = 'text-[color:oklch(var(--muted-foreground)/var(--zen-placeholder))]';
 
 /** A picker's previous/next arrows (Calendar, MonthPicker). */
 export const PICKER_NAV =
@@ -18,15 +25,14 @@ export const PICKER_MONTH =
 export const PICKER_MONTH_ON = 'bg-primary text-primary-foreground hover:bg-primary';
 
 /** Glow a trigger carries while its popup is open. */
-export const TRIGGER_OPEN =
-    'border-glow/60 [--glow-border-color:transparent] shadow-[0_0_0_3px_oklch(var(--glow)/0.16),0_0_24px_-6px_oklch(var(--glow)/0.6)]';
+export const TRIGGER_OPEN = 'border-glow/60 [--glow-border-color:transparent] shadow-glow-focus';
 
 /** Trigger for popup fields (dropdown): a field that glows while open. */
 export const TRIGGER = cx(FIELD, 'inline-flex cursor-pointer items-center justify-between gap-2 whitespace-nowrap');
 
 /** Popup panel (popover, dropdown list): glass with a soft glow. */
 export const POPUP =
-    'glass glass-blur rounded-xl text-foreground shadow-[var(--popup-shadow),0_0_40px_-20px_oklch(var(--glow)/0.5)] outline-hidden';
+    'glass glass-blur rounded-xl text-foreground shadow-[var(--popup-shadow),0_0_40px_-20px_oklch(var(--glow)/calc(0.5*var(--glow-k)))] outline-hidden';
 
 /** Pills (and TabList variant="pills"): a glass track… */
 export const PILL_TRACK =
@@ -34,7 +40,7 @@ export const PILL_TRACK =
 
 /** …a glowing pill that slides to the active item (its look is repeated in theme.css, for before it's measured)… */
 export const PILL_INDICATOR =
-    'absolute top-1 bottom-1 left-0 rounded-full bg-primary/15 shadow-[inset_0_0_0_1px_oklch(var(--glow)/0.35),0_0_24px_-4px_oklch(var(--glow)/0.6)] transition-[translate,width] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]';
+    'absolute top-1 bottom-1 left-0 rounded-full bg-primary/15 shadow-[inset_0_0_0_1px_oklch(var(--glow)/0.35),0_0_24px_-4px_oklch(var(--glow)/calc(0.6*var(--glow-k)))] transition-[translate,width] duration-500 ease-out-soft';
 
 /** …and items that sit above it, lit when current (a link) or selected (a tab). Only their text colour
  * transitions: the pill they wear before the indicator is measured (theme.css) must go at once. */
@@ -50,6 +56,6 @@ export const PILL =
 export const FIELD_WITHIN =
     'glow-border flex w-full items-center gap-1.5 h-10 rounded-lg border [--glow-border-color:oklch(var(--glow)/0.22)] bg-tint/[0.035] px-3 text-sm text-foreground ' +
     'shadow-[inset_0_1px_0_hsl(0_0%_100%/0.04)] transition-[border-color,background-color,box-shadow,--glow-border-color] duration-200 ' +
-    'placeholder:text-muted-foreground hover:[--glow-border-color:oklch(var(--glow)/0.4)] ' +
-    'focus-within:border-glow/60 focus-within:[--glow-border-color:transparent] focus-within:bg-tint/[0.05] focus-within:shadow-[0_0_0_3px_oklch(var(--glow)/0.16),0_0_24px_-6px_oklch(var(--glow)/0.6)] focus-within:outline-hidden ' +
+    'placeholder:text-[color:oklch(var(--muted-foreground)/var(--zen-placeholder))] hover:[--glow-border-color:oklch(var(--glow)/0.4)] ' +
+    'focus-within:border-glow/60 focus-within:[--glow-border-color:transparent] focus-within:bg-tint/[0.05] focus-within:shadow-glow-focus focus-within:outline-hidden ' +
     'disabled:cursor-not-allowed disabled:opacity-50';

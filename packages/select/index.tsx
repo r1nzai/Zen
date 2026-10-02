@@ -2,7 +2,7 @@ import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { CheckIcon } from '@zen/utils/status-icons';
-import { POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
+import { POPUP, TRIGGER, TRIGGER_OPEN, PLACEHOLDER } from '@zen/utils/styles';
 import { useTypeahead } from '@zen/utils/typeahead';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import {
@@ -159,7 +159,7 @@ export default function Select<V extends string>({
                 }}
                 className={cx('zen__select group', TRIGGER, 'w-full', popup.open && TRIGGER_OPEN, className)}
             >
-                <span className={cx('truncate', selectedLabel === undefined && 'text-muted-foreground')}>
+                <span className={cx('truncate', selectedLabel === undefined && PLACEHOLDER)}>
                     {selectedLabel ?? placeholder}
                 </span>
                 <FieldChevron open={popup.open} />

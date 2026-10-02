@@ -94,6 +94,10 @@ describe('Select', () => {
             </Select>,
         );
         expect(trigger()).toHaveTextContent('Pick one');
+        // Dimmer than a chosen value, so it can't pass for one.
+        expect(screen.getByText('Pick one')).toHaveClass(
+            'text-[color:oklch(var(--muted-foreground)/var(--zen-placeholder))]',
+        );
     });
 
     describe('SelectItem, SelectGroup, SelectSeparator', () => {

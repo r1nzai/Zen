@@ -20,9 +20,7 @@ export function SideNavGroup({
     return (
         <div className={cx('flex flex-col gap-1', className)}>
             {title && (
-                <span className="text-muted-foreground px-3 pb-1 text-[0.68rem] tracking-[0.1em] uppercase">
-                    {title}
-                </span>
+                <span className="text-muted-foreground text-2xs px-3 pb-1 tracking-widest uppercase">{title}</span>
             )}
             {children}
         </div>

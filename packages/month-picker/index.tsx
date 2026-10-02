@@ -4,7 +4,15 @@ import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { formatMonth, type Month, monthNames } from '@zen/utils/month';
-import { PICKER_MONTH, PICKER_MONTH_ON, PICKER_NAV, POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
+import {
+    PICKER_MONTH,
+    PICKER_MONTH_ON,
+    PICKER_NAV,
+    POPUP,
+    TRIGGER,
+    TRIGGER_OPEN,
+    PLACEHOLDER,
+} from '@zen/utils/styles';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import { ComponentProps, useState } from 'react';
 
@@ -49,7 +57,7 @@ export default function MonthPicker({
                 style={{ ...popup.triggerProps.style, ...style }}
                 className={cx('zen__month-picker group', TRIGGER, 'w-full', popup.open && TRIGGER_OPEN, className)}
             >
-                <span className={value ? undefined : 'text-muted-foreground'}>
+                <span className={value ? undefined : PLACEHOLDER}>
                     {value ? formatMonth(value, locale) : placeholder}
                 </span>
                 <FieldChevron open={popup.open} />

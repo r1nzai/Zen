@@ -39,16 +39,16 @@ export default function Checkbox({
                 aria-checked={indeterminate ? 'mixed' : undefined}
                 onChange={(e) => onChange?.(e.target.checked)}
                 className={cx(
-                    'peer border-tint/20 bg-tint/[0.04] m-0 size-full cursor-pointer appearance-none rounded-[5px] border',
+                    'peer bg-tint/[0.04] m-0 size-full cursor-pointer appearance-none rounded-[5px] border border-[color:oklch(var(--tint)/var(--zen-control-edge))]',
                     'outline-hidden transition-[background-color,border-color,box-shadow] duration-200',
-                    'hover:enabled:border-tint/35 focus-visible:ring-ring/50 focus-visible:ring-2',
+                    'focus-visible:ring-ring/50 focus-visible:ring-2 hover:enabled:border-[color:oklch(var(--tint)/var(--zen-control-edge-hover))]',
                     'checked:border-primary checked:bg-primary indeterminate:border-primary indeterminate:bg-primary',
-                    'checked:shadow-[0_0_14px_-2px_oklch(var(--glow)/0.8)] indeterminate:shadow-[0_0_14px_-2px_oklch(var(--glow)/0.8)]',
+                    'checked:shadow-[0_0_14px_-2px_oklch(var(--glow)/calc(0.8*var(--glow-k)))] indeterminate:shadow-[0_0_14px_-2px_oklch(var(--glow)/calc(0.8*var(--glow-k)))]',
                     'aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50',
                 )}
             />
             {/* The tick is uncovered from left to right, as if drawn, as the box is checked. */}
-            <CheckMicro className="text-primary-foreground pointer-events-none absolute size-3.5 opacity-0 transition-[opacity,clip-path] duration-300 ease-out [clip-path:inset(0_100%_0_0)] peer-checked:opacity-100 peer-checked:[clip-path:inset(0)] peer-indeterminate:hidden" />
+            <CheckMicro className="zen__checkbox-check text-primary-foreground pointer-events-none absolute size-3.5 opacity-0 transition-[opacity,clip-path] duration-300 ease-out [clip-path:inset(0_100%_0_0)] peer-checked:opacity-100 peer-checked:[clip-path:inset(0)] peer-indeterminate:hidden" />
             <MinusMicro className="text-primary-foreground pointer-events-none absolute hidden size-3.5 peer-indeterminate:block" />
         </span>
     );

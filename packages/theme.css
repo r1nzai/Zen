@@ -64,9 +64,19 @@
 
     --color-tint: oklch(var(--tint));
 
+    /* Surfaces (cards, dialogs, popups) are rounded-xl/2xl: derived too, so --radius reaches them. */
+    --radius-2xl: calc(var(--radius) + 6px);
+    --radius-xl: calc(var(--radius) + 2px);
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);
+
+    /* The small uppercase label over a stat, a nav group or a contents list; badges and tab-bar labels. */
+    --text-2xs: 0.68rem;
+
+    /* A focused (or open) field: a faint ring in the glow colour and a halo that follows --glow-strength. */
+    --shadow-glow-focus:
+        0 0 0 3px oklch(var(--glow) / 0.16), 0 0 24px -6px oklch(var(--glow) / calc(0.6 * var(--glow-k)));
 
     --font-sans: 'Inter Variable', Inter, ui-sans-serif, system-ui, sans-serif;
 
@@ -305,25 +315,46 @@ html[data-zen-graphics='lite'] :is(.zen-topo--lit, .zen-dots--lit) {
 .zen__table-container[data-under-top] .zen__sticky-top,
 .zen__table-container[data-under-left] .zen__sticky-left,
 .zen__table-container[data-under-bottom] .zen__sticky-bottom {
-    background-color: oklch(var(--card) / 0.6);
+    --zen-sticky-fill: oklch(var(--card) / 0.6);
+    background-color: var(--zen-sticky-fill);
     -webkit-backdrop-filter: blur(18px) saturate(1.4);
     backdrop-filter: blur(18px) saturate(1.4);
 }
 html[data-zen-graphics='lite'] .zen__table-container[data-under-top] .zen__sticky-top,
 html[data-zen-graphics='lite'] .zen__table-container[data-under-left] .zen__sticky-left,
 html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__sticky-bottom {
+    --zen-sticky-fill: oklch(var(--card));
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-    background-color: oklch(var(--card));
 }
 @media (hover: none), (pointer: coarse), (prefers-reduced-transparency: reduce) {
     .zen__table-container[data-under-top] .zen__sticky-top,
     .zen__table-container[data-under-left] .zen__sticky-left,
     .zen__table-container[data-under-bottom] .zen__sticky-bottom {
+        --zen-sticky-fill: oklch(var(--card));
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
-        background-color: oklch(var(--card));
     }
+}
+/*
+ * Rows passing under the header or footer fade into it over a short band, so
+ * the row cut by its edge reads as "more to scroll", not as clipped.
+ */
+.zen__table-container[data-under-top] .zen__sticky-top::after,
+.zen__table-container[data-under-bottom] .zen__sticky-bottom::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    height: 1.75rem;
+    pointer-events: none;
+}
+.zen__table-container[data-under-top] .zen__sticky-top::after {
+    top: 100%;
+    background: linear-gradient(to bottom, var(--zen-sticky-fill), transparent);
+}
+.zen__table-container[data-under-bottom] .zen__sticky-bottom::before {
+    bottom: 100%;
+    background: linear-gradient(to top, var(--zen-sticky-fill), transparent);
 }
 
 /* ───────────────────────── Code ───────────────────────── */
@@ -348,6 +379,7 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     --sh-entity: oklch(0.5 0.12 200);
     --sh-string: oklch(0.5 0.14 150);
     --sh-keyword: oklch(0.5 0.2 330);
+    --sh-comment: oklch(var(--muted-foreground));
 }
 
 /* ───────────────────────── Backdrop: contours / dots + light ───────────────────────── */
@@ -456,7 +488,7 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     background-color: color-mix(in oklab, var(--color-primary) 15%, transparent);
     box-shadow:
         inset 0 0 0 1px oklch(var(--glow) / 0.35),
-        0 0 24px -4px oklch(var(--glow) / 0.6);
+        0 0 24px -4px oklch(var(--glow) / calc(0.6 * var(--glow-k)));
 }
 :has(> .zen__tab-bar[data-pending]) > [role='tab'][aria-selected='true'] {
     /* The bar straddles the track's bottom border: 1px above its edge, 1px below. */
@@ -1108,7 +1140,11 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     }
 }
 
-/* Reduced motion: the OS setting, or opt in with html.reduce-motion. */
+/*
+ * Reduced motion: the OS setting, or opt in with html.reduce-motion. It reaches
+ * every element with a zen__ class, so each part that moves (a meter's fill, a
+ * toggle's thumb, a chevron) carries one of its own.
+ */
 @media (prefers-reduced-motion: reduce) {
     .zen-backdrop *,
     .zen-backdrop *::before,

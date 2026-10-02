@@ -1,7 +1,5 @@
-import { Badge, buttonVariants, Card, CardHeader, CardTitle, Stat, StatRow } from '@rinzai/zen';
+import { buttonVariants, Card } from '@rinzai/zen';
 import { Link } from 'react-router';
-
-import { version } from '../../../package.json';
 
 import { CodeCard } from '../components/code-block';
 import { DocsLayout } from '../components/docs-layout';
@@ -29,13 +27,13 @@ const TOC = [
 export default function Home() {
     return (
         <DocsLayout toc={TOC}>
-            <header className="mb-14 flex flex-col gap-5">
-                <Badge className="self-start">v{version} · dark glass</Badge>
+            <header className="mb-16 flex flex-col gap-5">
                 <h1 className="text-aurora text-5xl lg:text-6xl">Zen</h1>
                 <p className="text-muted-foreground mt-0! max-w-2xl text-lg leading-relaxed">
                     React components in dark glass: translucent surfaces, hairline borders that catch a pointer light,
-                    and one accent colour carrying the UI. Built on native platform features (<code>{'<dialog>'}</code>,
-                    the Popover API, radio inputs) with no runtime dependencies.
+                    and one accent colour carrying the UI. {COMPONENTS.length} components, dark and light, built on
+                    native platform features (<code>{'<dialog>'}</code>, the Popover API, radio inputs) with no runtime
+                    dependencies.
                 </p>
                 <div className="flex flex-wrap gap-3">
                     <a href="#installation" className={buttonVariants()}>
@@ -46,12 +44,6 @@ export default function Home() {
                     </Link>
                 </div>
             </header>
-
-            <StatRow className="mb-16">
-                <Stat label="Components" value={COMPONENTS.length} hint="and counting" />
-                <Stat label="Runtime dependencies" value="0" hint="React is the only peer" />
-                <Stat label="Themes" value="Dark + light" tone="positive" hint="OKLCH tokens" />
-            </StatRow>
 
             <div className="flex flex-col gap-14">
                 <section className="flex flex-col gap-4">

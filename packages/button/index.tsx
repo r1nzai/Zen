@@ -51,8 +51,8 @@ export const buttonVariants = cva(
             variant: {
                 default:
                     'bg-primary bg-[linear-gradient(to_bottom,oklch(1_0_0/0.16),transparent)] text-primary-foreground ' +
-                    'shadow-[0_0_0_1px_oklch(var(--glow)/0.55),0_0_22px_-6px_oklch(var(--glow)/0.7),inset_0_1px_0_hsl(0_0%_100%/0.3)] ' +
-                    'hover:shadow-[0_0_0_1px_oklch(var(--glow)/0.8),0_0_28px_-4px_oklch(var(--glow)/0.85),inset_0_1px_0_hsl(0_0%_100%/0.35)]',
+                    'shadow-[0_0_0_1px_oklch(var(--glow)/0.55),0_0_22px_-6px_oklch(var(--glow)/calc(0.7*var(--glow-k))),inset_0_1px_0_hsl(0_0%_100%/0.3)] ' +
+                    'hover:shadow-[0_0_0_1px_oklch(var(--glow)/0.8),0_0_28px_-4px_oklch(var(--glow)/calc(0.85*var(--glow-k))),inset_0_1px_0_hsl(0_0%_100%/0.35)]',
                 // Tonal: a soft fill in the accent colour, for the second action beside a primary one.
                 secondary:
                     'bg-primary/15 text-foreground shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.25)] hover:bg-primary/25',
@@ -61,7 +61,7 @@ export const buttonVariants = cva(
                     'glow-edge border border-tint/10 bg-tint/[0.03] text-foreground hover:border-tint/20 hover:bg-tint/[0.07]',
                 ghost: 'text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground',
                 destructive:
-                    'bg-destructive/90 text-destructive-foreground shadow-[0_0_0_1px_oklch(var(--destructive)/0.6),0_0_22px_-8px_oklch(var(--destructive)/0.7)] hover:bg-destructive',
+                    'bg-destructive/90 text-destructive-foreground shadow-[0_0_0_1px_oklch(var(--destructive)/0.6),0_0_22px_-8px_oklch(var(--destructive)/calc(0.7*var(--glow-k)))] hover:bg-destructive',
                 // Inline in running text (no padding, sits on the line) and truncates in a tight cell.
                 link: 'inline-block h-auto! max-w-full truncate rounded-sm px-0! text-left align-bottom text-[length:inherit] text-primary underline-offset-4 hover:underline active:scale-100',
                 // Square ghost button for a lone icon (Sora's menu trigger).

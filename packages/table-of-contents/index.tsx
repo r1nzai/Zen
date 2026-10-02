@@ -31,7 +31,7 @@ export default function TableOfContents({ items, title = 'On this page', classNa
     if (!items.length) return null;
     return (
         <nav aria-label={title} className={cx('zen__toc flex flex-col gap-3', className)}>
-            <p className="text-muted-foreground mt-0! text-[0.68rem] tracking-[0.1em] uppercase">{title}</p>
+            <p className="text-muted-foreground text-2xs mt-0! tracking-widest uppercase">{title}</p>
             <ul className="border-tint/[0.07] flex flex-col gap-2 border-l text-sm">
                 {items.map((item) => (
                     <li key={item.id} className={cx('-ml-px', item.depth === 2 && 'pl-3')}>

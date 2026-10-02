@@ -261,25 +261,28 @@ function Budget({ nav }: { nav: boolean }) {
                             value={month}
                             onChange={setMonth}
                             locale={LOCALE}
-                            className="w-40"
+                            className="w-40 max-sm:w-full"
                         />
-                        <Button variant="outline" loading={loading} onClick={refresh}>
-                            {loading ? 'Refreshing' : 'Refresh'}
-                        </Button>
-                        <Button onClick={() => setAdding(true)}>Add entry</Button>
-                        <Menu>
-                            <MenuTrigger aria-label="Budget actions" className={MORE}>
-                                <Ellipsis />
-                            </MenuTrigger>
-                            <MenuContent>
-                                <MenuItem onSelect={() => toast('Export started', { tone: 'info' })}>
-                                    Export CSV
-                                </MenuItem>
-                                <MenuItem destructive onSelect={() => setResetting(true)}>
-                                    Reset month
-                                </MenuItem>
-                            </MenuContent>
-                        </Menu>
+                        {/* The actions wrap as one group, so the primary action never ends up alone on a line. */}
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" loading={loading} onClick={refresh}>
+                                {loading ? 'Refreshing' : 'Refresh'}
+                            </Button>
+                            <Button onClick={() => setAdding(true)}>Add entry</Button>
+                            <Menu>
+                                <MenuTrigger aria-label="Budget actions" className={MORE}>
+                                    <Ellipsis />
+                                </MenuTrigger>
+                                <MenuContent>
+                                    <MenuItem onSelect={() => toast('Export started', { tone: 'info' })}>
+                                        Export CSV
+                                    </MenuItem>
+                                    <MenuItem destructive onSelect={() => setResetting(true)}>
+                                        Reset month
+                                    </MenuItem>
+                                </MenuContent>
+                            </Menu>
+                        </div>
                     </div>
                 </PageHeader>
 
@@ -498,7 +501,7 @@ function EntryTable({
                             <TableCell className="w-48 max-sm:hidden">
                                 <TagList tags={e.tags} />
                             </TableCell>
-                            <TableCell numeric className="w-36 py-1.5">
+                            <TableCell numeric className="w-36 py-1.5 max-sm:w-auto">
                                 <EditableCell
                                     label={`${e.label}: ${money(e.amount)}`}
                                     className={e.kind === 'income' ? 'text-primary text-glow' : undefined}
@@ -539,7 +542,9 @@ function EntryTable({
                 </TableBody>
                 <TableFooter>
                     <TableRow>
-                        <TableFooterCell colSpan={2}>Net</TableFooterCell>
+                        <TableFooterCell>Net</TableFooterCell>
+                        {/* Its own cell under Tags, hidden with that column: a colSpan would keep a phantom column on phones. */}
+                        <TableFooterCell className="max-sm:hidden" />
                         <TableFooterCell numeric className={total >= 0 ? 'text-primary' : 'text-destructive'}>
                             {total >= 0 ? '+' : '−'}
                             {money(Math.abs(total))}

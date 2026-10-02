@@ -33,6 +33,8 @@
     h5,
     h6 {
         font-weight: 600;
+        /* Lines of even length, so a heading never leaves one word on its last line. */
+        text-wrap: balance;
     }
     h1,
     h2,

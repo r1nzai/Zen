@@ -274,10 +274,10 @@ export default function Calendar(props: CalendarProps) {
                                                         onMouseEnter={() => pending && setHover(d)}
                                                         className={cx(
                                                             DAY,
-                                                            !inMonth && 'text-muted-foreground/45',
+                                                            !inMonth && 'text-muted-foreground',
                                                             off && 'cursor-not-allowed opacity-35',
                                                             chosen
-                                                                ? 'bg-primary text-primary-foreground shadow-[0_0_20px_-4px_oklch(var(--glow)/0.8)]'
+                                                                ? 'bg-primary text-primary-foreground shadow-[0_0_20px_-4px_oklch(var(--glow)/calc(0.8*var(--glow-k)))]'
                                                                 : !off && 'hover:bg-tint/[0.08]',
                                                             d === now &&
                                                                 'after:bg-primary after:absolute after:bottom-1 after:left-1/2 after:size-1 after:-translate-x-1/2 after:rounded-full',

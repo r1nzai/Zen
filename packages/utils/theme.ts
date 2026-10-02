@@ -82,6 +82,12 @@ export function themeVars(theme: ThemeSettings, appearance: Appearance = 'dark')
     const strengths = {
         'topo-strength': String({ off: 0, subtle: 0.55, visible: 1 }[theme.topography]),
     };
+    // Halos are tuned at soft; --glow-k scales them from there. Set beside the strength, so on an
+    // element below <html> it's worked out from that element's strength, not inherited from the root.
+    const glow = (levels: Record<ThemeSettings['glow'], number>) => ({
+        'glow-strength': String(levels[theme.glow]),
+        'glow-k': `calc(var(--glow-strength) / ${levels.soft})`,
+    });
 
     if (appearance === 'light') {
         return {
@@ -107,7 +113,7 @@ export function themeVars(theme: ThemeSettings, appearance: Appearance = 'dark')
             glow: t(0.62, mono ? 0.02 : Math.min(0.2, c * 1.4), h),
             'glow-2': t(0.65, mono ? 0.02 : c * 1.05, h + 30),
             tint: t(0.21, 0.02, h),
-            'glow-strength': String({ off: 0, soft: 0.4, bright: 0.8 }[theme.glow]),
+            ...glow({ off: 0, soft: 0.4, bright: 0.8 }),
             ...strengths,
         };
     }
@@ -131,12 +137,12 @@ export function themeVars(theme: ThemeSettings, appearance: Appearance = 'dark')
         'accent-foreground': t(0.88, c * 0.5, h),
         ring: t(0.72, c, h),
         destructive: t(0.64, 0.2, 25),
-        'destructive-foreground': t(0.985, 0, 0),
+        'destructive-foreground': t(0.13, 0.02, 25),
         glow: t(0.7, mono ? 0.02 : c, h),
         // Analogous second light (a little further round the wheel), not a contrasting colour.
         'glow-2': t(0.72, mono ? 0.02 : c * 0.75, h + 30),
         tint: t(1, 0, 0),
-        'glow-strength': String({ off: 0, soft: 0.55, bright: 1 }[theme.glow]),
+        ...glow({ off: 0, soft: 0.55, bright: 1 }),
         ...strengths,
     };
 }

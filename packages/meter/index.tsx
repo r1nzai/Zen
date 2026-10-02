@@ -52,12 +52,12 @@ export default function Meter({
             <div className="bg-muted col-span-2 h-2 overflow-hidden rounded-full">
                 <div
                     className={cx(
-                        'h-full rounded-full transition-[width] duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
+                        'zen__meter-fill ease-out-soft h-full rounded-full transition-[width] duration-700',
                         resolved === 'danger'
-                            ? 'bg-destructive shadow-[0_0_12px_oklch(var(--destructive)/0.7)]'
+                            ? 'bg-destructive shadow-[0_0_12px_oklch(var(--destructive)/calc(0.7*var(--glow-k)))]'
                             : resolved === 'warning'
-                              ? 'bg-accent-foreground shadow-[0_0_12px_oklch(var(--accent-foreground)/0.6)]'
-                              : 'from-primary to-glow-2 bg-gradient-to-r shadow-[0_0_12px_oklch(var(--glow)/0.6)]',
+                              ? 'bg-accent-foreground shadow-[0_0_12px_oklch(var(--accent-foreground)/calc(0.6*var(--glow-k)))]'
+                              : 'from-primary to-glow-2 bg-gradient-to-r shadow-[0_0_12px_oklch(var(--glow)/calc(0.6*var(--glow-k)))]',
                     )}
                     style={{ width: `${pct}%` }}
                 />

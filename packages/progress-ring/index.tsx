@@ -34,7 +34,7 @@ export default function ProgressRing({ value, size = 84, stroke = 7, label, chil
                     strokeLinecap="round"
                     strokeDasharray={c}
                     strokeDashoffset={c * (1 - v)}
-                    className="stroke-primary [filter:drop-shadow(0_0_6px_oklch(var(--glow)/0.45))] transition-[stroke-dashoffset] duration-700 ease-out"
+                    className="zen__progress-ring-arc stroke-primary [filter:drop-shadow(0_0_6px_oklch(var(--glow)/calc(0.45*var(--glow-k))))] transition-[stroke-dashoffset] duration-700 ease-out"
                 />
             </svg>
             <div className="absolute inset-0 grid place-items-center text-center">{children}</div>

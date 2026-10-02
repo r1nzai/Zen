@@ -277,7 +277,10 @@ export function TreeToggle({ expanded, onToggle, className, ...rest }: TreeToggl
             {...rest}
         >
             <ChevronRightMicro
-                className={cx('size-4 transition-transform duration-200 ease-out', expanded && 'rotate-90')}
+                className={cx(
+                    'zen__tree-chevron size-4 transition-transform duration-200 ease-out',
+                    expanded && 'rotate-90',
+                )}
             />
         </button>
     );

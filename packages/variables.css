@@ -27,7 +27,7 @@
     --accent: 0.3 0.046 295;
     --accent-foreground: 0.88 0.065 295;
     --destructive: 0.64 0.2 25;
-    --destructive-foreground: 0.985 0 0;
+    --destructive-foreground: 0.13 0.02 25;
 
     --border: 0.28 0.021 295;
     --input: 0.28 0.021 295;
@@ -37,12 +37,27 @@
     --glow: 0.7 0.13 295;
     --glow-2: 0.72 0.098 325; /* analogous, a little further round the wheel */
     --glow-strength: 0.55; /* 0 turns every glow off */
+    /*
+     * Component halos (a checked box, a primary button, a focused field) are
+     * tuned at the default strength; their alphas are scaled by this, so the
+     * default looks as designed and 0 turns them off too.
+     */
+    --glow-k: calc(var(--glow-strength) / 0.55);
 
     /*
      * Ink for translucent overlays (hairlines, glass fills, hover tints), used as
      * oklch(var(--tint) / alpha): white on dark, deep violet-grey on light.
      */
     --tint: 1 0 0;
+    /*
+     * Contrast floors for neutral parts, per theme (internal: no utilities of their own).
+     * Edges of unchecked checkboxes, radios and switches reach 3:1 against a card;
+     * placeholders reach 4.5:1 while staying clearly dimmer than a typed value.
+     */
+    --zen-control-edge: 0.35;
+    --zen-control-edge-hover: 0.5;
+    --zen-placeholder: 0.8;
+    --zen-thumb-off: oklch(1 0 0 / 0.7);
     --glass-shadow: 0 10px 40px -12px hsl(0 0% 0% / 0.6);
     --popup-shadow: 0 20px 60px -20px hsl(0 0% 0% / 0.8);
     --toast-shadow: 0 18px 50px -20px oklch(0 0 0 / 0.8);
@@ -93,8 +108,14 @@
     --glow: 0.62 0.182 295;
     --glow-2: 0.65 0.137 325;
     --glow-strength: 0.4;
+    --glow-k: calc(var(--glow-strength) / 0.4);
 
     --tint: 0.21 0.02 295;
+    --zen-control-edge: 0.5;
+    --zen-control-edge-hover: 0.65;
+    --zen-placeholder: 1;
+    /* A white thumb is lost on the pale track. */
+    --zen-thumb-off: oklch(var(--tint) / 0.5);
     --glass-shadow: 0 10px 30px -14px oklch(0.3 0.05 295 / 0.25);
     --popup-shadow: 0 20px 50px -20px oklch(0.3 0.05 295 / 0.35);
     --toast-shadow: 0 18px 50px -20px oklch(0.3 0.05 295 / 0.35);
