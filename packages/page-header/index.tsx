@@ -6,7 +6,7 @@ export default function PageHeader({ eyebrow, title, lead, children, className }
     return (
         <header className={cx('zen__page-header flex flex-col gap-3', className)}>
             {eyebrow && <p className="text-muted-foreground mt-0! text-xs tracking-[0.1em] uppercase">{eyebrow}</p>}
-            <h1 className="text-aurora text-4xl font-semibold tracking-tight lg:text-5xl">{title}</h1>
+            <h1 className="text-aurora text-4xl font-semibold tracking-tight text-balance lg:text-5xl">{title}</h1>
             {lead && <p className="text-muted-foreground mt-0! max-w-2xl text-lg leading-relaxed">{lead}</p>}
             {children}
         </header>

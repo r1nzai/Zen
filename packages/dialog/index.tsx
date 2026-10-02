@@ -73,7 +73,7 @@ export default function Dialog({
                 (side === 'left' || side === 'right') && 'my-0 h-dvh max-h-dvh w-[24rem] max-w-[calc(100vw-2.5rem)]',
                 side === 'right' && 'mr-0 ml-auto rounded-l-2xl',
                 side === 'left' && 'mr-auto ml-0 rounded-r-2xl',
-                'backdrop:bg-black/50 backdrop:backdrop-blur-sm pointer-coarse:backdrop:backdrop-blur-none',
+                'backdrop:bg-[color:var(--backdrop-scrim,oklch(0_0_0/0.5))] backdrop:backdrop-blur-sm pointer-coarse:backdrop:backdrop-blur-none',
                 className,
             )}
             onCancel={(e) => {
@@ -95,7 +95,7 @@ export default function Dialog({
                 {/* A bottom sheet's grip: says it came up from the edge. */}
                 {side === 'bottom' && <div aria-hidden className="bg-tint/20 mx-auto h-1 w-10 shrink-0 rounded-full" />}
                 <div className="flex flex-col gap-2">
-                    <h2 id={titleId} className="text-lg font-semibold tracking-tight">
+                    <h2 id={titleId} className="text-lg font-semibold tracking-tight text-balance">
                         {title}
                     </h2>
                     {description && (

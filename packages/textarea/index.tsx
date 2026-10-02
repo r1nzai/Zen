@@ -9,6 +9,7 @@ export default function Textarea(props: TextAreaProps) {
     return (
         <textarea
             className={cx(
+                'zen__textarea',
                 // FIELD's fixed height swapped for a taller, resizable box
                 FIELD.replace('h-10', ''),
                 'h-32 w-full resize-y py-2',

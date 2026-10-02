@@ -55,9 +55,7 @@ export function DisclosureTrigger({ className, onClick, children, ...rest }: Com
             )}
             {...rest}
         >
-            <FieldChevron
-                className={cx('text-inherit duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]', !open && '-rotate-90')}
-            />
+            <FieldChevron className={cx('ease-out-soft text-inherit duration-300', !open && '-rotate-90')} />
             {children}
         </button>
     );
@@ -105,7 +103,7 @@ export function DisclosureContent({ className, children, ...rest }: ComponentPro
             data-open={open || undefined}
             inert={!open}
             className={cx(
-                'zen__disclosure-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] data-open:grid-rows-[1fr]',
+                'zen__disclosure-content ease-out-soft grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 data-open:grid-rows-[1fr]',
                 grows && 'data-open:starting:grid-rows-[0fr]',
             )}
         >
@@ -113,7 +111,7 @@ export function DisclosureContent({ className, children, ...rest }: ComponentPro
             <div className="min-h-0 overflow-hidden">
                 <div
                     className={cx(
-                        '-translate-y-1 pt-2 opacity-0 transition-[opacity,translate] duration-300 ease-out',
+                        'zen__disclosure-body -translate-y-1 pt-2 opacity-0 transition-[opacity,translate] duration-300 ease-out',
                         'in-data-open:translate-y-0 in-data-open:opacity-100',
                         grows && 'in-data-open:starting:-translate-y-1 in-data-open:starting:opacity-0',
                         className,

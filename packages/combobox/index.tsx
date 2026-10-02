@@ -8,7 +8,7 @@ import { InputGroupAddon, InputGroupInput } from '@zen/input-group';
 import { cx } from '@zen/utils/cx';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { CheckIcon } from '@zen/utils/status-icons';
-import { POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
+import { POPUP, TRIGGER, TRIGGER_OPEN, PLACEHOLDER } from '@zen/utils/styles';
 import { anchoredStyle, useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import { useVirtualList } from '@zen/utils/useVirtualList';
 import {
@@ -222,8 +222,7 @@ function ComboboxValue({ placeholder }: { placeholder: string }) {
         const text = byKey.has(key) ? box.textOf(byKey.get(key)) : undefined;
         return text ? [{ key, text }] : [];
     });
-    if (!chosen.length)
-        return <span className={box.multiple ? 'text-muted-foreground' : undefined}>{placeholder}</span>;
+    if (!chosen.length) return <span className={PLACEHOLDER}>{placeholder}</span>;
     if (!box.multiple) return <>{chosen[0].text}</>;
     return (
         <Collapse
@@ -248,7 +247,7 @@ function ComboboxValue({ placeholder }: { placeholder: string }) {
                         // Up 1px: capitals sit above their line box's centre, so this centres the × on them.
                         className="group relative -top-px size-4 rounded-sm p-0.5"
                     >
-                        <XMark className="size-3 transition duration-300 group-hover:rotate-90" />
+                        <XMark className="zen__combobox-remove-icon size-3 transition duration-300 group-hover:rotate-90" />
                     </Button>
                 </Badge>
             )}

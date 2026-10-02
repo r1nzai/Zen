@@ -16,9 +16,9 @@ export default function Toggle(props: ToggleProps) {
     return (
         <label
             className={cx(
-                'zen__toggle border-tint/10 bg-tint/[0.06] relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border p-0.5',
+                'zen__toggle bg-tint/[0.06] relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border border-[color:oklch(var(--tint)/var(--zen-control-edge))] p-0.5',
                 'has-focus-visible:ring-glow/50 transition-[background-color,box-shadow,border-color] duration-300 has-focus-visible:ring-2',
-                'has-checked:border-glow/60 has-checked:bg-glow/40 has-checked:shadow-[0_0_18px_-2px_oklch(var(--glow)/0.8)]',
+                'has-checked:border-glow/60 has-checked:bg-glow/40 has-checked:shadow-[0_0_18px_-2px_oklch(var(--glow)/calc(0.8*var(--glow-k)))]',
                 'has-disabled:cursor-not-allowed has-disabled:opacity-50',
                 className,
             )}
@@ -43,8 +43,8 @@ export default function Toggle(props: ToggleProps) {
             <span
                 aria-hidden
                 className={cx(
-                    'size-[1.125rem] rounded-full bg-white/70 shadow-md',
-                    'transition-[translate,background-color] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
+                    'size-[1.125rem] rounded-full bg-[var(--zen-thumb-off)] shadow-md',
+                    'zen__toggle-thumb ease-out-soft transition-[translate,background-color] duration-300',
                     'peer-checked:translate-x-5 peer-checked:bg-white',
                 )}
             />

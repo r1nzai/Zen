@@ -9,6 +9,7 @@ export default function Input(props: InputProps) {
     return (
         <input
             className={cx(
+                'zen__input',
                 FIELD,
                 'w-full',
                 'read-only:text-foreground read-only:cursor-default read-only:border-none! read-only:bg-transparent read-only:shadow-none! read-only:outline-hidden!',

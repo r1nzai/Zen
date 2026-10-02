@@ -60,8 +60,8 @@ export default function Slider({
                 '[&::-webkit-slider-runnable-track]:h-2.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:[background:var(--zen-track)]',
                 '[&::-moz-range-track]:h-2.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:[background:var(--zen-track)]',
                 // Thumb
-                '[&::-webkit-slider-thumb]:-mt-[5px] [&::-webkit-slider-thumb]:size-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-[0_0_0_1px_oklch(0_0_0/0.3),0_0_16px_oklch(var(--glow)/0.8)] [&::-webkit-slider-thumb]:[background:var(--zen-thumb)]',
-                '[&::-moz-range-thumb]:size-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-[0_0_0_1px_oklch(0_0_0/0.3),0_0_16px_oklch(var(--glow)/0.8)] [&::-moz-range-thumb]:[background:var(--zen-thumb)]',
+                '[&::-webkit-slider-thumb]:-mt-[5px] [&::-webkit-slider-thumb]:size-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-[0_0_0_1px_oklch(0_0_0/0.3),0_0_16px_oklch(var(--glow)/calc(0.8*var(--glow-k)))] [&::-webkit-slider-thumb]:[background:var(--zen-thumb)]',
+                '[&::-moz-range-thumb]:size-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-[0_0_0_1px_oklch(0_0_0/0.3),0_0_16px_oklch(var(--glow)/calc(0.8*var(--glow-k)))] [&::-moz-range-thumb]:[background:var(--zen-thumb)]',
                 // Focus ring on the thumb
                 'focus-visible:[&::-webkit-slider-thumb]:ring-ring/40 focus-visible:[&::-webkit-slider-thumb]:ring-4',
                 'focus-visible:[&::-moz-range-thumb]:ring-ring/40 focus-visible:[&::-moz-range-thumb]:ring-4',

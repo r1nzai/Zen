@@ -444,7 +444,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                 )}
                 {row && active !== null && (
                     <div
-                        className="pointer-events-none absolute top-0 z-10 transition-[translate] duration-75"
+                        className="zen__chart-tooltip pointer-events-none absolute top-0 z-10 transition-[translate] duration-75"
                         style={tooltipPosition(tipX, tipY, width, height)}
                     >
                         {renderTooltip ? (

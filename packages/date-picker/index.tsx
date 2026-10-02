@@ -3,7 +3,7 @@ import Calendar from '@zen/calendar';
 import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { type DateRange, type DateString, formatDate, formatDateRange } from '@zen/utils/date';
-import { POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
+import { POPUP, TRIGGER, TRIGGER_OPEN, PLACEHOLDER } from '@zen/utils/styles';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import { ComponentProps, ReactNode } from 'react';
 
@@ -133,7 +133,7 @@ function PickerField({
                 style={{ ...popup.triggerProps.style, ...style }}
                 className={cx('zen__date-picker group', TRIGGER, 'w-full', popup.open && TRIGGER_OPEN, className)}
             >
-                <span className={cx('truncate', !shown && 'text-muted-foreground')}>{shown ?? placeholder}</span>
+                <span className={cx('truncate', !shown && PLACEHOLDER)}>{shown ?? placeholder}</span>
                 <CalendarIcon />
             </button>
             <div {...popup.popupProps} role="dialog" aria-label={label} className={cx('zen__popover', POPUP, 'p-3')}>

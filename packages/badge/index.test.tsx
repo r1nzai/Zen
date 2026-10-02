@@ -48,7 +48,7 @@ describe('Badge', () => {
     it('variant="destructive" applies a destructive tint', () => {
         const { container } = render(<Badge variant="destructive">Destructive</Badge>);
         const el = container.firstChild as HTMLElement;
-        expect(el).toHaveClass('bg-destructive/15');
+        expect(el).toHaveClass('bg-destructive/10');
         expect(el).toHaveClass('text-destructive');
         expect(el).not.toHaveClass('bg-glow/10');
     });
@@ -61,7 +61,7 @@ describe('Badge', () => {
         // must be absent
         expect(el).not.toHaveClass('bg-glow/10');
         expect(el).not.toHaveClass('bg-tint/[0.06]');
-        expect(el).not.toHaveClass('bg-destructive/15');
+        expect(el).not.toHaveClass('bg-destructive/10');
     });
 
     // ── className forwarding ─────────────────────────────────────────────────

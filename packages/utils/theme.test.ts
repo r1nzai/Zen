@@ -75,6 +75,11 @@ describe('theme settings', () => {
         expect(themeVars({ ...DEFAULT_THEME, topography: 'visible' })['topo-strength']).toBe('1');
     });
 
+    it('scales component halos from the soft glow, worked out beside the strength', () => {
+        expect(themeVars(DEFAULT_THEME, 'dark')['glow-k']).toBe('calc(var(--glow-strength) / 0.55)');
+        expect(themeVars(DEFAULT_THEME, 'light')['glow-k']).toBe('calc(var(--glow-strength) / 0.4)');
+    });
+
     it('normalizes missing, invalid or out-of-range values', () => {
         expect(normalizeTheme(undefined)).toEqual(DEFAULT_THEME);
         expect(normalizeTheme({ hue: 725.4, intensity: 'neon', preset: 'evil', glow: 'bright' })).toEqual({

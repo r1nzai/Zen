@@ -203,7 +203,7 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
                             // The popover's own defaults (centred, bordered, opaque) reset to a plain corner box.
                             'zen__toast-viewport fixed top-auto right-4 bottom-[calc(var(--zen-toast-offset,1rem)+env(safe-area-inset-bottom))] left-auto z-50 m-0 w-[calc(100vw-2rem)] overflow-visible border-0 bg-transparent p-0 text-inherit outline-hidden md:bottom-5 md:w-[24rem]',
                             // Its height follows the deck, so hovering the gaps between fanned-out toasts keeps it open.
-                            'transition-[height] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
+                            'ease-out-soft transition-[height] duration-300',
                             viewportClassName,
                         )}
                         style={{
@@ -268,14 +268,14 @@ const TONE = {
         ring: 'border-primary/30',
         badge: 'bg-primary/15 text-primary',
         bar: 'bg-primary',
-        glow: 'shadow-[0_18px_50px_-18px_oklch(var(--glow)/0.55)]',
+        glow: 'shadow-[0_18px_50px_-18px_oklch(var(--glow)/calc(0.55*var(--glow-k)))]',
     },
     error: {
         icon: AlertIcon,
         ring: 'border-destructive/40',
-        badge: 'bg-destructive/15 text-destructive',
+        badge: 'bg-destructive/10 text-destructive',
         bar: 'bg-destructive',
-        glow: 'shadow-[0_18px_50px_-18px_oklch(var(--destructive)/0.55)]',
+        glow: 'shadow-[0_18px_50px_-18px_oklch(var(--destructive)/calc(0.55*var(--glow-k)))]',
     },
     info: {
         icon: InfoIcon,
@@ -424,7 +424,7 @@ function Toast({
                 onPointerCancel={onPointerUp}
                 className={cx(
                     'zen__toast group glass glass-blur glow-edge text-card-foreground absolute! inset-x-0 bottom-0 origin-bottom touch-pan-y overflow-hidden rounded-2xl border select-none',
-                    'transition-[transform,translate,opacity,height] duration-400 ease-[cubic-bezier(0.2,0.8,0.2,1)] data-swiping:transition-none',
+                    'ease-out-soft transition-[transform,translate,opacity,height] duration-400 data-swiping:transition-none',
                     firstShow && 'starting:translate-y-full starting:opacity-0',
                     layout.hidden && 'opacity-0',
                     toast.leaving === 'fade' && 'translate-y-[35%] opacity-0',

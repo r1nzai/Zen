@@ -47,7 +47,7 @@ export default function Segmented<V extends string>({
                 {box && (
                     <span
                         aria-hidden
-                        className="bg-primary/15 absolute top-0 left-0 rounded-lg shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.4)] transition-[translate,width,height] duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+                        className="zen__segmented-indicator bg-primary/15 ease-out-soft absolute top-0 left-0 rounded-lg shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.4)] transition-[translate,width,height] duration-500"
                         style={{ translate: `${box.x}px ${box.y}px`, width: box.w, height: box.h }}
                     />
                 )}

@@ -77,15 +77,15 @@ export function Radio({ value, disabled, description, className, children }: Rad
                     disabled={disabled || group.disabled}
                     onChange={() => group.onChange(value)}
                     className={cx(
-                        'peer border-tint/20 bg-tint/[0.04] m-0 size-full cursor-pointer appearance-none rounded-full border outline-hidden',
+                        'peer bg-tint/[0.04] m-0 size-full cursor-pointer appearance-none rounded-full border border-[color:oklch(var(--tint)/var(--zen-control-edge))] outline-hidden',
                         'transition-[border-color,box-shadow] duration-200',
-                        'hover:enabled:border-tint/35 focus-visible:ring-ring/50 focus-visible:ring-2',
-                        'checked:border-primary checked:shadow-[0_0_14px_-3px_oklch(var(--glow)/0.8)] disabled:cursor-not-allowed',
+                        'focus-visible:ring-ring/50 focus-visible:ring-2 hover:enabled:border-[color:oklch(var(--tint)/var(--zen-control-edge-hover))]',
+                        'checked:border-primary checked:shadow-[0_0_14px_-3px_oklch(var(--glow)/calc(0.8*var(--glow-k)))] disabled:cursor-not-allowed',
                     )}
                 />
                 <span
                     aria-hidden
-                    className="bg-primary pointer-events-none absolute size-2 scale-0 rounded-full shadow-[0_0_8px_oklch(var(--glow)/0.9)] transition-transform duration-200 ease-[cubic-bezier(0.3,1.6,0.5,1)] peer-checked:scale-100"
+                    className="zen__radio-dot bg-primary pointer-events-none absolute size-2 scale-0 rounded-full shadow-[0_0_8px_oklch(var(--glow)/calc(0.9*var(--glow-k)))] transition-transform duration-200 ease-[cubic-bezier(0.3,1.6,0.5,1)] peer-checked:scale-100"
                 />
             </span>
             <span className="flex flex-col gap-0.5">

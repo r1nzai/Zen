@@ -43,7 +43,7 @@ export function InputGroupInput({ className, ...rest }: ComponentProps<'input'>)
     return (
         <input
             className={cx(
-                'placeholder:text-muted-foreground h-full w-full min-w-0 flex-1 bg-transparent text-sm outline-hidden disabled:cursor-not-allowed',
+                'h-full w-full min-w-0 flex-1 bg-transparent text-sm outline-hidden placeholder:text-[color:oklch(var(--muted-foreground)/var(--zen-placeholder))] disabled:cursor-not-allowed',
                 className,
             )}
             {...rest}
