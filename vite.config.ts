@@ -49,7 +49,9 @@ export default defineConfig({
                 version: '19.3',
             },
         },
-        ignorePatterns: ['node_modules/**/*', 'dist/*'],
+        // .storybook: Oxlint's type checker doesn't find the tsconfig for files in a dot-folder and
+        // reports false errors there; tsc type-checks it (root tsconfig.json includes it).
+        ignorePatterns: ['node_modules/**/*', 'dist/*', '.storybook/**'],
         rules: {
             'constructor-super': 'error',
             'for-direction': 'error',
@@ -128,7 +130,8 @@ export default defineConfig({
             'react/no-is-mounted': 'error',
             'react/no-render-return-value': 'error',
             'react/no-string-refs': 'error',
-            'react/no-unescaped-entities': 'error',
+            // Off: TypeScript already rejects a bare > or } in JSX text, so this rule only flags prose quotes.
+            'react/no-unescaped-entities': 'off',
             'react/no-unknown-property': 'error',
             'react/no-unsafe': 'off',
             'react/require-render-return': 'error',

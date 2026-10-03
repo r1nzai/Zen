@@ -112,8 +112,11 @@ test('without CSS anchor positioning, popups are still placed at their trigger',
     // As in Safari before 26: the browser reports no position-area, so Zen places popups itself.
     await page.addInitScript(() => {
         const supports = CSS.supports.bind(CSS);
-        CSS.supports = ((...args: [string, string?]) =>
-            args.join(':').includes('position-area') ? false : supports(...args)) as typeof CSS.supports;
+        // Both forms: supports('position-area', 'top') and supports('(position-area: top)').
+        CSS.supports = ((property: string, value?: string) => {
+            if (`${property}:${value ?? ''}`.includes('position-area')) return false;
+            return value === undefined ? supports(property) : supports(property, value);
+        }) as typeof CSS.supports;
     });
     errors = await open(page, '/components/dialog/');
     await page.getByRole('button', { name: 'Add budget' }).click();
