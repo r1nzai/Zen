@@ -8,8 +8,10 @@ import { ChartTooltipCard } from './tooltip';
  * A ring of parts of a whole (e.g. spending by category), with your content in
  * the middle (e.g. the total). Segments are parted by a small gap, with
  * rounded corners; pointing at one (or focusing it) lifts it and shows its
- * value. Best for a handful of parts: past about six, use bars. Colours default
- * to the chart palette in order.
+ * value. A part too small to show at its share is drawn as a pill, the
+ * narrowest segment, taking the room from the larger parts in proportion. Best
+ * for a handful of parts: past about six, use bars. Colours default to the
+ * chart palette in order.
  */
 export default function DonutChart({
     items,
@@ -29,12 +31,17 @@ export default function DonutChart({
     // Half the gap between segments, in px. The same width all the way across, so the
     // gaps have parallel sides (a fixed angle would make wedges, wider at the rim).
     const halfGap = items.filter((it) => it.value > 0).length > 1 ? 1.5 : 0;
+    // Parts shrink by the gap and the corner radius; the stroke adds the corner back, rounded.
+    const [r0, r1, inset] = [inner + corner, r - corner, halfGap + corner];
+    // The narrowest part: its outer edge cut down to a point, a line across the ring that the
+    // stroke draws as a pill. No part with a value is drawn narrower, so none is lost.
+    const least = 2 * cut(inset, r1);
 
+    const sweeps = shares(items, least);
     let angle = -Math.PI / 2;
     const arcs = items.map((it, i) => {
-        const sweep = total ? (Math.max(0, it.value) / total) * Math.PI * 2 : 0;
-        const a = { start: angle, end: angle + sweep, color: it.color ?? paletteColor(palette, i, items.length) };
-        angle += sweep;
+        const a = { start: angle, end: angle + sweeps[i], color: it.color ?? paletteColor(palette, i, items.length) };
+        angle += sweeps[i];
         return a;
     });
 
@@ -83,15 +90,12 @@ export default function DonutChart({
                 className="overflow-visible"
             >
                 {arcs.map((a, i) => {
+                    // A part with no value has no segment.
+                    if (a.end === a.start) return null;
                     // The only segment is the whole ring: it has no ends, so no rounding. Its exact shape, with
                     // no rounding stroke, whose start and end would meet in a seam at the top.
                     const whole = a.end - a.start >= Math.PI * 2 - 1e-6;
-                    // Parts shrink by the gap and the corner radius; the stroke adds the corner
-                    // back, rounded.
-                    const d = whole
-                        ? sector(inner, r, a.start, a.end)
-                        : segment(inner + corner, r - corner, a.start, a.end, halfGap + corner);
-                    if (!d) return null;
+                    const d = whole ? sector(inner, r, a.start, a.end) : segment(r0, r1, a.start, a.end, inset);
                     const mid = (a.start + a.end) / 2;
                     const lift = active === i && !whole ? 4 : 0;
                     const pct = total ? Math.round((items[i].value / total) * 100) : 0;
@@ -154,6 +158,27 @@ export default function DonutChart({
 const EDGE = 8; // the tooltip is kept this far inside the viewport
 
 /**
+ * Each part's sweep round the ring, in radians: in proportion to its value, but
+ * none with a value narrower than `least`. Parts that would be are drawn at
+ * `least`, and the rest share what's left, still in proportion to each other.
+ * With too many parts for each to have `least`, all are equal.
+ */
+function shares(items: DonutChartProps['items'], least: number): number[] {
+    const full = Math.PI * 2;
+    const values = items.map((it) => it.value).filter((v) => v > 0);
+    const sorted = [...values].sort((a, b) => a - b);
+    const floor = Math.min(least, full / values.length);
+    let rest = values.reduce((s, v) => s + v, 0);
+    let raised = 0;
+    // A part's share of what the raised parts leave.
+    const share = (v: number) => (v / rest) * (full - raised * floor);
+    // Raising a part to the floor leaves less for the rest, which can put the next smallest
+    // below it too: so raise them smallest first, until one clears it (the largest always would).
+    while (raised < sorted.length - 1 && share(sorted[raised]) < floor) rest -= sorted[raised++];
+    return items.map((it) => (it.value > 0 ? Math.max(floor, share(it.value)) : 0));
+}
+
+/**
  * A point at a radius and angle, for a path. Rounded to a thousandth of a pixel:
  * engines' trigonometry differs in the last digits (Node's and Chrome's do), and
  * the path drawn on the server must match the browser's to hydrate.
@@ -164,23 +189,31 @@ function point(rad: number, a: number) {
 }
 
 /**
+ * How far round from a line through the centre a point at radius `rad` is `inset`
+ * px from it: at most a quarter turn, for a radius no wider than the inset.
+ */
+function cut(inset: number, rad: number) {
+    return rad > inset ? Math.asin(inset / rad) : Math.PI / 2;
+}
+
+/**
  * A ring segment between two radii and two angles (radians, clockwise from 3
  * o'clock), with each end cut `inset` px inside its boundary line, parallel to
- * it: so neighbours are parted by an even gap. Narrow enough that the inner
- * edge would cross itself, it comes to a point there. Empty if nothing's left.
+ * it: so neighbours are parted by an even gap. An edge too short for both cuts
+ * comes to a point: the narrowest segment is a line across the ring.
  */
 function segment(r0: number, r1: number, a0: number, a1: number, inset: number): string {
-    const within = (rad: number) => Math.asin(Math.min(1, inset / rad));
-    const [o0, o1] = [a0 + within(r1), a1 - within(r1)];
-    if (o1 <= o0) return '';
-    let [i0, i1] = [a0 + within(r0), a1 - within(r0)];
-    if (i1 < i0) i0 = i1 = (a0 + a1) / 2;
-    const outer = `M${point(r1, o0)}A${r1},${r1} 0 ${o1 - o0 > Math.PI ? 1 : 0} 1 ${point(r1, o1)}`;
-    const back =
-        i1 > i0
-            ? `L${point(r0, i1)}A${r0},${r0} 0 ${i1 - i0 > Math.PI ? 1 : 0} 0 ${point(r0, i0)}`
-            : `L${point(r0, i0)}`;
-    return `${outer}${back}Z`;
+    // Where the edge at a radius starts and ends, once cut; where the cuts cross, its middle.
+    const edge = (rad: number) => {
+        const [e0, e1] = [a0 + cut(inset, rad), a1 - cut(inset, rad)];
+        return e1 < e0 ? [(a0 + a1) / 2, (a0 + a1) / 2] : [e0, e1];
+    };
+    const [o0, o1] = edge(r1);
+    const [i0, i1] = edge(r0);
+    const arc = (rad: number, from: number, to: number, clockwise: 0 | 1) =>
+        from === to ? '' : `A${rad},${rad} 0 ${Math.abs(to - from) > Math.PI ? 1 : 0} ${clockwise} ${point(rad, to)}`;
+    // Round the outer edge, then back along the inner.
+    return `M${point(r1, o0)}${arc(r1, o0, o1, 1)}L${point(r0, i1)}${arc(r0, i1, i0, 0)}Z`;
 }
 
 /** An annular sector between two radii and two angles (radians, clockwise from 3 o'clock). */

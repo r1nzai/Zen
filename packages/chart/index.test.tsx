@@ -189,6 +189,35 @@ describe('DonutChart', () => {
         expect(ring).toHaveAttribute('stroke-width', '0');
     });
 
+    it('draws every part with a value, however small, with no hole in the ring', () => {
+        const items = [
+            { key: 'home', label: 'Home', value: 107557 },
+            { key: 'emi', label: 'EMI', value: 32748 },
+            { key: 'food', label: 'Food', value: 30000 },
+            // 1.4%: thinner than the gap and rounding take off a segment's ends.
+            { key: 'fun', label: 'Fun', value: 2421 },
+            { key: 'gifts', label: 'Gifts', value: 0 },
+        ];
+        render(<DonutChart items={items} label="Planned" size={160} />);
+        const parts = screen.getAllByRole('listitem');
+        expect(parts.map((p) => p.getAttribute('aria-label')!.split(':')[0])).toEqual(['Home', 'EMI', 'Food', 'Fun']);
+        // The angles each segment's outer edge runs between (a pill's is one point).
+        const edges = parts.map((p) => {
+            const [, x0, y0, x1 = x0, y1 = y0] = p
+                .getAttribute('d')!
+                .match(/^M([-\d.]+),([-\d.]+)(?:A\S+ \d \d \d ([-\d.]+),([-\d.]+))?/)!;
+            return [Math.atan2(+y0, +x0), Math.atan2(+y1, +x1)];
+        });
+        const turn = (a: number) => (a + 2 * Math.PI) % (2 * Math.PI);
+        // Neighbours are all parted by the same gap, so no part's room is left empty.
+        const gaps = edges.map(([, end], i) => turn(edges[(i + 1) % edges.length][0] - end));
+        gaps.forEach((gap) => expect(gap).toBeCloseTo(gaps[0], 3));
+        // The larger parts make room for the smallest, and keep their proportions.
+        const sweeps = edges.map(([start, end]) => turn(end - start) + gaps[0]);
+        expect(sweeps[0] / sweeps[1]).toBeCloseTo(107557 / 32748, 3);
+        expect(sweeps[1] / sweeps[2]).toBeCloseTo(32748 / 30000, 3);
+    });
+
     it('stacks what you put in the middle together', () => {
         render(
             <DonutChart items={ITEMS} label="Spending">
