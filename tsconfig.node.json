@@ -5,7 +5,8 @@
         "moduleResolution": "bundler",
         "allowSyntheticDefaultImports": true,
         "allowArbitraryExtensions": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "skipLibCheck": true
     },
     "include": ["vite.config.ts", "playwright.config.ts", "package.json"]
 }
