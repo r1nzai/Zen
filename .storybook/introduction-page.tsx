@@ -66,8 +66,8 @@ export function IntroductionPage() {
                     </p>
                     <Code language="css" code={`@import '@rinzai/zen/base.css';`} />
                     <p>
-                        The look is set in <strong>Inter</strong>. Load it however you like, for example with{' '}
-                        <code>@fontsource-variable/inter</code>.
+                        The look is set in <strong>Geist</strong>. Load it however you like, for example with{' '}
+                        <code>@fontsource-variable/geist</code>.
                     </p>
                 </Section>
 

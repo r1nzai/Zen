@@ -35,7 +35,7 @@ Zen never styles your own elements. For its page setup (the background showing t
 @import '@rinzai/zen/base.css';
 ```
 
-The look is set in [Inter](https://rsms.me/inter/); load it however you like.
+The look is set in [Geist](https://vercel.com/font); load it however you like.
 
 ## Usage
 

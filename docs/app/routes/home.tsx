@@ -71,10 +71,10 @@ export default function Home() {
                     <CodeCard lang="css" code={`@import '@rinzai/zen/base.css';`} />
                     <p>
                         The look is set in{' '}
-                        <a href="https://rsms.me/inter/" className="text-primary underline-offset-4 hover:underline">
-                            Inter
+                        <a href="https://vercel.com/font" className="text-primary underline-offset-4 hover:underline">
+                            Geist
                         </a>
-                        . Load it however you like, for example with <code>@fontsource-variable/inter</code>.
+                        . Load it however you like, for example with <code>@fontsource-variable/geist</code>.
                     </p>
                 </section>
 

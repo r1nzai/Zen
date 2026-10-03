@@ -3,7 +3,7 @@ import { create } from 'storybook/theming';
 import { version } from '../package.json';
 
 // Sora's palette (packages/variables.css), converted from OKLCH to sRGB for Storybook's chrome.
-const fontBase = '"Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif';
+const fontBase = '"Geist Variable", Geist, ui-sans-serif, system-ui, sans-serif';
 const fontCode = 'ui-monospace, SFMono-Regular, Menlo, monospace';
 
 const shared = {

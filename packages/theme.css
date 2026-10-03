@@ -78,7 +78,7 @@
     --shadow-glow-focus:
         0 0 0 3px oklch(var(--glow) / 0.16), 0 0 24px -6px oklch(var(--glow) / calc(0.6 * var(--glow-k)));
 
-    --font-sans: 'Inter Variable', Inter, ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Geist Variable', Geist, ui-sans-serif, system-ui, sans-serif;
 
     --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
 
