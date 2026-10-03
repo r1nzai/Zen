@@ -517,6 +517,17 @@ main[data-zen-skip-target]:focus {
 html.zen-theme-waving * {
     view-transition-name: none !important;
 }
+/*
+ * No transitions while it plays: the new page is a live capture, so every colour
+ * set fading by the theme change (hundreds, on a busy page) would repaint it
+ * each frame under the moving clip, and stutter the wave. The page is shown in
+ * the new theme at once, as the wave reveals it.
+ */
+html.zen-theme-waving *,
+html.zen-theme-waving *::before,
+html.zen-theme-waving *::after {
+    transition: none !important;
+}
 html.zen-theme-waving::view-transition-old(root),
 html.zen-theme-waving::view-transition-new(root),
 html.zen-theme-waving::view-transition-group(zen-theme-area),
