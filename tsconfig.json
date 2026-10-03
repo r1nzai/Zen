@@ -24,6 +24,6 @@
             "@rinzai/zen": ["./packages/index.ts"]
         }
     },
-    "include": ["packages"],
+    "include": ["packages", ".storybook", "e2e"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }
