@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { vi } from 'vite-plus/test';
 
 // jsdom does not implement the native Popover API — polyfill the methods so
 // components that call them don't throw during tests.

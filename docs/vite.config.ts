@@ -3,12 +3,12 @@ import { fileURLToPath } from 'node:url';
 import reactDocgenTypescript from '@joshwooding/vite-plugin-react-docgen-typescript';
 import { reactRouter } from '@react-router/dev/vite';
 import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'vite';
+import { defineConfig, lazyPlugins } from 'vite-plus';
 
 const packages = fileURLToPath(new URL('../packages', import.meta.url));
 
 export default defineConfig({
-    plugins: [
+    plugins: lazyPlugins(() => [
         tailwindcss(),
         // Props tables: attaches each component's props (types, defaults, JSDoc) as __docgenInfo.
         reactDocgenTypescript({
@@ -21,7 +21,7 @@ export default defineConfig({
             propFilter: (prop) => !prop.parent || !/node_modules/.test(prop.parent.fileName),
         }),
         reactRouter(),
-    ],
+    ]),
     resolve: {
         // Docs run on the library's source, so the site always shows the current code.
         alias: [
