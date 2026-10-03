@@ -134,7 +134,7 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
                 if (!rest.length) setHovered(false);
                 return rest;
             });
-            setHeights(({ [id]: _gone, ...hs }) => hs); // eslint-disable-line @typescript-eslint/no-unused-vars
+            setHeights(({ [id]: _gone, ...hs }) => hs); // oxlint-disable-line @typescript-eslint/no-unused-vars
             clocks.current.delete(id);
             entered.current.delete(id);
         }, EXIT_MS);
