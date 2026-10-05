@@ -1,4 +1,4 @@
-import { Card, Tab, TabList, TabPanel, Tabs } from '@rinzai/zen';
+import { Card, followSectionLink, Tab, TabList, TabPanel, Tabs } from '@rinzai/zen';
 
 import type { Example } from '../examples';
 import { CodeBlock } from './code-block';
@@ -13,7 +13,7 @@ export function ExampleBlock({ example, heading = true }: { example: Example; he
             {heading && (
                 <div className="flex flex-col gap-1">
                     <h3 id={id} className="text-lg">
-                        <a href={`#${id}`} className="hover:text-primary">
+                        <a href={`#${id}`} onClick={followSectionLink} className="hover:text-primary">
                             {example.title}
                         </a>
                     </h3>

@@ -182,6 +182,8 @@ export {
     themeVars,
 } from './utils/theme';
 export { prepareThemeWave, themeWave } from './utils/theme-wave';
+export { followSectionLink } from './utils/section-link';
+export { reducedMotion } from './utils/motion';
 export { useHydrated } from './utils/useHydrated';
 export {
     addMonths,

@@ -1,4 +1,4 @@
-import { buttonVariants, Card } from '@rinzai/zen';
+import { buttonVariants, Card, followSectionLink } from '@rinzai/zen';
 import { Link } from 'react-router';
 
 import { CodeCard } from '../components/code-block';
@@ -36,7 +36,7 @@ export default function Home() {
                     dependencies.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                    <a href="#installation" className={buttonVariants()}>
+                    <a href="#installation" onClick={followSectionLink} className={buttonVariants()}>
                         Get started
                     </a>
                     <Link to="/showcase/" className={buttonVariants({ variant: 'outline' })}>

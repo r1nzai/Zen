@@ -1,5 +1,6 @@
 import { cx } from '@zen/utils/cx';
 import { formatMoney, type Money } from '@zen/utils/money';
+import { reducedMotion } from '@zen/utils/motion';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
@@ -21,10 +22,7 @@ export default function AnimatedNumber({
     const current = useRef(fromZero ? 0 : value);
 
     useIsoLayoutEffect(() => {
-        const reduced =
-            window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ||
-            document.documentElement.classList.contains('reduce-motion');
-        if (reduced || duration <= 0) {
+        if (reducedMotion() || duration <= 0) {
             current.current = value;
             setShown(value);
             return;

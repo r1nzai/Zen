@@ -1,6 +1,7 @@
 import ChevronRightMicro from '@zen/icons/micro/chevron-right';
 import { TableCell, TableCellProps, TableRow } from '@zen/table';
 import { cx } from '@zen/utils/cx';
+import { reducedMotion } from '@zen/utils/motion';
 import {
     ComponentProps,
     CSSProperties,
@@ -98,11 +99,6 @@ export function useTree<T>({ items, getKey, getChildren, defaultExpanded = true,
             }),
         [defaultExpanded],
     );
-
-    const reducedMotion = () =>
-        typeof window !== 'undefined' &&
-        (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ||
-            document.documentElement.classList.contains('reduce-motion'));
 
     /** Opens or closes a row, animating its children. */
     const toggle = (key: string) => {

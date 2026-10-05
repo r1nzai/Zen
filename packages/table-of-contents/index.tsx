@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { followSectionLink } from '@zen/utils/section-link';
 import { useEffect, useState } from 'react';
 
 /**
@@ -37,6 +38,7 @@ export default function TableOfContents({ items, title = 'On this page', classNa
                     <li key={item.id} className={cx('-ml-px', item.depth === 2 && 'pl-3')}>
                         <a
                             href={`#${item.id}`}
+                            onClick={followSectionLink}
                             aria-current={item.id === activeId ? 'location' : undefined}
                             className={cx(
                                 'text-muted-foreground hover:text-foreground block border-l border-transparent pl-3 transition-colors',

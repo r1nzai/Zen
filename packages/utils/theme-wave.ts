@@ -1,4 +1,5 @@
 import { applyGraphicsMode } from './graphics';
+import { reducedMotion } from './motion';
 import { changeTheme, oklchToLinearRgb } from './theme';
 
 // Into a light theme, the new theme spreads from the switch to the far corners
@@ -213,10 +214,7 @@ function srgb(triplet: string): number[] {
 
 /** Whether a switch draws the water; otherwise the theme just changes (see themeWave). */
 function wavy(): boolean {
-    const reduced =
-        window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ||
-        document.documentElement.classList.contains('reduce-motion');
-    return !reduced && !!document.startViewTransition && applyGraphicsMode() !== 'lite';
+    return !reducedMotion() && !!document.startViewTransition && applyGraphicsMode() !== 'lite';
 }
 
 /**
