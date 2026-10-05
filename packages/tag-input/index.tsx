@@ -8,8 +8,8 @@ import { ClipboardEvent, ComponentProps, KeyboardEvent, useLayoutEffect, useRef,
  * A field of short values (tags, emails, labels): typing one and pressing
  * Enter or a comma adds it, pasting a list adds each, Backspace in the empty
  * field takes the last one back. Each is removed with its ×. Values are
- * trimmed and kept once. Past about four rows it scrolls (a max-h-* class
- * changes that).
+ * trimmed and kept once. Past about three rows the tags scroll, under a
+ * typing line that stays in view (a max-h-* class sets the field's height).
  */
 export default function TagInput({
     value: controlled,
@@ -25,13 +25,13 @@ export default function TagInput({
     const value = controlled ?? own;
     const [text, setText] = useState('');
     const field = useFieldProps(rest);
-    const box = useRef<HTMLDivElement>(null);
+    const tags = useRef<HTMLDivElement>(null);
     const count = value.length;
 
-    // Typing goes on after the last tag: keep that line in view as tags are added.
+    // While typing them in, show the newest tags.
     useLayoutEffect(() => {
-        const el = box.current;
-        if (el?.contains(document.activeElement)) el.scrollTop = el.scrollHeight;
+        const el = tags.current;
+        if (el?.parentElement?.contains(document.activeElement)) el.scrollTop = el.scrollHeight;
     }, [count]);
 
     const set = (next: string[]) => {
@@ -48,34 +48,37 @@ export default function TagInput({
 
     return (
         <div
-            ref={box}
             className={cx(
                 'zen__tag-input',
                 FIELD,
-                'flex h-auto max-h-32 min-h-10 w-full cursor-text flex-wrap items-center gap-1.5 overflow-y-auto py-1.5',
+                'flex h-auto max-h-36 min-h-10 w-full cursor-text flex-col gap-1.5 py-1.5',
                 'has-[input:focus-visible]:border-glow/60 has-[input:focus-visible]:bg-tint/[0.05] has-[input:focus-visible]:shadow-glow-focus has-[input:focus-visible]:[--glow-border-color:transparent]',
                 disabled && 'cursor-not-allowed opacity-50',
                 className,
             )}
             onClick={(e) => (e.currentTarget.querySelector('input') as HTMLInputElement | null)?.focus()}
         >
-            {value.map((tag) => (
-                <span
-                    key={tag}
-                    className="zen__tag bg-primary/12 text-foreground inline-flex items-center gap-1 rounded-md py-0.5 pr-1 pl-2 text-xs shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.25)]"
-                >
-                    {tag}
-                    <button
-                        type="button"
-                        disabled={disabled}
-                        aria-label={removeLabel(tag)}
-                        onClick={() => set(value.filter((t) => t !== tag))}
-                        className="text-muted-foreground hover:text-foreground hover:bg-tint/10 focus-visible:ring-ring/50 touch-target grid size-4 cursor-pointer place-items-center rounded-sm outline-hidden focus-visible:ring-2"
-                    >
-                        <XMark className="size-3" />
-                    </button>
-                </span>
-            ))}
+            {count > 0 && (
+                <div ref={tags} className="flex min-h-0 flex-wrap gap-1.5 overflow-y-auto">
+                    {value.map((tag) => (
+                        <span
+                            key={tag}
+                            className="zen__tag bg-primary/12 text-foreground inline-flex items-center gap-1 rounded-md py-0.5 pr-1 pl-2 text-xs shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.25)]"
+                        >
+                            {tag}
+                            <button
+                                type="button"
+                                disabled={disabled}
+                                aria-label={removeLabel(tag)}
+                                onClick={() => set(value.filter((t) => t !== tag))}
+                                className="text-muted-foreground hover:text-foreground hover:bg-tint/10 focus-visible:ring-ring/50 touch-target grid size-4 cursor-pointer place-items-center rounded-sm outline-hidden focus-visible:ring-2"
+                            >
+                                <XMark className="size-3" />
+                            </button>
+                        </span>
+                    ))}
+                </div>
+            )}
             <input
                 {...rest}
                 {...field}
@@ -109,7 +112,7 @@ export default function TagInput({
                     e.preventDefault();
                     add(pasted.split(/[,\n]/));
                 }}
-                className="h-7 min-w-24 flex-1 bg-transparent outline-hidden placeholder:text-[color:oklch(var(--muted-foreground)/var(--zen-placeholder))]"
+                className="h-7 w-full shrink-0 bg-transparent outline-hidden placeholder:text-[color:oklch(var(--muted-foreground)/var(--zen-placeholder))]"
             />
         </div>
     );

@@ -19,15 +19,16 @@ describe('TagInput', () => {
         expect(screen.getByText('rent')).toBeInTheDocument();
     });
 
-    it('is capped in height, and keeps the typing line in view as tags are added', () => {
+    it('scrolls only the tags, under a typing line that stays in view', () => {
         const { input } = setup();
-        const box = input.parentElement!;
-        expect(box).toHaveClass('max-h-32', 'overflow-y-auto');
-        vi.spyOn(box, 'scrollHeight', 'get').mockReturnValue(300);
+        const tags = screen.getByText('food').parentElement!;
+        expect(tags).toHaveClass('overflow-y-auto');
+        expect(tags).not.toContainElement(input);
+        vi.spyOn(tags, 'scrollHeight', 'get').mockReturnValue(300);
         input.focus();
         fireEvent.change(input, { target: { value: 'rent' } });
         fireEvent.keyDown(input, { key: 'Enter' });
-        expect(box.scrollTop).toBe(300);
+        expect(tags.scrollTop).toBe(300);
     });
 
     it('adds each of a pasted list', () => {
