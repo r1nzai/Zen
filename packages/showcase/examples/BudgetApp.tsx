@@ -286,7 +286,7 @@ function Budget({ nav }: { nav: boolean }) {
                     </div>
                 </PageHeader>
 
-                <StatRow>
+                <StatRow className="lg:gap-6">
                     {loading ? (
                         [0, 1, 2].map((i) => (
                             <div key={i} className="glass glow-edge flex flex-col gap-2 rounded-xl p-4">
@@ -315,8 +315,8 @@ function Budget({ nav }: { nav: boolean }) {
                     )}
                 </StatRow>
 
-                <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-                    <div className="flex min-w-0 flex-col gap-6">
+                <div className="grid gap-6 lg:grid-cols-3">
+                    <div className="flex min-w-0 flex-col gap-6 lg:col-span-2">
                         <Card>
                             <CardHeader>
                                 <CardTitle>Entries</CardTitle>
