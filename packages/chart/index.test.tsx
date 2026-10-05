@@ -183,10 +183,8 @@ describe('DonutChart', () => {
     it('one part is a whole ring, with no notch where its ends would meet', () => {
         render(<DonutChart items={[{ key: 'emi', label: 'EMI', value: 32748 }]} label="Planned" />);
         const ring = screen.getByRole('listitem', { name: /EMI/ });
-        // Drawn as two full circles (outer and inner edge), not a sector with rounded ends,
-        // and with no rounding stroke, whose ends would meet in a seam.
+        // Drawn as two full circles (outer and inner edge), not a sector with rounded ends.
         expect(ring.getAttribute('d')!.match(/M/g)).toHaveLength(2);
-        expect(ring).toHaveAttribute('stroke-width', '0');
     });
 
     it('draws every part with a value, however small, with no hole in the ring', () => {
@@ -205,7 +203,7 @@ describe('DonutChart', () => {
         const edges = parts.map((p) => {
             const [, x0, y0, x1 = x0, y1 = y0] = p
                 .getAttribute('d')!
-                .match(/^M([-\d.]+),([-\d.]+)(?:A\S+ \d \d \d ([-\d.]+),([-\d.]+))?/)!;
+                .match(/^M([-\d.]+),([-\d.]+)(?:A80,80 \d \d \d ([-\d.]+),([-\d.]+))?/)!;
             return [Math.atan2(+y0, +x0), Math.atan2(+y1, +x1)];
         });
         const turn = (a: number) => (a + 2 * Math.PI) % (2 * Math.PI);
@@ -216,6 +214,17 @@ describe('DonutChart', () => {
         const sweeps = edges.map(([start, end]) => turn(end - start) + gaps[0]);
         expect(sweeps[0] / sweeps[1]).toBeCloseTo(107557 / 32748, 3);
         expect(sweeps[1] / sweeps[2]).toBeCloseTo(32748 / 30000, 3);
+    });
+
+    it('draws each segment once, so a translucent colour has no lighter rim', () => {
+        render(
+            <DonutChart items={ITEMS.map((it) => ({ ...it, color: 'oklch(0.7 0.2 300 / 0.5)' }))} label="Spending" />,
+        );
+        for (const part of screen.getAllByRole('listitem')) {
+            expect(part.style.stroke).toBe('');
+            expect(part).not.toHaveAttribute('stroke-width');
+            expect(part.getAttribute('d')!.match(/M/g)).toHaveLength(1);
+        }
     });
 
     it('stacks what you put in the middle together', () => {

@@ -31,10 +31,10 @@ export default function DonutChart({
     // Half the gap between segments, in px. The same width all the way across, so the
     // gaps have parallel sides (a fixed angle would make wedges, wider at the rim).
     const halfGap = items.filter((it) => it.value > 0).length > 1 ? 1.5 : 0;
-    // Parts shrink by the gap and the corner radius; the stroke adds the corner back, rounded.
+    // The corners' centres: in from the edges and the gap by the corner radius.
     const [r0, r1, inset] = [inner + corner, r - corner, halfGap + corner];
-    // The narrowest part: its outer edge cut down to a point, a line across the ring that the
-    // stroke draws as a pill. No part with a value is drawn narrower, so none is lost.
+    // The narrowest part: its outer edge cut down to a point, drawn as a pill.
+    // No part with a value is drawn narrower, so none is lost.
     const least = 2 * cut(inset, r1);
 
     const sweeps = shares(items, least);
@@ -92,10 +92,9 @@ export default function DonutChart({
                 {arcs.map((a, i) => {
                     // A part with no value has no segment.
                     if (a.end === a.start) return null;
-                    // The only segment is the whole ring: it has no ends, so no rounding. Its exact shape, with
-                    // no rounding stroke, whose start and end would meet in a seam at the top.
+                    // The only segment is the whole ring: it has no ends, so no rounding.
                     const whole = a.end - a.start >= Math.PI * 2 - 1e-6;
-                    const d = whole ? sector(inner, r, a.start, a.end) : segment(r0, r1, a.start, a.end, inset);
+                    const d = whole ? sector(inner, r, a.start, a.end) : segment(r0, r1, a.start, a.end, inset, corner);
                     const mid = (a.start + a.end) / 2;
                     const lift = active === i && !whole ? 4 : 0;
                     const pct = total ? Math.round((items[i].value / total) * 100) : 0;
@@ -106,8 +105,6 @@ export default function DonutChart({
                             tabIndex={0}
                             aria-label={`${items[i].label}: ${formatValue(items[i].value)} (${pct}%)`}
                             d={d}
-                            strokeWidth={whole ? 0 : corner * 2}
-                            strokeLinejoin="round"
                             onPointerEnter={() => setActive(i)}
                             onPointerLeave={() => setActive(null)}
                             onFocus={() => setActive(i)}
@@ -115,7 +112,6 @@ export default function DonutChart({
                             className="zen__chart-fade focus-visible:outline-hidden"
                             style={{
                                 fill: a.color,
-                                stroke: a.color,
                                 opacity: active !== null && active !== i ? 0.55 : 1,
                                 transform: `translate(${Math.cos(mid) * lift}px, ${Math.sin(mid) * lift}px)`,
                                 transition: 'transform 200ms ease-out, opacity 200ms',
@@ -184,9 +180,21 @@ function shares(items: DonutChartProps['items'], least: number): number[] {
  * the path drawn on the server must match the browser's to hydrate.
  */
 function point(rad: number, a: number) {
-    const round = (v: number) => Math.round(v * 1000) / 1000;
-    return `${round(rad * Math.cos(a))},${round(rad * Math.sin(a))}`;
+    return xy([rad * Math.cos(a), rad * Math.sin(a)]);
 }
+function xy([x, y]: Vec) {
+    const round = (v: number) => Math.round(v * 1000) / 1000;
+    return `${round(x)},${round(y)}`;
+}
+
+type Vec = [number, number];
+const at = (rad: number, a: number): Vec => [rad * Math.cos(a), rad * Math.sin(a)];
+const plus = ([x, y]: Vec, [dx, dy]: Vec, k: number): Vec => [x + dx * k, y + dy * k];
+/** The unit normal to the line from `a` to `b`, on its left: outward, going clockwise round a shape. */
+const normal = ([ax, ay]: Vec, [bx, by]: Vec): Vec => {
+    const len = Math.hypot(bx - ax, by - ay);
+    return [(by - ay) / len, (ax - bx) / len];
+};
 
 /**
  * How far round from a line through the centre a point at radius `rad` is `inset`
@@ -197,12 +205,13 @@ function cut(inset: number, rad: number) {
 }
 
 /**
- * A ring segment between two radii and two angles (radians, clockwise from 3
- * o'clock), with each end cut `inset` px inside its boundary line, parallel to
- * it: so neighbours are parted by an even gap. An edge too short for both cuts
- * comes to a point: the narrowest segment is a line across the ring.
+ * A ring segment, its corners rounded by `c`: the shape whose corners' centres are
+ * at radii r0 and r1 and two angles (radians, clockwise from 3 o'clock), each end
+ * cut `inset` px inside its boundary line, parallel to it, so neighbours are parted
+ * by an even gap. An edge too short for both cuts comes to a point: the narrowest
+ * segment is a pill. One outline, so a translucent colour is even all over.
  */
-function segment(r0: number, r1: number, a0: number, a1: number, inset: number): string {
+function segment(r0: number, r1: number, a0: number, a1: number, inset: number, c: number): string {
     // Where the edge at a radius starts and ends, once cut; where the cuts cross, its middle.
     const edge = (rad: number) => {
         const [e0, e1] = [a0 + cut(inset, rad), a1 - cut(inset, rad)];
@@ -210,10 +219,17 @@ function segment(r0: number, r1: number, a0: number, a1: number, inset: number):
     };
     const [o0, o1] = edge(r1);
     const [i0, i1] = edge(r0);
+    const [O0, O1, I1, I0] = [at(r1, o0), at(r1, o1), at(r0, i1), at(r0, i0)];
+    const [end, start] = [normal(O1, I1), normal(I0, O0)];
     const arc = (rad: number, from: number, to: number, clockwise: 0 | 1) =>
         from === to ? '' : `A${rad},${rad} 0 ${Math.abs(to - from) > Math.PI ? 1 : 0} ${clockwise} ${point(rad, to)}`;
-    // Round the outer edge, then back along the inner.
-    return `M${point(r1, o0)}${arc(r1, o0, o1, 1)}L${point(r0, i1)}${arc(r0, i1, i0, 0)}Z`;
+    const corner = (to: Vec) => `A${c},${c} 0 0 1 ${xy(to)}`;
+    // Round the outer edge, down the end, back along the inner edge and up the start.
+    return (
+        `M${point(r1 + c, o0)}${arc(r1 + c, o0, o1, 1)}${corner(plus(O1, end, c))}L${xy(plus(I1, end, c))}` +
+        `${corner(at(r0 - c, i1))}${arc(r0 - c, i1, i0, 0)}${corner(plus(I0, start, c))}L${xy(plus(O0, start, c))}` +
+        `${corner(at(r1 + c, o0))}Z`
+    );
 }
 
 /** An annular sector between two radii and two angles (radians, clockwise from 3 o'clock). */
