@@ -334,6 +334,10 @@ export function themeWave(
             const reach = (t: number) => (closing ? 1 - bezier(FALL, t) : bezier(EASE, t)) * radius;
             // The ring is cut out of the new theme as it spreads, or of the old as it closes in.
             const pseudoElement = `::view-transition-${closing ? 'old' : 'new'}(${layer})`;
+            // The layer's box, in the page's coordinates. The page's snapshot can start above the
+            // viewport (behind a phone's address bar): where the browser put the water says where.
+            const water = new DOMMatrix(getComputedStyle(root, `::view-transition-group(${NAME})`).transform);
+            const [boxLeft, boxTop] = scoped ? [box.left, box.top] : [left - water.e, top - water.f];
             const ring = (t: number) => {
                 const r = reach(t);
                 const seconds = (t * duration) / 1000;
@@ -341,7 +345,7 @@ export function themeWave(
                     const a = (i / POINTS) * 2 * Math.PI;
                     const out = Math.max(0, r + wobble(a, r, seconds, seed));
                     // In the layer's own box.
-                    return `${(x - box.left + out * Math.cos(a)).toFixed(1)}px ${(y - box.top + out * Math.sin(a)).toFixed(1)}px`;
+                    return `${(x - boxLeft + out * Math.cos(a)).toFixed(1)}px ${(y - boxTop + out * Math.sin(a)).toFixed(1)}px`;
                 });
                 return `polygon(${points.join(',')})`;
             };

@@ -3,6 +3,7 @@ import { themeWave } from './theme-wave';
 describe('themeWave', () => {
     let animate: ReturnType<typeof vi.fn<Element['animate']>>;
     let finish: () => void;
+    let shift = 0;
 
     beforeEach(() => {
         animate = vi.fn<Element['animate']>(
@@ -12,9 +13,19 @@ describe('themeWave', () => {
                     currentTime: 0,
                     playState: 'running',
                     cancel() {},
+                    pause() {},
+                    finish() {},
                 }) as unknown as Animation,
         );
         Element.prototype.animate = animate;
+        // jsdom has no DOMMatrix: the water's layer where the browser put it, at the viewport's origin.
+        vi.stubGlobal(
+            'DOMMatrix',
+            class {
+                e = 0;
+                f = shift;
+            },
+        );
         vi.spyOn(window, 'requestAnimationFrame').mockReturnValue(0);
         const finished = new Promise<void>((resolve) => (finish = resolve));
         // As browsers do: ready once the update (which may be async) is done.
@@ -30,6 +41,8 @@ describe('themeWave', () => {
         document.documentElement.removeAttribute('style');
         document.documentElement.removeAttribute('data-zen-graphics');
         vi.restoreAllMocks();
+        vi.unstubAllGlobals();
+        shift = 0;
         delete (document as Partial<Document>).startViewTransition;
         delete (Element.prototype as Partial<Element>).animate;
     });
@@ -118,6 +131,17 @@ describe('themeWave', () => {
         await settle();
         expect(canvas?.isConnected).toBe(false);
         expect(document.documentElement).not.toHaveClass('zen-theme-waving');
+    });
+
+    it("cuts the edge where the page's snapshot is: on a phone it starts above the viewport, behind the address bar", async () => {
+        withGpu();
+        // The snapshot starts 56px above the viewport: the water, at the viewport's top, is 56px down it.
+        shift = 56;
+        themeWave(into('0.98 0 0'), { x: 100, y: 200 });
+        await new Promise((resolve) => setTimeout(resolve));
+        const keyframes = animate.mock.calls[0][0] as Keyframe[];
+        expect(String(keyframes[0].clipPath)).toMatch(/^polygon\(100(\.0)?px 256(\.0)?px/);
+        await settle();
     });
 
     it('with a target, plays inside it: its own layer, the water over just it, the theme read from it', async () => {
