@@ -36,13 +36,20 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
         const rects = new Map<HTMLElement, DOMRect>();
         const written = new WeakMap<HTMLElement, string>();
         const ours = new Set<Element>();
-        const write = (el: HTMLElement, gx: string, gy: string, xName = '--gx', yName = '--gy') => {
+        // As attributes where CSS can read them (theme.css): an inline property restyles all inside the element.
+        const [GX, GY] =
+            typeof CSS !== 'undefined' && CSS.supports?.('width', 'attr(x type(<length>))')
+                ? ['data-zen-gx', 'data-zen-gy']
+                : ['--gx', '--gy'];
+        const set = (el: HTMLElement, name: string, value: string) =>
+            name.startsWith('data-') ? el.setAttribute(name, value) : el.style.setProperty(name, value);
+        const write = (el: HTMLElement, gx: string, gy: string, xName = GX, yName = GY) => {
             const key = gx + ' ' + gy;
             if (written.get(el) === key) return;
             written.set(el, key);
             ours.add(el);
-            el.style.setProperty(xName, gx);
-            el.style.setProperty(yName, gy);
+            set(el, xName, gx);
+            set(el, yName, gy);
         };
         const park = (el: HTMLElement) => {
             if (parked.has(el)) return;
@@ -75,7 +82,8 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
         const onMutations = (records: MutationRecord[]) => {
             for (const r of records) {
                 if (backdrop?.contains(r.target)) continue;
-                if (r.type === 'attributes' && r.attributeName === 'style' && ours.has(r.target as Element)) continue;
+                const own = r.attributeName === 'style' || r.attributeName === GX || r.attributeName === GY;
+                if (r.type === 'attributes' && own && ours.has(r.target as Element)) continue;
                 rects.clear();
                 if (r.type === 'childList' || r.attributeName === 'class') relist = true;
             }

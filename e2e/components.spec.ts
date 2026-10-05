@@ -352,14 +352,21 @@ test('the pointer light follows lit elements near it, re-measured when the page 
         }, top);
     const at = (i: number) =>
         page.evaluate((i) => {
-            const el = document.querySelectorAll<HTMLElement>('.glow-edge')[i];
-            return [el.style.getPropertyValue('--gx'), el.style.getPropertyValue('--gy')];
+            // What the edge layer paints with, whether Backdrop wrote attributes or properties.
+            const edge = getComputedStyle(document.querySelectorAll('.glow-edge')[i], '::before');
+            return [edge.getPropertyValue('--gx').trim(), edge.getPropertyValue('--gy').trim()];
         }, i);
     const near = await add(100);
     const far = await add(5000);
     await page.mouse.move(150, 130);
     await expect.poll(() => at(near)).toEqual(['50px', '30px']);
     expect(await at(far)).toEqual(['-9999px', '-9999px']);
+    // Written as attributes where CSS reads them: an inline property would restyle all inside the element.
+    const written = await page.evaluate((i) => {
+        const el = document.querySelectorAll<HTMLElement>('.glow-edge')[i];
+        return [el.getAttribute('data-zen-gx'), el.style.getPropertyValue('--gx')];
+    }, near);
+    expect(written).toEqual(['50px', '']);
 
     // The page moves under it: the next move measures it again.
     await page.evaluate((i) => (document.querySelectorAll<HTMLElement>('.glow-edge')[i].style.top = '60px'), near);

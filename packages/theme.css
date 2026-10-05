@@ -125,7 +125,9 @@
  *
  * --gx/--gy stay unregistered: Chrome restyles registered ones, written inline
  * per element, slower every frame. Each lit element resets them, so a nested
- * one never inherits its container's.
+ * one never inherits its container's. Where typed attr() works, Backdrop writes
+ * data-zen-gx/gy instead: a change then restyles only the element, not all
+ * that's inside it.
  */
 @utility glow-edge {
     position: relative;
@@ -162,6 +164,12 @@
         pointer-events: none;
         z-index: 1;
     }
+    @supports (width: attr(x type(<length>))) {
+        &::before {
+            --gx: attr(data-zen-gx type(<length>), -999px);
+            --gy: attr(data-zen-gy type(<length>), -999px);
+        }
+    }
 }
 
 /*
@@ -184,6 +192,10 @@
         --gx: -999px;
         --gy: -999px;
         border-color: var(--glow-border-color);
+        @supports (width: attr(x type(<length>))) {
+            --gx: attr(data-zen-gx type(<length>), -999px);
+            --gy: attr(data-zen-gy type(<length>), -999px);
+        }
     }
     @supports (background-clip: border-area) {
         .glow-border {
