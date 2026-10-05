@@ -352,7 +352,11 @@ export function themeWave(
                 clipPath: ring(f / FRAMES),
                 offset: f / FRAMES,
             }));
+            // Paused and moved from the frame that draws the water: left running, the browser
+            // moves the edge on its own clock, ahead of the ripples drawn here.
             const clock = root.animate(keyframes, { duration, pseudoElement });
+            clock.pause();
+            let start: number | undefined;
 
             const { canvas, gl, uniform } = gpu;
             const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -369,11 +373,16 @@ export function themeWave(
             // Filling, the water comes in calm and its ripples build as more pours in, then
             // settle as it fills: gone at t = 1. No splash.
             const swell = (t: number) => 1.6 * smoothstep(0.05, 0.45, t) * (1 - t) ** 1.5;
-            const frame = () => {
+            const frame = (now: number) => {
                 if (id !== running) return;
+                start ??= now;
+                const p = Math.min(1, (now - start) / duration);
+                clock.currentTime = p * duration;
                 // Nothing left on the canvas while it's still in the page, after the transition.
-                if (clock.playState === 'finished') return drain(gpu);
-                const p = Math.min(1, Number(clock.currentTime ?? 0) / duration);
+                if (p === 1) {
+                    clock.finish();
+                    return drain(gpu);
+                }
                 const edge = reach(p);
                 // Everything fades to nothing by the end, so whichever frame is the last drawn
                 // before the transition ends (and the canvas is still in the page), it's blank.
@@ -396,7 +405,7 @@ export function themeWave(
                 gl.drawArrays(gl.TRIANGLES, 0, 3);
                 requestAnimationFrame(frame);
             };
-            frame();
+            requestAnimationFrame(frame);
         })
         .catch(() => {});
     transition.finished.finally(() => {
