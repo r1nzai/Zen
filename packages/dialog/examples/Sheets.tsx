@@ -3,19 +3,24 @@ import { useState } from 'react';
 
 /** With side, a dialog slides in from an edge: a bottom sheet (phones) or a side panel (filters, details). */
 export default function Sheets() {
-    const [side, setSide] = useState<'bottom' | 'right' | 'left' | null>(null);
+    const [open, setOpen] = useState(false);
+    const [side, setSide] = useState<'bottom' | 'right'>('bottom');
+    const show = (from: 'bottom' | 'right') => {
+        setSide(from);
+        setOpen(true);
+    };
     return (
         <div className="flex flex-wrap gap-2">
-            <Button variant="outline" onClick={() => setSide('bottom')}>
+            <Button variant="outline" onClick={() => show('bottom')}>
                 Bottom sheet
             </Button>
-            <Button variant="outline" onClick={() => setSide('right')}>
+            <Button variant="outline" onClick={() => show('right')}>
                 Side panel
             </Button>
             <Dialog
-                open={side !== null}
-                onOpenChange={(open) => !open && setSide(null)}
-                side={side ?? 'right'}
+                open={open}
+                onOpenChange={setOpen}
+                side={side}
                 title="Filters"
                 description="Show only what you need."
             >
