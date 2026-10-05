@@ -1,6 +1,6 @@
 {
     "name": "@rinzai/zen",
-    "version": "0.8.2",
+    "version": "0.8.3",
     "description": "React components in dark glass: translucent surfaces, hairline borders that catch a pointer light, one accent colour. Tailwind v4, no runtime dependencies.",
     "keywords": [
         "react",
