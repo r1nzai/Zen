@@ -38,12 +38,14 @@ export default function DonutChart({
     const least = 2 * cut(inset, r1);
 
     const sweeps = shares(items, least);
-    let angle = -Math.PI / 2;
-    const arcs = items.map((it, i) => {
-        const a = { start: angle, end: angle + sweeps[i], color: it.color ?? paletteColor(palette, i, items.length) };
-        angle += sweeps[i];
-        return a;
-    });
+    const arcs: { start: number; end: number; color: string }[] = [];
+    for (let i = 0, angle = -Math.PI / 2; i < items.length; angle += sweeps[i++]) {
+        arcs.push({
+            start: angle,
+            end: angle + sweeps[i],
+            color: items[i].color ?? paletteColor(palette, i, items.length),
+        });
+    }
 
     const tip = active === null ? null : items[active];
     const tipAngle = active === null ? null : (arcs[active].start + arcs[active].end) / 2;
