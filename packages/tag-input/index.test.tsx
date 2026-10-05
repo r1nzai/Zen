@@ -19,6 +19,17 @@ describe('TagInput', () => {
         expect(screen.getByText('rent')).toBeInTheDocument();
     });
 
+    it('is capped in height, and keeps the typing line in view as tags are added', () => {
+        const { input } = setup();
+        const box = input.parentElement!;
+        expect(box).toHaveClass('max-h-32', 'overflow-y-auto');
+        vi.spyOn(box, 'scrollHeight', 'get').mockReturnValue(300);
+        input.focus();
+        fireEvent.change(input, { target: { value: 'rent' } });
+        fireEvent.keyDown(input, { key: 'Enter' });
+        expect(box.scrollTop).toBe(300);
+    });
+
     it('adds each of a pasted list', () => {
         const { input, onValueChange } = setup();
         fireEvent.paste(input, { clipboardData: { getData: () => 'a, b\nc' } });

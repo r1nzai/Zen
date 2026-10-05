@@ -2,13 +2,14 @@ import { useFieldProps } from '@zen/field';
 import XMark from '@zen/icons/micro/x-mark';
 import { cx } from '@zen/utils/cx';
 import { FIELD } from '@zen/utils/styles';
-import { ClipboardEvent, ComponentProps, KeyboardEvent, useState } from 'react';
+import { ClipboardEvent, ComponentProps, KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
 
 /**
  * A field of short values (tags, emails, labels): typing one and pressing
  * Enter or a comma adds it, pasting a list adds each, Backspace in the empty
  * field takes the last one back. Each is removed with its ×. Values are
- * trimmed and kept once.
+ * trimmed and kept once. Past about four rows it scrolls (a max-h-* class
+ * changes that).
  */
 export default function TagInput({
     value: controlled,
@@ -24,6 +25,14 @@ export default function TagInput({
     const value = controlled ?? own;
     const [text, setText] = useState('');
     const field = useFieldProps(rest);
+    const box = useRef<HTMLDivElement>(null);
+    const count = value.length;
+
+    // Typing goes on after the last tag: keep that line in view as tags are added.
+    useLayoutEffect(() => {
+        const el = box.current;
+        if (el?.contains(document.activeElement)) el.scrollTop = el.scrollHeight;
+    }, [count]);
 
     const set = (next: string[]) => {
         if (controlled === undefined) setOwn(next);
@@ -39,10 +48,11 @@ export default function TagInput({
 
     return (
         <div
+            ref={box}
             className={cx(
                 'zen__tag-input',
                 FIELD,
-                'flex h-auto min-h-10 w-full cursor-text flex-wrap items-center gap-1.5 py-1.5',
+                'flex h-auto max-h-32 min-h-10 w-full cursor-text flex-wrap items-center gap-1.5 overflow-y-auto py-1.5',
                 'has-[input:focus-visible]:border-glow/60 has-[input:focus-visible]:bg-tint/[0.05] has-[input:focus-visible]:shadow-glow-focus has-[input:focus-visible]:[--glow-border-color:transparent]',
                 disabled && 'cursor-not-allowed opacity-50',
                 className,
