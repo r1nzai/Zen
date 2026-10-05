@@ -157,7 +157,27 @@ export function applyTheme(
     { appearance = 'dark', target }: { appearance?: Appearance; target?: HTMLElement } = {},
 ): void {
     const el = target ?? document.documentElement;
-    for (const [k, v] of Object.entries(themeVars(theme, appearance))) el.style.setProperty(`--${k}`, v);
+    changeTheme(el, () => {
+        for (const [k, v] of Object.entries(themeVars(theme, appearance))) el.style.setProperty(`--${k}`, v);
+    });
+}
+
+/**
+ * Runs a theme change on `el` (its classes or variables) with transitions off in
+ * it, so every part takes the new colours at once: each fading its own (a big
+ * table's every cell) all together stalls the page. The marker is an attribute,
+ * not a class: apps re-apply their theme when <html>'s class changes, and a
+ * class here would wake them again, endlessly.
+ */
+export function changeTheme(el: Element, change: () => void): void {
+    el.setAttribute('data-zen-theme-applying', '');
+    try {
+        change();
+        // The new colours are worked out while transitions are off, so none start.
+        getComputedStyle(el).getPropertyValue('color');
+    } finally {
+        el.removeAttribute('data-zen-theme-applying');
+    }
 }
 
 /** Removes an applied theme, back to the stylesheet's defaults. */

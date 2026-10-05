@@ -285,3 +285,21 @@ test("a theme switch's wave is the only transition: no part animates its own col
     await expect(page.locator('html')).toHaveClass(/\blight\b/);
     expect(started).toEqual([]);
 });
+
+test('a theme switch without the wave (lite graphics) changes at once: no part animates its own colours', async ({
+    page,
+}) => {
+    errors = await open(page, '/showcase/');
+    await page.evaluate(() => document.documentElement.setAttribute('data-zen-graphics', 'lite'));
+    const started = await page.evaluate(async () => {
+        const runs: string[] = [];
+        document.addEventListener('transitionrun', (e) => runs.push(e.propertyName), true);
+        document.querySelector<HTMLButtonElement>('button[aria-label^="Switch to"]')!.click();
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        return runs;
+    });
+    await expect(page.locator('html')).toHaveClass(/\blight\b/);
+    expect(started).toEqual([]);
+    // Hovering still fades, once the theme has changed.
+    await expect(page.locator('html')).not.toHaveAttribute('data-zen-theme-applying');
+});

@@ -104,4 +104,32 @@ describe('theme settings', () => {
         resetTheme(el);
         expect(el.style.getPropertyValue('--primary')).toBe('');
     });
+
+    it('applies with transitions off, marked without touching the class an app may watch', async () => {
+        const root = document.documentElement;
+        const marked: boolean[] = [];
+        const setProperty = root.style.setProperty.bind(root.style);
+        root.style.setProperty = (...args) => {
+            marked.push(root.hasAttribute('data-zen-theme-applying'));
+            setProperty(...args);
+        };
+        // An app re-applying its theme whenever <html>'s class changes.
+        let applied = 0;
+        const watch = new MutationObserver(() => {
+            // Capped, so a loop fails the test instead of hanging it.
+            if (++applied > 3) return watch.disconnect();
+            applyTheme(DEFAULT_THEME, { appearance: root.classList.contains('light') ? 'light' : 'dark' });
+        });
+        watch.observe(root, { attributes: true, attributeFilter: ['class'] });
+        root.classList.add('light');
+        await new Promise((resolve) => setTimeout(resolve));
+        watch.disconnect();
+        delete (root.style as Partial<CSSStyleDeclaration>).setProperty;
+        root.classList.remove('light');
+        resetTheme();
+        expect(applied).toBe(1);
+        expect(marked.length).toBeGreaterThan(0);
+        expect(marked.every(Boolean)).toBe(true);
+        expect(root.hasAttribute('data-zen-theme-applying')).toBe(false);
+    });
 });

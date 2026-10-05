@@ -518,14 +518,16 @@ html.zen-theme-waving * {
     view-transition-name: none !important;
 }
 /*
- * The wave is the change: nothing else transitions to the new theme. Each part's
- * own colour transitions (a table's every cell) would otherwise all run at once
- * under it, on the main thread, and starve the water's frames on a big page.
+ * A theme changes at once (or with the wave, which is the change): nothing
+ * transitions to it. Each part's own colour transitions (a table's every cell)
+ * would otherwise all run together, on the main thread, stalling a big page and
+ * starving the water's frames. [data-zen-theme-applying]: applyTheme, and a switch
+ * without the wave (utils/theme.ts, changeTheme).
  */
-html.zen-theme-waving,
-html.zen-theme-waving *,
-html.zen-theme-waving *::before,
-html.zen-theme-waving *::after {
+:is(html.zen-theme-waving, [data-zen-theme-applying]),
+:is(html.zen-theme-waving, [data-zen-theme-applying]) *,
+:is(html.zen-theme-waving, [data-zen-theme-applying]) *::before,
+:is(html.zen-theme-waving, [data-zen-theme-applying]) *::after {
     transition: none !important;
 }
 html.zen-theme-waving::view-transition-old(root),

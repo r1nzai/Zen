@@ -1,5 +1,5 @@
 import { applyGraphicsMode } from './graphics';
-import { oklchToLinearRgb } from './theme';
+import { changeTheme, oklchToLinearRgb } from './theme';
 
 // Into a light theme, the new theme spreads from the switch to the far corners
 // in this long (ms): quick off the switch, slowing towards the far edges.
@@ -262,7 +262,7 @@ export function themeWave(
     const bottom = Math.min(h, box.bottom);
     const gpu = wavy() && right > left && bottom > top ? waterCanvas() : null;
     if (!gpu) {
-        change();
+        changeTheme(scoped ? target : root, change);
         return;
     }
 
