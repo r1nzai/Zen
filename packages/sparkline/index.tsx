@@ -54,9 +54,8 @@ export default function Sparkline({ values, area = true, tone = 'primary', class
                 </>
             )}
             <path
-                className="zen__chart-draw"
+                className="zen__sparkline-draw"
                 d={line}
-                pathLength={1}
                 fill="none"
                 stroke="currentColor"
                 strokeWidth={2}

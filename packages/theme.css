@@ -1288,8 +1288,25 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     }
 }
 /* Held at their start until the chart is first on screen, so they're seen. */
-[data-zen-unseen] :is(.zen__chart-draw, .zen__chart-grow, .zen__chart-fade),
-[data-zen-unseen]:is(.zen__chart-draw, .zen__chart-grow, .zen__chart-fade) {
+/*
+ * A sparkline is revealed from the left instead: its stroke doesn't scale with the
+ * stretched drawing (non-scaling-stroke), and Chrome then measures a dash in screen
+ * pixels, not along the path, breaking the line up. Its points only go rightwards,
+ * so the reveal draws it just the same.
+ */
+.zen__sparkline-draw {
+    animation: zen-sparkline-draw 0.9s cubic-bezier(0.3, 0.7, 0.2, 1) both;
+}
+@keyframes zen-sparkline-draw {
+    from {
+        clip-path: inset(0 100% 0 0);
+    }
+    to {
+        clip-path: inset(0);
+    }
+}
+[data-zen-unseen] :is(.zen__chart-draw, .zen__sparkline-draw, .zen__chart-grow, .zen__chart-fade),
+[data-zen-unseen]:is(.zen__chart-draw, .zen__sparkline-draw, .zen__chart-grow, .zen__chart-fade) {
     animation-play-state: paused;
 }
 
