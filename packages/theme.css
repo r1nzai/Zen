@@ -996,6 +996,13 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
 .zen__dialog:not([open])::backdrop {
     opacity: 0;
 }
+/* A dialog opened from a button grows out of it, and shrinks back into it (useModal sets the origin). */
+.zen__dialog[data-zen-from] {
+    transition-duration: 280ms;
+}
+.zen__dialog[data-zen-from]:not([open]) {
+    scale: 0.4;
+}
 /* Sheets slide from their edge instead of scaling up. */
 .zen__dialog[data-side] {
     transition:
@@ -1027,6 +1034,9 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     }
     .zen__dialog[open]::backdrop {
         opacity: 0;
+    }
+    .zen__dialog[data-zen-from][open] {
+        scale: 0.4;
     }
     .zen__dialog[data-side][open] {
         scale: none;
@@ -1162,6 +1172,37 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     }
 }
 
+/*
+ * Morphs: a card opening into its page. Give the pair the view-transition class
+ * zen-morph (React: <ViewTransition name=… share="zen-morph">). The box moves and
+ * resizes; what's in it keeps its size, clipped to the box, so text never stretches.
+ */
+::view-transition-group(*.zen-morph) {
+    animation-duration: 0.42s;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+::view-transition-image-pair(*.zen-morph) {
+    overflow: clip;
+    border-radius: var(--radius-xl);
+}
+::view-transition-old(*.zen-morph),
+::view-transition-new(*.zen-morph) {
+    height: 100%;
+    object-fit: none;
+    object-position: top left;
+}
+
+/* Content arriving where its placeholder was. */
+.zen__reveal {
+    animation: zen-reveal 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes zen-reveal {
+    from {
+        opacity: 0;
+        translate: 0 4px;
+    }
+}
+
 /* Time left before a toast goes away. */
 .zen__toast-timer {
     animation: zen-toast-timer linear forwards;
@@ -1179,6 +1220,21 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     }
     70% {
         transform: scale(1.2);
+    }
+}
+
+/* A tag added to a TagInput pops in. */
+.zen__tag {
+    animation: zen-pop 0.3s var(--ease-out-soft) backwards;
+}
+
+/* CodeInput's caret, in the box typing goes into. */
+.zen__code-caret {
+    animation: zen-caret 1s steps(1) infinite;
+}
+@keyframes zen-caret {
+    50% {
+        opacity: 0;
     }
 }
 
@@ -1215,6 +1271,11 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     from {
         opacity: 0;
     }
+}
+/* Held at their start until the chart is first on screen, so they're seen. */
+[data-zen-unseen] :is(.zen__chart-draw, .zen__chart-grow, .zen__chart-fade),
+[data-zen-unseen]:is(.zen__chart-draw, .zen__chart-grow, .zen__chart-fade) {
+    animation-play-state: paused;
 }
 
 /*

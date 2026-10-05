@@ -1,7 +1,8 @@
 import ChevronDown from '@zen/icons/chevron-down';
 import ChevronUp from '@zen/icons/chevron-up';
 import { cx } from '@zen/utils/cx';
-import { ComponentProps, ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { reducedMotion } from '@zen/utils/motion';
+import { ComponentProps, ReactNode, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 /*
  * Sticky parts (the header row, the footer row, a first column) are clear glass
@@ -84,9 +85,49 @@ export function TableHeader({ className, ...rest }: ComponentProps<'thead'>) {
     return <thead className={cx('zen__sticky-top sticky top-0 z-20', className)} {...rest} />;
 }
 
-export function TableBody(props: ComponentProps<'tbody'>) {
-    return <tbody {...props} />;
+/**
+ * The rows. When rows are added, removed or reordered (a sort), the others
+ * slide to their new places and new ones fade in. Not with spacer rows (a
+ * virtual list: rows come and go as it scrolls), nor with reduced motion.
+ */
+export function TableBody({ ref, ...rest }: ComponentProps<'tbody'>) {
+    const body = useRef<HTMLTableSectionElement>(null);
+    const last = useRef<{ rows: HTMLTableRowElement[]; tops: Map<HTMLTableRowElement, number> }>(null);
+    useIsoLayoutEffect(() => {
+        const el = body.current;
+        if (!el) return;
+        const rows = [...el.rows];
+        const before = last.current;
+        // The same rows in the same order: nothing to move, nor to measure.
+        if (before && rows.length === before.rows.length && rows.every((r, i) => r === before.rows[i])) return;
+        const tops = new Map(rows.map((r) => [r, r.offsetTop]));
+        last.current = { rows, tops };
+        if (!before || reducedMotion() || el.querySelector('[data-zen-spacer]')) return;
+        for (const row of rows) {
+            const was = before.tops.get(row);
+            if (was === undefined) {
+                // A tree row opening has its own animation.
+                if (!row.hasAttribute('data-tree-key'))
+                    row.animate?.({ opacity: [0, 1], translate: ['0 -6px', '0 0'] }, ENTER);
+            } else if (was !== tops.get(row)) {
+                row.animate?.({ translate: [`0 ${was - tops.get(row)!}px`, '0 0'] }, MOVE);
+            }
+        }
+    });
+    return (
+        <tbody
+            ref={(node) => {
+                body.current = node;
+                if (typeof ref === 'function') return ref(node);
+                if (ref) ref.current = node;
+            }}
+            {...rest}
+        />
+    );
 }
+const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+const MOVE: KeyframeAnimationOptions = { duration: 320, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' };
+const ENTER: KeyframeAnimationOptions = { duration: 260, easing: 'ease-out' };
 
 /** Rows that stay at the bottom while the body scrolls (totals, balances). */
 export function TableFooter({ className, ...rest }: ComponentProps<'tfoot'>) {
@@ -190,7 +231,7 @@ export function TableFooterCell({ numeric, sticky, className, ...rest }: TableCe
 export function TableSpacerRow({ height, colSpan }: { height: number; colSpan: number }) {
     if (height <= 0) return null;
     return (
-        <tr aria-hidden>
+        <tr aria-hidden data-zen-spacer>
             <td colSpan={colSpan} style={{ height, padding: 0, border: 0 }} />
         </tr>
     );

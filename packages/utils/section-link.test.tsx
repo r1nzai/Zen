@@ -1,17 +1,16 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import type { MockInstance } from 'vite-plus/test';
 
 import { followSectionLink } from './section-link';
 
 describe('followSectionLink', () => {
-    let scrollIntoView: ReturnType<typeof vi.fn<Element['scrollIntoView']>>;
+    let scrollIntoView: MockInstance<Element['scrollIntoView']>;
     beforeEach(() => {
-        scrollIntoView = vi.fn<Element['scrollIntoView']>();
-        Element.prototype.scrollIntoView = scrollIntoView;
+        scrollIntoView = vi.spyOn(Element.prototype, 'scrollIntoView');
         history.replaceState(null, '', '/');
     });
     afterEach(() => {
         document.documentElement.classList.remove('reduce-motion');
-        delete (Element.prototype as Partial<Element>).scrollIntoView;
     });
 
     const page = () =>

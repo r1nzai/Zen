@@ -94,6 +94,8 @@ export function anchoredStyle(id: string, { align = 'start', offset = 4, width }
         positionTryFallbacks: 'flip-block',
         inset: 'auto',
         margin: `${offset}px 0`,
+        // It scales in from the corner (or edge) by the trigger.
+        transformOrigin: { start: 'top left', end: 'top right', center: 'top' }[align],
         // As wide as its content, and at least as wide as the trigger.
         ...(width === 'at-least' && { width: 'max-content', minWidth: 'anchor-size(width)' }),
         ...(width === 'match' && { width: 'anchor-size(width)', minWidth: 0 }),
@@ -186,6 +188,7 @@ function placeAgainstTrigger(popup: HTMLElement) {
     const end = rtl ? t.left : t.right - p.width;
     const left = align === 'center' ? t.left + (t.width - p.width) / 2 : align === 'end' ? end : start;
     s.top = `${top}px`;
+    s.transformOrigin = s.transformOrigin.replace(/top|bottom/, top === above ? 'bottom' : 'top');
     s.left = `${Math.max(EDGE, Math.min(left, vw - p.width - EDGE))}px`;
 }
 

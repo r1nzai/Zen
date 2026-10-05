@@ -1,3 +1,4 @@
+import { useSeen } from '@zen/utils/useSeen';
 import { cx } from '@zen/utils/cx';
 import { ReactNode, useLayoutEffect, useRef, useState } from 'react';
 
@@ -51,6 +52,7 @@ export default function DonutChart({
     const tipAngle = active === null ? null : (arcs[active].start + arcs[active].end) / 2;
     const root = useRef<HTMLDivElement>(null);
     const tipRef = useRef<HTMLDivElement>(null);
+    const seen = useSeen(root);
 
     // The tooltip is in the top layer, placed against the ring, so no container that
     // clips its overflow cuts it off; it follows the ring when the page scrolls.
@@ -82,7 +84,12 @@ export default function DonutChart({
     }, [tipAngle, r]);
 
     return (
-        <div ref={root} className={cx('zen__donut relative shrink-0', className)} style={{ width: size, height: size }}>
+        <div
+            ref={root}
+            data-zen-unseen={seen ? undefined : ''}
+            className={cx('zen__donut relative shrink-0', className)}
+            style={{ width: size, height: size }}
+        >
             <svg
                 width={size}
                 height={size}

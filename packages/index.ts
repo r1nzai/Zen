@@ -42,7 +42,7 @@ export {
     ComboboxTrigger,
 } from './combobox';
 export { default as ConfirmDialog } from './confirm-dialog';
-export { default as Dialog, DialogClose, DialogFooter, type DialogProps } from './dialog';
+export { default as Dialog, DialogClose, DialogFooter, type DialogProps, useModal } from './dialog';
 export { default as EditableCell, type EditableCellProps } from './editable-cell';
 export { default as Disclosure, DisclosureContent, type DisclosureProps, DisclosureTrigger } from './disclosure';
 export {
@@ -242,3 +242,18 @@ declare module 'react' {
         [key: `--${string}`]: string | number;
     }
 }
+export { Breadcrumb, type BreadcrumbProps, default as Breadcrumbs } from './breadcrumbs';
+export { default as CodeInput, type CodeInputProps } from './code-input';
+export {
+    type CommandItem,
+    default as CommandPalette,
+    type CommandPaletteProps,
+    useCommandPaletteShortcut,
+} from './command-palette';
+export { default as EmptyState, type EmptyStateProps } from './empty-state';
+export { accepts, default as FileDrop, type FileDropProps } from './file-drop';
+export { pageRange, default as Pagination, type PaginationProps } from './pagination';
+export { default as Sparkline, type SparklineProps } from './sparkline';
+export { Step, type StepProps, default as Stepper, type StepperProps } from './stepper';
+export { default as TagInput, type TagInputProps } from './tag-input';
+export { default as Timeline, TimelineItem, type TimelineItemProps } from './timeline';

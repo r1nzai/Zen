@@ -1,3 +1,4 @@
+import { useSeen } from '@zen/utils/useSeen';
 import { cx } from '@zen/utils/cx';
 
 import { type ChartPalette, paletteColor } from './palette';
@@ -82,6 +83,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
     const id = useId().replace(/[^\w-]/g, '');
     const wrap = useRef<HTMLDivElement>(null);
     const width = useWidth(wrap);
+    const seen = useSeen(wrap);
     const [active, setActive] = useState<number | null>(null);
     const [pointer, setPointer] = useState<{ y: number } | null>(null);
 
@@ -386,6 +388,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
             {showLegend && <Legend series={series} />}
             <div
                 ref={wrap}
+                data-zen-unseen={seen ? undefined : ''}
                 tabIndex={0}
                 aria-label={`${label}: use the arrow keys to read values`}
                 onPointerMove={onPointerMove}

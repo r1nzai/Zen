@@ -48,6 +48,12 @@ export const COMPONENTS: ComponentDoc[] = [
     },
     { slug: 'badge', title: 'Badge', description: 'A small label for status, counts and tags.', parts: ['Badge'] },
     {
+        slug: 'breadcrumbs',
+        title: 'Breadcrumbs',
+        description: 'Where a page sits: its parents as links, then the page itself. Works with any router.',
+        parts: ['Breadcrumbs', 'Breadcrumb'],
+    },
+    {
         slug: 'button',
         title: 'Button',
         description: 'Actions, from the one glowing primary action to quiet ghost buttons.',
@@ -59,7 +65,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Card',
         description: 'Glass panels for grouping content, and stats for single figures.',
         parts: ['Card', 'CardHeader', 'CardTitle', 'CardDescription', 'Stat', 'StatRow'],
-        examples: ['Goal', 'Stats'],
+        examples: ['Goal', 'Stats', 'Morph'],
     },
     {
         slug: 'calendar',
@@ -98,6 +104,13 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Highlighted', 'Plain', 'InCard'],
     },
     {
+        slug: 'code-input',
+        title: 'Code Input',
+        description:
+            'A one-time code, a box per character, that types, pastes and autofills from a text message like any field.',
+        parts: ['CodeInput'],
+    },
+    {
         slug: 'collapse',
         title: 'Collapse',
         description: 'Shows as many items as fit on one line, and the rest behind "+N".',
@@ -118,6 +131,14 @@ export const COMPONENTS: ComponentDoc[] = [
             'ComboboxCreate',
         ],
         examples: ['Accounts', 'Tags', 'ManyItems'],
+    },
+    {
+        slug: 'command-palette',
+        title: 'Command Palette',
+        description:
+            'Search everything and act on it from the keyboard: a field over a list that narrows as you type, opened with ⌘K.',
+        parts: ['CommandPalette'],
+        imports: ['CommandPalette', 'useCommandPaletteShortcut'],
     },
     {
         slug: 'date-picker',
@@ -148,11 +169,23 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['EditableCell'],
     },
     {
+        slug: 'empty-state',
+        title: 'Empty State',
+        description: "What a list or page shows when there's nothing in it yet, and the action that fills it.",
+        parts: ['EmptyState'],
+    },
+    {
         slug: 'field',
         title: 'Field',
         description:
             'A label, hint and error wired to their control for screen readers, and messages for a whole form.',
         parts: ['Field', 'FormMessage'],
+    },
+    {
+        slug: 'file-drop',
+        title: 'File Drop',
+        description: 'Somewhere to drop files, or click to choose them, that lights up as files are dragged over it.',
+        parts: ['FileDrop'],
     },
     {
         slug: 'header',
@@ -210,6 +243,12 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Page Header',
         description: 'Eyebrow, aurora title and lead paragraph for the top of a page.',
         parts: ['PageHeader'],
+    },
+    {
+        slug: 'pagination',
+        title: 'Pagination',
+        description: 'The pages a long list is split into, as buttons or links for your router.',
+        parts: ['Pagination'],
     },
     {
         slug: 'pills',
@@ -273,7 +312,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Skeleton & Spinner',
         description: 'Placeholders for content on its way.',
         parts: ['Skeleton', 'Spinner'],
-        examples: ['LoadingCard', 'WithSpinner'],
+        examples: ['LoadingCard', 'Reveal', 'WithSpinner'],
     },
     {
         slug: 'slider',
@@ -281,6 +320,12 @@ export const COMPONENTS: ComponentDoc[] = [
         description: 'A native range input with a glowing thumb and any track you like.',
         parts: ['Slider'],
         examples: ['Default', 'Hue'],
+    },
+    {
+        slug: 'sparkline',
+        title: 'Sparkline',
+        description: 'A small line of how a number has moved, with no axes, for beside a figure. It draws itself in.',
+        parts: ['Sparkline'],
     },
     {
         slug: 'spinner',
@@ -302,6 +347,12 @@ export const COMPONENTS: ComponentDoc[] = [
             'A small status that changes in place, such as Saving…, Saved or Not saved with a Retry, and fades back once the news is old.',
         parts: ['StatusPill', 'StatusPillAction'],
         examples: ['Save'],
+    },
+    {
+        slug: 'stepper',
+        title: 'Stepper',
+        description: 'The steps of a flow and where you are in it; the line between them fills in as you go.',
+        parts: ['Stepper', 'Step'],
     },
     {
         slug: 'table',
@@ -333,6 +384,13 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['Tabs', 'TabList', 'Tab', 'TabPanel'],
         examples: ['Underline', 'Pills'],
     },
+    {
+        slug: 'tag-input',
+        title: 'Tag Input',
+        description:
+            'A field of short values (tags, emails): Enter or a comma adds one, Backspace takes the last back.',
+        parts: ['TagInput'],
+    },
     { slug: 'textarea', title: 'Textarea', description: 'Multi-line text, styled like Input.', parts: ['TextArea'] },
     {
         slug: 'theme-toggle',
@@ -341,6 +399,12 @@ export const COMPONENTS: ComponentDoc[] = [
             'Switches between the dark and light themes, remembering the choice itself or leaving it to your app.',
         parts: ['ThemeToggle', 'ThemeScript'],
         examples: ['Default', 'YourState'],
+    },
+    {
+        slug: 'timeline',
+        title: 'Timeline',
+        description: 'Events in order, each on a dot joined by a line: an activity feed or a history.',
+        parts: ['Timeline', 'TimelineItem'],
     },
     {
         slug: 'toast',

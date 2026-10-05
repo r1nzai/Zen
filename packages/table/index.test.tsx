@@ -157,3 +157,55 @@ describe('useSort', () => {
         expect(screen.getByRole('columnheader').querySelector('svg')).toBeInTheDocument();
     });
 });
+
+describe('TableBody motion', () => {
+    let animate: ReturnType<typeof vi.fn>;
+    beforeEach(() => {
+        animate = vi.fn();
+        Element.prototype.animate = animate as unknown as Element['animate'];
+        // jsdom has no layout: a row's top is its place in the body.
+        vi.spyOn(HTMLElement.prototype, 'offsetTop', 'get').mockImplementation(function (this: HTMLElement) {
+            return this instanceof HTMLTableRowElement ? this.sectionRowIndex * 40 : 0;
+        });
+    });
+    afterEach(() => {
+        vi.restoreAllMocks();
+        delete (Element.prototype as Partial<Element>).animate;
+    });
+
+    const rows = (keys: string[], spacer = false) => (
+        <Table>
+            <TableBody>
+                {spacer && <TableSpacerRow height={10} colSpan={1} />}
+                {keys.map((k) => (
+                    <TableRow key={k}>
+                        <TableCell>{k}</TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
+    );
+    const moves = () => animate.mock.calls.map(([keyframes]) => keyframes);
+
+    it('slides reordered rows from where they were, and fades new ones in', () => {
+        const { rerender } = render(rows(['a', 'b']));
+        expect(animate).not.toHaveBeenCalled();
+        rerender(rows(['b', 'a', 'c']));
+        expect(moves()).toEqual([
+            { translate: ['0 40px', '0 0'] },
+            { translate: ['0 -40px', '0 0'] },
+            { opacity: [0, 1], translate: ['0 -6px', '0 0'] },
+        ]);
+    });
+
+    it('stays still when the rows are the same, in a virtual list, or with reduced motion', () => {
+        const { rerender } = render(rows(['a', 'b']));
+        rerender(rows(['a', 'b']));
+        document.documentElement.classList.add('reduce-motion');
+        rerender(rows(['b', 'a']));
+        document.documentElement.classList.remove('reduce-motion');
+        const virtual = render(rows(['a', 'b'], true));
+        virtual.rerender(rows(['b', 'a'], true));
+        expect(animate).not.toHaveBeenCalled();
+    });
+});

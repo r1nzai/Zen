@@ -37,26 +37,10 @@ export default function Dialog({
     className,
     role,
 }: DialogProps) {
-    useGraphicsMode();
     const ref = useRef<HTMLDialogElement>(null);
     const titleId = useId();
     const descriptionId = useId();
-
-    useEffect(() => {
-        const dialog = ref.current;
-        if (!dialog) return;
-        if (open && !dialog.open) {
-            // Whether the page shows a scrollbar, measured before opening hides it (see theme.css).
-            const root = document.documentElement;
-            root.toggleAttribute('data-zen-scrollbar', window.innerWidth > root.clientWidth);
-            dialog.showModal();
-            initialFocus?.current?.focus();
-        } else if (!open && dialog.open) {
-            dialog.close();
-        }
-    }, [open, initialFocus]);
-    // While open, toasts render in here: outside a modal dialog they'd be inert.
-    useToastHost(ref, open);
+    useModal(ref, open, initialFocus);
 
     return (
         <dialog
@@ -108,6 +92,47 @@ export default function Dialog({
             </div>
         </dialog>
     );
+}
+
+/**
+ * Opens and closes a <dialog> as a modal with `open`: focus moves in (to
+ * `initialFocus` if given) and back after, the page behind is inert and
+ * doesn't scroll, and toasts show inside it while it's open. For your own
+ * modal on a <dialog> (Dialog and CommandPalette use it); give the element
+ * the zen__dialog class for the open and close animation.
+ */
+export function useModal(
+    ref: RefObject<HTMLDialogElement | null>,
+    open: boolean,
+    initialFocus?: RefObject<HTMLElement | null>,
+): void {
+    useGraphicsMode();
+    useEffect(() => {
+        const dialog = ref.current;
+        if (!dialog) return;
+        if (open && !dialog.open) {
+            // Whether the page shows a scrollbar, measured before opening hides it (see theme.css).
+            const root = document.documentElement;
+            root.toggleAttribute('data-zen-scrollbar', window.innerWidth > root.clientWidth);
+            // It grows out of what opened it, and shrinks back into it (theme.css). Set before
+            // it opens: its first style is what it grows from.
+            const trigger =
+                document.activeElement !== document.body ? document.activeElement?.getBoundingClientRect() : null;
+            const from = !!trigger && !dialog.dataset.side;
+            dialog.toggleAttribute('data-zen-from', from);
+            dialog.showModal();
+            if (from) {
+                const x = trigger.left + trigger.width / 2 - dialog.offsetLeft;
+                const y = trigger.top + trigger.height / 2 - dialog.offsetTop;
+                dialog.style.transformOrigin = `${Math.round(x)}px ${Math.round(y)}px`;
+            }
+            initialFocus?.current?.focus();
+        } else if (!open && dialog.open) {
+            dialog.close();
+        }
+    }, [ref, open, initialFocus]);
+    // While open, toasts render in here: outside a modal dialog they'd be inert.
+    useToastHost(ref, open);
 }
 
 /** The row of actions at the end of a dialog, right-aligned. */

@@ -10,6 +10,11 @@ if (typeof HTMLElement !== 'undefined') {
     HTMLElement.prototype.togglePopover = vi.fn();
 }
 
+// Nor scrolling an element into view.
+if (typeof Element !== 'undefined' && !('scrollIntoView' in Element.prototype)) {
+    Object.assign(Element.prototype, { scrollIntoView() {} });
+}
+
 // Nor modal <dialog>: open and close by toggling the attribute.
 if (typeof HTMLDialogElement !== 'undefined' && !HTMLDialogElement.prototype.showModal) {
     HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
