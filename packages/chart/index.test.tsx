@@ -38,6 +38,9 @@ describe('Chart', () => {
         );
         expect(screen.getByRole('figure', { name: 'Cash flow' })).toHaveTextContent('April was the best month.');
         const table = screen.getByRole('table', { name: 'Cash flow' });
+        // Hidden by its box: sr-only on a table itself can't shrink it, so it widens a phone's page.
+        expect(table.parentElement).toHaveClass('sr-only');
+        expect(table).not.toHaveClass('sr-only');
         const rows = within(table).getAllByRole('row');
         expect(rows[0]).toHaveTextContent('monthIncomeSpending');
         expect(rows[4]).toHaveTextContent('Apr14070');

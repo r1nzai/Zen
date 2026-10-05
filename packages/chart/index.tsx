@@ -317,30 +317,33 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
     // The screen-reader table only changes with the data.
     const table = useMemo(
         () => (
-            <table className="sr-only">
-                <caption>{label}</caption>
-                <thead>
-                    <tr>
-                        <th scope="col">{String(x)}</th>
-                        {series.map((s) => (
-                            <th key={s.dataKey} scope="col">
-                                {s.label}
-                            </th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {rows.map((r, i) => (
-                        <tr key={i}>
-                            <th scope="row">{(formatTooltipX ?? formatX)(r[x] as never)}</th>
-                            {series.map((s) => {
-                                const v = value(r, s.dataKey);
-                                return <td key={s.dataKey}>{v === null ? '' : formatY(v)}</td>;
-                            })}
+            // Hidden by a box around it: a table won't shrink to sr-only's 1px, so on a phone it pushes the page wider.
+            <div className="sr-only">
+                <table>
+                    <caption>{label}</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">{String(x)}</th>
+                            {series.map((s) => (
+                                <th key={s.dataKey} scope="col">
+                                    {s.label}
+                                </th>
+                            ))}
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {rows.map((r, i) => (
+                            <tr key={i}>
+                                <th scope="row">{(formatTooltipX ?? formatX)(r[x] as never)}</th>
+                                {series.map((s) => {
+                                    const v = value(r, s.dataKey);
+                                    return <td key={s.dataKey}>{v === null ? '' : formatY(v)}</td>;
+                                })}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         ),
         [label, x, series, rows, formatTooltipX, formatX, formatY],
     );
