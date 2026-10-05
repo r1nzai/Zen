@@ -163,17 +163,14 @@ export function applyTheme(
 }
 
 /**
- * Runs a theme change on `el` (its classes or variables) with transitions off in
- * it, so every part takes the new colours at once: each fading its own (a big
- * table's every cell) all together stalls the page. The marker is an attribute,
- * not a class: apps re-apply their theme when <html>'s class changes, and a
- * class here would wake them again, endlessly.
+ * Runs a theme change on `el` with transitions off. Marked by an attribute, not a
+ * class: apps re-apply their theme when <html>'s class changes, which would loop.
  */
 export function changeTheme(el: Element, change: () => void): void {
     el.setAttribute('data-zen-theme-applying', '');
     try {
         change();
-        // The new colours are worked out while transitions are off, so none start.
+        // Resolve the new colours while transitions are still off.
         getComputedStyle(el).getPropertyValue('color');
     } finally {
         el.removeAttribute('data-zen-theme-applying');

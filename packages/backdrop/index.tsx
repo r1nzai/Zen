@@ -24,16 +24,8 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
         // (--gx/--gy). Per-element values stay exact inside transformed, masked
         // or scrolling containers, where viewport-fixed backgrounds don't.
         //
-        // A pointer move does as little as it can, so a page of thousands of lit
-        // elements (a big table's cells) costs what a few do:
-        // - The lit elements are looked up again only after the page's elements change.
-        // - Only those on screen, or within the light's reach of it, are followed
-        //   (an IntersectionObserver); the rest are parked once.
-        // - Their boxes are measured once and kept until the layout may have changed:
-        //   a scroll, a resize, a lit element resizing, the page's elements or
-        //   attributes changing, or a transition or animation ending.
-        // Values are only written when they change: each write restyles and repaints
-        // the element.
+        // Only lit elements near the screen are followed, and their boxes are kept
+        // until the layout may have changed. Values are written only when they change.
         const REACH = 400; // the edge glow's gradient radius is 360px
         const SELECTOR = '.glow-edge, .glow-border';
         let out = true;
@@ -79,9 +71,7 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
                       { rootMargin: `${REACH}px` },
                   );
         const resized = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(() => rects.clear());
-        // Anything but the lights' own writes (their --gx/--gy, the light box) may
-        // have moved things: measure again. New or removed elements, or classes: look
-        // the lit elements up again.
+        // Anything but the lights' own writes may have moved things.
         const onMutations = (records: MutationRecord[]) => {
             for (const r of records) {
                 if (backdrop?.contains(r.target)) continue;
@@ -104,7 +94,6 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
             }
             for (const el of next) {
                 if (lit.has(el)) continue;
-                // Until it's known to be near, it's parked.
                 park(el);
                 nearby?.observe(el);
                 resized?.observe(el);
@@ -114,9 +103,8 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
         const apply = () => {
             frame = 0;
             listed();
-            // Without an IntersectionObserver, every lit element is followed.
             const els = nearby ? [...near] : [...lit];
-            // Measured first, then written: interleaving the two forces a layout per element.
+            // Measure all, then write: interleaving forces a layout per element.
             for (const el of els) if (!rects.has(el)) rects.set(el, el.getBoundingClientRect());
             const box = backdrop?.getBoundingClientRect();
             // The backdrop's own light is a small box moved to the pointer: only the
@@ -139,7 +127,7 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
                     parked.delete(el);
                 } else park(el);
             }
-            // The records of these writes are the lights' own: set aside, not acted on.
+            // Drop our own writes' records.
             onMutations(mutations?.takeRecords() ?? []);
             ours.clear();
         };
@@ -175,7 +163,7 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
             rects.clear();
             schedule();
         };
-        // Parts that move by CSS (a card lifting, a dialog opening) are measured again once they stop.
+        // Parts moved by CSS (a dialog opening) are measured again once they stop.
         const onMoved = () => rects.clear();
         window.addEventListener('scroll', onScroll, { passive: true, capture: true });
         window.addEventListener('resize', onResize, { passive: true });
@@ -196,19 +184,15 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
         };
     }, []);
 
-    // The aurora drifts in steps, about 6 a second (theme.css), but a running CSS
-    // animation of custom properties restyles the page on every frame, 60 a second,
-    // to find nothing changed in between. So its animations are held paused and moved
-    // on 6 times a second instead: the same keyframes, the same look. Asked for each
-    // time, as CSS switches them off and on (phones, lite graphics); ones that end
-    // (reduced motion) are left to CSS.
+    // The aurora steps 6 times a second, but a running custom-property animation
+    // restyles every frame: hold it paused and step its clock instead.
     useEffect(() => {
         const aurora = ref.current?.querySelector('.zen-aurora');
         if (!aurora?.getAnimations) return;
         let last = performance.now();
         const tick = () => {
             const now = performance.now();
-            // All read first, then moved: reading after a move would restyle again.
+            // Read all, then move: reading after a move restyles again.
             const drifting = aurora
                 .getAnimations()
                 .filter((a) => a.effect?.getTiming().iterations === Infinity)

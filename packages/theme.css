@@ -123,13 +123,9 @@
  * position into each element's --gx/--gy, so neighbouring cards light up
  * consistently as if from one light source.
  *
- * --gx/--gy are plain, unregistered custom properties: Chrome restyles
- * registered ones written inline far more slowly, each element's own value
- * making every frame slower than the last (measured: 40 lit cards went from 20
- * to 30ms a frame and spiked to 180ms; plain ones stay at 3ms). Plain ones
- * are inherited, so each lit element starts from its own "no light" value,
- * and one nested in another (a field in a lit panel) never shows the outer
- * one's position before Backdrop writes its own.
+ * --gx/--gy stay unregistered: Chrome restyles registered ones, written inline
+ * per element, slower every frame. Each lit element resets them, so a nested
+ * one never inherits its container's.
  */
 @utility glow-edge {
     position: relative;
@@ -511,11 +507,8 @@ html.zen-theme-waving * {
     view-transition-name: none !important;
 }
 /*
- * A theme changes at once (or with the wave, which is the change): nothing
- * transitions to it. Each part's own colour transitions (a table's every cell)
- * would otherwise all run together, on the main thread, stalling a big page and
- * starving the water's frames. [data-zen-theme-applying]: applyTheme, and a switch
- * without the wave (utils/theme.ts, changeTheme).
+ * A theme changes at once: every part's own colour transition running together
+ * stalls a big page. [data-zen-theme-applying] is set by changeTheme (utils/theme.ts).
  */
 :is(html.zen-theme-waving, [data-zen-theme-applying]),
 :is(html.zen-theme-waving, [data-zen-theme-applying]) *,
