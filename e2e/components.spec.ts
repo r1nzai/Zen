@@ -327,3 +327,57 @@ test('the aurora drifts on, moved 6 times a second rather than restyled every fr
     });
     expect(after.dx).not.toBe(before.dx);
 });
+
+test('the pointer light follows lit elements near it, re-measured when the page moves and found when added', async ({
+    page,
+}) => {
+    // Headless browsers render in software, which Zen treats as lite graphics (no pointer light).
+    // Set before the page's scripts run, once <html> exists.
+    await page.addInitScript(() =>
+        new MutationObserver((_, watch) => {
+            if (!document.documentElement) return;
+            document.documentElement.setAttribute('data-zen-graphics', 'full');
+            watch.disconnect();
+        }).observe(document, { childList: true }),
+    );
+    errors = await open(page, '/showcase/');
+    // A lit element of our own, placed where we know: pointer offsets are exact.
+    const add = (top: number) =>
+        page.evaluate((top) => {
+            const el = document.createElement('div');
+            el.className = 'glow-edge';
+            el.style.cssText = `position: fixed; left: 100px; top: ${top}px; width: 200px; height: 100px`;
+            document.body.append(el);
+            return document.querySelectorAll('.glow-edge').length - 1;
+        }, top);
+    const at = (i: number) =>
+        page.evaluate((i) => {
+            const el = document.querySelectorAll<HTMLElement>('.glow-edge')[i];
+            return [el.style.getPropertyValue('--gx'), el.style.getPropertyValue('--gy')];
+        }, i);
+    const near = await add(100);
+    const far = await add(5000);
+    await page.mouse.move(150, 130);
+    await expect.poll(() => at(near)).toEqual(['50px', '30px']);
+    expect(await at(far)).toEqual(['-9999px', '-9999px']);
+
+    // The page moves under it: the next move measures it again.
+    await page.evaluate((i) => (document.querySelectorAll<HTMLElement>('.glow-edge')[i].style.top = '60px'), near);
+    await page.mouse.move(160, 130);
+    await expect.poll(() => at(near)).toEqual(['60px', '70px']);
+
+    // Added later, and near: lit.
+    const added = await add(200);
+    await page.mouse.move(170, 210);
+    await expect.poll(() => at(added)).toEqual(['70px', '10px']);
+
+    // A lit field put inside a lit element (an editing cell in a table panel) has no light
+    // of its own until Backdrop places it, rather than its container's.
+    const nested = await page.evaluate((i) => {
+        const field = document.createElement('input');
+        field.className = 'glow-border';
+        document.querySelectorAll<HTMLElement>('.glow-edge')[i].append(field);
+        return getComputedStyle(field).getPropertyValue('--gx').trim();
+    }, added);
+    expect(nested).toBe('-999px');
+});

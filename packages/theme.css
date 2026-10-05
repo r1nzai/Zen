@@ -122,31 +122,22 @@
  * Border that lights up near the pointer. <Backdrop> writes the pointer
  * position into each element's --gx/--gy, so neighbouring cards light up
  * consistently as if from one light source.
+ *
+ * --gx/--gy are plain, unregistered custom properties: Chrome restyles
+ * registered ones written inline far more slowly, each element's own value
+ * making every frame slower than the last (measured: 40 lit cards went from 20
+ * to 30ms a frame and spiked to 180ms; plain ones stay at 3ms). Plain ones
+ * are inherited, so each lit element starts from its own "no light" value,
+ * and one nested in another (a field in a lit panel) never shows the outer
+ * one's position before Backdrop writes its own.
  */
-/*
- * The pointer position for glow-edge, per element. Not inherited: Backdrop
- * updates it every pointer or scroll frame, and an inherited property would
- * restyle everything inside the card each time. The edge layer takes it
- * explicitly (inherit) instead.
- */
-@property --gx {
-    syntax: '<length>';
-    inherits: false;
-    initial-value: -999px;
-}
-@property --gy {
-    syntax: '<length>';
-    inherits: false;
-    initial-value: -999px;
-}
-
 @utility glow-edge {
     position: relative;
     isolation: isolate;
+    --gx: -999px;
+    --gy: -999px;
     &::before {
         content: '';
-        --gx: inherit;
-        --gy: inherit;
         position: absolute;
         /* Inside the box (along its border), so it never causes overflow or scrollbars. */
         inset: 0;
@@ -194,6 +185,8 @@
 }
 @layer components {
     .glow-border {
+        --gx: -999px;
+        --gy: -999px;
         border-color: var(--glow-border-color);
     }
     @supports (background-clip: border-area) {
