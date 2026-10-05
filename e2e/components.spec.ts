@@ -303,3 +303,27 @@ test('a theme switch without the wave (lite graphics) changes at once: no part a
     // Hovering still fades, once the theme has changed.
     await expect(page.locator('html')).not.toHaveAttribute('data-zen-theme-applying');
 });
+
+test('the aurora drifts on, moved 6 times a second rather than restyled every frame', async ({ page }) => {
+    errors = await open(page, '/showcase/');
+    await page.evaluate(() => document.documentElement.setAttribute('data-zen-graphics', 'full'));
+    const read = () =>
+        page.evaluate(() => {
+            const aurora = document.querySelector('.zen-aurora')!;
+            return {
+                anims: aurora.getAnimations().map((a) => ({ state: a.playState, time: Number(a.currentTime) })),
+                dx: getComputedStyle(aurora).getPropertyValue('--zen-a-dx'),
+            };
+        });
+    await page.waitForTimeout(400);
+    const before = await read();
+    await page.waitForTimeout(2000);
+    const after = await read();
+    expect(after.anims).toHaveLength(3);
+    after.anims.forEach((a, i) => {
+        expect(a.state).toBe('paused');
+        expect(a.time - before.anims[i].time).toBeGreaterThan(1600);
+        expect(a.time - before.anims[i].time).toBeLessThan(2600);
+    });
+    expect(after.dx).not.toBe(before.dx);
+});

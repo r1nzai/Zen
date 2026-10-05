@@ -111,6 +111,34 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
         };
     }, []);
 
+    // The aurora drifts in steps, about 6 a second (theme.css), but a running CSS
+    // animation of custom properties restyles the page on every frame, 60 a second,
+    // to find nothing changed in between. So its animations are held paused and moved
+    // on 6 times a second instead: the same keyframes, the same look. Asked for each
+    // time, as CSS switches them off and on (phones, lite graphics); ones that end
+    // (reduced motion) are left to CSS.
+    useEffect(() => {
+        const aurora = ref.current?.querySelector('.zen-aurora');
+        if (!aurora?.getAnimations) return;
+        let last = performance.now();
+        const tick = () => {
+            const now = performance.now();
+            // All read first, then moved: reading after a move would restyle again.
+            const drifting = aurora
+                .getAnimations()
+                .filter((a) => a.effect?.getTiming().iterations === Infinity)
+                .map((a) => [a, a.playState === 'paused' ? Number(a.currentTime ?? 0) : null] as const);
+            for (const [a, time] of drifting) {
+                if (time === null) a.pause();
+                else a.currentTime = time + (now - last);
+            }
+            last = now;
+        };
+        tick();
+        const timer = window.setInterval(tick, 1000 / 6);
+        return () => clearInterval(timer);
+    }, []);
+
     // The contour image is drawn once into a bitmap at the backdrop's exact pixel
     // size (again after a resize) and used as the mask from then on. Otherwise a
     // vector image (thousands of path segments) is re-drawn every time the lit
