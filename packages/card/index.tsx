@@ -33,7 +33,7 @@ export function CardTitle({ asChild, className, children, ...rest }: CardTitlePr
 }
 
 /** A single figure with a label, e.g. "Revenue  $12,400". */
-export function Stat({ label, value, hint, tone = 'default', className }: StatProps) {
+export function Stat({ label, value, hint, tone = 'default', className, children }: StatProps) {
     return (
         <div className={cx('zen__stat glass glow-edge flex flex-col gap-1 rounded-xl p-3.5 md:p-4', className)}>
             <span className="text-muted-foreground text-2xs truncate tracking-widest uppercase sm:text-xs">
@@ -49,6 +49,7 @@ export function Stat({ label, value, hint, tone = 'default', className }: StatPr
                 {value}
             </span>
             {hint && <span className="text-muted-foreground text-xs">{hint}</span>}
+            {children}
         </div>
     );
 }
@@ -81,4 +82,6 @@ export interface StatProps {
     hint?: ReactNode;
     tone?: 'default' | 'positive' | 'negative';
     className?: string;
+    /** Under the figure: how it got there, like a Sparkline. */
+    children?: ReactNode;
 }

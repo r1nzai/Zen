@@ -46,6 +46,15 @@ describe('Stat', () => {
         expect(screen.getByText('$800')).toHaveClass('text-destructive');
         expect(screen.getByText('this month')).toBeInTheDocument();
     });
+
+    it('shows its children under the figure', () => {
+        render(
+            <Stat label="Spent" value="$800" hint="this month">
+                <svg data-testid="trend" />
+            </Stat>,
+        );
+        expect(screen.getByText('this month').nextElementSibling).toBe(screen.getByTestId('trend'));
+    });
 });
 
 describe('ProgressRing', () => {
