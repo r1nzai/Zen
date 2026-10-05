@@ -15,6 +15,21 @@ const ITEMS = options.map((o) => (
 ));
 
 describe('Segmented', () => {
+    it('places no indicator while hidden (in a closed dialog), so it never grows from nothing', () => {
+        const visible = vi.fn(() => false);
+        Object.assign(HTMLElement.prototype, { checkVisibility: visible });
+        try {
+            render(
+                <Segmented label="Glow" value="soft" onChange={() => {}}>
+                    {ITEMS}
+                </Segmented>,
+            );
+            expect(document.querySelector('.zen__segmented-indicator')).toBeNull();
+        } finally {
+            delete (HTMLElement.prototype as { checkVisibility?: unknown }).checkVisibility;
+        }
+    });
+
     it('is a labelled radio group with the value checked', () => {
         render(
             <Segmented label="Glow" value="soft" onChange={() => {}}>

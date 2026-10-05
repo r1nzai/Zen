@@ -33,7 +33,8 @@ export function useIndicator(
         const track = trackRef.current;
         if (!track) return;
         const measure = () => {
-            const el = track.querySelector<HTMLElement>(selector);
+            // A hidden track (a closed dialog's) measures 0×0: the indicator would grow from nothing when shown.
+            const el = track.checkVisibility?.() !== false ? track.querySelector<HTMLElement>(selector) : null;
             const next = el && { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight };
             // Only on a change: the indicator appearing is itself a mutation of the track.
             setBox((prev) =>
