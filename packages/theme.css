@@ -1026,6 +1026,18 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
 .zen__dialog[data-side='left']:not([open]) {
     translate: -100% 0;
 }
+/* A sheet being swiped back to its edge (useSheetSwipe): it follows the finger, and the scrim fades with it. */
+.zen__dialog[data-side][open] {
+    translate: var(--zen-swipe, 0 0);
+}
+.zen__dialog[data-side][open]::backdrop {
+    opacity: calc(1 - var(--zen-swipe-progress, 0));
+}
+.zen__dialog[data-swiping],
+.zen__dialog[data-swiping]::backdrop {
+    transition: none;
+    user-select: none;
+}
 @starting-style {
     .zen__popover:popover-open,
     .zen__dialog[open] {
@@ -1040,6 +1052,9 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     }
     .zen__dialog[data-side][open] {
         scale: none;
+    }
+    .zen__dialog[data-side][open]::backdrop {
+        opacity: 0;
     }
     .zen__dialog[data-side='bottom'][open] {
         translate: 0 100%;

@@ -167,3 +167,171 @@ describe('ConfirmDialog', () => {
         });
     });
 });
+
+describe('Dialog sheet swipe', () => {
+    // Event times: each touch event is 16ms after the last, a finger moving at a frame's pace.
+    let now = 0;
+    const touch = (el: Element, type: 'down' | 'move' | 'up', x: number, y: number, more = {}) => {
+        now += 16;
+        const init = { clientX: x, clientY: y, pointerId: 1, pointerType: 'touch', isPrimary: true, ...more };
+        if (type === 'down') fireEvent.pointerDown(el, init);
+        else if (type === 'move') fireEvent.pointerMove(el, init);
+        else fireEvent.pointerUp(el, init);
+    };
+    const swipe = (el: Element, dx: number, dy: number, more = {}) => {
+        touch(el, 'down', 100, 100, more);
+        touch(el, 'move', 100 + dx / 2, 100 + dy / 2, more);
+        touch(el, 'move', 100 + dx, 100 + dy, more);
+        touch(el, 'up', 100 + dx, 100 + dy, more);
+    };
+    beforeEach(() => {
+        vi.spyOn(Event.prototype, 'timeStamp', 'get').mockImplementation(() => now);
+        vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(400);
+        vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(320);
+    });
+    afterEach(() => vi.restoreAllMocks());
+
+    const sheet = (props: Partial<Parameters<typeof Dialog>[0]> = {}) => {
+        const onOpenChange = vi.fn();
+        render(
+            <Dialog open side="bottom" title="Filters" onOpenChange={onOpenChange} {...props}>
+                <input aria-label="Name" />
+                <button type="button">Apply</button>
+            </Dialog>,
+        );
+        return onOpenChange;
+    };
+
+    it('follows a finger down, and closes when let go far enough', () => {
+        const onOpenChange = sheet();
+        const title = screen.getByText('Filters');
+        touch(title, 'down', 100, 100);
+        touch(title, 'move', 100, 160);
+        expect(dialogEl().style.getPropertyValue('--zen-swipe')).toBe('0 60px');
+        expect(dialogEl()).toHaveAttribute('data-swiping');
+        touch(title, 'move', 100, 260);
+        touch(title, 'up', 100, 260);
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('springs back from a short, slow swipe', () => {
+        const onOpenChange = sheet();
+        const title = screen.getByText('Filters');
+        touch(title, 'down', 100, 100);
+        touch(title, 'move', 100, 112);
+        touch(title, 'move', 100, 116);
+        touch(title, 'up', 100, 116);
+        expect(onOpenChange).not.toHaveBeenCalled();
+        expect(dialogEl().style.getPropertyValue('--zen-swipe')).toBe('');
+        expect(dialogEl()).not.toHaveAttribute('data-swiping');
+    });
+
+    it('closes on a quick flick, short as it is', () => {
+        const onOpenChange = sheet();
+        const title = screen.getByText('Filters');
+        touch(title, 'down', 100, 100);
+        touch(title, 'move', 100, 120);
+        touch(title, 'move', 100, 140);
+        touch(title, 'up', 100, 140);
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('not a flick when the finger stopped before lifting', () => {
+        const onOpenChange = sheet();
+        const title = screen.getByText('Filters');
+        touch(title, 'down', 100, 100);
+        touch(title, 'move', 100, 120);
+        touch(title, 'move', 100, 140);
+        now += 300;
+        touch(title, 'up', 100, 140);
+        expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('a side panel closes by swiping toward its edge, not away from it', () => {
+        const onOpenChange = sheet({ side: 'left' });
+        swipe(screen.getByText('Filters'), 200, 0);
+        expect(onOpenChange).not.toHaveBeenCalled();
+        swipe(screen.getByText('Filters'), -200, 0);
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    describe('only when meant', () => {
+        it('not with a mouse or pen', () => {
+            const onOpenChange = sheet();
+            swipe(screen.getByText('Filters'), 0, 300, { pointerType: 'mouse' });
+            swipe(screen.getByText('Filters'), 0, 300, { pointerType: 'pen' });
+            expect(onOpenChange).not.toHaveBeenCalled();
+        });
+
+        it('not mostly sideways, or upward', () => {
+            const onOpenChange = sheet();
+            swipe(screen.getByText('Filters'), 200, 120);
+            swipe(screen.getByText('Filters'), 0, -300);
+            expect(onOpenChange).not.toHaveBeenCalled();
+        });
+
+        it('not from a text field', () => {
+            const onOpenChange = sheet();
+            swipe(screen.getByLabelText('Name'), 0, 300);
+            expect(onOpenChange).not.toHaveBeenCalled();
+        });
+
+        it('not from something that takes this gesture itself (its touch-action)', () => {
+            const onOpenChange = sheet({ side: 'right' });
+            screen.getByRole('button', { name: 'Apply' }).style.touchAction = 'pan-y';
+            swipe(screen.getByRole('button', { name: 'Apply' }), 300, 0);
+            expect(onOpenChange).not.toHaveBeenCalled();
+        });
+
+        it('not while the content can still scroll up', () => {
+            const onOpenChange = sheet();
+            const body = screen.getByText('Filters').closest('.overflow-y-auto') as HTMLElement;
+            vi.spyOn(body, 'scrollHeight', 'get').mockReturnValue(900);
+            vi.spyOn(body, 'clientHeight', 'get').mockReturnValue(400);
+            body.style.overflowY = 'auto';
+            body.scrollTop = 50;
+            swipe(screen.getByText('Filters'), 0, 300);
+            expect(onOpenChange).not.toHaveBeenCalled();
+            body.scrollTop = 0;
+            swipe(screen.getByText('Filters'), 0, 300);
+            expect(onOpenChange).toHaveBeenCalledWith(false);
+        });
+
+        it('not once a second finger comes down', () => {
+            const onOpenChange = sheet();
+            const title = screen.getByText('Filters');
+            touch(title, 'down', 100, 100);
+            touch(title, 'move', 100, 200);
+            touch(title, 'down', 200, 100, { pointerId: 2, isPrimary: false });
+            touch(title, 'move', 100, 300);
+            touch(title, 'up', 100, 300);
+            expect(onOpenChange).not.toHaveBeenCalled();
+            expect(dialogEl().style.getPropertyValue('--zen-swipe')).toBe('');
+        });
+
+        it('not when the sheet must be finished (dismissible={false})', () => {
+            const onOpenChange = sheet({ dismissible: false });
+            swipe(screen.getByText('Filters'), 0, 300);
+            expect(onOpenChange).not.toHaveBeenCalled();
+        });
+
+        it('a swipe that began on a button is not a tap on it', () => {
+            const onClick = vi.fn();
+            render(
+                <Dialog open side="bottom" title="Filters">
+                    <button type="button" onClick={onClick}>
+                        Pick
+                    </button>
+                </Dialog>,
+            );
+            const button = screen.getByRole('button', { name: 'Pick' });
+            touch(button, 'down', 100, 100);
+            touch(button, 'move', 100, 130);
+            touch(button, 'up', 100, 130);
+            fireEvent.click(button);
+            expect(onClick).not.toHaveBeenCalled();
+            fireEvent.click(button);
+            expect(onClick).toHaveBeenCalledOnce();
+        });
+    });
+});
