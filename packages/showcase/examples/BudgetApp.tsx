@@ -304,6 +304,7 @@ function Budget({ nav }: { nav: boolean }) {
                             <Stat
                                 label="Spent"
                                 value={<AnimatedMoney value={spent} currency={CURRENCY} locale={LOCALE} />}
+                                hint={income > 0 ? `${Math.round((spent / income) * 100)}% of income` : undefined}
                                 tone="negative"
                             />
                             <Stat

@@ -1,17 +1,6 @@
-import {
-    Button,
-    buttonVariants,
-    Header,
-    Pill,
-    PillIndicator,
-    Pills,
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-    ThemeToggle,
-} from '@rinzai/zen';
+import { Button, buttonVariants, Dialog, Header, Pill, PillIndicator, Pills, ThemeToggle } from '@rinzai/zen';
 import Bars from '@zen/icons/bars';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 
 import { version } from '../../../package.json';
@@ -39,7 +28,7 @@ export function SiteHeader() {
                     <a
                         href={`https://www.npmjs.com/package/@rinzai/zen/v/${version}`}
                         aria-label={`Version ${version} on npm`}
-                        className="border-tint/10 text-muted-foreground hover:text-foreground hover:border-tint/20 rounded-md border px-1.5 py-0.5 font-mono text-xs transition-colors"
+                        className="border-tint/10 text-muted-foreground hover:text-foreground hover:border-tint/20 touch-target rounded-md border px-1.5 py-0.5 font-mono text-xs transition-colors"
                     >
                         v{version}
                     </a>
@@ -60,7 +49,10 @@ export function SiteHeader() {
                 </nav>
                 <div className="flex items-center gap-1">
                     {/* A full page load: Storybook is a separate app served from /storybook. */}
-                    <a href="/storybook/" className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
+                    <a
+                        href="/storybook/"
+                        className={buttonVariants({ variant: 'ghost', size: 'sm', className: 'max-sm:hidden' })}
+                    >
                         Storybook
                     </a>
                     <a
@@ -88,26 +80,27 @@ export function SiteHeader() {
     );
 }
 
-/** Phones: the sidebar in a popover. */
+/** Phones: the sidebar in a panel from the left. */
 function MobileMenu() {
     const [open, setOpen] = useState(false);
     const { pathname } = useLocation();
     // Following a link closes it.
     useEffect(() => setOpen(false), [pathname]);
+    const menu = useRef<HTMLDivElement>(null);
+    // Opens on the current page, however far down the list.
+    useEffect(() => {
+        if (open) menu.current?.querySelector('[aria-current=page]')?.scrollIntoView({ block: 'center' });
+    }, [open]);
     return (
         <div className="md:hidden">
-            <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                    <Button variant="icon" size="icon" aria-label="Menu">
-                        <Bars className="size-5" />
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent aria-label="Site navigation">
-                    <div className="max-h-[70vh] w-64 overflow-y-auto p-3">
-                        <Sidebar />
-                    </div>
-                </PopoverContent>
-            </Popover>
+            <Button variant="icon" size="icon" aria-label="Menu" onClick={() => setOpen(true)}>
+                <Bars className="size-5" />
+            </Button>
+            <Dialog open={open} onOpenChange={setOpen} side="left" title="Zen">
+                <div ref={menu}>
+                    <Sidebar storybook />
+                </div>
+            </Dialog>
         </div>
     );
 }

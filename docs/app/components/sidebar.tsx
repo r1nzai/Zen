@@ -14,7 +14,8 @@ const GROUPS = [
     { title: 'Components', links: COMPONENTS.map((c) => ({ to: componentPath(c.slug), label: c.title })) },
 ];
 
-export function Sidebar() {
+/** `storybook`: a link to it too, for where the header has no room for one. */
+export function Sidebar({ storybook = false }: { storybook?: boolean }) {
     return (
         <SideNav aria-label="Docs">
             {GROUPS.map((group) => (
@@ -27,6 +28,12 @@ export function Sidebar() {
                             </NavLink>
                         </SideNavLink>
                     ))}
+                    {storybook && group === GROUPS[0] && (
+                        // A full page load: Storybook is a separate app served from /storybook.
+                        <SideNavLink asChild>
+                            <a href="/storybook/">Storybook</a>
+                        </SideNavLink>
+                    )}
                 </SideNavGroup>
             ))}
         </SideNav>

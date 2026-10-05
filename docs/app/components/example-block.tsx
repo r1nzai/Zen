@@ -29,7 +29,7 @@ export function ExampleBlock({ example, heading = true }: { example: Example; he
                         </TabList>
                     </div>
                     <TabPanel value="preview">
-                        <div className="flex min-h-56 items-center justify-center p-6 md:p-10">
+                        <div className="flex min-h-40 items-center justify-center p-6 md:min-h-56 md:p-10">
                             <Component />
                         </div>
                     </TabPanel>

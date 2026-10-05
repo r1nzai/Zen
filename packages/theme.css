@@ -224,6 +224,25 @@
  * surface's own `!` background (a Dialog's) is: an unlayered !important rule
  * loses to a layered one.
  */
+/*
+ * On touch screens, a small control's hit area grows to at least 44px (centred on
+ * it), while it looks the same. For controls that aren't positioned themselves.
+ */
+@utility touch-target {
+    @media (pointer: coarse) {
+        position: relative;
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            translate: -50% -50%;
+            width: max(100%, 44px);
+            height: max(100%, 44px);
+        }
+    }
+}
+
 @utility glass-blur {
     @apply backdrop-blur-[18px] backdrop-saturate-140;
     /*
@@ -381,6 +400,53 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
     --sh-string: oklch(0.5 0.14 150);
     --sh-keyword: oklch(0.5 0.2 330);
     --sh-comment: oklch(var(--muted-foreground));
+}
+
+/*
+ * Code wider than its block fades out at the edge it carries on past. The mask is
+ * only in the keyframes: code that fits has no scroll timeline, so no mask at all.
+ */
+@property --zen-code-l {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+@property --zen-code-r {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+@keyframes zen-code-fade {
+    0% {
+        --zen-code-l: 0px;
+        --zen-code-r: 2rem;
+    }
+    5% {
+        --zen-code-l: 2rem;
+    }
+    95% {
+        --zen-code-r: 2rem;
+    }
+    100% {
+        --zen-code-l: 2rem;
+        --zen-code-r: 0px;
+    }
+    0%,
+    100% {
+        mask-image: linear-gradient(
+            to right,
+            transparent,
+            #000 var(--zen-code-l),
+            #000 calc(100% - var(--zen-code-r)),
+            transparent
+        );
+    }
+}
+@supports (animation-timeline: scroll()) {
+    .zen__code-block pre {
+        animation: zen-code-fade linear both;
+        animation-timeline: scroll(self inline);
+    }
 }
 
 /* ───────────────────────── Backdrop: contours / dots + light ───────────────────────── */

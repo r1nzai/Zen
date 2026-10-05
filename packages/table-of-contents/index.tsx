@@ -31,8 +31,8 @@ export default function TableOfContents({ items, title = 'On this page', classNa
 
     if (!items.length) return null;
     return (
-        <nav aria-label={title} className={cx('zen__toc flex flex-col gap-3', className)}>
-            <p className="text-muted-foreground text-2xs mt-0! tracking-widest uppercase">{title}</p>
+        <nav aria-label={title || 'On this page'} className={cx('zen__toc flex flex-col gap-3', className)}>
+            {title && <p className="text-muted-foreground text-2xs mt-0! tracking-widest uppercase">{title}</p>}
             <ul className="border-tint/[0.07] flex flex-col gap-2 border-l text-sm">
                 {items.map((item) => (
                     <li key={item.id} className={cx('-ml-px', item.depth === 2 && 'pl-3')}>
@@ -41,7 +41,7 @@ export default function TableOfContents({ items, title = 'On this page', classNa
                             onClick={followSectionLink}
                             aria-current={item.id === activeId ? 'location' : undefined}
                             className={cx(
-                                'text-muted-foreground hover:text-foreground block border-l border-transparent pl-3 transition-colors',
+                                'text-muted-foreground hover:text-foreground block border-l border-transparent pl-3 transition-colors pointer-coarse:py-1.5',
                                 'aria-[current=location]:border-primary aria-[current=location]:text-foreground',
                             )}
                         >
@@ -64,6 +64,7 @@ export interface TableOfContentsItem {
 
 export interface TableOfContentsProps {
     items: TableOfContentsItem[];
+    /** Shown above the list, and names it. Empty: no heading shown (e.g. under a trigger that says it). */
     title?: string;
     className?: string;
 }
