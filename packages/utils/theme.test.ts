@@ -105,6 +105,21 @@ describe('theme settings', () => {
         expect(el.style.getPropertyValue('--primary')).toBe('');
     });
 
+    it('marks nothing when re-applied with the same values, or while the wave has transitions off', () => {
+        const root = document.documentElement;
+        applyTheme(DEFAULT_THEME);
+        const watch = new MutationObserver(() => {});
+        watch.observe(root, { attributes: true, attributeFilter: ['data-zen-theme-applying'] });
+        applyTheme(DEFAULT_THEME);
+        root.classList.add('zen-theme-waving');
+        applyTheme(DEFAULT_THEME, { appearance: 'light' });
+        root.classList.remove('zen-theme-waving');
+        expect(watch.takeRecords()).toEqual([]);
+        watch.disconnect();
+        expect(root.style.getPropertyValue('--background')).toBe(themeVars(DEFAULT_THEME, 'light').background);
+        resetTheme();
+    });
+
     it('applies with transitions off, marked without touching the class an app may watch', async () => {
         const root = document.documentElement;
         const marked: boolean[] = [];

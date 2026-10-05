@@ -157,8 +157,13 @@ export function applyTheme(
     { appearance = 'dark', target }: { appearance?: Appearance; target?: HTMLElement } = {},
 ): void {
     const el = target ?? document.documentElement;
+    // Apps re-apply on every class change of <html>, mostly with the same values: those cost nothing.
+    const changed = Object.entries(themeVars(theme, appearance)).filter(
+        ([k, v]) => el.style.getPropertyValue(`--${k}`) !== v,
+    );
+    if (!changed.length) return;
     changeTheme(el, () => {
-        for (const [k, v] of Object.entries(themeVars(theme, appearance))) el.style.setProperty(`--${k}`, v);
+        for (const [k, v] of changed) el.style.setProperty(`--${k}`, v);
     });
 }
 
@@ -167,6 +172,8 @@ export function applyTheme(
  * class: apps re-apply their theme when <html>'s class changes, which would loop.
  */
 export function changeTheme(el: Element, change: () => void): void {
+    // The wave already has transitions off.
+    if (document.documentElement.classList.contains('zen-theme-waving')) return change();
     el.setAttribute('data-zen-theme-applying', '');
     try {
         change();
