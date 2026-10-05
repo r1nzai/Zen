@@ -24,18 +24,15 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
         // (--gx/--gy). Per-element values stay exact inside transformed, masked
         // or scrolling containers, where viewport-fixed backgrounds don't.
         //
-        // Only lit elements near the screen are followed, and their boxes are kept
-        // until the layout may have changed. Values are written only when they change.
+        // Per frame: read every element's box first, then write (interleaving the two
+        // forces a layout per element). Only elements within reach of the light are
+        // updated; the rest are parked once, so they aren't repainted every frame.
+        // Values are only written when they change: scrolling fires this every
+        // frame, and each write restyles and repaints the element.
         const REACH = 400; // the edge glow's gradient radius is 360px
-        const SELECTOR = '.glow-edge, .glow-border';
-        let out = true;
-        let lit = new Set<HTMLElement>();
-        let relist = true;
-        const near = new Set<HTMLElement>();
         const parked = new WeakSet<HTMLElement>();
-        const rects = new Map<HTMLElement, DOMRect>();
+        let out = true;
         const written = new WeakMap<HTMLElement, string>();
-        const ours = new Set<Element>();
         // As attributes where CSS can read them (theme.css): an inline property restyles all inside the element.
         const [GX, GY] =
             typeof CSS !== 'undefined' && CSS.supports?.('width', 'attr(x type(<length>))')
@@ -47,73 +44,13 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
             const key = gx + ' ' + gy;
             if (written.get(el) === key) return;
             written.set(el, key);
-            ours.add(el);
             set(el, xName, gx);
             set(el, yName, gy);
         };
-        const park = (el: HTMLElement) => {
-            if (parked.has(el)) return;
-            write(el, '-9999px', '-9999px');
-            parked.add(el);
-        };
-        const schedule = () => {
-            if (!frame) frame = requestAnimationFrame(apply);
-        };
-        const nearby =
-            typeof IntersectionObserver === 'undefined'
-                ? null
-                : new IntersectionObserver(
-                      (entries) => {
-                          for (const { target, isIntersecting } of entries) {
-                              const el = target as HTMLElement;
-                              if (isIntersecting) near.add(el);
-                              else {
-                                  near.delete(el);
-                                  rects.delete(el);
-                                  park(el);
-                              }
-                          }
-                          if (!out) schedule();
-                      },
-                      { rootMargin: `${REACH}px` },
-                  );
-        const resized = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(() => rects.clear());
-        // Anything but the lights' own writes may have moved things.
-        const onMutations = (records: MutationRecord[]) => {
-            for (const r of records) {
-                if (backdrop?.contains(r.target)) continue;
-                const own = r.attributeName === 'style' || r.attributeName === GX || r.attributeName === GY;
-                if (r.type === 'attributes' && own && ours.has(r.target as Element)) continue;
-                rects.clear();
-                if (r.type === 'childList' || r.attributeName === 'class') relist = true;
-            }
-        };
-        const mutations = typeof MutationObserver === 'undefined' ? null : new MutationObserver(onMutations);
-        const listed = () => {
-            if (!relist) return;
-            relist = false;
-            const next = new Set(document.querySelectorAll<HTMLElement>(SELECTOR));
-            for (const el of lit) {
-                if (next.has(el)) continue;
-                nearby?.unobserve(el);
-                resized?.unobserve(el);
-                near.delete(el);
-                rects.delete(el);
-            }
-            for (const el of next) {
-                if (lit.has(el)) continue;
-                park(el);
-                nearby?.observe(el);
-                resized?.observe(el);
-            }
-            lit = next;
-        };
         const apply = () => {
             frame = 0;
-            listed();
-            const els = nearby ? [...near] : [...lit];
-            // Measure all, then write: interleaving forces a layout per element.
-            for (const el of els) if (!rects.has(el)) rects.set(el, el.getBoundingClientRect());
+            const els = Array.from(document.querySelectorAll<HTMLElement>('.glow-edge, .glow-border'));
+            const rects = els.map((el) => el.getBoundingClientRect());
             const box = backdrop?.getBoundingClientRect();
             // The backdrop's own light is a small box moved to the pointer: only the
             // box changes, so only where it was and is gets repainted. (A change on the
@@ -128,16 +65,20 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
                 if (light && !out)
                     write(light, `${Math.round(x - box.left)}px`, `${Math.round(y - box.top)}px`, 'left', 'top');
             }
-            for (const el of els) {
-                const r = rects.get(el)!;
-                if (x > r.left - REACH && x < r.right + REACH && y > r.top - REACH && y < r.bottom + REACH) {
+            els.forEach((el, i) => {
+                const r = rects[i];
+                const near = x > r.left - REACH && x < r.right + REACH && y > r.top - REACH && y < r.bottom + REACH;
+                if (near) {
                     write(el, `${Math.round(x - r.left)}px`, `${Math.round(y - r.top)}px`);
                     parked.delete(el);
-                } else park(el);
-            }
-            // Drop our own writes' records.
-            onMutations(mutations?.takeRecords() ?? []);
-            ours.clear();
+                } else if (!parked.has(el)) {
+                    write(el, '-9999px', '-9999px');
+                    parked.add(el);
+                }
+            });
+        };
+        const schedule = () => {
+            if (!frame) frame = requestAnimationFrame(apply);
         };
         const onMove = (e: PointerEvent) => {
             x = e.clientX;
@@ -154,7 +95,6 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
         // re-measure every card on each scroll frame, which makes phones stutter.
         // Without a GPU (lite graphics) the lights are off, so there's nothing to track either.
         if (window.matchMedia?.('(hover: none), (pointer: coarse)').matches || applyGraphicsMode() === 'lite') return;
-        mutations?.observe(document.body, { subtree: true, childList: true, attributes: true });
         window.addEventListener('pointermove', onMove, { passive: true });
         root.addEventListener('pointerleave', onLeave);
         // Content moves under a still pointer when scrolling. Re-aim the lights once
@@ -163,31 +103,17 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
         // simply rides along with the card.
         let settle = 0;
         const onScroll = () => {
-            rects.clear();
             clearTimeout(settle);
             settle = window.setTimeout(schedule, 120);
         };
-        const onResize = () => {
-            rects.clear();
-            schedule();
-        };
-        // Parts moved by CSS (a dialog opening) are measured again once they stop.
-        const onMoved = () => rects.clear();
         window.addEventListener('scroll', onScroll, { passive: true, capture: true });
-        window.addEventListener('resize', onResize, { passive: true });
-        document.addEventListener('transitionend', onMoved, true);
-        document.addEventListener('animationend', onMoved, true);
+        window.addEventListener('resize', schedule, { passive: true });
         return () => {
             window.removeEventListener('pointermove', onMove);
             root.removeEventListener('pointerleave', onLeave);
             window.removeEventListener('scroll', onScroll, { capture: true });
             clearTimeout(settle);
-            window.removeEventListener('resize', onResize);
-            document.removeEventListener('transitionend', onMoved, true);
-            document.removeEventListener('animationend', onMoved, true);
-            mutations?.disconnect();
-            nearby?.disconnect();
-            resized?.disconnect();
+            window.removeEventListener('resize', schedule);
             cancelAnimationFrame(frame);
         };
     }, []);
