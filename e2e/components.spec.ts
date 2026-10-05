@@ -270,3 +270,18 @@ test('dialogs and sheets open on screen, even far down a scrolled page', async (
     expect(Math.round(box.y + box.height)).toBe(800);
     await expect(sheet.getByRole('button', { name: 'Apply' })).toBeInViewport();
 });
+
+test("a theme switch's wave is the only transition: no part animates its own colours under it", async ({ page }) => {
+    errors = await open(page, '/showcase/');
+    // Headless browsers render in software, which Zen treats as lite graphics (no wave).
+    await page.evaluate(() => document.documentElement.setAttribute('data-zen-graphics', 'full'));
+    const started = await page.evaluate(async () => {
+        const runs: string[] = [];
+        document.addEventListener('transitionrun', (e) => runs.push(e.propertyName), true);
+        document.querySelector<HTMLButtonElement>('button[aria-label^="Switch to"]')!.click();
+        await new Promise((resolve) => setTimeout(resolve, 1600));
+        return runs;
+    });
+    await expect(page.locator('html')).toHaveClass(/\blight\b/);
+    expect(started).toEqual([]);
+});

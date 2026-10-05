@@ -517,6 +517,17 @@ main[data-zen-skip-target]:focus {
 html.zen-theme-waving * {
     view-transition-name: none !important;
 }
+/*
+ * The wave is the change: nothing else transitions to the new theme. Each part's
+ * own colour transitions (a table's every cell) would otherwise all run at once
+ * under it, on the main thread, and starve the water's frames on a big page.
+ */
+html.zen-theme-waving,
+html.zen-theme-waving *,
+html.zen-theme-waving *::before,
+html.zen-theme-waving *::after {
+    transition: none !important;
+}
 html.zen-theme-waving::view-transition-old(root),
 html.zen-theme-waving::view-transition-new(root),
 html.zen-theme-waving::view-transition-group(zen-theme-area),
