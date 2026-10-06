@@ -104,7 +104,7 @@ export function TableBody({ ref, ...rest }: ComponentProps<'tbody'>) {
         last.current = { rows, tops };
         if (!before || reducedMotion() || el.querySelector('[data-zen-spacer]')) return;
         const gone = before.rows.filter((row) => !row.isConnected);
-        // A tree opening or closing rows animates their height, and the rows below move with it.
+        // A tree animates its own rows opening and closing.
         const tree = (row: Element) => row.matches('.zen__tree-row-enter, .zen__tree-row-exit');
         if (rows.some((row) => !before.tops.has(row) && tree(row)) || gone.some(tree)) return;
         if (rows.some((row) => before.tops.has(row))) {

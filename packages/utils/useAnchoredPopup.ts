@@ -180,7 +180,7 @@ function placeAgainstTrigger(popup: HTMLElement) {
     const start = rtl ? t.right - p.width : t.left;
     const end = rtl ? t.left : t.right - p.width;
     const left = align === 'center' ? t.left + (t.width - p.width) / 2 : align === 'end' ? end : start;
-    // Placed by the edge nearest the trigger; its margin (theme.css) is the gap, and slides as it opens.
+    // By the edge nearest the trigger: the margin (theme.css) is the gap, and animates.
     s.top = flip ? 'auto' : `${t.bottom}px`;
     s.bottom = flip ? `${vh - t.top}px` : 'auto';
     s.left = `${Math.max(EDGE, Math.min(left, vw - p.width - EDGE))}px`;

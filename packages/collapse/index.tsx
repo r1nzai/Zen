@@ -76,8 +76,7 @@ export default function Collapse<TData>({
     return (
         <div
             ref={rowRef}
-            // Its width comes from where it's placed, never from what it shows: in a table column (sized by
-            // its content) hiding an item would narrow the column, and it would fit again, and again.
+            // Else, in a table, hiding an item narrows its column, and it fits again and again.
             className={cx('zen__collapse flex min-w-0 items-center overflow-hidden [contain:inline-size]', className)}
         >
             {items.slice(0, shown).map((item, i) => (

@@ -37,7 +37,7 @@ interface Point {
     y: number;
     /** The MenuContextTrigger it was asked from. */
     from: string;
-    /** The pointer still pressing, when it opens on a press (a long press, or right-click on macOS and Linux). */
+    /** The pointer still pressing, when it opens on a press. */
     pointerId?: number;
 }
 
@@ -79,7 +79,7 @@ export default function Menu({ onOpenChange, children }: MenuProps) {
             onOpenChange?.(open);
         },
     });
-    // Its point stays while it fades out: without its anchor it would jump to the corner of the page.
+    // Without its anchor while fading out, it would jump to the page's corner.
     const forgetPoint = () => {
         const menu = popup.popupRef.current;
         const fading = menu?.getAnimations?.() ?? [];
@@ -91,7 +91,7 @@ export default function Menu({ onOpenChange, children }: MenuProps) {
     useIsoLayoutEffect(() => {
         if (!point) return;
         popup.setOpen(true);
-        // The press that opened it is the menu's: letting go would otherwise count as a click outside, and close it.
+        // Else letting go counts as a click outside, and closes it.
         if (point.pointerId !== undefined) {
             try {
                 popup.popupRef.current?.setPointerCapture(point.pointerId);
@@ -219,7 +219,6 @@ export function MenuContextTrigger({
     const props = {
         ...rest,
         className: cx('[-webkit-touch-callout:none]', className),
-        // Which one the open menu is for, to style it as such.
         'data-popup-open': (asked && popup.open) || undefined,
         onContextMenu: (e: MouseEvent<HTMLElement>) => {
             onContextMenu?.(e as MouseEvent<HTMLDivElement>);

@@ -102,7 +102,6 @@ export default function Dialog({
                     onClick={() => onOpenChange?.(false)}
                     className={cx(
                         'text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute end-4 grid size-8 cursor-pointer place-items-center rounded-lg outline-hidden transition-colors focus-visible:ring-2',
-                        // Level with the title (lower in a bottom sheet, under its grip).
                         side === 'bottom' ? 'top-7.5' : 'top-5.5',
                     )}
                 >
