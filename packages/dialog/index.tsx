@@ -1,3 +1,4 @@
+import XMarkMicro from '@zen/icons/micro/x-mark';
 import { cx } from '@zen/utils/cx';
 import Button, { ButtonProps } from '@zen/button';
 import { useToastHost } from '@zen/toast';
@@ -21,7 +22,7 @@ const CloseContext = createContext<() => void>(() => {});
 /**
  * Modal dialog on the native <dialog> element: focus is trapped and restored,
  * the page behind is inert, and Escape closes it. `dismissible={false}` is for
- * flows the user must finish (no Escape or outside-click close). With `side`,
+ * flows the user must finish (no Escape, outside-click or close button). With `side`,
  * it's a sheet that slides in from that edge: a bottom sheet on phones, a side
  * panel for filters or details. On touch, a sheet swipes back to its edge to close.
  */
@@ -37,6 +38,7 @@ export default function Dialog({
     side,
     className,
     role,
+    closeLabel = 'Close',
 }: DialogProps) {
     const ref = useRef<HTMLDialogElement>(null);
     const titleId = useId();
@@ -80,7 +82,7 @@ export default function Dialog({
             >
                 {/* A bottom sheet's grip: says it came up from the edge. */}
                 {side === 'bottom' && <div aria-hidden className="bg-tint/20 mx-auto h-1 w-10 shrink-0 rounded-full" />}
-                <div className="flex flex-col gap-2">
+                <div className={cx('flex flex-col gap-2', dismissible && 'pe-8')}>
                     <h2 id={titleId} className="text-lg font-semibold tracking-tight text-balance">
                         {title}
                     </h2>
@@ -92,6 +94,21 @@ export default function Dialog({
                 </div>
                 <CloseContext.Provider value={() => onOpenChange?.(false)}>{children}</CloseContext.Provider>
             </div>
+            {/* Last, so the dialog's own first field still gets focus when it opens. */}
+            {dismissible && (
+                <button
+                    type="button"
+                    aria-label={closeLabel}
+                    onClick={() => onOpenChange?.(false)}
+                    className={cx(
+                        'text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute end-4 grid size-8 cursor-pointer place-items-center rounded-lg outline-hidden transition-colors focus-visible:ring-2',
+                        // Level with the title (lower in a bottom sheet, under its grip).
+                        side === 'bottom' ? 'top-7.5' : 'top-5.5',
+                    )}
+                >
+                    <XMarkMicro className="size-4" />
+                </button>
+            )}
         </dialog>
     );
 }
@@ -205,4 +222,6 @@ export interface DialogProps {
     side?: 'bottom' | 'left' | 'right';
     className?: string;
     role?: ComponentProps<'dialog'>['role'];
+    /** The close button's accessible name. */
+    closeLabel?: string;
 }

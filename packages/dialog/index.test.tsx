@@ -54,6 +54,21 @@ describe('Dialog', () => {
         expect(cancel.defaultPrevented).toBe(true);
     });
 
+    it('has a close button, last so the content gets focus first, but not when it must be finished', () => {
+        const onOpenChange = vi.fn();
+        const { rerender } = render(
+            <Dialog open title="Rename" onOpenChange={onOpenChange} closeLabel="Close rename">
+                <input aria-label="Name" />
+            </Dialog>,
+        );
+        const close = screen.getByRole('button', { name: 'Close rename', hidden: true });
+        expect(dialogEl().lastElementChild).toBe(close);
+        fireEvent.click(close);
+        expect(onOpenChange).toHaveBeenCalledWith(false);
+        rerender(<Dialog open dismissible={false} title="Rename" onOpenChange={onOpenChange} />);
+        expect(screen.queryByRole('button', { name: 'Close rename', hidden: true })).toBeNull();
+    });
+
     it('does not close on clicks inside the content', () => {
         const onOpenChange = vi.fn();
         render(
