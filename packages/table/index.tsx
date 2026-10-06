@@ -103,19 +103,17 @@ export function TableBody({ ref, ...rest }: ComponentProps<'tbody'>) {
         const tops = new Map(rows.map((r) => [r, r.offsetTop]));
         last.current = { rows, tops };
         if (!before || reducedMotion() || el.querySelector('[data-zen-spacer]')) return;
+        const gone = before.rows.filter((row) => !row.isConnected);
+        // A tree opening or closing rows animates their height, and the rows below move with it.
+        const tree = (row: Element) => row.matches('.zen__tree-row-enter, .zen__tree-row-exit');
+        if (rows.some((row) => !before.tops.has(row) && tree(row)) || gone.some(tree)) return;
         if (rows.some((row) => before.tops.has(row))) {
-            for (const row of before.rows) {
-                // A tree row closing has already shrunk away.
-                if (!row.isConnected && !row.classList.contains('zen__tree-row-exit'))
-                    fadeOut(row, before.tops.get(row)!, el, rows);
-            }
+            for (const row of gone) fadeOut(row, before.tops.get(row)!, el, rows);
         }
         for (const row of rows) {
             const was = before.tops.get(row);
             if (was === undefined) {
-                // A tree row opening has its own animation.
-                if (!row.hasAttribute('data-tree-key'))
-                    row.animate?.({ opacity: [0, 1], translate: ['0 -6px', '0 0'] }, ENTER);
+                row.animate?.({ opacity: [0, 1], translate: ['0 -6px', '0 0'] }, ENTER);
             } else if (was !== tops.get(row)) {
                 row.animate?.({ translate: [`0 ${was - tops.get(row)!}px`, '0 0'] }, MOVE);
             }

@@ -227,13 +227,13 @@ describe('TableBody motion', () => {
         expect(ghosts()).toHaveLength(0);
     });
 
-    it('fades nothing out for tree rows that closed with their own animation', () => {
-        const closing = (keys: string[]) => (
+    it('leaves a tree opening or closing rows to its own animation', () => {
+        const tree = (keys: string[], cls: string) => (
             <TableContainer>
                 <Table>
                     <TableBody>
                         {keys.map((k) => (
-                            <TableRow key={k} className={k === 'a' ? undefined : 'zen__tree-row-exit'}>
+                            <TableRow key={k} className={k.startsWith('child') ? cls : undefined}>
                                 <TableCell>{k}</TableCell>
                             </TableRow>
                         ))}
@@ -241,8 +241,11 @@ describe('TableBody motion', () => {
                 </Table>
             </TableContainer>
         );
-        const { rerender } = render(closing(['a', 'b']));
-        rerender(closing(['a']));
+        const { rerender } = render(tree(['a', 'b'], 'zen__tree-row-enter'));
+        rerender(tree(['a', 'child1', 'child2', 'b'], 'zen__tree-row-enter'));
+        rerender(tree(['a', 'child1', 'child2', 'b'], 'zen__tree-row-exit'));
+        rerender(tree(['a', 'b'], 'zen__tree-row-exit'));
+        expect(animate).not.toHaveBeenCalled();
         expect(ghosts()).toHaveLength(0);
     });
 
