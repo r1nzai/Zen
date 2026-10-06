@@ -83,4 +83,33 @@ describe('DateRangePicker', () => {
         expect(trigger).toHaveAttribute('aria-expanded', 'false');
         expect(trigger).toHaveTextContent(/\d+\s*–\s*\d+/);
     });
+
+    it('picks a preset in one tap, and marks the one in effect', () => {
+        const onChange = vi.fn();
+        const week = { start: '2026-03-02', end: '2026-03-08' };
+        const { rerender } = render(
+            <DateRangePicker
+                aria-label="Range"
+                value={null}
+                onChange={onChange}
+                locale="en-US"
+                presets={[{ label: 'That week', range: week }]}
+            />,
+        );
+        open('Range');
+        fireEvent.click(screen.getByRole('button', { name: 'That week', hidden: true }));
+        expect(onChange).toHaveBeenCalledWith(week);
+        expect(screen.getByRole('button', { name: 'Range' })).toHaveAttribute('aria-expanded', 'false');
+        rerender(
+            <DateRangePicker
+                aria-label="Range"
+                value={week}
+                onChange={onChange}
+                locale="en-US"
+                presets={[{ label: 'That week', range: week }]}
+            />,
+        );
+        open('Range');
+        expect(screen.getByRole('button', { name: 'That week', hidden: true })).toHaveAttribute('aria-pressed', 'true');
+    });
 });

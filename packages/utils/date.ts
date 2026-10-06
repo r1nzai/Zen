@@ -57,6 +57,24 @@ export function today(now: Date = new Date()): DateString {
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 }
 
+/**
+ * The ranges people pick most, up to `today`: label them yourself, e.g. for
+ * DateRangePicker's presets. Weeks start on `weekStartsOn` (0 for Sunday).
+ */
+export function commonRanges(today: DateString, weekStartsOn = 1) {
+    const month = today.slice(0, 7);
+    const lastMonth = addMonthsToDate(`${month}-01`, -1);
+    return {
+        today: { start: today, end: today },
+        thisWeek: { start: addDays(today, -((dayOfWeek(today) - weekStartsOn + 7) % 7)), end: today },
+        last7Days: { start: addDays(today, -6), end: today },
+        last30Days: { start: addDays(today, -29), end: today },
+        thisMonth: { start: `${month}-01`, end: today },
+        lastMonth: { start: lastMonth, end: addDays(`${month}-01`, -1) },
+        thisYear: { start: `${today.slice(0, 4)}-01-01`, end: today },
+    } satisfies Record<string, DateRange>;
+}
+
 /** Days from `from` to `to` (negative if `to` is earlier). */
 export function daysBetween(from: DateString, to: DateString): number {
     return dayIndex(to) - dayIndex(from);

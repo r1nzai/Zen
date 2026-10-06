@@ -52,7 +52,9 @@ export default function DatePicker({
 /**
  * Date range field: pick a start and then an end in a Calendar (the days
  * between are previewed while pointing); it closes once the range is complete.
- * Shows the range the locale's way, e.g. "Sep 3 – 10, 2026".
+ * Shows the range the locale's way, e.g. "Sep 3 – 10, 2026". With `presets`,
+ * common ranges ("Last 30 days") sit beside the calendar, one tap each (see
+ * commonRanges).
  */
 export function DateRangePicker({
     value,
@@ -66,6 +68,7 @@ export function DateRangePicker({
     placeholder = 'Pick dates',
     onClear,
     clearLabel = 'Clear',
+    presets,
     ...rest
 }: DateRangePickerProps) {
     const shown = !value
@@ -81,18 +84,49 @@ export function DateRangePicker({
             label="Choose dates"
             onClear={value ? onClear : undefined}
             clearLabel={clearLabel}
-            calendar={(close) => (
-                <Calendar
-                    autoFocus
-                    mode="range"
-                    value={value}
-                    onChange={(r) => {
-                        onChange(r);
-                        if (r.end) close();
-                    }}
-                    {...{ locale, min, max, isDisabled, weekStartsOn, months }}
-                />
-            )}
+            calendar={(close) => {
+                const calendar = (
+                    <Calendar
+                        autoFocus
+                        mode="range"
+                        value={value}
+                        onChange={(r) => {
+                            onChange(r);
+                            if (r.end) close();
+                        }}
+                        {...{ locale, min, max, isDisabled, weekStartsOn, months }}
+                    />
+                );
+                if (!presets?.length) return calendar;
+                return (
+                    <div className="flex flex-col gap-3 sm:flex-row">
+                        <div
+                            role="group"
+                            aria-label="Presets"
+                            className="border-tint/[0.06] flex flex-wrap gap-1 sm:flex-col sm:flex-nowrap sm:border-e sm:pe-3"
+                        >
+                            {presets.map((p) => {
+                                const on = value?.start === p.range.start && value?.end === p.range.end;
+                                return (
+                                    <button
+                                        key={p.label}
+                                        type="button"
+                                        aria-pressed={on}
+                                        onClick={() => {
+                                            onChange(p.range);
+                                            close();
+                                        }}
+                                        className="text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground aria-pressed:bg-primary/12 aria-pressed:text-foreground focus-visible:ring-ring/40 cursor-pointer rounded-lg px-2.5 py-1.5 text-start text-sm whitespace-nowrap outline-hidden focus-visible:ring-2"
+                                    >
+                                        {p.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        {calendar}
+                    </div>
+                );
+            }}
         />
     );
 }
@@ -194,4 +228,11 @@ export interface DateRangePickerProps extends PickerProps {
     onChange: (range: DateRange) => void;
     /** Months shown side by side (2 suits wide screens). */
     months?: number;
+    /** Ranges picked in one tap, beside the calendar. */
+    presets?: DateRangePreset[];
+}
+
+export interface DateRangePreset {
+    label: string;
+    range: DateRange;
 }

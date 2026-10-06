@@ -153,7 +153,7 @@ export const COMPONENTS: ComponentDoc[] = [
         description:
             'A field that opens a calendar: one date, or a range previewed as you point. Dates are "YYYY-MM-DD" strings, so they never shift with time zones.',
         parts: ['DatePicker', 'DateRangePicker'],
-        examples: ['Default', 'Range', 'InField'],
+        examples: ['Default', 'Range', 'Presets', 'InField'],
     },
     {
         slug: 'dialog',

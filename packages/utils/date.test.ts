@@ -1,6 +1,7 @@
 import {
     addDays,
     addMonthsToDate,
+    commonRanges,
     dayOfWeek,
     daysBetween,
     daysInMonth,
@@ -61,5 +62,18 @@ describe('date helpers', () => {
         expect(weekStart('en-GB')).toBe(1);
         expect(weekStart('de-DE')).toBe(1);
         expect(weekStart('not a locale!')).toBe(1);
+    });
+
+    it('gives the common ranges up to today', () => {
+        const r = commonRanges('2026-03-04', 1); // a Wednesday
+        expect(r.today).toEqual({ start: '2026-03-04', end: '2026-03-04' });
+        expect(r.thisWeek).toEqual({ start: '2026-03-02', end: '2026-03-04' });
+        expect(r.last7Days).toEqual({ start: '2026-02-26', end: '2026-03-04' });
+        expect(r.last30Days.start).toBe('2026-02-03');
+        expect(r.thisMonth).toEqual({ start: '2026-03-01', end: '2026-03-04' });
+        expect(r.lastMonth).toEqual({ start: '2026-02-01', end: '2026-02-28' });
+        expect(r.thisYear).toEqual({ start: '2026-01-01', end: '2026-03-04' });
+        expect(commonRanges('2026-03-04', 0).thisWeek.start).toBe('2026-03-01');
+        expect(commonRanges('2026-01-15').lastMonth).toEqual({ start: '2025-12-01', end: '2025-12-31' });
     });
 });

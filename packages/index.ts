@@ -84,7 +84,13 @@ export {
 } from './chart';
 export { Radio, default as RadioGroup, type RadioGroupProps, type RadioProps } from './radio-group';
 export { default as Calendar, type CalendarProps, type CalendarRangeProps, type CalendarSingleProps } from './calendar';
-export { default as DatePicker, type DatePickerProps, DateRangePicker, type DateRangePickerProps } from './date-picker';
+export {
+    default as DatePicker,
+    type DatePickerProps,
+    type DateRangePreset,
+    DateRangePicker,
+    type DateRangePickerProps,
+} from './date-picker';
 export {
     type CurrencyConversion,
     default as MoneyInput,
@@ -212,6 +218,7 @@ export {
     addDays,
     addMonthsToDate,
     type DateRange,
+    commonRanges,
     type DateString,
     type DateStyle,
     dayIndex,
