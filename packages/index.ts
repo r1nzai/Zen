@@ -3,6 +3,8 @@ export {
     default as Menu,
     MenuContent,
     type MenuContentProps,
+    MenuContextTrigger,
+    type MenuContextTriggerProps,
     MenuHeader,
     MenuItem,
     type MenuItemProps,

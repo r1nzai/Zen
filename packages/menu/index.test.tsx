@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 
-import Menu, { MenuContent, MenuHeader, MenuItem, MenuSeparator, MenuTrigger } from './index';
+import Menu, { MenuContent, MenuContextTrigger, MenuHeader, MenuItem, MenuSeparator, MenuTrigger } from './index';
 
 const Icon = () => <svg data-testid="icon" className="size-4" />;
 
@@ -122,5 +122,70 @@ describe('Menu', () => {
     it('parts outside a Menu say so', () => {
         vi.spyOn(console, 'error').mockImplementation(() => {});
         expect(() => render(<MenuTrigger>Go</MenuTrigger>)).toThrow('<MenuTrigger> must be inside <Menu>');
+    });
+});
+
+describe('MenuContextTrigger', () => {
+    const onOpen = vi.fn();
+    beforeEach(() => onOpen.mockClear());
+    function Row({ onTap = () => {}, disabled = false }: { onTap?: () => void; disabled?: boolean }) {
+        return (
+            <Menu onOpenChange={onOpen}>
+                <MenuContextTrigger disabled={disabled} onClick={onTap}>
+                    Weekly shop
+                </MenuContextTrigger>
+                <MenuContent aria-label="Entry actions">
+                    <MenuItem>Edit</MenuItem>
+                </MenuContent>
+            </Menu>
+        );
+    }
+    const anchor = () => document.body.querySelector<HTMLElement>('body > [data-zen-anchor]');
+
+    it('opens where the pointer is on a right-click, instead of the browser menu', () => {
+        render(<Row />);
+        const menu = screen.getByRole('menu', { hidden: true });
+        const event = fireEvent.contextMenu(screen.getByText('Weekly shop'), { clientX: 120, clientY: 80 });
+        expect(event).toBe(false); // default prevented
+        expect(onOpen).toHaveBeenCalledWith(true);
+        expect(anchor()).toHaveStyle({ left: '120px', top: '80px', position: 'fixed' });
+        expect(menu).toHaveAttribute('aria-label', 'Entry actions');
+        expect(menu).not.toHaveAttribute('aria-labelledby');
+    });
+
+    it('opens on a long press, and the tap that ends it does nothing', () => {
+        vi.useFakeTimers();
+        const onTap = vi.fn();
+        render(<Row onTap={onTap} />);
+        const row = screen.getByText('Weekly shop');
+        fireEvent.pointerDown(row, { pointerType: 'touch', isPrimary: true, clientX: 50, clientY: 40 });
+        act(() => {
+            vi.advanceTimersByTime(499);
+        });
+        expect(onOpen).not.toHaveBeenCalled();
+        act(() => {
+            vi.advanceTimersByTime(1);
+        });
+        expect(onOpen).toHaveBeenCalledWith(true);
+        fireEvent.pointerUp(row, { pointerType: 'touch' });
+        fireEvent.click(row);
+        expect(onTap).not.toHaveBeenCalled();
+        vi.useRealTimers();
+    });
+
+    it('a press that moves is a scroll, not a long press', () => {
+        vi.useFakeTimers();
+        render(<Row />);
+        const row = screen.getByText('Weekly shop');
+        fireEvent.pointerDown(row, { pointerType: 'touch', isPrimary: true, clientX: 50, clientY: 40 });
+        fireEvent.pointerMove(row, { pointerType: 'touch', clientX: 50, clientY: 70 });
+        vi.advanceTimersByTime(600);
+        expect(onOpen).not.toHaveBeenCalled();
+        vi.useRealTimers();
+    });
+
+    it('when disabled, leaves the browser its own menu', () => {
+        render(<Row disabled />);
+        expect(fireEvent.contextMenu(screen.getByText('Weekly shop'))).toBe(true);
     });
 });

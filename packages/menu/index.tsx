@@ -1,9 +1,25 @@
 import { cx } from '@zen/utils/cx';
+import { createPortal } from 'react-dom';
 import { useTypeahead } from '@zen/utils/typeahead';
 import { useGraphicsMode } from '@zen/utils/graphics';
 import { Slot } from '@zen/utils/slot';
-import { anchoredStyle, useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
-import { ComponentProps, createContext, KeyboardEvent, MouseEvent, ReactNode, useContext, useId } from 'react';
+import { anchoredStyle, anchorFor, useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
+import {
+    ComponentProps,
+    createContext,
+    KeyboardEvent,
+    MouseEvent,
+    PointerEvent,
+    ReactNode,
+    useContext,
+    useEffect,
+    useId,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react';
+
+const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 /** Closes the menu; items call it when chosen. */
 const CloseContext = createContext<() => void>(() => {});
@@ -11,6 +27,14 @@ const CloseContext = createContext<() => void>(() => {});
 interface MenuContextValue {
     popup: ReturnType<typeof useAnchoredPopup<HTMLDivElement>>;
     triggerId: string;
+    /** Where a context menu was asked for; it opens there instead of under a button. */
+    point: Point | null;
+    openAt: (point: Point) => void;
+}
+
+interface Point {
+    x: number;
+    y: number;
 }
 
 const MenuContext = createContext<MenuContextValue | null>(null);
@@ -26,20 +50,39 @@ function useMenu(part: string) {
  * clicks and Escape close it and focus returns to the button. Arrow keys, Home
  * and End move between items. Put a MenuTrigger (its content is yours: an icon,
  * an avatar, a label) and a MenuContent inside; fill the content with MenuItem,
- * MenuSeparator and MenuHeader.
+ * MenuSeparator and MenuHeader. For a context menu, put a MenuContextTrigger
+ * around what it's for instead of a MenuTrigger.
  */
 export default function Menu({ onOpenChange, children }: MenuProps) {
     useGraphicsMode();
     const triggerId = useId();
+    const [point, setPoint] = useState<Point | null>(null);
+    // Opened at a point, nothing gets focus back natively: whatever had it does.
+    const returnTo = useRef<HTMLElement | null>(null);
     const popup = useAnchoredPopup<HTMLDivElement>({
         onOpenChange: (open) => {
             // Focus the menu itself, so arrow keys work without highlighting an item for mouse users.
             if (open) popup.popupRef.current?.focus();
+            else setPoint(null);
+            if (!open && returnTo.current) {
+                const active = document.activeElement;
+                if (!active || active === document.body || popup.popupRef.current?.contains(active))
+                    returnTo.current.focus();
+                returnTo.current = null;
+            }
             onOpenChange?.(open);
         },
     });
+    // Opens once the point it's anchored to is on the page.
+    useIsoLayoutEffect(() => {
+        if (point) popup.setOpen(true);
+    }, [point]);
+    const openAt = (at: Point) => {
+        returnTo.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        setPoint({ ...at });
+    };
     return (
-        <MenuContext.Provider value={{ popup, triggerId }}>
+        <MenuContext.Provider value={{ popup, triggerId, point, openAt }}>
             <CloseContext.Provider value={() => popup.setOpen(false)}>{children}</CloseContext.Provider>
         </MenuContext.Provider>
     );
@@ -66,9 +109,15 @@ export function MenuTrigger({ asChild, style, children, ...rest }: MenuTriggerPr
     );
 }
 
-/** The menu panel: glass, below the button (above it if there's no room), lined up with its end edge by default. */
-export function MenuContent({ align = 'end', offset = 6, className, style, children, ...rest }: MenuContentProps) {
-    const { popup, triggerId } = useMenu('MenuContent');
+/**
+ * The menu panel: glass, below the button (above it if there's no room), lined
+ * up with its end edge by default. A context menu opens from the pointer
+ * instead; name it with `aria-label`.
+ */
+export function MenuContent({ align, offset, className, style, children, ...rest }: MenuContentProps) {
+    const { popup, triggerId, point } = useMenu('MenuContent');
+    align ??= point ? 'start' : 'end';
+    offset ??= point ? 2 : 6;
     const typeahead = useTypeahead();
 
     const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -92,7 +141,7 @@ export function MenuContent({ align = 'end', offset = 6, className, style, child
 
     return (
         <div
-            aria-labelledby={triggerId}
+            aria-labelledby={point ? undefined : triggerId}
             {...rest}
             {...popup.popupProps}
             role="menu"
@@ -109,6 +158,105 @@ export function MenuContent({ align = 'end', offset = 6, className, style, child
         >
             {children}
         </div>
+    );
+}
+
+/** How long a finger rests before a context menu opens, where the browser doesn't open one (iOS). */
+const LONG_PRESS = 500;
+const SLOP = 8;
+
+/**
+ * What a context menu is for, e.g. a row or a card: right-click (or the
+ * keyboard's menu key, or Shift+F10) opens the Menu where the pointer is, and
+ * so does a long press on a phone. With `asChild`, your own element instead of
+ * a div.
+ */
+export function MenuContextTrigger({
+    asChild,
+    disabled,
+    className,
+    onContextMenu,
+    onPointerDown,
+    onClickCapture,
+    children,
+    ...rest
+}: MenuContextTriggerProps) {
+    const { popup, point, openAt } = useMenu('MenuContextTrigger');
+    const press = useRef<{ x: number; y: number; timer: number } | null>(null);
+    const pressed = useRef(false);
+    const endPress = () => {
+        if (press.current) clearTimeout(press.current.timer);
+        press.current = null;
+    };
+    useEffect(() => endPress, []);
+
+    const props = {
+        ...rest,
+        className: cx('[-webkit-touch-callout:none]', className),
+        onContextMenu: (e: MouseEvent<HTMLElement>) => {
+            onContextMenu?.(e as MouseEvent<HTMLDivElement>);
+            if (disabled || e.defaultPrevented) return;
+            e.preventDefault();
+            endPress();
+            if (popup.open) return;
+            // From the keyboard there's no pointer: open at what's focused.
+            if (e.clientX === 0 && e.clientY === 0) {
+                const box = (e.target as Element).getBoundingClientRect();
+                openAt({ x: box.left, y: box.bottom });
+            } else openAt({ x: e.clientX, y: e.clientY });
+        },
+        onPointerDown: (e: PointerEvent<HTMLElement>) => {
+            onPointerDown?.(e as PointerEvent<HTMLDivElement>);
+            pressed.current = false;
+            if (disabled || e.pointerType !== 'touch' || !e.isPrimary) return;
+            const at = { x: e.clientX, y: e.clientY };
+            const el = e.currentTarget;
+            const move = (m: globalThis.PointerEvent) => {
+                if (Math.hypot(m.clientX - at.x, m.clientY - at.y) > SLOP) stop();
+            };
+            const stop = () => {
+                endPress();
+                el.removeEventListener('pointermove', move);
+                el.removeEventListener('pointerup', stop);
+                el.removeEventListener('pointercancel', stop);
+            };
+            el.addEventListener('pointermove', move);
+            el.addEventListener('pointerup', stop);
+            el.addEventListener('pointercancel', stop);
+            press.current = {
+                ...at,
+                timer: window.setTimeout(() => {
+                    stop();
+                    pressed.current = true;
+                    if (!popup.open) openAt(at);
+                }, LONG_PRESS),
+            };
+        },
+        // A long press isn't a tap on what's under the finger.
+        onClickCapture: (e: MouseEvent<HTMLElement>) => {
+            onClickCapture?.(e as MouseEvent<HTMLDivElement>);
+            if (!pressed.current) return;
+            pressed.current = false;
+            e.preventDefault();
+            e.stopPropagation();
+        },
+    };
+    // On the body: inside a transformed or glass ancestor, fixed wouldn't be the viewport.
+    const anchor =
+        point &&
+        createPortal(
+            <span
+                aria-hidden
+                {...anchorFor(popup.id)}
+                style={{ ...anchorFor(popup.id).style, position: 'fixed', left: point.x, top: point.y }}
+            />,
+            document.body,
+        );
+    return (
+        <>
+            {asChild ? <Slot {...(props as ComponentProps<'a'>)}>{children}</Slot> : <div {...props}>{children}</div>}
+            {anchor}
+        </>
     );
 }
 
@@ -177,8 +325,15 @@ export interface MenuTriggerProps extends ComponentProps<'button'> {
     asChild?: boolean;
 }
 
+export interface MenuContextTriggerProps extends ComponentProps<'div'> {
+    /** Put its props on your own element (the single child) instead of a div. */
+    asChild?: boolean;
+    /** Leave the browser's own context menu. */
+    disabled?: boolean;
+}
+
 export interface MenuContentProps extends ComponentProps<'div'> {
-    /** Which edge of the button the menu lines up with (default end), or centred on it. */
+    /** Which edge of the button the menu lines up with (default end; a context menu starts at the pointer), or centred on it. */
     align?: 'start' | 'end' | 'center';
     /** Gap between the button and the menu, in px. */
     offset?: number;
