@@ -335,6 +335,12 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['RangeSlider'],
     },
     {
+        slug: 'repeat-picker',
+        title: 'Repeat Picker',
+        description: 'How often something recurs, like a bill, said in words, with the next dates it falls on.',
+        parts: ['RepeatPicker'],
+    },
+    {
         slug: 'segmented',
         title: 'Segmented',
         description: 'A pill row for a few mutually exclusive options.',
