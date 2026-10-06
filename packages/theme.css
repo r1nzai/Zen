@@ -1245,6 +1245,17 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     }
 }
 
+/* A value just changed by an edit. */
+.zen__editable-cell[data-changed] {
+    animation: zen-cell-changed 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes zen-cell-changed {
+    from {
+        background-color: oklch(var(--primary) / 0.22);
+        box-shadow: 0 0 14px oklch(var(--glow) / calc(0.45 * var(--glow-k)));
+    }
+}
+
 /* Time left before a toast goes away. */
 .zen__toast-timer {
     animation: zen-toast-timer linear forwards;

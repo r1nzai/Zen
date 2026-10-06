@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { useState } from 'react';
 
 import EditableCell from './index';
 
@@ -46,5 +47,34 @@ describe('EditableCell', () => {
         fireEvent.click(screen.getByRole('button'));
         expect(onEditingChange).toHaveBeenCalledWith(true);
         expect(screen.queryByRole('textbox')).toBeNull(); // still controlled: not editing until the prop says so
+    });
+
+    it('glows when an edit changed the value, not when it was cancelled', () => {
+        function Cell() {
+            const [value, setValue] = useState(100);
+            return (
+                <EditableCell
+                    editor={(close) => (
+                        <input
+                            aria-label="Amount"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') setValue(value + 1);
+                                close();
+                            }}
+                        />
+                    )}
+                >
+                    {value}
+                </EditableCell>
+            );
+        }
+        render(<Cell />);
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Escape' });
+        expect(screen.getByRole('button')).not.toHaveAttribute('data-changed');
+        fireEvent.click(screen.getByRole('button'));
+        fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter' });
+        expect(screen.getByRole('button')).toHaveTextContent('101');
+        expect(screen.getByRole('button')).toHaveAttribute('data-changed');
     });
 });

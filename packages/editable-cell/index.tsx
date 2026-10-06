@@ -1,11 +1,14 @@
 import { cx } from '@zen/utils/cx';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
+
+const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 /**
  * A value edited in place, e.g. in a table cell: shows `children` as a button,
  * and on click (or Enter) swaps in your editor. Call `close()` from the editor
  * when it's done (committed or cancelled). Works with any editor: a compact
- * MoneyInput, an Input, a Select.
+ * MoneyInput, an Input, a Select. A value changed by an edit glows briefly
+ * when the editor closes.
  */
 export default function EditableCell({
     children,
@@ -23,6 +26,12 @@ export default function EditableCell({
         if (editingProp === undefined) setEditingState(next);
         onEditingChange?.(next);
     };
+    const button = useRef<HTMLButtonElement>(null);
+    const [before, setBefore] = useState<string | null>(null);
+    useIsoLayoutEffect(() => {
+        const node = button.current;
+        if (!editing && node && before !== null && node.textContent !== before) node.dataset.changed = '';
+    }, [editing, before]);
 
     if (readOnly) {
         return (
@@ -34,10 +43,14 @@ export default function EditableCell({
     if (editing) return <>{editor(() => setEditing(false))}</>;
     return (
         <button
+            ref={button}
             type="button"
             title={title}
             aria-label={label ? `${label}. Edit` : undefined}
-            onClick={() => setEditing(true)}
+            onClick={(e) => {
+                setBefore(e.currentTarget.textContent);
+                setEditing(true);
+            }}
             className={cx(
                 'zen__editable-cell hover:bg-primary/10 focus-visible:ring-ring/50 w-full cursor-pointer rounded-md px-1.5 py-0.5 text-right tabular-nums transition-colors focus-visible:ring-2 focus-visible:outline-hidden',
                 className,
