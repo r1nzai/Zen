@@ -290,3 +290,11 @@ export { default as IconPicker, ICON_COLORS, type IconColor, type IconPickerProp
 export { default as RepeatPicker, type RepeatPickerProps } from './repeat-picker';
 export { describeRepeat, nextOccurrences, type Repeat } from './utils/repeat';
 export { default as LoadMore, type LoadMoreProps } from './load-more';
+export {
+    SortableHandle,
+    type SortableHandleProps,
+    SortableItem,
+    type SortableItemProps,
+    SortableList,
+    type SortableListProps,
+} from './sortable';

@@ -383,6 +383,12 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'Hue'],
     },
     {
+        slug: 'sortable',
+        title: 'Sortable List',
+        description: 'Put a list in order by dragging items by a grip, or with the keyboard, each step announced.',
+        parts: ['SortableList', 'SortableItem', 'SortableHandle'],
+    },
+    {
         slug: 'sparkline',
         title: 'Sparkline',
         description: 'A small line of how a number has moved, with no axes, for beside a figure. It draws itself in.',

@@ -1272,6 +1272,14 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     transition: none;
 }
 
+/* While an item is dragged, the others glide out of its way (not when the list is reordered after). */
+.zen__sortable[data-sorting] > .zen__sortable-item:not([data-dragging]) {
+    transition:
+        translate 0.2s var(--ease-out-soft),
+        box-shadow 0.2s,
+        scale 0.2s;
+}
+
 /* Time left before a toast goes away. */
 .zen__toast-timer {
     animation: zen-toast-timer linear forwards;
