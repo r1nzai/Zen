@@ -63,6 +63,7 @@
         "test:watch": "vp test",
         "test:coverage": "vp test run --coverage",
         "test:e2e": "playwright test",
+        "test:visual": "playwright test e2e/visual.spec.ts",
         "build": "vp build",
         "check": "vp check",
         "lint": "vp lint",
