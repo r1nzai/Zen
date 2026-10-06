@@ -35,4 +35,16 @@ describe('AnimatedNumber', () => {
         expect(screen.getByText('₹1,52,000')).toBeInTheDocument();
         document.documentElement.classList.remove('reduce-motion');
     });
+
+    it('rolls each digit from zero to its own, reading as the whole value', () => {
+        const frames: FrameRequestCallback[] = [];
+        vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => frames.push(cb));
+        const { container } = render(<AnimatedNumber roll value={1205} format={(v) => v.toLocaleString('en-US')} />);
+        expect(screen.getByText('1,205')).toHaveClass('sr-only');
+        const strips = () => [...container.querySelectorAll<HTMLElement>('.zen__digit')].map((d) => d.style.translate);
+        expect(strips()).toEqual(['0 0%', '0 0%', '0 0%', '0 0%']);
+        act(() => frames.shift()!(16));
+        expect(strips()).toEqual(['0 -10%', '0 -20%', '0 0%', '0 -50%']);
+        vi.restoreAllMocks();
+    });
 });

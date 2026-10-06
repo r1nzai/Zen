@@ -29,6 +29,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Animated Number',
         description: 'Numbers and amounts that count smoothly to each new value.',
         parts: ['AnimatedNumber', 'AnimatedMoney'],
+        examples: ['Default', 'Roll'],
     },
     {
         slug: 'avatar',
