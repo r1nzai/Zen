@@ -957,16 +957,27 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
  * otherwise be repainted when the animation ends, its icons snapping a pixel
  * away from the text.
  */
-.zen__popover,
+.zen__popover {
+    will-change: opacity;
+}
 .zen__dialog {
     will-change: scale;
 }
+/*
+ * A popup slides out from its trigger rather than scaling, which would read as
+ * its size changing. The gap to the trigger (margin-block) is what animates, so
+ * it slides the right way when it flips above.
+ */
 .zen__popover {
+    margin-block: calc(var(--zen-anchor-offset, 4) * 1px);
     transition:
         opacity 150ms,
-        scale 150ms,
-        overlay 150ms allow-discrete,
-        display 150ms allow-discrete;
+        margin-block 180ms var(--ease-out-soft),
+        overlay 180ms allow-discrete,
+        display 180ms allow-discrete;
+}
+.zen__popover:not(:popover-open) {
+    margin-block: calc((var(--zen-anchor-offset, 4) - 6) * 1px);
 }
 .zen__dialog {
     /*
@@ -988,7 +999,9 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
         overlay 150ms allow-discrete,
         display 150ms allow-discrete;
 }
-.zen__popover:not(:popover-open),
+.zen__popover:not(:popover-open) {
+    opacity: 0;
+}
 .zen__dialog:not([open]) {
     opacity: 0;
     scale: 0.95;
@@ -1039,7 +1052,10 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     user-select: none;
 }
 @starting-style {
-    .zen__popover:popover-open,
+    .zen__popover:popover-open {
+        opacity: 0;
+        margin-block: calc((var(--zen-anchor-offset, 4) - 6) * 1px);
+    }
     .zen__dialog[open] {
         opacity: 0;
         scale: 0.95;

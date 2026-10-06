@@ -93,9 +93,6 @@ export function anchoredStyle(id: string, { align = 'start', offset = 4, width }
         positionArea: area,
         positionTryFallbacks: 'flip-block',
         inset: 'auto',
-        margin: `${offset}px 0`,
-        // It scales in from the corner (or edge) by the trigger.
-        transformOrigin: { start: 'top left', end: 'top right', center: 'top' }[align],
         // As wide as its content, and at least as wide as the trigger.
         ...(width === 'at-least' && { width: 'max-content', minWidth: 'anchor-size(width)' }),
         ...(width === 'match' && { width: 'anchor-size(width)', minWidth: 0 }),
@@ -173,22 +170,19 @@ function placeAgainstTrigger(popup: HTMLElement) {
     for (const prop of ['position-anchor', 'position-area', 'position-try-fallbacks']) s.removeProperty(prop);
     // Measured at the viewport's corner, so its own width isn't squeezed by where it was.
     s.inset = '0 auto auto 0';
-    s.margin = '0';
     if (width === 'match') s.width = `${t.width}px`;
     if (width === 'at-least') s.minWidth = `${t.width}px`;
-    // Layout size, not its box on screen: it scales up as it opens.
     const p = { width: popup.offsetWidth, height: popup.offsetHeight };
     const vw = document.documentElement.clientWidth;
-    const vh = window.innerHeight;
-    const below = t.bottom + offset;
-    const above = t.top - offset - p.height;
-    const top = below + p.height > vh - EDGE && above >= EDGE ? above : below;
+    const vh = document.documentElement.clientHeight;
+    const flip = t.bottom + offset + p.height > vh - EDGE && t.top - offset - p.height >= EDGE;
     const rtl = getComputedStyle(trigger).direction === 'rtl';
     const start = rtl ? t.right - p.width : t.left;
     const end = rtl ? t.left : t.right - p.width;
     const left = align === 'center' ? t.left + (t.width - p.width) / 2 : align === 'end' ? end : start;
-    s.top = `${top}px`;
-    s.transformOrigin = s.transformOrigin.replace(/top|bottom/, top === above ? 'bottom' : 'top');
+    // Placed by the edge nearest the trigger; its margin (theme.css) is the gap, and slides as it opens.
+    s.top = flip ? 'auto' : `${t.bottom}px`;
+    s.bottom = flip ? `${vh - t.top}px` : 'auto';
     s.left = `${Math.max(EDGE, Math.min(left, vw - p.width - EDGE))}px`;
 }
 
