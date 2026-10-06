@@ -259,3 +259,4 @@ export { default as TagInput, type TagInputProps } from './tag-input';
 export { default as Timeline, TimelineItem, type TimelineItemProps } from './timeline';
 export { default as Kbd } from './kbd';
 export { default as RangeSlider, type RangeSliderProps } from './range-slider';
+export { default as FilterBar, FilterChip, type FilterBarProps, type FilterChipProps } from './filter-bar';

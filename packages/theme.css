@@ -1239,7 +1239,8 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
 }
 
 /* A tag added to a TagInput pops in. */
-.zen__tag {
+.zen__tag,
+.zen__filter-chip {
     animation: zen-pop 0.3s var(--ease-out-soft) backwards;
 }
 

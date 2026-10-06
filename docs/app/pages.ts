@@ -188,6 +188,12 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['FileDrop'],
     },
     {
+        slug: 'filter-bar',
+        title: 'Filter Bar',
+        description: 'The filters in effect, each removed with its \u00d7, and Clear all.',
+        parts: ['FilterBar', 'FilterChip'],
+    },
+    {
         slug: 'header',
         title: 'Header',
         description: 'A sticky glass bar across the top of the page.',
