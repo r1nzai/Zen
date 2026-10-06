@@ -206,7 +206,8 @@ export function SortableItem({ id, className, ...rest }: SortableItemProps) {
             data-sortable-id={id}
             data-lifted={lifted === id || undefined}
             className={cx(
-                'zen__sortable-item relative transition-[box-shadow,scale] duration-200 data-dragging:z-10 data-dragging:scale-[1.02] data-dragging:shadow-[0_12px_32px_-12px_oklch(0_0_0/0.6)] data-lifted:z-10 data-lifted:shadow-[0_0_0_2px_oklch(var(--primary)/0.6)]',
+                // Lifted, it's a card of its own, covering the items it passes over.
+                'zen__sortable-item relative transition-[box-shadow,scale,background-color] duration-200 data-dragging:bg-card data-lifted:bg-card data-dragging:z-10 data-dragging:rounded-xl data-dragging:scale-[1.02] data-dragging:shadow-[0_0_0_1px_oklch(var(--tint)/0.08),0_12px_32px_-12px_oklch(0_0_0/0.6)] data-lifted:z-10 data-lifted:rounded-xl data-lifted:shadow-[0_0_0_2px_oklch(var(--primary)/0.6)]',
                 className,
             )}
             {...rest}
