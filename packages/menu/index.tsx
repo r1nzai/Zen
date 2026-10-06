@@ -63,11 +63,13 @@ export default function Menu({ onOpenChange, children }: MenuProps) {
     const [point, setPoint] = useState<Point | null>(null);
     // Opened at a point, nothing gets focus back natively: whatever had it does.
     const returnTo = useRef<HTMLElement | null>(null);
+    const isOpen = useRef(false);
     const popup = useAnchoredPopup<HTMLDivElement>({
         onOpenChange: (open) => {
+            isOpen.current = open;
             // Focus the menu itself, so arrow keys work without highlighting an item for mouse users.
             if (open) popup.popupRef.current?.focus();
-            else setPoint(null);
+            else forgetPoint();
             if (!open && returnTo.current) {
                 const active = document.activeElement;
                 if (!active || active === document.body || popup.popupRef.current?.contains(active))
@@ -77,6 +79,14 @@ export default function Menu({ onOpenChange, children }: MenuProps) {
             onOpenChange?.(open);
         },
     });
+    // Its point stays while it fades out: without its anchor it would jump to the corner of the page.
+    const forgetPoint = () => {
+        const menu = popup.popupRef.current;
+        const fading = menu?.getAnimations?.() ?? [];
+        void Promise.allSettled(fading.map((a) => a.finished)).then(() => {
+            if (!isOpen.current) setPoint(null);
+        });
+    };
     // Opens once the point it's anchored to is on the page.
     useIsoLayoutEffect(() => {
         if (!point) return;
