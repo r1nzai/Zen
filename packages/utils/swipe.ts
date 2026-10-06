@@ -8,8 +8,9 @@ const FLICK_WINDOW = 100;
 const SLOP = 8;
 
 export interface SwipeDirection {
-    axis: 'x' | 'y';
-    /** 1 for right or down, -1 for left or up. */
+    /** `inline` is x along the text: flipped in right-to-left layouts. */
+    axis: 'x' | 'y' | 'inline';
+    /** 1 for right or down (or the inline end), -1 for left or up (or the inline start). */
     sign: 1 | -1;
 }
 
@@ -39,11 +40,13 @@ export function useSwipe(
     useEffect(() => {
         handlersRef.current = handlers;
     });
-    const axis = direction?.axis;
-    const sign = direction?.sign;
+    const logical = direction?.axis;
+    const inlineSign = direction?.sign;
     useEffect(() => {
         const el = ref.current;
-        if (!el || !axis || !sign) return;
+        if (!el || !logical || !inlineSign) return;
+        const axis = logical === 'y' ? 'y' : 'x';
+        const sign = logical === 'inline' && getComputedStyle(el).direction === 'rtl' ? -inlineSign : inlineSign;
         // Recent [time, distance] points: a flick's speed is over the last moments, as one event's step is uneven.
         let drag: { id: number; x: number; y: number; points: [number, number][]; on: boolean } | null = null;
         let swallowClick = false;
@@ -122,7 +125,7 @@ export function useSwipe(
             el.removeEventListener('click', onClick, true);
             delete el.dataset.swiping;
         };
-    }, [ref, axis, sign]);
+    }, [ref, logical, inlineSign]);
 }
 
 /** A text field, or something that takes touch gestures in this axis itself (by its touch-action). */
@@ -139,13 +142,16 @@ function startsElsewhere(target: Element, root: HTMLElement, axis: 'x' | 'y'): b
 /** Whether something under the finger (up to the page) would still scroll with this swipe. */
 function scrollsFirst(target: Element, axis: 'x' | 'y', sign: number): boolean {
     for (let el: Element | null = target; el; el = el.parentElement) {
-        const overflow = getComputedStyle(el)[axis === 'y' ? 'overflowY' : 'overflowX'];
+        const style = getComputedStyle(el);
+        const overflow = axis === 'y' ? style.overflowY : style.overflowX;
         // The page scrolls unless it's locked (as it is under a modal dialog).
         const page = el === el.ownerDocument.scrollingElement;
         if (page ? overflow === 'hidden' || overflow === 'clip' : !/auto|scroll/.test(overflow)) continue;
-        const pos = axis === 'y' ? el.scrollTop : el.scrollLeft;
         const max = axis === 'y' ? el.scrollHeight - el.clientHeight : el.scrollWidth - el.clientWidth;
         if (max <= 0) continue;
+        // From the top or left edge; scrollLeft runs from 0 down to -max in right-to-left.
+        const rtl = axis === 'x' && style.direction === 'rtl';
+        const pos = axis === 'y' ? el.scrollTop : rtl ? el.scrollLeft + max : el.scrollLeft;
         // Swiping one way scrolls content the other way.
         if (sign > 0 ? pos > 0 : pos < max - 1) return true;
     }

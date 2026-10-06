@@ -67,4 +67,17 @@ describe('TableSwipeRow', () => {
         expect(onDelete).toHaveBeenCalled();
         expect(row()).not.toHaveAttribute('data-open');
     });
+
+    it('swipes the other way in a right-to-left layout', () => {
+        document.documentElement.dir = 'rtl';
+        try {
+            setup();
+            swipe(screen.getByText('Weekly shop'), -60);
+            expect(row()).not.toHaveAttribute('data-open');
+            swipe(screen.getByText('Weekly shop'), 60);
+            expect(row()).toHaveAttribute('data-open');
+        } finally {
+            document.documentElement.removeAttribute('dir');
+        }
+    });
 });

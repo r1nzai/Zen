@@ -5,8 +5,8 @@ import { ComponentProps, ReactNode, useRef, useState } from 'react';
 import { TableRow } from './index';
 
 /**
- * A row whose actions sit behind it: swipe it left to reveal them, right (or
- * tap the row) to put them away. They also come out when focused, so the
+ * A row whose actions sit behind it at its end: swipe it left to reveal them
+ * (right, in right-to-left layouts), back (or tap the row) to put them away. They also come out when focused, so the
  * keyboard reaches them. Use it in a TableContainer.
  */
 export function TableSwipeRow({
@@ -32,7 +32,7 @@ export function TableSwipeRow({
 
     useSwipe(
         row,
-        { axis: 'x', sign: open ? 1 : -1 },
+        { axis: 'inline', sign: open ? 1 : -1 },
         {
             move: (d) => show(resist(open ? width() - d : d)),
             release: (d, speed) => settle(open !== (d > width() / 2 || speed > FLICK_SPEED)),
@@ -63,7 +63,7 @@ export function TableSwipeRow({
             {...rest}
         >
             {children}
-            <td className="zen__swipe-actions border-tint/[0.045] absolute inset-y-0 left-full flex w-(--zen-row-swipe,0px) justify-end overflow-hidden border-b p-0">
+            <td className="zen__swipe-actions border-tint/[0.045] absolute inset-y-0 start-full flex w-(--zen-row-swipe,0px) justify-end overflow-hidden border-b p-0">
                 <div
                     ref={tray}
                     onFocus={() => !open && settle(true)}

@@ -1261,6 +1261,9 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     translate: calc(-1 * var(--zen-row-swipe, 0px)) 0;
     transition: translate 0.3s var(--ease-out-soft);
 }
+.zen__swipe-row:dir(rtl) {
+    translate: var(--zen-row-swipe, 0px) 0;
+}
 .zen__swipe-actions {
     transition: width 0.3s var(--ease-out-soft);
 }
