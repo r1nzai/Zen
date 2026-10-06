@@ -3,12 +3,21 @@ import Toggle from './index';
 
 describe('Toggle', () => {
     describe('rendering', () => {
-        it('renders a clickable label', () => {
-            const { container } = render(<Toggle />);
-            expect(container.firstChild).toBeInTheDocument();
+        it('is named by a label around it (it is no label itself: labels cannot nest), which flips it', () => {
+            const onChange = vi.fn();
+            render(
+                <label>
+                    Repeats every month
+                    <Toggle onChange={onChange} />
+                </label>,
+            );
+            expect(screen.getByRole('switch', { name: 'Repeats every month' })).toBeInTheDocument();
+            expect(document.querySelectorAll('label')).toHaveLength(1);
+            fireEvent.click(screen.getByText('Repeats every month'));
+            expect(onChange).toHaveBeenCalledWith(true);
         });
 
-        it('applies additional className to the root label', () => {
+        it('applies additional className to the root', () => {
             const { container } = render(<Toggle className="my-custom-class" />);
             expect(container.firstChild).toHaveClass('my-custom-class');
         });
@@ -27,23 +36,23 @@ describe('Toggle', () => {
 
         it('slides the knob with the checked state', () => {
             const { container } = render(<Toggle />);
-            expect(container.querySelector('span')).toHaveClass('peer-checked:translate-x-5');
+            expect(container.querySelector('.zen__toggle-thumb')).toHaveClass('peer-checked:translate-x-5');
         });
     });
 
     describe('onChange behaviour', () => {
         it('calls onChange(true) when clicked while unchecked', () => {
             const onChange = vi.fn();
-            const { container } = render(<Toggle checked={false} onChange={onChange} />);
-            fireEvent.click(container.firstChild as Element);
+            render(<Toggle checked={false} onChange={onChange} />);
+            fireEvent.click(screen.getByRole('switch'));
             expect(onChange).toHaveBeenCalledTimes(1);
             expect(onChange).toHaveBeenCalledWith(true);
         });
 
         it('calls onChange(false) when clicked while checked', () => {
             const onChange = vi.fn();
-            const { container } = render(<Toggle checked={true} onChange={onChange} />);
-            fireEvent.click(container.firstChild as Element);
+            render(<Toggle checked={true} onChange={onChange} />);
+            fireEvent.click(screen.getByRole('switch'));
             expect(onChange).toHaveBeenCalledTimes(1);
             expect(onChange).toHaveBeenCalledWith(false);
         });

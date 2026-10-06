@@ -33,7 +33,7 @@ export default function Accounts() {
             value={account}
             onValueChange={setAccount}
         >
-            <ComboboxTrigger placeholder="Pick an account" className="w-72" />
+            <ComboboxTrigger aria-label="Account" placeholder="Pick an account" className="w-72" />
             <ComboboxPopup>
                 <ComboboxSearch placeholder="Search accounts" />
                 <ComboboxList<Account>

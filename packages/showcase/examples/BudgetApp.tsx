@@ -777,7 +777,7 @@ function SpendingByGroup({ entries }: { entries: Entry[] }) {
                 <CardTitle>Spending by group</CardTitle>
             </CardHeader>
             <TableContainer className="-mx-1">
-                <Table>
+                <Table {...tree.tableProps}>
                     <TableHeader>
                         <TableRow>
                             <TableHead>Category</TableHead>
@@ -802,6 +802,7 @@ function SpendingByGroup({ entries }: { entries: Entry[] }) {
                                 </TreeCell>
                                 <TreeCell>
                                     <Meter
+                                        aria-label={`${row.item.name} spent`}
                                         className="w-full"
                                         value={row.item.spent}
                                         max={row.item.budget}

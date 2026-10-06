@@ -11,7 +11,7 @@ export default function ManyItems() {
     const [account, setAccount] = useState<string | null>('1');
     return (
         <Combobox items={ACCOUNTS} value={account} onValueChange={setAccount}>
-            <ComboboxTrigger className="w-64" />
+            <ComboboxTrigger aria-label="Account" className="w-64" />
             <ComboboxPopup>
                 <ComboboxSearch />
                 <ComboboxList>

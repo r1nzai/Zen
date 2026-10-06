@@ -3,9 +3,9 @@ import { Input } from '@rinzai/zen';
 export default function States() {
     return (
         <div className="flex w-72 flex-col gap-3">
-            <Input placeholder="Placeholder" />
-            <Input defaultValue="With a value" />
-            <Input defaultValue="Disabled" disabled />
+            <Input aria-label="Empty" placeholder="Placeholder" />
+            <Input aria-label="Filled" defaultValue="With a value" />
+            <Input aria-label="Disabled" defaultValue="Disabled" disabled />
         </div>
     );
 }

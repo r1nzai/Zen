@@ -92,6 +92,7 @@
         "@vitejs/plugin-react": "^6.1.1",
         "@vitest/coverage-v8": "catalog:",
         "autoprefixer": "^10.6.1",
+        "axe-core": "4.13.0",
         "chromatic": "^18.9.5",
         "esbuild": "^0.28.2",
         "eslint-plugin-storybook": "^10.6.0",

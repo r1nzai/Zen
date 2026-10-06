@@ -9,7 +9,7 @@ export default function Tags() {
     const [chosen, setChosen] = useState(['Essential', 'Shared']);
     return (
         <Combobox multiple items={tags} itemKey={asText} itemText={asText} value={chosen} onValueChange={setChosen}>
-            <ComboboxTrigger placeholder="No tags" className="w-80" />
+            <ComboboxTrigger aria-label="Tags" placeholder="No tags" className="w-80" />
             <ComboboxPopup>
                 <ComboboxSearch />
                 <ComboboxList>

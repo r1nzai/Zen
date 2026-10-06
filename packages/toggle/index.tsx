@@ -13,8 +13,9 @@ export interface ToggleProps extends Omit<ComponentProps<'input'>, 'onChange' | 
 export default function Toggle(props: ToggleProps) {
     const { className, onChange, onKeyDown, disabled, ...rest } = props;
 
+    // A span, not a label: it's usually inside your own label, and labels can't nest.
     return (
-        <label
+        <span
             className={cx(
                 'zen__toggle bg-tint/[0.06] relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border border-[color:oklch(var(--tint)/var(--zen-control-edge))] p-0.5',
                 'has-focus-visible:ring-glow/50 transition-[background-color,box-shadow,border-color] duration-300 has-focus-visible:ring-2',
@@ -48,6 +49,6 @@ export default function Toggle(props: ToggleProps) {
                     'peer-checked:translate-x-5 peer-checked:bg-white',
                 )}
             />
-        </label>
+        </span>
     );
 }

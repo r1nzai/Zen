@@ -390,6 +390,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                 ref={wrap}
                 data-zen-unseen={seen ? undefined : ''}
                 tabIndex={0}
+                role="group"
                 aria-label={`${label}: use the arrow keys to read values`}
                 onPointerMove={onPointerMove}
                 onPointerLeave={() => {
