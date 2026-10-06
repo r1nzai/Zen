@@ -294,6 +294,12 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'Horizontal'],
     },
     {
+        slug: 'range-slider',
+        title: 'Range Slider',
+        description: 'Two thumbs on one track, for a span like an amount from $50 to $500.',
+        parts: ['RangeSlider'],
+    },
+    {
         slug: 'segmented',
         title: 'Segmented',
         description: 'A pill row for a few mutually exclusive options.',
