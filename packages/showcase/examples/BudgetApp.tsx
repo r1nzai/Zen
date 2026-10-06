@@ -639,7 +639,7 @@ function EntryTable({
                     <TableHeader>
                         <TableRow>
                             <TableHead {...headProps('label')}>Entry</TableHead>
-                            <TableHead className="max-sm:hidden">Tags</TableHead>
+                            <TableHead className="w-2/5 max-sm:hidden">Tags</TableHead>
                             <TableHead numeric {...headProps('amount')}>
                                 Amount
                             </TableHead>
@@ -737,7 +737,7 @@ function EntryTable({
 /** As many tags as fit on one line; the rest behind "+N". */
 function TagList({ tags }: { tags: string[] }) {
     return (
-        <Collapse items={tags} className="gap-1">
+        <Collapse items={tags} className="w-full gap-1">
             {(t) => <Badge variant="secondary">{t}</Badge>}
         </Collapse>
     );

@@ -6,8 +6,9 @@ import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 /**
  * A row showing as many items as fit on one line, and the rest behind a "+N"
  * button that opens them in a popover. It measures the items as rendered (any
- * content, font or style), and fits again whenever the row resizes. Size the
- * row with className (e.g. w-full, max-w-md, gap-1).
+ * content, font or style), and fits again whenever the row resizes. Its width
+ * is the room it's given, not its items': size the row with className (e.g.
+ * w-full, max-w-md, gap-1).
  */
 export default function Collapse<TData>({
     items,
@@ -73,7 +74,12 @@ export default function Collapse<TData>({
     const label = (n: number) => `+${n}${moreLabel ? ` ${moreLabel}` : ''}`;
 
     return (
-        <div ref={rowRef} className={cx('zen__collapse flex min-w-0 items-center overflow-hidden', className)}>
+        <div
+            ref={rowRef}
+            // Its width comes from where it's placed, never from what it shows: in a table column (sized by
+            // its content) hiding an item would narrow the column, and it would fit again, and again.
+            className={cx('zen__collapse flex min-w-0 items-center overflow-hidden [contain:inline-size]', className)}
+        >
             {items.slice(0, shown).map((item, i) => (
                 <span key={item} data-collapse-item className="flex shrink-0">
                     {children(item, i, data?.[i])}
