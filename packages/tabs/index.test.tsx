@@ -95,4 +95,24 @@ describe('Tabs', () => {
         expect(screen.getByRole('tab', { name: 'B' })).toHaveAttribute('aria-selected', 'true');
         expect(screen.getByRole('tab', { name: 'B' })).toHaveFocus();
     });
+
+    it('brings a panel in from the side of its tab, and not on first show', () => {
+        render(
+            <Tabs defaultValue="b">
+                <TabList>
+                    <Tab value="a">A</Tab>
+                    <Tab value="b">B</Tab>
+                    <Tab value="c">C</Tab>
+                </TabList>
+                <TabPanel value="a">Panel A</TabPanel>
+                <TabPanel value="b">Panel B</TabPanel>
+                <TabPanel value="c">Panel C</TabPanel>
+            </Tabs>,
+        );
+        expect(screen.getByRole('tabpanel')).not.toHaveAttribute('data-enter');
+        fireEvent.click(screen.getByRole('tab', { name: 'C' }));
+        expect(screen.getByRole('tabpanel')).toHaveAttribute('data-enter', 'end');
+        fireEvent.click(screen.getByRole('tab', { name: 'A' }));
+        expect(screen.getByRole('tabpanel')).toHaveAttribute('data-enter', 'start');
+    });
 });

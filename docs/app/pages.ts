@@ -418,7 +418,7 @@ export const COMPONENTS: ComponentDoc[] = [
         description:
             'Switch between panels in place, with an underline or a glowing pill that slides to the active tab. To go to another page, use Pills.',
         parts: ['Tabs', 'TabList', 'Tab', 'TabPanel'],
-        examples: ['Underline', 'Pills'],
+        examples: ['Underline', 'Pills', 'Panels'],
     },
     {
         slug: 'tag-input',
