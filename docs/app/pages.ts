@@ -440,7 +440,7 @@ export const COMPONENTS: ComponentDoc[] = [
             'TableSwipeRow',
             'TableSwipeAction',
         ],
-        examples: ['Default', 'Sortable', 'Selectable', 'Swipe', 'Virtual'],
+        examples: ['Default', 'Sortable', 'Selectable', 'Swipe', 'Detail', 'Virtual'],
     },
     {
         slug: 'table-of-contents',
