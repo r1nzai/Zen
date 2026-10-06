@@ -286,3 +286,4 @@ export { default as FilterBar, FilterChip, type FilterBarProps, type FilterChipP
 export { default as Keypad, type KeypadProps } from './keypad';
 export { default as CalendarHeatmap, type CalendarHeatmapProps } from './calendar-heatmap';
 export { default as Trend, type TrendProps } from './trend';
+export { default as IconPicker, ICON_COLORS, type IconColor, type IconPickerProps } from './icon-picker';

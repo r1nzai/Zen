@@ -216,6 +216,12 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['Header'],
     },
     {
+        slug: 'icon-picker',
+        title: 'Icon Picker',
+        description: 'An icon and a colour for something, like a spending category, from a grid in a popover.',
+        parts: ['IconPicker'],
+    },
+    {
         slug: 'inset',
         title: 'Inset',
         description:
