@@ -298,3 +298,4 @@ export {
     SortableList,
     type SortableListProps,
 } from './sortable';
+export { default as PageTransition } from './page-transition';

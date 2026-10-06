@@ -1207,6 +1207,42 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     object-position: top left;
 }
 
+/* Pages: the old one fades out as the new one rises in (PageTransition). */
+::view-transition-group(zen-page) {
+    animation-duration: 0.34s;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+::view-transition-old(zen-page) {
+    animation: zen-page-out 0.16s ease-in both;
+}
+::view-transition-new(zen-page) {
+    animation: zen-page-in 0.34s cubic-bezier(0.2, 0.8, 0.2, 1) 0.06s both;
+}
+@keyframes zen-page-out {
+    to {
+        opacity: 0;
+        translate: 0 -6px;
+    }
+}
+@keyframes zen-page-in {
+    from {
+        opacity: 0;
+        translate: 0 12px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(zen-page),
+    ::view-transition-old(zen-page),
+    ::view-transition-new(zen-page) {
+        animation: none;
+    }
+}
+html.reduce-motion::view-transition-group(zen-page),
+html.reduce-motion::view-transition-old(zen-page),
+html.reduce-motion::view-transition-new(zen-page) {
+    animation: none;
+}
+
 /* The selection bar rises into view when the first row is selected. */
 .zen__selection-bar {
     animation: zen-bar-in 0.3s var(--ease-out-soft) both;

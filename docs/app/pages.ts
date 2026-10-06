@@ -293,6 +293,13 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['PageHeader'],
     },
     {
+        slug: 'page-transition',
+        title: 'Page Transition',
+        description:
+            'The old page fades out as the new one rises in, when your router changes page in a view transition.',
+        parts: ['PageTransition'],
+    },
+    {
         slug: 'pagination',
         title: 'Pagination',
         description: 'The pages a long list is split into, as buttons or links for your router.',
