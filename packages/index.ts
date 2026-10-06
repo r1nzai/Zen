@@ -137,7 +137,14 @@ export {
     TableHeader,
     type TableHeadProps,
     TableRow,
+    SelectionBar,
+    type SelectionBarProps,
+    TableSelectCell,
+    type TableSelectCellProps,
+    TableSelectHead,
+    type TableSelectHeadProps,
     TableSpacerRow,
+    useSelection,
     useSort,
 } from './table';
 export { default as TableOfContents, type TableOfContentsItem } from './table-of-contents';

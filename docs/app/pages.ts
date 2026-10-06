@@ -398,8 +398,11 @@ export const COMPONENTS: ComponentDoc[] = [
             'TableFooter',
             'TableFooterCell',
             'TableSpacerRow',
+            'TableSelectCell',
+            'TableSelectHead',
+            'SelectionBar',
         ],
-        examples: ['Default', 'Sortable', 'Virtual'],
+        examples: ['Default', 'Sortable', 'Selectable', 'Virtual'],
     },
     {
         slug: 'table-of-contents',

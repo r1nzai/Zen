@@ -135,8 +135,8 @@ export function TableFooter({ className, ...rest }: ComponentProps<'tfoot'>) {
 }
 
 /** A row; its cells light up together on hover. */
-export function TableRow({ className, ...rest }: ComponentProps<'tr'>) {
-    return <tr className={cx('group', className)} {...rest} />;
+export function TableRow({ selected, className, ...rest }: ComponentProps<'tr'> & { selected?: boolean }) {
+    return <tr data-selected={selected || undefined} className={cx('group', className)} {...rest} />;
 }
 
 /**
@@ -200,6 +200,7 @@ export function TableCell({ numeric, sticky, className, ...rest }: TableCellProp
                 // cells stay opaque (a translucent colour would show the scrolled content through them).
                 'border-tint/[0.045] border-b px-3 py-2.5 transition-colors duration-150',
                 'group-hover:[background-image:linear-gradient(oklch(var(--tint)/0.035),oklch(var(--tint)/0.035))]',
+                'group-data-selected:[background-image:linear-gradient(oklch(var(--primary)/0.09),oklch(var(--primary)/0.09))]',
                 sticky === 'left' &&
                     'zen__sticky-left sticky left-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)]',
                 numeric && 'text-right tabular-nums',
@@ -300,3 +301,13 @@ export interface TableCellProps extends ComponentProps<'td'> {
     /** Stay in view when the table scrolls sideways. */
     sticky?: 'left';
 }
+
+export {
+    SelectionBar,
+    type SelectionBarProps,
+    TableSelectCell,
+    type TableSelectCellProps,
+    TableSelectHead,
+    type TableSelectHeadProps,
+    useSelection,
+} from './selection';
