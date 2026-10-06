@@ -221,6 +221,12 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['Kbd'],
     },
     {
+        slug: 'keypad',
+        title: 'Keypad',
+        description: 'A number pad for typing an amount on a phone.',
+        parts: ['Keypad'],
+    },
+    {
         slug: 'menu',
         title: 'Menu',
         description:

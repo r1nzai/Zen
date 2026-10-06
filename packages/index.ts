@@ -260,3 +260,4 @@ export { default as Timeline, TimelineItem, type TimelineItemProps } from './tim
 export { default as Kbd } from './kbd';
 export { default as RangeSlider, type RangeSliderProps } from './range-slider';
 export { default as FilterBar, FilterChip, type FilterBarProps, type FilterChipProps } from './filter-bar';
+export { default as Keypad, type KeypadProps } from './keypad';
