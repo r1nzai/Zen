@@ -476,6 +476,12 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['TreeRow', 'TreeCell', 'TreeLabel', 'TreeToggle'],
         examples: ['Basic', 'Planner'],
     },
+    {
+        slug: 'trend',
+        title: 'Trend',
+        description: 'A change, like +12% with an arrow, coloured by whether it is good news.',
+        parts: ['Trend'],
+    },
 ];
 
 // Trailing slashes throughout: pages are built as <path>/index.html, which Cloudflare serves at

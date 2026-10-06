@@ -5,7 +5,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
-import * as prettier from 'prettier';
+import { execFileSync } from 'node:child_process';
 
 const require = createRequire(import.meta.url);
 const heroicons = dirname(require.resolve('heroicons/package.json'));
@@ -33,6 +33,8 @@ const ICONS = {
     table: ['TableIcon', '24/outline/table-cells'],
     'x-mark': ['XMark', '24/outline/x-mark'],
     // The small glyphs components draw themselves (not exported from the package).
+    'micro/arrow-trending-down': ['ArrowTrendingDownMicro', '16/solid/arrow-trending-down'],
+    'micro/arrow-trending-up': ['ArrowTrendingUpMicro', '16/solid/arrow-trending-up'],
     'micro/calendar': ['CalendarMicro', '16/solid/calendar'],
     'micro/check': ['CheckMicro', '16/solid/check'],
     'micro/chevron-down': ['ChevronDownMicro', '16/solid/chevron-down'],
@@ -53,7 +55,6 @@ const ATTRS = {
     'clip-rule': 'clipRule',
 };
 
-const config = await prettier.resolveConfig('packages/icons/index.ts');
 for (const [file, [name, source]] of Object.entries(ICONS)) {
     let svg = readFileSync(join(heroicons, `${source}.svg`), 'utf8').trim();
     for (const [from, to] of Object.entries(ATTRS)) svg = svg.replaceAll(`${from}=`, `${to}=`);
@@ -70,5 +71,6 @@ export default function ${name}(props: IconProps) {
 }
 `;
     mkdirSync(dirname(`packages/icons/${file}.tsx`), { recursive: true });
-    writeFileSync(`packages/icons/${file}.tsx`, await prettier.format(code, { ...config, parser: 'typescript' }));
+    writeFileSync(`packages/icons/${file}.tsx`, code);
 }
+execFileSync('vp', ['fmt', 'packages/icons'], { stdio: 'inherit' });
