@@ -1,6 +1,7 @@
 import { ReactNode, startTransition, useEffect, useMemo, useState, ViewTransition } from 'react';
 
 import {
+    AllocationBar,
     AnimatedMoney,
     applyPreset,
     applyTheme,
@@ -25,6 +26,7 @@ import {
     ConfirmDialog,
     customize,
     DEFAULT_THEME,
+    describeRepeat,
     Dialog,
     EditableCell,
     EmptyState,
@@ -34,26 +36,31 @@ import {
     formatMonth,
     FormMessage,
     Header,
+    IconPicker,
     Input,
     Kbd,
+    LoadMore,
+    Menu,
+    MenuContent,
+    MenuContextTrigger,
+    MenuItem,
+    MenuTrigger,
+    Meter,
     type Money,
     MoneyInput,
     type Month,
     MonthPicker,
-    Menu,
-    MenuContent,
-    MenuItem,
-    MenuTrigger,
-    Meter,
+    PageHeader,
+    Pagination,
     Pill,
     PillIndicator,
     Pills,
-    PageHeader,
-    Pagination,
     type PresetId,
     PRESETS,
     ProgressRing,
     reducedMotion,
+    type Repeat,
+    RepeatPicker,
     resetTheme,
     Segmented,
     SegmentedItem,
@@ -61,6 +68,9 @@ import {
     SelectItem,
     Skeleton,
     Slider,
+    SortableHandle,
+    SortableItem,
+    SortableList,
     Sparkline,
     Stat,
     StatRow,
@@ -84,8 +94,8 @@ import {
     Tabs,
     TagInput,
     TextArea,
-    ThemeToggle,
     type ThemeSettings,
+    ThemeToggle,
     Timeline,
     TimelineItem,
     ToastProvider,
@@ -96,6 +106,7 @@ import {
     TreeCell,
     TreeLabel,
     TreeRow,
+    Trend,
     useCommandPaletteShortcut,
     useSort,
     useToast,
@@ -128,7 +139,7 @@ interface Entry {
     kind: Kind;
     category: CategoryKey;
     tags: string[];
-    recurring: boolean;
+    repeat?: Repeat;
 }
 
 const CATEGORIES = [
@@ -140,6 +151,7 @@ const CATEGORIES = [
     { value: 'subscriptions', label: 'Subscriptions', group: 'Lifestyle', budget: 4000 },
     { value: 'travel', label: 'Travel', group: 'Lifestyle', budget: 30000 },
 ] as const;
+const MONTHLY: Repeat = { every: 1, unit: 'month' };
 const categoryOf = (key: CategoryKey) => CATEGORIES.find((c) => c.value === key)!;
 
 /** Words in an imported row's description that say which category it is. */
@@ -153,7 +165,7 @@ const CATEGORY_WORDS: [CategoryKey, RegExp][] = [
 ];
 
 const INITIAL: Entry[] = [
-    { id: 1, label: 'Paycheck', amount: 845000, kind: 'income', category: 'salary', tags: ['Work'], recurring: true },
+    { id: 1, label: 'Paycheck', amount: 845000, kind: 'income', category: 'salary', tags: ['Work'], repeat: MONTHLY },
     {
         id: 2,
         label: 'Rent',
@@ -161,7 +173,7 @@ const INITIAL: Entry[] = [
         kind: 'expense',
         category: 'rent',
         tags: ['Essential', 'Shared'],
-        recurring: true,
+        repeat: MONTHLY,
     },
     {
         id: 3,
@@ -170,7 +182,6 @@ const INITIAL: Entry[] = [
         kind: 'expense',
         category: 'groceries',
         tags: ['Essential', 'Shared', 'Cash', 'Reimbursable'],
-        recurring: false,
     },
     {
         id: 4,
@@ -179,7 +190,6 @@ const INITIAL: Entry[] = [
         kind: 'expense',
         category: 'groceries',
         tags: ['Cash'],
-        recurring: false,
     },
     {
         id: 5,
@@ -188,7 +198,7 @@ const INITIAL: Entry[] = [
         kind: 'expense',
         category: 'transport',
         tags: ['Work'],
-        recurring: true,
+        repeat: MONTHLY,
     },
     {
         id: 6,
@@ -197,7 +207,6 @@ const INITIAL: Entry[] = [
         kind: 'expense',
         category: 'dining',
         tags: ['Treat'],
-        recurring: false,
     },
     {
         id: 7,
@@ -206,7 +215,6 @@ const INITIAL: Entry[] = [
         kind: 'expense',
         category: 'dining',
         tags: ['Treat', 'Shared'],
-        recurring: false,
     },
     {
         id: 8,
@@ -215,7 +223,7 @@ const INITIAL: Entry[] = [
         kind: 'expense',
         category: 'subscriptions',
         tags: [],
-        recurring: true,
+        repeat: MONTHLY,
     },
     {
         id: 9,
@@ -224,7 +232,6 @@ const INITIAL: Entry[] = [
         kind: 'expense',
         category: 'travel',
         tags: ['Treat', 'Annual'],
-        recurring: false,
     },
     {
         id: 10,
@@ -233,7 +240,6 @@ const INITIAL: Entry[] = [
         kind: 'income',
         category: 'salary',
         tags: ['Work'],
-        recurring: false,
     },
 ];
 
@@ -261,6 +267,10 @@ const EARLIER: Activity[] = [
     { id: -1, title: 'Paycheck received', detail: '+$8,450 from Northwind', time: '1 Sep' },
     { id: -2, title: 'Rent paid', detail: '−$1,850 to Northside Lettings', time: '1 Sep' },
     { id: -3, title: 'Goal reached 60%', detail: 'Emergency fund', time: '28 Aug' },
+    { id: -4, title: 'Budget changed', detail: 'Dining out: $120 → $150', time: '24 Aug' },
+    { id: -5, title: 'Statement imported', detail: '14 entries from Northwind Bank', time: '20 Aug' },
+    { id: -6, title: 'Entry deleted', detail: 'Duplicate train pass', time: '18 Aug' },
+    { id: -7, title: 'Goal added', detail: 'New laptop, $2,000', time: '12 Aug' },
 ];
 
 /** Jumps to a section of the page, as an in-page link would. */
@@ -401,11 +411,20 @@ function Budget({ nav }: { nav: boolean }) {
                 <StatRow className="lg:gap-6">
                     {(
                         [
-                            ['Income', income, '+4% on last month', 'default', trend(INCOME_BEFORE, income), 'primary'],
+                            [
+                                'Income',
+                                income,
+                                income / 100 / INCOME_BEFORE.at(-1)! - 1,
+                                'up',
+                                'default',
+                                trend(INCOME_BEFORE, income),
+                                'primary',
+                            ],
                             [
                                 'Spent',
                                 spent,
-                                income > 0 ? `${Math.round((spent / income) * 100)}% of income` : undefined,
+                                spent / 100 / SPENT_BEFORE.at(-1)! - 1,
+                                'down',
                                 'negative',
                                 trend(SPENT_BEFORE, spent),
                                 'negative',
@@ -413,6 +432,7 @@ function Budget({ nav }: { nav: boolean }) {
                             [
                                 'Net this month',
                                 income - spent,
+                                undefined,
                                 undefined,
                                 income >= spent ? 'positive' : 'negative',
                                 trend(
@@ -422,12 +442,18 @@ function Budget({ nav }: { nav: boolean }) {
                                 'primary',
                             ],
                         ] as const
-                    ).map(([label, value, hint, tone, values, line]) => (
+                    ).map(([label, value, change, good, tone, values, line]) => (
                         <Stat
                             key={label}
                             label={label}
                             tone={tone}
-                            hint={hint}
+                            hint={
+                                change !== undefined && (
+                                    <Trend value={change} good={good} locale={LOCALE}>
+                                        on last month
+                                    </Trend>
+                                )
+                            }
                             value={
                                 <Skeleton loading={loading} className="my-1 h-6 w-28">
                                     <span>
@@ -648,7 +674,7 @@ function EntryTable({
                             </TableHead>
                         </TableRow>
                     </TableHeader>
-                    <TableBody>
+                    <TableBody className="rise-list">
                         {rows.length === 0 && (
                             <TableEmpty colSpan={4}>
                                 <EmptyState
@@ -663,56 +689,58 @@ function EntryTable({
                             </TableEmpty>
                         )}
                         {rows.slice((page - 1) * PAGE, page * PAGE).map((e) => (
-                            <TableRow key={e.id}>
-                                <TableCell>
-                                    <div className="flex flex-col">
-                                        <span className="font-medium">{e.label}</span>
-                                        <span className="text-muted-foreground text-xs">
-                                            {categoryOf(e.category).label}
-                                            {e.recurring && ' · monthly'}
-                                        </span>
-                                    </div>
-                                </TableCell>
-                                <TableCell className="w-48 max-sm:hidden">
-                                    <TagList tags={e.tags} />
-                                </TableCell>
-                                <TableCell numeric className="w-36 py-1.5 max-sm:w-auto">
-                                    <EditableCell
-                                        label={`${e.label}: ${money(e.amount)}`}
-                                        className={e.kind === 'income' ? 'text-primary text-glow' : undefined}
-                                        editor={(close) => (
-                                            <MoneyInput
-                                                compact
-                                                autoFocus
-                                                aria-label={e.label}
-                                                value={e.amount}
-                                                currency={CURRENCY}
-                                                locale={LOCALE}
-                                                onChange={(v) => {
-                                                    if (v !== null && v > 0) onAmount(e.id, v);
-                                                    close();
-                                                }}
-                                                onCancel={close}
-                                            />
-                                        )}
-                                    >
-                                        {e.kind === 'income' ? '+' : '−'}
-                                        {money(e.amount)}
-                                    </EditableCell>
-                                </TableCell>
-                                <TableCell className="w-10 px-1">
-                                    <Menu>
-                                        <MenuTrigger aria-label={`Actions for ${e.label}`} className={MORE}>
-                                            <Ellipsis />
-                                        </MenuTrigger>
-                                        <MenuContent>
-                                            <MenuItem destructive onSelect={() => onDelete(e)}>
-                                                Delete
-                                            </MenuItem>
-                                        </MenuContent>
-                                    </Menu>
-                                </TableCell>
-                            </TableRow>
+                            <Menu key={e.id}>
+                                <MenuContextTrigger asChild>
+                                    <TableRow className="data-popup-open:bg-tint/[0.06]">
+                                        <TableCell>
+                                            <div className="flex flex-col">
+                                                <span className="font-medium">{e.label}</span>
+                                                <span className="text-muted-foreground text-xs">
+                                                    {categoryOf(e.category).label}
+                                                    {e.repeat && ` · ${describeRepeat(e.repeat, LOCALE).toLowerCase()}`}
+                                                </span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="w-48 max-sm:hidden">
+                                            <TagList tags={e.tags} />
+                                        </TableCell>
+                                        <TableCell numeric className="w-36 py-1.5 max-sm:w-auto">
+                                            <EditableCell
+                                                label={`${e.label}: ${money(e.amount)}`}
+                                                className={e.kind === 'income' ? 'text-primary text-glow' : undefined}
+                                                editor={(close) => (
+                                                    <MoneyInput
+                                                        compact
+                                                        autoFocus
+                                                        aria-label={e.label}
+                                                        value={e.amount}
+                                                        currency={CURRENCY}
+                                                        locale={LOCALE}
+                                                        onChange={(v) => {
+                                                            if (v !== null && v > 0) onAmount(e.id, v);
+                                                            close();
+                                                        }}
+                                                        onCancel={close}
+                                                    />
+                                                )}
+                                            >
+                                                {e.kind === 'income' ? '+' : '−'}
+                                                {money(e.amount)}
+                                            </EditableCell>
+                                        </TableCell>
+                                        <TableCell className="w-10 px-1">
+                                            <MenuTrigger aria-label={`Actions for ${e.label}`} className={MORE}>
+                                                <Ellipsis />
+                                            </MenuTrigger>
+                                            <MenuContent aria-label={`${e.label} actions`}>
+                                                <MenuItem destructive onSelect={() => onDelete(e)}>
+                                                    Delete
+                                                </MenuItem>
+                                            </MenuContent>
+                                        </TableCell>
+                                    </TableRow>
+                                </MenuContextTrigger>
+                            </Menu>
                         ))}
                     </TableBody>
                     <TableFooter>
@@ -776,6 +804,13 @@ function SpendingByGroup({ entries }: { entries: Entry[] }) {
             <CardHeader>
                 <CardTitle>Spending by group</CardTitle>
             </CardHeader>
+            <AllocationBar
+                label="Spending by group"
+                items={groups.map((g) => ({ key: g.name, label: g.name, value: g.spent }))}
+                formatValue={money}
+                locale={LOCALE}
+                className="mb-4"
+            />
             <TableContainer className="-mx-1">
                 <Table {...tree.tableProps}>
                     <TableHeader>
@@ -859,18 +894,25 @@ function BudgetMeters({ entries }: { entries: Entry[] }) {
 
 /** What happened lately, newest first; it grows as you add, change, import and delete. */
 function RecentActivity({ activity }: { activity: Activity[] }) {
+    const [shown, setShown] = useState(4);
     return (
         <Card id="activity" className="scroll-mt-24">
             <CardHeader>
                 <CardTitle>Recent activity</CardTitle>
             </CardHeader>
             <Timeline>
-                {activity.slice(0, 4).map((a, i) => (
+                {activity.slice(0, shown).map((a, i) => (
                     <TimelineItem key={a.id} active={i === 0} title={a.title} time={a.time}>
                         {a.detail}
                     </TimelineItem>
                 ))}
             </Timeline>
+            <LoadMore
+                auto={false}
+                label="Earlier"
+                hasMore={shown < activity.length}
+                onLoadMore={() => setShown((n) => n + 4)}
+            />
         </Card>
     );
 }
@@ -886,13 +928,37 @@ const GOALS = [
         history: [3800, 4300, 4900, 5400, 5900, 6400],
     },
     { id: 'laptop', name: 'New laptop', saved: 56000, target: 200000, history: [0, 100, 210, 300, 420, 560] },
+    { id: 'holiday', name: 'Summer holiday', saved: 31000, target: 250000, history: [0, 0, 60, 140, 220, 310] },
 ];
+
+const GOAL_ICONS = [
+    { value: 'lifebuoy', label: 'Safety net', icon: '🛟' },
+    { value: 'laptop', label: 'Laptop', icon: '💻' },
+    { value: 'beach', label: 'Holiday', icon: '🏖️' },
+    { value: 'home', label: 'Home', icon: '🏠' },
+    { value: 'car', label: 'Car', icon: '🚗' },
+    { value: 'study', label: 'Study', icon: '🎓' },
+    { value: 'gift', label: 'Gift', icon: '🎁' },
+    { value: 'plane', label: 'Travel', icon: '✈️' },
+    { value: 'ring', label: 'Wedding', icon: '💍' },
+    { value: 'pet', label: 'Pet', icon: '🐾' },
+    { value: 'books', label: 'Books', icon: '📚' },
+    { value: 'savings', label: 'Savings', icon: '💰' },
+];
+const iconOf = (value: string) => GOAL_ICONS.find((i) => i.value === value)!.icon;
 
 /** Each goal opens into its details, morphing out of its row (a view transition, zen-morph). */
 function Goals() {
     const [monthly, setMonthly] = useState(400);
     const [openId, setOpenId] = useState<string | null>(null);
+    const [order, setOrder] = useState(GOALS.map((g) => g.id));
+    const [icons, setIcons] = useState<Record<string, string>>({
+        emergency: 'lifebuoy',
+        laptop: 'laptop',
+        holiday: 'beach',
+    });
     const open = GOALS.find((g) => g.id === openId);
+    const goal = (id: string) => GOALS.find((g) => g.id === id)!;
     const show = (id: string | null) => startTransition(() => setOpenId(id));
     const left = GOALS.reduce((sum, g) => sum + g.target - g.saved, 0);
     const months = Math.ceil(left / (monthly * 100));
@@ -911,11 +977,20 @@ function Goals() {
                 <ViewTransition name={`goal-${open.id}`} share="zen-morph">
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-4">
+                            <IconPicker
+                                label={`${open.name} icon`}
+                                icons={GOAL_ICONS}
+                                colors={[]}
+                                value={{ icon: icons[open.id] }}
+                                onChange={(v) => setIcons((i) => ({ ...i, [open.id]: v.icon }))}
+                            />
                             <ProgressRing value={open.saved / open.target} size={88} stroke={7} label={open.name}>
                                 <span className="text-base font-semibold tabular-nums">{percent(open)}%</span>
                             </ProgressRing>
                             <div className="flex flex-col">
-                                <span className="font-medium">{open.name}</span>
+                                <span className="font-medium">
+                                    {iconOf(icons[open.id])} {open.name}
+                                </span>
                                 <span className="text-muted-foreground text-sm tabular-nums">
                                     {money(open.saved)} of {money(open.target)}
                                 </span>
@@ -932,25 +1007,38 @@ function Goals() {
                 </ViewTransition>
             ) : (
                 <div className="flex flex-col gap-4">
-                    {GOALS.map((g) => (
-                        <ViewTransition key={g.id} name={`goal-${g.id}`} share="zen-morph">
-                            <button
-                                type="button"
-                                onClick={() => show(g.id)}
-                                className="hover:bg-tint/[0.04] focus-visible:ring-ring/50 -m-2 flex cursor-pointer items-center gap-4 rounded-xl p-2 text-left outline-hidden transition-colors focus-visible:ring-2"
-                            >
-                                <ProgressRing value={g.saved / g.target} size={56} stroke={5} label={g.name}>
-                                    <span className="text-xs font-semibold tabular-nums">{percent(g)}%</span>
-                                </ProgressRing>
-                                <span className="flex flex-col">
-                                    <span className="text-sm font-medium">{g.name}</span>
-                                    <span className="text-muted-foreground text-xs tabular-nums">
-                                        {money(g.saved)} of {money(g.target)}
-                                    </span>
-                                </span>
-                            </button>
-                        </ViewTransition>
-                    ))}
+                    <SortableList
+                        value={order}
+                        onChange={setOrder}
+                        aria-label="Goals, first funded first"
+                        className="gap-3"
+                    >
+                        {order.map(goal).map((g) => (
+                            <SortableItem key={g.id} id={g.id} className="flex items-center gap-1">
+                                <SortableHandle id={g.id} label={g.name} />
+                                <ViewTransition name={`goal-${g.id}`} share="zen-morph">
+                                    <button
+                                        type="button"
+                                        onClick={() => show(g.id)}
+                                        className="hover:bg-tint/[0.04] focus-visible:ring-ring/50 flex flex-1 cursor-pointer items-center gap-4 rounded-xl p-2 text-left outline-hidden transition-colors focus-visible:ring-2"
+                                    >
+                                        <ProgressRing value={g.saved / g.target} size={56} stroke={5} label={g.name}>
+                                            <span className="text-xs font-semibold tabular-nums">{percent(g)}%</span>
+                                        </ProgressRing>
+                                        <span className="flex flex-col">
+                                            <span className="text-sm font-medium">
+                                                {iconOf(icons[g.id])} {g.name}
+                                            </span>
+                                            <span className="text-muted-foreground text-xs tabular-nums">
+                                                {money(g.saved)} of {money(g.target)}
+                                            </span>
+                                        </span>
+                                    </button>
+                                </ViewTransition>
+                            </SortableItem>
+                        ))}
+                    </SortableList>
+                    <p className="text-muted-foreground mt-0! text-xs">Drag to choose which goal is funded first.</p>
                     <div className="border-tint/[0.07] flex flex-col gap-2 border-t pt-4">
                         <div className="flex justify-between text-sm">
                             <span className="font-medium">Put aside each month</span>
@@ -966,7 +1054,7 @@ function Goals() {
                             valueText={(v) => money(v * 100)}
                         />
                         <p className="text-muted-foreground mt-0! text-xs">
-                            Both goals reached in about {months} months.
+                            All goals reached in about {months} months.
                         </p>
                     </div>
                 </div>
@@ -1074,7 +1162,7 @@ function AddEntryDialog({
             category: 'groceries' as CategoryKey,
             tags: [] as string[],
             month: '2026-09' as Month | null,
-            recurring: false,
+            repeat: null as Repeat | null,
             note: '',
         }),
         [],
@@ -1115,7 +1203,7 @@ function AddEntryDialog({
                         kind: form.kind,
                         category: form.category,
                         tags: form.tags,
-                        recurring: form.recurring,
+                        repeat: form.repeat ?? undefined,
                     });
                     close();
                 }}
@@ -1132,7 +1220,7 @@ function AddEntryDialog({
                             placeholder="Weekly shop"
                         />
                     </Field>
-                    <Field label="Amount" error={submitted ? errors.amount : undefined}>
+                    <Field label="Amount" hint="Sums work too: 12.50+4" error={submitted ? errors.amount : undefined}>
                         <MoneyInput
                             live
                             allowEmpty
@@ -1173,13 +1261,22 @@ function AddEntryDialog({
                     <TextArea value={form.note} onChange={(e) => set('note', e.target.value)} placeholder="Optional" />
                 </Field>
                 <label className="flex items-center justify-between gap-4 text-sm">
-                    Repeats every month
+                    Repeats
                     <Toggle
-                        checked={form.recurring}
-                        onChange={(r) => set('recurring', r)}
-                        aria-label="Repeats every month"
+                        checked={!!form.repeat}
+                        onChange={(on) => set('repeat', on ? MONTHLY : null)}
+                        aria-label="Repeats"
                     />
                 </label>
+                {form.repeat && (
+                    <RepeatPicker
+                        label="How often"
+                        value={form.repeat}
+                        onChange={(r) => set('repeat', r)}
+                        locale={LOCALE}
+                        start={`${form.month ?? '2026-09'}-01`}
+                    />
+                )}
                 {submitted && !valid && <FormMessage tone="error">Fix the fields above to add it.</FormMessage>}
                 <div className="flex justify-end gap-2">
                     <Button variant="outline" onClick={close}>
@@ -1215,7 +1312,7 @@ function parseStatement(text: string): Omit<Entry, 'id'>[] {
         const kind: Kind = value < 0 ? 'expense' : 'income';
         const category =
             kind === 'income' ? 'salary' : (CATEGORY_WORDS.find(([, words]) => words.test(label))?.[0] ?? 'groceries');
-        out.push({ label, amount: Math.round(Math.abs(value) * 100), kind, category, tags: [], recurring: false });
+        out.push({ label, amount: Math.round(Math.abs(value) * 100), kind, category, tags: [] });
     }
     return out;
 }
