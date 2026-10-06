@@ -23,7 +23,7 @@ export default function Context() {
                     >
                         <li
                             tabIndex={0}
-                            className="focus-visible:ring-ring/40 flex justify-between px-4 py-3 text-sm outline-hidden select-none focus-visible:ring-2"
+                            className="focus-visible:ring-ring/40 data-popup-open:bg-primary/12 flex justify-between px-4 py-3 text-sm outline-hidden transition-colors select-none first:rounded-t-xl last:rounded-b-xl focus-visible:ring-2"
                         >
                             <span>{e.label}</span>
                             <span className="tabular-nums">{e.amount}</span>

@@ -35,6 +35,10 @@ interface MenuContextValue {
 interface Point {
     x: number;
     y: number;
+    /** The MenuContextTrigger it was asked from. */
+    from: string;
+    /** The pointer still pressing, when it opens on a press (a long press, or right-click on macOS and Linux). */
+    pointerId?: number;
 }
 
 const MenuContext = createContext<MenuContextValue | null>(null);
@@ -75,7 +79,16 @@ export default function Menu({ onOpenChange, children }: MenuProps) {
     });
     // Opens once the point it's anchored to is on the page.
     useIsoLayoutEffect(() => {
-        if (point) popup.setOpen(true);
+        if (!point) return;
+        popup.setOpen(true);
+        // The press that opened it is the menu's: letting go would otherwise count as a click outside, and close it.
+        if (point.pointerId !== undefined) {
+            try {
+                popup.popupRef.current?.setPointerCapture(point.pointerId);
+            } catch {
+                // Already let go.
+            }
+        }
     }, [point]);
     const openAt = (at: Point) => {
         returnTo.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -168,8 +181,9 @@ const SLOP = 8;
 /**
  * What a context menu is for, e.g. a row or a card: right-click (or the
  * keyboard's menu key, or Shift+F10) opens the Menu where the pointer is, and
- * so does a long press on a phone. With `asChild`, your own element instead of
- * a div.
+ * so does a long press on a phone. While its menu is open it has
+ * `data-popup-open`, to show what the menu is for. With `asChild`, your own
+ * element instead of a div.
  */
 export function MenuContextTrigger({
     asChild,
@@ -182,6 +196,8 @@ export function MenuContextTrigger({
     ...rest
 }: MenuContextTriggerProps) {
     const { popup, point, openAt } = useMenu('MenuContextTrigger');
+    const id = useId();
+    const asked = point?.from === id;
     const press = useRef<{ x: number; y: number; timer: number } | null>(null);
     const pressed = useRef(false);
     const endPress = () => {
@@ -193,6 +209,8 @@ export function MenuContextTrigger({
     const props = {
         ...rest,
         className: cx('[-webkit-touch-callout:none]', className),
+        // Which one the open menu is for, to style it as such.
+        'data-popup-open': (asked && popup.open) || undefined,
         onContextMenu: (e: MouseEvent<HTMLElement>) => {
             onContextMenu?.(e as MouseEvent<HTMLDivElement>);
             if (disabled || e.defaultPrevented) return;
@@ -202,14 +220,19 @@ export function MenuContextTrigger({
             // From the keyboard there's no pointer: open at what's focused.
             if (e.clientX === 0 && e.clientY === 0) {
                 const box = (e.target as Element).getBoundingClientRect();
-                openAt({ x: box.left, y: box.bottom });
-            } else openAt({ x: e.clientX, y: e.clientY });
+                openAt({ x: box.left, y: box.bottom, from: id });
+            } else {
+                const native = e.nativeEvent;
+                const pointerId =
+                    'pointerId' in native && e.buttons ? (native as globalThis.PointerEvent).pointerId : undefined;
+                openAt({ x: e.clientX, y: e.clientY, from: id, pointerId });
+            }
         },
         onPointerDown: (e: PointerEvent<HTMLElement>) => {
             onPointerDown?.(e as PointerEvent<HTMLDivElement>);
             pressed.current = false;
             if (disabled || e.pointerType !== 'touch' || !e.isPrimary) return;
-            const at = { x: e.clientX, y: e.clientY };
+            const at = { x: e.clientX, y: e.clientY, from: id, pointerId: e.pointerId };
             const el = e.currentTarget;
             const move = (m: globalThis.PointerEvent) => {
                 if (Math.hypot(m.clientX - at.x, m.clientY - at.y) > SLOP) stop();
@@ -244,6 +267,7 @@ export function MenuContextTrigger({
     // On the body: inside a transformed or glass ancestor, fixed wouldn't be the viewport.
     const anchor =
         point &&
+        asked &&
         createPortal(
             <span
                 aria-hidden

@@ -184,6 +184,41 @@ describe('MenuContextTrigger', () => {
         vi.useRealTimers();
     });
 
+    it("the press that opened it is the menu's, so letting go is not a click outside", () => {
+        vi.useFakeTimers();
+        const capture = vi.fn();
+        HTMLElement.prototype.setPointerCapture = capture;
+        render(<Row />);
+        fireEvent.pointerDown(screen.getByText('Weekly shop'), {
+            pointerType: 'touch',
+            isPrimary: true,
+            pointerId: 7,
+        });
+        act(() => {
+            vi.advanceTimersByTime(500);
+        });
+        expect(capture).toHaveBeenCalledWith(7);
+        expect(capture.mock.contexts[0]).toBe(screen.getByRole('menu', { hidden: true }));
+        delete (HTMLElement.prototype as Partial<HTMLElement>).setPointerCapture;
+        vi.useRealTimers();
+    });
+
+    it('marks the one it was opened from, and anchors there', () => {
+        render(
+            <Menu>
+                <MenuContextTrigger>Weekly shop</MenuContextTrigger>
+                <MenuContextTrigger>Train pass</MenuContextTrigger>
+                <MenuContent aria-label="Entry actions">
+                    <MenuItem>Edit</MenuItem>
+                </MenuContent>
+            </Menu>,
+        );
+        fireEvent.contextMenu(screen.getByText('Train pass'), { clientX: 120, clientY: 80 });
+        expect(screen.getByText('Train pass')).toHaveAttribute('data-popup-open');
+        expect(screen.getByText('Weekly shop')).not.toHaveAttribute('data-popup-open');
+        expect(document.body.querySelectorAll('body > [data-zen-anchor]')).toHaveLength(1);
+    });
+
     it('when disabled, leaves the browser its own menu', () => {
         render(<Row disabled />);
         expect(fireEvent.contextMenu(screen.getByText('Weekly shop'))).toBe(true);
