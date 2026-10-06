@@ -1,6 +1,15 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 
-import Chart, { ChartArea, ChartBar, ChartLine, ChartReference, DonutChart, niceTicks, paletteColor } from './index';
+import Chart, {
+    AllocationBar,
+    ChartArea,
+    ChartBar,
+    ChartLine,
+    ChartReference,
+    DonutChart,
+    niceTicks,
+    paletteColor,
+} from './index';
 
 // jsdom has no layout: give the chart a width to draw into.
 beforeAll(() => {
@@ -253,5 +262,29 @@ describe('DonutChart', () => {
         fireEvent.focus(screen.getByRole('listitem', { name: /Food/ }));
         expect(screen.getByText('30%')).toBeInTheDocument();
         expect(screen.getByText('₹30')).toBeInTheDocument();
+    });
+});
+
+describe('AllocationBar', () => {
+    const items = [
+        { key: 'a', label: 'Bills', value: 300 },
+        { key: 'b', label: 'Savings', value: 100 },
+        { key: 'c', label: 'Gifts', value: 0 },
+    ];
+
+    it('reads out every part with its share, and splits the bar by value', () => {
+        const { container } = render(<AllocationBar label="Income" items={items} locale="en-US" />);
+        expect(screen.getByRole('img')).toHaveAccessibleName('Income. Bills: 300, 75%; Savings: 100, 25%');
+        const parts = container.querySelectorAll<HTMLElement>('[role=img] > span');
+        expect([...parts].map((p) => p.style.flexGrow)).toEqual(['300', '100']);
+        expect(screen.getByText('Gifts')).toBeInTheDocument();
+    });
+
+    it('picks out the part pointed at, in the bar or the legend', () => {
+        const { container } = render(<AllocationBar label="Income" items={items} locale="en-US" />);
+        fireEvent.pointerEnter(screen.getByText('Savings').closest('li')!);
+        const [bills, savings] = container.querySelectorAll('[role=img] > span');
+        expect(savings).toHaveAttribute('data-active');
+        expect(bills).toHaveAttribute('data-dimmed');
     });
 });

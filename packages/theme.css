@@ -1349,7 +1349,8 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
  * pixels, not along the path, breaking the line up. Its points only go rightwards,
  * so the reveal draws it just the same.
  */
-.zen__sparkline-draw {
+.zen__sparkline-draw,
+.zen__chart-sweep {
     animation: zen-sparkline-draw 0.9s cubic-bezier(0.3, 0.7, 0.2, 1) both;
 }
 @keyframes zen-sparkline-draw {
@@ -1360,8 +1361,8 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
         clip-path: inset(0);
     }
 }
-[data-zen-unseen] :is(.zen__chart-draw, .zen__sparkline-draw, .zen__chart-grow, .zen__chart-fade),
-[data-zen-unseen]:is(.zen__chart-draw, .zen__sparkline-draw, .zen__chart-grow, .zen__chart-fade) {
+[data-zen-unseen] :is(.zen__chart-draw, .zen__sparkline-draw, .zen__chart-sweep, .zen__chart-grow, .zen__chart-fade),
+[data-zen-unseen]:is(.zen__chart-draw, .zen__sparkline-draw, .zen__chart-sweep, .zen__chart-grow, .zen__chart-fade) {
     animation-play-state: paused;
 }
 
