@@ -227,6 +227,25 @@ describe('TableBody motion', () => {
         expect(ghosts()).toHaveLength(0);
     });
 
+    it('fades nothing out for tree rows that closed with their own animation', () => {
+        const closing = (keys: string[]) => (
+            <TableContainer>
+                <Table>
+                    <TableBody>
+                        {keys.map((k) => (
+                            <TableRow key={k} className={k === 'a' ? undefined : 'zen__tree-row-exit'}>
+                                <TableCell>{k}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        );
+        const { rerender } = render(closing(['a', 'b']));
+        rerender(closing(['a']));
+        expect(ghosts()).toHaveLength(0);
+    });
+
     it('fades nothing out when every row changed (a new page, not a deletion)', () => {
         const { rerender } = render(panel(['a', 'b']));
         rerender(panel(['x', 'y']));

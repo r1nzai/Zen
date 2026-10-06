@@ -104,7 +104,11 @@ export function TableBody({ ref, ...rest }: ComponentProps<'tbody'>) {
         last.current = { rows, tops };
         if (!before || reducedMotion() || el.querySelector('[data-zen-spacer]')) return;
         if (rows.some((row) => before.tops.has(row))) {
-            for (const row of before.rows) if (!row.isConnected) fadeOut(row, before.tops.get(row)!, el, rows);
+            for (const row of before.rows) {
+                // A tree row closing has already shrunk away.
+                if (!row.isConnected && !row.classList.contains('zen__tree-row-exit'))
+                    fadeOut(row, before.tops.get(row)!, el, rows);
+            }
         }
         for (const row of rows) {
             const was = before.tops.get(row);
