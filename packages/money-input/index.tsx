@@ -10,9 +10,9 @@ import { ChangeEvent, ComponentProps, KeyboardEvent, ReactNode, useEffect, useId
 
 /**
  * Amount input in one currency. Shows grouped digits for the locale (1,52,000
- * for en-IN) and accepts shorthand: 1.5L, 2cr, 10k, 1.2m. Commits on blur or
- * Enter; Escape reverts. Values are integer minor units (paise, cents), or null
- * when empty.
+ * for en-IN) and accepts shorthand: 1.5L, 2cr, 10k, 1.2m, and sums: 120+45.50,
+ * 3*12.99. Commits on blur or Enter; Escape reverts. Values are integer minor
+ * units (paise, cents), or null when empty.
  *
  * With `convert`, the symbol becomes a currency switch: type an amount in e.g.
  * USD and it's converted at the rates you load (in the browser; the amount is

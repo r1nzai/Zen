@@ -42,6 +42,16 @@ describe('MoneyInput', () => {
         expect(input()).toHaveValue('1,50,000');
     });
 
+    it('works out a sum on commit', () => {
+        const onValue = vi.fn();
+        render(<Controlled onValue={onValue} />);
+        fireEvent.focus(input());
+        type('1200 + 450.50 - 1k');
+        fireEvent.blur(input());
+        expect(onValue).toHaveBeenCalledWith(65050);
+        expect(input()).toHaveValue('650.50');
+    });
+
     it('commits on Enter, and Escape reverts', () => {
         const onValue = vi.fn();
         const onCancel = vi.fn();

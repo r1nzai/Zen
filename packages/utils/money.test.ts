@@ -64,6 +64,33 @@ describe('parseMoneyInput shorthand', () => {
     });
 });
 
+describe('parseMoneyInput sums', () => {
+    it('adds and takes away exactly, shorthand and symbols too', () => {
+        expect(parseMoneyInput('120 + 45.50', 'USD')).toBe(16550);
+        expect(parseMoneyInput('0.10+0.20', 'USD')).toBe(30);
+        expect(parseMoneyInput('1,200 - 300 + 12.25', 'USD')).toBe(91225);
+        expect(parseMoneyInput('10k+1.5k', 'INR')).toBe(major(11_500));
+        expect(parseMoneyInput('$100 − $25', 'USD')).toBe(7500);
+        expect(parseMoneyInput('-20 + 5', 'USD')).toBe(-1500);
+    });
+
+    it('multiplies and divides by plain numbers before adding, rounding to the cent', () => {
+        expect(parseMoneyInput('3 * 12.99', 'USD')).toBe(3897);
+        expect(parseMoneyInput('12.99 × 3 + 5', 'USD')).toBe(4397);
+        expect(parseMoneyInput('100 / 3', 'USD')).toBe(3333);
+        expect(parseMoneyInput('200 ÷ 3', 'USD')).toBe(6667);
+        expect(parseMoneyInput('10.01 * 0.5', 'USD')).toBe(501); // 5.005 rounds half away from zero
+        expect(parseMoneyInput('1500 / 4', 'JPY')).toBe(375);
+    });
+
+    it('rejects a sum that is not one', () => {
+        expect(() => parseMoneyInput('100 +', 'USD')).toThrow(MoneyParseError);
+        expect(() => parseMoneyInput('100 / 0', 'USD')).toThrow(MoneyParseError);
+        expect(() => parseMoneyInput('100 * $2', 'USD')).toThrow(MoneyParseError);
+        expect(() => parseMoneyInput('5 bananas + 2', 'USD')).toThrow(MoneyParseError);
+    });
+});
+
 describe('formatAmount', () => {
     it('omits the symbol and shows decimals only when needed', () => {
         expect(formatAmount(major(152_000), 'INR', 'en-IN')).toBe('1,52,000');

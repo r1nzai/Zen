@@ -88,9 +88,48 @@ const SUFFIXES: Record<string, number> = {
 
 /**
  * Like parseMoney, plus shorthand: "1.5L" (lakh), "2cr" (crore), "10k",
- * "1.2m". Scaling is done by shifting the decimal string, so it stays exact.
+ * "1.2m", and sums: "120 + 45.50 - 10", "3 * 12.99", "1200 / 4" (× and ÷
+ * too). Amounts add exactly; times and divide take plain numbers and round
+ * to the currency's smallest unit (halves away from zero).
  */
 export function parseMoneyInput(input: string, currency: string): Money {
+    // An operator after the start of an amount; a leading sign belongs to the first amount.
+    const parts = input.trim().split(/(?<=[\d.a-z])\s*([+\-−*/×÷])\s*/i);
+    if (parts.length === 1) return parseAmount(input, currency);
+    let total = 0;
+    let i = 0;
+    while (i < parts.length) {
+        const sign = i === 0 || parts[i - 1] === '+' ? 1 : -1;
+        let term = parseAmount(parts[i], currency);
+        i += 2;
+        while (i < parts.length && /[*/×÷]/.test(parts[i - 1])) {
+            const times = parts[i - 1] === '*' || parts[i - 1] === '×';
+            term = scale(term, parts[i], times, input);
+            i += 2;
+        }
+        total += sign * term;
+    }
+    if (!Number.isSafeInteger(total)) throw new MoneyParseError(input);
+    return total;
+}
+
+/** `minor` times or divided by a plain decimal number, rounded to a whole minor unit. */
+function scale(minor: Money, by: string, times: boolean, input: string): Money {
+    const m = /^(\d*)(?:\.(\d+))?$/.exec(by.trim());
+    if (!m || (m[1] === '' && !m[2])) throw new MoneyParseError(input);
+    const places = (m[2] ?? '').length;
+    const n = BigInt((m[1] || '0') + (m[2] ?? ''));
+    const unit = 10n ** BigInt(places);
+    const [num, den] = times ? [BigInt(minor) * n, unit] : [BigInt(minor) * unit, n];
+    if (den === 0n) throw new MoneyParseError(input);
+    const neg = num < 0n;
+    const abs = neg ? -num : num;
+    const rounded = (abs * 2n + den) / (den * 2n);
+    return Number(neg ? -rounded : rounded);
+}
+
+/** One amount: parseMoney plus shorthand. */
+function parseAmount(input: string, currency: string): Money {
     const m = /^\s*(.*?)\s*([a-z]+)\s*$/i.exec(input);
     const suffix = m ? m[2].toLowerCase() : '';
     const power = SUFFIXES[suffix];

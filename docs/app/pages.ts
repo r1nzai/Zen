@@ -252,7 +252,7 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'money-input',
         title: 'Money Input',
         description:
-            'Amounts in any currency and locale, with shorthand like 1.5L or 10k, exact to the paisa, and typed in other currencies, converted at your rates. Built on Input Group.',
+            'Amounts in any currency and locale, with shorthand like 1.5L or 10k and sums like 120+45.50, exact to the paisa, and typed in other currencies, converted at your rates. Built on Input Group.',
         parts: ['MoneyInput', 'MoneyCurrencyMenu', 'MoneyConversionHint'],
         examples: ['Default', 'Dollars', 'Convert', 'Compact'],
     },
