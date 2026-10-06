@@ -15,6 +15,7 @@ export default function Meter({
     valueText,
     tone = 'auto',
     warnAt = 0.85,
+    marks,
     className,
     ...rest
 }: MeterProps) {
@@ -49,7 +50,7 @@ export default function Meter({
                     {detail}
                 </span>
             )}
-            <div className="bg-muted col-span-2 h-2 overflow-hidden rounded-full">
+            <div className="bg-muted relative col-span-2 h-2 overflow-hidden rounded-full">
                 <div
                     className={cx(
                         'zen__meter-fill ease-out-soft h-full rounded-full transition-[width] duration-700',
@@ -61,6 +62,15 @@ export default function Meter({
                     )}
                     style={{ width: `${pct}%` }}
                 />
+                {marks?.map((mark) => (
+                    <span
+                        key={mark}
+                        aria-hidden
+                        data-reached={value >= mark || undefined}
+                        className="zen__meter-mark bg-tint/25 data-reached:bg-background/70 absolute inset-y-0 w-0.5 -translate-x-1/2 transition-colors duration-700"
+                        style={{ left: `${max > 0 ? Math.min(100, (mark / max) * 100) : 0}%` }}
+                    />
+                ))}
             </div>
             {hint && (
                 <span
@@ -92,5 +102,7 @@ export interface MeterProps extends Omit<ComponentProps<'div'>, 'children'> {
     tone?: 'auto' | 'default' | 'warning' | 'danger';
     /** Fraction of max where `auto` turns to warning (default 0.85). */
     warnAt?: number;
+    /** Milestones along the bar, in the same units as value: e.g. [2500, 5000, 7500] of 10000. */
+    marks?: number[];
     className?: string;
 }

@@ -227,6 +227,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Meter',
         description: 'A measure against a limit, like spend against a budget: warm near it, red past it.',
         parts: ['Meter'],
+        examples: ['Budget', 'Milestones'],
     },
     {
         slug: 'money-input',

@@ -42,3 +42,13 @@ describe('Meter', () => {
         expect(screen.getByRole('meter', { name: 'Cockpit share' })).toHaveAttribute('data-testid', 'm');
     });
 });
+
+describe('Meter marks', () => {
+    it('places each milestone along the bar, and marks those reached', () => {
+        const { container } = render(<Meter label="Saved" value={6000} max={10000} marks={[2500, 5000, 7500]} />);
+        const marks = [...container.querySelectorAll<HTMLElement>('.zen__meter-mark')];
+        expect(marks.map((m) => m.style.left)).toEqual(['25%', '50%', '75%']);
+        expect(marks.map((m) => m.hasAttribute('data-reached'))).toEqual([true, true, false]);
+        expect(marks.every((m) => m.getAttribute('aria-hidden') === 'true')).toBe(true);
+    });
+});
