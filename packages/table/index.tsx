@@ -349,3 +349,4 @@ export {
     type TableSelectHeadProps,
     useSelection,
 } from './selection';
+export { TableSwipeAction, type TableSwipeActionProps, TableSwipeRow, type TableSwipeRowProps } from './swipe';

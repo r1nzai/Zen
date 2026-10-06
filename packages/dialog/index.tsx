@@ -2,6 +2,7 @@ import { cx } from '@zen/utils/cx';
 import Button, { ButtonProps } from '@zen/button';
 import { useToastHost } from '@zen/toast';
 import { useGraphicsMode } from '@zen/utils/graphics';
+import { FLICK_SPEED, useSwipe } from '@zen/utils/swipe';
 import {
     ComponentProps,
     createContext,
@@ -136,140 +137,34 @@ export function useModal(
     useToastHost(ref, open);
 }
 
-/** A swipe this far (share of the sheet), or a flick this fast (px/ms), closes a sheet. */
+/** A swipe this far along (share of the sheet), or a flick, closes a sheet. */
 const SWIPE_SHARE = 0.3;
-const SWIPE_SPEED = 0.5;
-/** A flick's speed is measured over this long (ms) before letting go. */
-const FLICK_WINDOW = 100;
-/** How far a finger moves before it counts as a swipe or not. */
-const SLOP = 8;
 
 /**
  * A sheet follows a finger swiping it back to its edge, and closes when let go
- * far enough along or flicked; otherwise it springs back. Only a deliberate
- * swipe: one finger, mostly along the closing direction, not starting in a text
- * field or on something that handles its own touch gestures (its touch-action
- * says so), and not while what's under the finger can still scroll that way.
+ * far enough along or flicked; otherwise it springs back.
  */
 function useSheetSwipe(ref: RefObject<HTMLDialogElement | null>, side: DialogProps['side'], close: () => void) {
-    const closeRef = useRef(close);
-    useEffect(() => {
-        closeRef.current = close;
-    });
-    useEffect(() => {
-        const dialog = ref.current;
-        if (!dialog) return;
-        dialog.style.removeProperty('--zen-swipe');
-        dialog.style.removeProperty('--zen-swipe-progress');
-        if (!side) return;
-        const axis = side === 'bottom' ? 'y' : 'x';
-        const sign = side === 'left' ? -1 : 1;
-        // Recent [time, distance] points: a flick's speed is over the last moments, as one event's step is uneven.
-        let drag: { id: number; x: number; y: number; points: [number, number][]; on: boolean } | null = null;
-        let swallowClick = false;
-
-        const size = () => (axis === 'y' ? dialog.offsetHeight : dialog.offsetWidth);
-        const along = (e: PointerEvent) => (axis === 'y' ? e.clientY - drag!.y : e.clientX - drag!.x) * sign;
-        const across = (e: PointerEvent) => (axis === 'y' ? e.clientX - drag!.x : e.clientY - drag!.y);
-        const show = (d: number) => {
+    const axis = side === 'bottom' ? 'y' : 'x';
+    const sign = side === 'left' ? -1 : 1;
+    const size = () => (axis === 'y' ? ref.current!.offsetHeight : ref.current!.offsetWidth);
+    const reset = () => {
+        ref.current?.style.removeProperty('--zen-swipe');
+        ref.current?.style.removeProperty('--zen-swipe-progress');
+    };
+    useEffect(reset, [ref, side]);
+    useSwipe(ref, side ? { axis, sign } : undefined, {
+        move: (d) => {
             const moved = d > 0 ? d : d / 6;
-            dialog.style.setProperty('--zen-swipe', axis === 'y' ? `0 ${moved}px` : `${moved * sign}px 0`);
-            dialog.style.setProperty('--zen-swipe-progress', String(Math.max(0, Math.min(1, d / size()))));
-        };
-        const end = (closing: boolean) => {
-            const swiped = drag?.on;
-            drag = null;
-            if (!swiped) return;
-            delete dialog.dataset.swiping;
-            swallowClick = true;
-            if (closing) return closeRef.current();
-            dialog.style.removeProperty('--zen-swipe');
-            dialog.style.removeProperty('--zen-swipe-progress');
-        };
-
-        const onDown = (e: PointerEvent) => {
-            swallowClick = false;
-            if (e.pointerType !== 'touch') return;
-            // A second finger (a pinch): not a swipe after all.
-            if (!e.isPrimary) return end(false);
-            if (startsElsewhere(e.target as Element, dialog, axis)) return;
-            drag = { id: e.pointerId, x: e.clientX, y: e.clientY, points: [[e.timeStamp, 0]], on: false };
-        };
-        const onMove = (e: PointerEvent) => {
-            if (!drag || e.pointerId !== drag.id) return;
-            const d = along(e);
-            if (!drag.on) {
-                if (Math.hypot(d, across(e)) < SLOP) return;
-                if (d <= 0 || Math.abs(across(e)) * 1.5 > d || scrollsFirst(e.target as Element, dialog, axis, sign)) {
-                    drag = null;
-                    return;
-                }
-                drag.on = true;
-                dialog.dataset.swiping = '';
-                dialog.setPointerCapture?.(e.pointerId);
-            }
-            drag.points = [...drag.points.filter(([t]) => e.timeStamp - t < FLICK_WINDOW), [e.timeStamp, d]];
-            show(d);
-        };
-        const onUp = (e: PointerEvent) => {
-            if (!drag || e.pointerId !== drag.id) return;
-            const d = along(e);
-            const [t0, d0] = drag.points.find(([t]) => e.timeStamp - t < FLICK_WINDOW) ?? [e.timeStamp, d];
-            const speed = (d - d0) / Math.max(1, e.timeStamp - t0);
-            end(e.type === 'pointerup' && (d > size() * SWIPE_SHARE || (d > 0 && speed > SWIPE_SPEED)));
-        };
-        // Once it's a swipe, the page mustn't scroll or zoom with it (pointer events can't stop that).
-        const onTouchMove = (e: TouchEvent) => {
-            if (drag?.on) e.preventDefault();
-        };
-        // A swipe that started on a button or link isn't a tap on it, nor on the backdrop.
-        const onClick = (e: Event) => {
-            if (!swallowClick) return;
-            swallowClick = false;
-            e.stopPropagation();
-            e.preventDefault();
-        };
-
-        dialog.addEventListener('pointerdown', onDown);
-        dialog.addEventListener('pointermove', onMove);
-        dialog.addEventListener('pointerup', onUp);
-        dialog.addEventListener('pointercancel', onUp);
-        dialog.addEventListener('touchmove', onTouchMove, { passive: false });
-        dialog.addEventListener('click', onClick, true);
-        return () => {
-            dialog.removeEventListener('pointerdown', onDown);
-            dialog.removeEventListener('pointermove', onMove);
-            dialog.removeEventListener('pointerup', onUp);
-            dialog.removeEventListener('pointercancel', onUp);
-            dialog.removeEventListener('touchmove', onTouchMove);
-            dialog.removeEventListener('click', onClick, true);
-            delete dialog.dataset.swiping;
-        };
-    }, [ref, side]);
-}
-
-/** A text field, or something that takes touch gestures in this axis itself (by its touch-action). */
-function startsElsewhere(target: Element, dialog: HTMLElement, axis: 'x' | 'y'): boolean {
-    if (target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"])')) return true;
-    const pans = axis === 'y' ? /pan-(y|up|down)/ : /pan-(x|left|right)/;
-    for (let el: Element | null = target; el && el !== dialog; el = el.parentElement) {
-        const action = getComputedStyle(el).touchAction;
-        if (action && action !== 'auto' && action !== 'manipulation' && !pans.test(action)) return true;
-    }
-    return false;
-}
-
-/** Whether something under the finger would still scroll with this swipe. */
-function scrollsFirst(target: Element, dialog: HTMLElement, axis: 'x' | 'y', sign: number): boolean {
-    for (let el: Element | null = target; el; el = el === dialog ? null : el.parentElement) {
-        const style = getComputedStyle(el);
-        if (!/auto|scroll/.test(axis === 'y' ? style.overflowY : style.overflowX)) continue;
-        const pos = axis === 'y' ? el.scrollTop : el.scrollLeft;
-        const max = axis === 'y' ? el.scrollHeight - el.clientHeight : el.scrollWidth - el.clientWidth;
-        if (max <= 0) continue;
-        if (sign > 0 ? pos > 0 : pos < max - 1) return true;
-    }
-    return false;
+            ref.current!.style.setProperty('--zen-swipe', axis === 'y' ? `0 ${moved}px` : `${moved * sign}px 0`);
+            ref.current!.style.setProperty('--zen-swipe-progress', String(Math.max(0, Math.min(1, d / size()))));
+        },
+        release: (d, speed) => {
+            if (d > size() * SWIPE_SHARE || (d > 0 && speed > FLICK_SPEED)) close();
+            else reset();
+        },
+        cancel: reset,
+    });
 }
 
 /** The row of actions at the end of a dialog, right-aligned. */

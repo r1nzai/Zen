@@ -1256,6 +1256,19 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     }
 }
 
+/* A swiped row moves aside for the actions behind it, and settles when let go. */
+.zen__swipe-row {
+    translate: calc(-1 * var(--zen-row-swipe, 0px)) 0;
+    transition: translate 0.3s var(--ease-out-soft);
+}
+.zen__swipe-actions {
+    transition: width 0.3s var(--ease-out-soft);
+}
+.zen__swipe-row[data-swiping],
+.zen__swipe-row[data-swiping] > .zen__swipe-actions {
+    transition: none;
+}
+
 /* Time left before a toast goes away. */
 .zen__toast-timer {
     animation: zen-toast-timer linear forwards;

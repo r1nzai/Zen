@@ -403,8 +403,10 @@ export const COMPONENTS: ComponentDoc[] = [
             'TableSelectCell',
             'TableSelectHead',
             'SelectionBar',
+            'TableSwipeRow',
+            'TableSwipeAction',
         ],
-        examples: ['Default', 'Sortable', 'Selectable', 'Virtual'],
+        examples: ['Default', 'Sortable', 'Selectable', 'Swipe', 'Virtual'],
     },
     {
         slug: 'table-of-contents',

@@ -144,6 +144,10 @@ export {
     TableSelectHead,
     type TableSelectHeadProps,
     TableSpacerRow,
+    TableSwipeAction,
+    type TableSwipeActionProps,
+    TableSwipeRow,
+    type TableSwipeRowProps,
     useSelection,
     useSort,
 } from './table';
