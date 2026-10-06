@@ -32,4 +32,29 @@ describe('FilterBar', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Clear all' }));
         expect(onClear).toHaveBeenCalledOnce();
     });
+
+    it('a removed chip fades out where it was, out of reach, then goes', () => {
+        const fade = { onfinish: null as null | (() => void), oncancel: null };
+        const animate = vi.fn(() => fade);
+        Element.prototype.animate = animate as unknown as Element['animate'];
+        const bar = (tags: string[]) => (
+            <FilterBar>
+                {tags.map((t) => (
+                    <FilterChip key={t} onRemove={() => {}}>
+                        {t}
+                    </FilterChip>
+                ))}
+            </FilterBar>
+        );
+        const { rerender } = render(bar(['Amount', 'Tag']));
+        rerender(bar(['Tag']));
+        const ghost = screen.getByText('Amount', { exact: false });
+        expect(ghost).toHaveAttribute('aria-hidden', 'true');
+        expect(ghost).toHaveStyle({ position: 'absolute' });
+        expect(screen.getAllByRole('button')).toHaveLength(1);
+        expect(animate).toHaveBeenCalledWith({ opacity: [1, 0], scale: [1, 0.9] }, expect.anything());
+        fade.onfinish!();
+        expect(screen.queryByText('Amount', { exact: false })).toBeNull();
+        delete (Element.prototype as Partial<Element>).animate;
+    });
 });

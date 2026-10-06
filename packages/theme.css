@@ -963,11 +963,7 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
 .zen__dialog {
     will-change: scale;
 }
-/*
- * A popup slides out from its trigger rather than scaling, which would read as
- * its size changing. The gap to the trigger (margin-block) is what animates, so
- * it slides the right way when it flips above.
- */
+/* The gap animates, not scale (which reads as resizing), so a popup flipped above slides the right way. */
 .zen__popover {
     margin-block: calc(var(--zen-anchor-offset, 4) * 1px);
     transition:
@@ -1394,9 +1390,27 @@ html.reduce-motion::view-transition-new(zen-page) {
 }
 
 /* A tag added to a TagInput pops in. */
-.zen__tag,
-.zen__filter-chip {
+.zen__tag {
     animation: zen-pop 0.3s var(--ease-out-soft) backwards;
+}
+
+@keyframes zen-fade-in {
+    from {
+        opacity: 0;
+    }
+}
+@keyframes zen-chip-in {
+    from {
+        opacity: 0;
+        scale: 0.92;
+        translate: 0 3px;
+    }
+}
+.zen__filter-chip {
+    animation: zen-chip-in 0.28s var(--ease-out-soft) backwards;
+}
+.zen__filter-clear {
+    animation: zen-fade-in 0.2s ease-out backwards;
 }
 
 /* CodeInput's caret, in the box typing goes into. */
