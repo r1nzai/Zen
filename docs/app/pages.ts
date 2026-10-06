@@ -249,6 +249,13 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['Keypad'],
     },
     {
+        slug: 'load-more',
+        title: 'Load More',
+        description:
+            'The end of a long list that has more: loads the next page when it scrolls into view, or on a press.',
+        parts: ['LoadMore'],
+    },
+    {
         slug: 'menu',
         title: 'Menu',
         description:

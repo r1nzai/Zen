@@ -289,3 +289,4 @@ export { default as Trend, type TrendProps } from './trend';
 export { default as IconPicker, ICON_COLORS, type IconColor, type IconPickerProps } from './icon-picker';
 export { default as RepeatPicker, type RepeatPickerProps } from './repeat-picker';
 export { describeRepeat, nextOccurrences, type Repeat } from './utils/repeat';
+export { default as LoadMore, type LoadMoreProps } from './load-more';
