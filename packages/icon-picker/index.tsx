@@ -45,26 +45,28 @@ export default function IconPicker({
                 {icon?.icon}
             </PopoverTrigger>
             <PopoverContent aria-label={label} className="flex w-72 flex-col gap-3 p-3">
-                <fieldset className="flex flex-wrap gap-1.5">
-                    <legend className="text-muted-foreground mb-1.5 text-xs">Colour</legend>
-                    {colors.map((c) => (
-                        <label key={c.value} title={c.label} className="relative cursor-pointer">
-                            <input
-                                type="radio"
-                                name={`${name}-color`}
-                                aria-label={c.label}
-                                checked={value.color === c.value}
-                                onChange={() => onChange({ ...value, color: c.value })}
-                                className="peer sr-only"
-                            />
-                            <span
-                                aria-hidden
-                                style={{ background: c.color }}
-                                className="ring-offset-background peer-focus-visible:ring-ring/60 peer-checked:ring-foreground/70 block size-6 rounded-full ring-offset-2 transition-shadow peer-checked:ring-2 peer-focus-visible:ring-2"
-                            />
-                        </label>
-                    ))}
-                </fieldset>
+                {colors.length > 0 && (
+                    <fieldset className="flex flex-wrap gap-1.5">
+                        <legend className="text-muted-foreground mb-1.5 text-xs">Colour</legend>
+                        {colors.map((c) => (
+                            <label key={c.value} title={c.label} className="relative cursor-pointer">
+                                <input
+                                    type="radio"
+                                    name={`${name}-color`}
+                                    aria-label={c.label}
+                                    checked={value.color === c.value}
+                                    onChange={() => onChange({ ...value, color: c.value })}
+                                    className="peer sr-only"
+                                />
+                                <span
+                                    aria-hidden
+                                    style={{ background: c.color }}
+                                    className="ring-offset-background peer-focus-visible:ring-ring/60 peer-checked:ring-foreground/70 block size-6 rounded-full ring-offset-2 transition-shadow peer-checked:ring-2 peer-focus-visible:ring-2"
+                                />
+                            </label>
+                        ))}
+                    </fieldset>
+                )}
                 <fieldset className="grid grid-cols-6 gap-1" style={tint(color?.color)}>
                     <legend className="text-muted-foreground mb-1.5 text-xs">Icon</legend>
                     {icons.map((i) => (
