@@ -297,6 +297,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Progress Ring',
         description: 'Circular progress with room for a label in the middle.',
         parts: ['ProgressRing'],
+        examples: ['Default', 'Goal'],
     },
     {
         slug: 'radio-cards',

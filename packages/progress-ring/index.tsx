@@ -1,11 +1,20 @@
 import { cx } from '@zen/utils/cx';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
-/** Circular progress, 0–1, with optional content in the middle. */
+/**
+ * Circular progress, 0–1, with optional content in the middle. Reaching 1
+ * while shown sends out a ring of glow, once.
+ */
 export default function ProgressRing({ value, size = 84, stroke = 7, label, children, className }: ProgressRingProps) {
     const r = (size - stroke) / 2;
     const c = 2 * Math.PI * r;
     const v = Math.min(Math.max(value, 0), 1);
+    const [prev, setPrev] = useState(v);
+    const [bursts, setBursts] = useState(0);
+    if (v !== prev) {
+        setPrev(v);
+        if (prev < 1 && v === 1) setBursts(bursts + 1);
+    }
     return (
         <div
             role="progressbar"
@@ -37,6 +46,15 @@ export default function ProgressRing({ value, size = 84, stroke = 7, label, chil
                     className="zen__progress-ring-arc stroke-primary [filter:drop-shadow(0_0_6px_oklch(var(--glow)/calc(0.45*var(--glow-k))))] transition-[stroke-dashoffset] duration-700 ease-out"
                 />
             </svg>
+            {bursts > 0 && (
+                // Keyed so a second goal reached plays it again.
+                <span
+                    key={bursts}
+                    aria-hidden
+                    className="zen__ring-burst border-primary pointer-events-none absolute inset-0 rounded-full"
+                    style={{ borderWidth: stroke }}
+                />
+            )}
             <div className="absolute inset-0 grid place-items-center text-center">{children}</div>
         </div>
     );

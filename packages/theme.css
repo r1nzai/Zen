@@ -1229,6 +1229,22 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     }
 }
 
+/* A progress ring reaching its goal: a ring of glow goes out from the arc as it closes. */
+.zen__ring-burst {
+    animation: zen-ring-burst 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s both;
+    box-shadow: 0 0 18px oklch(var(--glow) / calc(0.6 * var(--glow-k)));
+}
+@keyframes zen-ring-burst {
+    from {
+        opacity: 0.9;
+        scale: 1;
+    }
+    to {
+        opacity: 0;
+        scale: 1.45;
+    }
+}
+
 /* Time left before a toast goes away. */
 .zen__toast-timer {
     animation: zen-toast-timer linear forwards;

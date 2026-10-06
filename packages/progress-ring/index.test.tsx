@@ -32,4 +32,13 @@ describe('ProgressRing', () => {
         );
         expect(screen.getByText('50%')).toBeInTheDocument();
     });
+
+    it('sends out a burst when the goal is reached, not when it starts there', () => {
+        const { container, rerender } = render(<ProgressRing value={1} label="Goal" />);
+        expect(container.querySelector('.zen__ring-burst')).toBeNull();
+        rerender(<ProgressRing value={0.5} label="Goal" />);
+        expect(container.querySelector('.zen__ring-burst')).toBeNull();
+        rerender(<ProgressRing value={1.2} label="Goal" />);
+        expect(container.querySelector('.zen__ring-burst')).not.toBeNull();
+    });
 });
