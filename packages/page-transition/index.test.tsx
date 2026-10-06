@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import PageTransition from './index';
 
 describe('PageTransition', () => {
-    it('puts the page in its own view-transition layer, keeping your styles', () => {
+    it('marks the page for its view-transition layer, keeping your styles', () => {
         render(
             <PageTransition className="p-4" style={{ color: 'red' }}>
                 Page
@@ -11,7 +11,8 @@ describe('PageTransition', () => {
         );
         const page = screen.getByText('Page');
         expect(page).toHaveClass('zen__page-transition', 'p-4');
-        expect(page.style.viewTransitionName).toBe('zen-page');
+        // Named only during a transition (theme.css), so it isn't a backdrop root the rest of the time.
+        expect(page.style.viewTransitionName).toBe('');
         expect(page).toHaveStyle({ color: 'rgb(255, 0, 0)' });
     });
 });

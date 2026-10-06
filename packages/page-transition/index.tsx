@@ -8,12 +8,6 @@ import { ComponentProps } from 'react';
  * fades out as the new one rises in, while everything outside (header, nav)
  * stays still. One per page.
  */
-export default function PageTransition({ className, style, ...rest }: ComponentProps<'div'>) {
-    return (
-        <div
-            className={cx('zen__page-transition', className)}
-            style={{ viewTransitionName: 'zen-page', ...style }}
-            {...rest}
-        />
-    );
+export default function PageTransition({ className, ...rest }: ComponentProps<'div'>) {
+    return <div className={cx('zen__page-transition', className)} {...rest} />;
 }

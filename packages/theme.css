@@ -1261,6 +1261,10 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
 }
 
 /* Pages: the old one fades out as the new one rises in (PageTransition). */
+/* Named only while one runs: a named page is a backdrop root, where glass inside stops blurring. */
+html:active-view-transition .zen__page-transition {
+    view-transition-name: zen-page;
+}
 ::view-transition-group(zen-page) {
     animation-duration: 0.34s;
     animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
