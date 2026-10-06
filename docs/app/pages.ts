@@ -61,6 +61,12 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Variants', 'Sizes', 'Tones', 'Loading', 'AsLink'],
     },
     {
+        slug: 'calendar-heatmap',
+        title: 'Calendar Heatmap',
+        description: 'A month of days shaded by their value, like spending per day.',
+        parts: ['CalendarHeatmap'],
+    },
+    {
         slug: 'card',
         title: 'Card',
         description: 'Glass panels for grouping content, and stats for single figures.',
