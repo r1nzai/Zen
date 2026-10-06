@@ -219,6 +219,22 @@ describe('MenuContextTrigger', () => {
         expect(document.body.querySelectorAll('body > [data-zen-anchor]')).toHaveLength(1);
     });
 
+    it('a MenuTrigger beside it does not show as open when it opened from a right-click', () => {
+        render(
+            <Menu>
+                <MenuContextTrigger>Weekly shop</MenuContextTrigger>
+                <MenuTrigger aria-label="Actions">⋯</MenuTrigger>
+                <MenuContent aria-label="Entry actions">
+                    <MenuItem>Edit</MenuItem>
+                </MenuContent>
+            </Menu>,
+        );
+        fireEvent.contextMenu(screen.getByText('Weekly shop'), { clientX: 120, clientY: 80 });
+        const button = screen.getByRole('button', { name: 'Actions' });
+        expect(button).toHaveAttribute('aria-expanded', 'false');
+        expect(button).not.toHaveAttribute('data-popup-open');
+    });
+
     it('when disabled, leaves the browser its own menu', () => {
         render(<Row disabled />);
         expect(fireEvent.contextMenu(screen.getByText('Weekly shop'))).toBe(true);

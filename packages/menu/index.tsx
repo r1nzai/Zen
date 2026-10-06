@@ -116,11 +116,13 @@ export default function Menu({ onOpenChange, children }: MenuProps) {
  * icon or avatar; the menu is named after it. With `asChild`, your own button instead.
  */
 export function MenuTrigger({ asChild, style, children, ...rest }: MenuTriggerProps) {
-    const { popup, triggerId } = useMenu('MenuTrigger');
+    const { popup, triggerId, point } = useMenu('MenuTrigger');
     const props = {
         id: triggerId,
         'aria-haspopup': 'menu' as const,
         ...popup.triggerProps,
+        // Opened by a MenuContextTrigger, not by this button.
+        ...(point && { 'aria-expanded': false, 'data-popup-open': undefined }),
         ...rest,
         style: { ...popup.triggerProps.style, ...style },
     };
