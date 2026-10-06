@@ -164,6 +164,7 @@ function useSheetSwipe(ref: RefObject<HTMLDialogElement | null>, side: DialogPro
             else reset();
         },
         cancel: reset,
+        threshold: () => size() * SWIPE_SHARE,
     });
 }
 

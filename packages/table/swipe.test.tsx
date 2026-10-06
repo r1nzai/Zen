@@ -80,4 +80,21 @@ describe('TableSwipeRow', () => {
             document.documentElement.removeAttribute('dir');
         }
     });
+
+    it('taps lightly as a swipe crosses the point where letting go opens it, each way', () => {
+        const vibrate = vi.fn();
+        Object.defineProperty(navigator, 'vibrate', { value: vibrate, configurable: true });
+        setup();
+        const cell = screen.getByText('Weekly shop');
+        touch(cell, 'down', 200);
+        touch(cell, 'move', 180);
+        expect(vibrate).not.toHaveBeenCalled();
+        touch(cell, 'move', 150);
+        expect(vibrate).toHaveBeenCalledTimes(1);
+        touch(cell, 'move', 140);
+        touch(cell, 'move', 175);
+        expect(vibrate).toHaveBeenCalledTimes(2);
+        touch(cell, 'up', 175);
+        delete (navigator as { vibrate?: unknown }).vibrate;
+    });
 });

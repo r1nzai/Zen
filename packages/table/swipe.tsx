@@ -37,6 +37,7 @@ export function TableSwipeRow({
             move: (d) => show(resist(open ? width() - d : d)),
             release: (d, speed) => settle(open !== (d > width() / 2 || speed > FLICK_SPEED)),
             cancel: () => settle(open),
+            threshold: () => width() / 2,
         },
     );
 

@@ -21,6 +21,8 @@ export interface SwipeHandlers {
     release: (d: number, speed: number) => void;
     /** Interrupted (a second finger, or the browser took the touch): put things back. */
     cancel: () => void;
+    /** How far along letting go would act (close, open…); crossing it, either way, gives a light tap where phones can vibrate. */
+    threshold?: () => number;
 }
 
 /**
@@ -48,7 +50,8 @@ export function useSwipe(
         const axis = logical === 'y' ? 'y' : 'x';
         const sign = logical === 'inline' && getComputedStyle(el).direction === 'rtl' ? -inlineSign : inlineSign;
         // Recent [time, distance] points: a flick's speed is over the last moments, as one event's step is uneven.
-        let drag: { id: number; x: number; y: number; points: [number, number][]; on: boolean } | null = null;
+        let drag: { id: number; x: number; y: number; points: [number, number][]; on: boolean; past: boolean } | null =
+            null;
         let swallowClick = false;
 
         const along = (e: PointerEvent) => (axis === 'y' ? e.clientY - drag!.y : e.clientX - drag!.x) * sign;
@@ -71,7 +74,7 @@ export function useSwipe(
                 return;
             }
             if (startsElsewhere(e.target as Element, el, axis)) return;
-            drag = { id: e.pointerId, x: e.clientX, y: e.clientY, points: [[e.timeStamp, 0]], on: false };
+            drag = { id: e.pointerId, x: e.clientX, y: e.clientY, points: [[e.timeStamp, 0]], on: false, past: false };
         };
         const onMove = (e: PointerEvent) => {
             if (!drag || e.pointerId !== drag.id) return;
@@ -88,6 +91,11 @@ export function useSwipe(
             }
             drag.points = [...drag.points.filter(([t]) => e.timeStamp - t < FLICK_WINDOW), [e.timeStamp, d]];
             handlersRef.current.move(d);
+            const at = handlersRef.current.threshold?.();
+            if (at !== undefined && d > at !== drag.past) {
+                drag.past = !drag.past;
+                navigator.vibrate?.(8);
+            }
         };
         const onUp = (e: PointerEvent) => {
             if (!drag || e.pointerId !== drag.id) return;

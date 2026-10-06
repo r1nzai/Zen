@@ -39,7 +39,8 @@ const move = <T,>(list: readonly T[], from: number, to: number) => {
 
 /**
  * A list put in order by dragging, e.g. budget categories: drag an item by its
- * SortableHandle and the others make way; it settles into place when let go.
+ * SortableHandle and the others make way (a phone taps lightly at each new
+ * place); it settles into place when let go.
  * From the keyboard, Space or Enter on a handle picks the item up, the arrow
  * keys move it, Space or Enter drops it and Escape puts it back; each step is
  * announced. `value` is the ids in order; render a SortableItem for each.
@@ -98,9 +99,12 @@ export function SortableList({ value, onChange, className, children, ...rest }: 
             const dy = y - startY + scroller.scrollTop - startScroll;
             dragged.style.translate = `0 ${dy}px`;
             const centre = centres[from] + dy;
+            const was = target;
             target = from;
             while (target < els.length - 1 && centre > centres[target + 1]) target++;
             while (target > 0 && centre < centres[target - 1]) target--;
+            // A light tap as it takes a new place, where phones can vibrate.
+            if (target !== was) navigator.vibrate?.(5);
             els.forEach((el, i) => {
                 if (i === from) return;
                 const shift = from < i && i <= target ? -room : target <= i && i < from ? room : 0;
