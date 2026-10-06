@@ -17,7 +17,7 @@ export default function Default() {
                         <TableHead numeric>Amount</TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody className="rise-list">
                     {ENTRIES.map((e) => (
                         <TableRow key={e.label}>
                             <TableCell className="font-medium">

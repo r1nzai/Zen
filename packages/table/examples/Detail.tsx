@@ -69,7 +69,7 @@ export default function Detail() {
                         <TableHead numeric>Amount</TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody className="rise-list">
                     {ENTRIES.map((e) => (
                         <ViewTransition key={e.id} name={`entry-${e.id}`} share="zen-morph">
                             <TableRow onClick={() => go(e.id)} className="cursor-pointer">

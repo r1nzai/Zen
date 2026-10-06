@@ -1153,6 +1153,47 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
 .rise > *:nth-child(n + 5) {
     animation-delay: 200ms;
 }
+/* A list's rows (a .rise-list's children, e.g. a TableBody's) enter the same way, in quicker steps, as they first show. */
+.rise-list > * {
+    animation: zen-rise 0.45s var(--ease-out-soft) backwards;
+}
+.rise-list > *:nth-child(2) {
+    animation-delay: 35ms;
+}
+.rise-list > *:nth-child(3) {
+    animation-delay: 70ms;
+}
+.rise-list > *:nth-child(4) {
+    animation-delay: 105ms;
+}
+.rise-list > *:nth-child(5) {
+    animation-delay: 140ms;
+}
+.rise-list > *:nth-child(6) {
+    animation-delay: 175ms;
+}
+.rise-list > *:nth-child(7) {
+    animation-delay: 210ms;
+}
+.rise-list > *:nth-child(8) {
+    animation-delay: 245ms;
+}
+.rise-list > *:nth-child(9) {
+    animation-delay: 280ms;
+}
+.rise-list > *:nth-child(10) {
+    animation-delay: 315ms;
+}
+.rise-list > *:nth-child(11) {
+    animation-delay: 350ms;
+}
+.rise-list > *:nth-child(12) {
+    animation-delay: 385ms;
+}
+/* Past the first screenful, rows (often added later, e.g. by LoadMore) just appear. */
+.rise-list > *:nth-child(n + 13) {
+    animation: none;
+}
 
 /*
  * Loading placeholders: a soft light sweeping across. The light is a layer
@@ -1421,7 +1462,8 @@ html.reduce-motion::view-transition-new(zen-page) {
     [class*='zen__'],
     [class*='zen__']::before,
     [class*='zen__']::backdrop,
-    .rise > * {
+    .rise > *,
+    .rise-list > * {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
@@ -1432,7 +1474,8 @@ html.reduce-motion .zen-backdrop *::before,
 html.reduce-motion [class*='zen__'],
 html.reduce-motion [class*='zen__']::before,
 html.reduce-motion [class*='zen__']::backdrop,
-html.reduce-motion .rise > * {
+html.reduce-motion .rise > *,
+html.reduce-motion .rise-list > * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

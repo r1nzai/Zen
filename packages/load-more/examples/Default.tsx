@@ -19,7 +19,7 @@ export default function Default() {
     };
     return (
         <div className="glass glow-edge h-80 w-full max-w-sm overflow-y-auto rounded-xl">
-            <ul className="divide-tint/[0.06] divide-y">
+            <ul className="rise-list divide-tint/[0.06] divide-y">
                 {entries.map((e) => (
                     <li key={e.id} className="flex justify-between px-4 py-2.5 text-sm">
                         <span>{e.label}</span>
