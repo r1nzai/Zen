@@ -1,4 +1,4 @@
-import { Button, CommandPalette, useCommandPaletteShortcut, type CommandItem } from '@rinzai/zen';
+import { Button, CommandPalette, Kbd, useCommandPaletteShortcut, type CommandItem } from '@rinzai/zen';
 import ChartBar from '@zen/icons/chart-bar';
 import ListBullet from '@zen/icons/list-bullet';
 import Settings from '@zen/icons/settings';
@@ -21,7 +21,11 @@ export default function Default() {
     return (
         <div className="flex flex-col items-center gap-3">
             <Button variant="outline" onClick={() => setOpen(true)}>
-                Search… <kbd className="text-muted-foreground ml-2 font-sans text-xs">⌘K</kbd>
+                Search…
+                <span className="ml-2 flex gap-0.5">
+                    <Kbd>⌘</Kbd>
+                    <Kbd>K</Kbd>
+                </span>
             </Button>
             {last && <p className="text-muted-foreground mt-0! text-sm">Ran: {last}</p>}
             <CommandPalette open={open} onOpenChange={setOpen} items={items} placeholder="Search pages and actions…" />

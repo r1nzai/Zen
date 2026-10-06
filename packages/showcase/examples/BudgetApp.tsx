@@ -35,6 +35,7 @@ import {
     FormMessage,
     Header,
     Input,
+    Kbd,
     type Money,
     MoneyInput,
     type Month,
@@ -373,8 +374,9 @@ function Budget({ nav }: { nav: boolean }) {
                                     <Search />
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p className="mt-0! px-2.5 py-1.5 text-xs">
-                                        Search <kbd className="text-muted-foreground font-sans">⌘K</kbd>
+                                    <p className="mt-0! flex items-center gap-1 px-2.5 py-1.5 text-xs">
+                                        Search <Kbd>⌘</Kbd>
+                                        <Kbd>K</Kbd>
                                     </p>
                                 </TooltipContent>
                             </Tooltip>

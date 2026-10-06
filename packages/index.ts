@@ -257,3 +257,4 @@ export { default as Sparkline, type SparklineProps } from './sparkline';
 export { Step, type StepProps, default as Stepper, type StepperProps } from './stepper';
 export { default as TagInput, type TagInputProps } from './tag-input';
 export { default as Timeline, TimelineItem, type TimelineItemProps } from './timeline';
+export { default as Kbd } from './kbd';

@@ -209,6 +209,12 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'WithButton'],
     },
     {
+        slug: 'kbd',
+        title: 'Kbd',
+        description: 'Keys on the keyboard, for shortcuts in hints and tooltips.',
+        parts: ['Kbd'],
+    },
+    {
         slug: 'menu',
         title: 'Menu',
         description:
