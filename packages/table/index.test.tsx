@@ -208,4 +208,28 @@ describe('TableBody motion', () => {
         virtual.rerender(rows(['b', 'a'], true));
         expect(animate).not.toHaveBeenCalled();
     });
+
+    const panel = (keys: string[]) => <TableContainer>{rows(keys)}</TableContainer>;
+    const ghosts = () => [...document.querySelectorAll('.zen__table-container > table[aria-hidden]')];
+
+    it('fades a deleted row where it was, then takes it away', () => {
+        const fade = { onfinish: null as null | (() => void), oncancel: null };
+        animate.mockImplementation(function (this: Element) {
+            return this.tagName === 'TABLE' ? fade : undefined;
+        });
+        const { rerender } = render(panel(['a', 'b', 'c']));
+        rerender(panel(['a', 'c']));
+        expect(ghosts()).toHaveLength(1);
+        expect(ghosts()[0]).toHaveTextContent('b');
+        expect((ghosts()[0] as HTMLElement).style.top).toBe('40px');
+        expect(moves()).toContainEqual({ opacity: [1, 0], translate: ['0 0', '-12px 0'] });
+        fade.onfinish!();
+        expect(ghosts()).toHaveLength(0);
+    });
+
+    it('fades nothing out when every row changed (a new page, not a deletion)', () => {
+        const { rerender } = render(panel(['a', 'b']));
+        rerender(panel(['x', 'y']));
+        expect(ghosts()).toHaveLength(0);
+    });
 });

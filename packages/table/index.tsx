@@ -68,7 +68,7 @@ export function TableContainer({ label, className, ref, onScroll, ...rest }: Tab
                 role={label ? 'region' : undefined}
                 aria-label={label}
                 tabIndex={label ? 0 : undefined}
-                className="zen__table-container focus-visible:ring-ring/30 min-h-0 overflow-auto rounded-[inherit] outline-hidden will-change-scroll focus-visible:ring-2 focus-visible:ring-inset"
+                className="zen__table-container focus-visible:ring-ring/30 relative min-h-0 overflow-auto rounded-[inherit] outline-hidden will-change-scroll focus-visible:ring-2 focus-visible:ring-inset"
                 {...rest}
             />
         </div>
@@ -103,6 +103,9 @@ export function TableBody({ ref, ...rest }: ComponentProps<'tbody'>) {
         const tops = new Map(rows.map((r) => [r, r.offsetTop]));
         last.current = { rows, tops };
         if (!before || reducedMotion() || el.querySelector('[data-zen-spacer]')) return;
+        if (rows.some((row) => before.tops.has(row))) {
+            for (const row of before.rows) if (!row.isConnected) fadeOut(row, before.tops.get(row)!, el, rows);
+        }
         for (const row of rows) {
             const was = before.tops.get(row);
             if (was === undefined) {
@@ -125,7 +128,42 @@ export function TableBody({ ref, ...rest }: ComponentProps<'tbody'>) {
         />
     );
 }
+
+/**
+ * A deleted row fades where it was while the rows below slide up into its
+ * place: React has already taken it out, so it's put back in a copy of the
+ * table, at its old place over the scrolling content, with the columns as wide.
+ */
+function fadeOut(row: HTMLTableRowElement, top: number, body: HTMLTableSectionElement, kept: HTMLTableRowElement[]) {
+    const table = body.closest('table');
+    const scroller = body.closest<HTMLElement>('.zen__table-container');
+    const like = kept.find((r) => r.cells.length === row.cells.length);
+    if (!table || !scroller || !like) return;
+    const box = scroller.getBoundingClientRect();
+    const at = table.getBoundingClientRect();
+    const ghost = document.createElement('table');
+    ghost.className = table.className;
+    ghost.setAttribute('aria-hidden', 'true');
+    Object.assign(ghost.style, {
+        position: 'absolute',
+        top: `${at.top - box.top + scroller.scrollTop + top}px`,
+        left: `${at.left - box.left + scroller.scrollLeft}px`,
+        width: `${table.offsetWidth}px`,
+        tableLayout: 'fixed',
+        pointerEvents: 'none',
+    });
+    const cols = document.createElement('colgroup');
+    for (const cell of like.cells)
+        cols.appendChild(document.createElement('col')).style.width = `${cell.offsetWidth}px`;
+    ghost.append(cols, document.createElement('tbody'));
+    ghost.tBodies[0].append(row);
+    scroller.append(ghost);
+    const fade = ghost.animate?.({ opacity: [1, 0], translate: ['0 0', '-12px 0'] }, LEAVE);
+    if (fade) fade.onfinish = fade.oncancel = () => ghost.remove();
+    else ghost.remove();
+}
 const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+const LEAVE: KeyframeAnimationOptions = { duration: 220, easing: 'ease-in' };
 const MOVE: KeyframeAnimationOptions = { duration: 320, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' };
 const ENTER: KeyframeAnimationOptions = { duration: 260, easing: 'ease-out' };
 
