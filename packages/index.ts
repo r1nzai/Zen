@@ -30,6 +30,13 @@ export {
     StatRow,
 } from './card';
 export { default as CodeBlock } from './code-block';
+export {
+    ColorPanel,
+    type ColorPanelProps,
+    default as ColorPicker,
+    type ColorPickerProps,
+    type ColorSwatch,
+} from './color-picker';
 export { default as Chip, type ChipProps } from './chip';
 export { default as Collapse } from './collapse';
 export {
@@ -207,6 +214,7 @@ export { prepareThemeWave, themeWave } from './utils/theme-wave';
 export { followSectionLink } from './utils/section-link';
 export { reducedMotion } from './utils/motion';
 export { useHydrated } from './utils/useHydrated';
+export { hexToOklch, type Oklch, oklchToHex } from './utils/color';
 export { type CopyToClipboardOptions, useCopyToClipboard } from './utils/useCopyToClipboard';
 export {
     addMonths,

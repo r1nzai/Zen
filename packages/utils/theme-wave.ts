@@ -1,5 +1,6 @@
 import { applyGraphicsMode } from './graphics';
 import { reducedMotion } from './motion';
+import { linearToSrgb } from './color';
 import { changeTheme, oklchToLinearRgb } from './theme';
 
 // Into a light theme, the new theme spreads from the switch to the far corners
@@ -209,7 +210,7 @@ function drain(gpu: Water) {
 
 /** A theme colour (an OKLCH triplet) as sRGB 0–1, for the shader. */
 function srgb(triplet: string): number[] {
-    return oklchToLinearRgb(triplet).map((c) => (c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055));
+    return oklchToLinearRgb(triplet).map(linearToSrgb);
 }
 
 /** Whether a switch draws the water; otherwise the theme just changes (see themeWave). */

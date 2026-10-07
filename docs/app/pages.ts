@@ -129,6 +129,15 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['CodeInput'],
     },
     {
+        slug: 'color-picker',
+        title: 'Color Picker',
+        description:
+            'Pick a colour by eye or by hex: a saturation and brightness area, hue and opacity, and your own swatches. With hexToOklch to give a colour to the theme engine.',
+        parts: ['ColorPicker', 'ColorPanel'],
+        imports: ['ColorPicker', 'ColorPanel', 'hexToOklch', 'oklchToHex'],
+        examples: ['Default', 'Swatches', 'Inline', 'Accent'],
+    },
+    {
         slug: 'collapse',
         title: 'Collapse',
         description: 'Shows as many items as fit on one line, and the rest behind "+N".',

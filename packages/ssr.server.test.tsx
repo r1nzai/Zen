@@ -35,6 +35,8 @@ import {
     Meter,
     MoneyInput,
     MonthPicker,
+    ColorPicker,
+    ColorPanel,
     Pill,
     PillIndicator,
     Pills,
@@ -173,6 +175,8 @@ const components = {
         </Select>
     ),
     MonthPicker: <MonthPicker aria-label="x" value="2026-09" onChange={() => {}} locale="en-US" />,
+    ColorPicker: <ColorPicker aria-label="x" value="#7c5cff" onChange={() => {}} />,
+    ColorPanel: <ColorPanel value="#7c5cff80" onChange={() => {}} alpha swatches={[{ label: 'x', value: '#fff' }]} />,
     AnimatedNumber: <AnimatedNumber value={42} />,
     Avatar: <Avatar name="Rin" />,
     Field: (
