@@ -68,6 +68,14 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['CalendarHeatmap'],
     },
     {
+        slug: 'canvas',
+        title: 'Canvas',
+        description:
+            'A fixed-size surface where items sit anywhere, like the cards of a stream overlay: drag to move, handles to resize, arrow keys too, and snapping to edges and each other.',
+        parts: ['Canvas', 'CanvasItem'],
+        examples: ['Overlay', 'Snapping'],
+    },
+    {
         slug: 'card',
         title: 'Card',
         description: 'Glass panels for grouping content, and stats for single figures.',

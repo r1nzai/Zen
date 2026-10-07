@@ -58,7 +58,7 @@ export default function App() {
 
 - **Surfaces:** Card, Inset, Alert, Stat, Dialog (and sheets from an edge), ConfirmDialog, Popover, Tooltip, Toast (a stacked deck), Disclosure, Backdrop (aurora, contours or dots, and a pointer light)
 - **Inputs:** Button, Input, TextArea, InputGroup, MoneyInput (with currency conversion), Select, Combobox, Calendar, DatePicker, DateRangePicker, MonthPicker, ColorPicker, Checkbox, RadioGroup, RadioCards, Segmented, Slider, Toggle, Chip, Field
-- **Data:** Chart (areas, lines, bars) and DonutChart in plain SVG, composable Table with sticky edges and sorting, tree rows, editable cells, virtual rows, Meter, ProgressRing, AnimatedNumber, Badge, StatusPill (a live save status), Skeleton, Spinner
+- **Data:** Chart (areas, lines, bars) and DonutChart in plain SVG, composable Table with sticky edges and sorting, tree rows, editable cells, virtual rows, Meter, ProgressRing, AnimatedNumber, Badge, StatusPill (a live save status), Skeleton, Spinner, Canvas (items placed freely, with snapping)
 - **Navigation:** Header, Pills, Tabs, TabBar, SideNav, TableOfContents, Menu
 - **Theming:** dark and light, OKLCH tokens, and a theme generator (presets or any hue) that keeps contrast readable
 - **Hooks and utilities:** `themeWave` (the theme spreads from the switch like a drop falling into water: ripples, glints and a rainbow edge, drawn on the GPU; `prepareThemeWave` readies it when the pointer reaches your own switch), `useAnchoredPopup`, `useVirtualList`, `useTree`, `useSort`, `useCopyToClipboard`, money, currency, month and date helpers, `hexToOklch` and `oklchToHex`, `cx` (Tailwind-aware class merging), `cva`

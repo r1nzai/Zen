@@ -36,6 +36,8 @@ import {
     MoneyInput,
     MonthPicker,
     ColorPicker,
+    Canvas,
+    CanvasItem,
     ColorPanel,
     Pill,
     PillIndicator,
@@ -175,6 +177,18 @@ const components = {
         </Select>
     ),
     MonthPicker: <MonthPicker aria-label="x" value="2026-09" onChange={() => {}} locale="en-US" />,
+    Canvas: (
+        <Canvas
+            aria-label="x"
+            width={100}
+            height={50}
+            items={[{ id: 'a', x: 1, y: 2, w: 10, h: 10 }]}
+            selected="a"
+            onChange={() => {}}
+        >
+            <CanvasItem id="a" label="A" />
+        </Canvas>
+    ),
     ColorPicker: <ColorPicker aria-label="x" value="#7c5cff" onChange={() => {}} />,
     ColorPanel: <ColorPanel value="#7c5cff80" onChange={() => {}} alpha swatches={[{ label: 'x', value: '#fff' }]} />,
     AnimatedNumber: <AnimatedNumber value={42} />,

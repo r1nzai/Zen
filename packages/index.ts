@@ -29,6 +29,15 @@ export {
     Stat,
     StatRow,
 } from './card';
+export {
+    Canvas,
+    type CanvasGuide,
+    CanvasItem,
+    type CanvasItemProps,
+    type CanvasItemRect,
+    type CanvasProps,
+    type CanvasRect,
+} from './canvas';
 export { default as CodeBlock } from './code-block';
 export {
     ColorPanel,
