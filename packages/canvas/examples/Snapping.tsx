@@ -1,8 +1,11 @@
-import { Canvas, CanvasItem, type CanvasItemRect } from '@rinzai/zen';
+import { Canvas, CanvasItem, type CanvasItemRect, Segmented, SegmentedItem } from '@rinzai/zen';
 import { useState } from 'react';
 
-/** With `snap`, items line up with the surface's edges and centre and with each other, a guide showing where; with `grid`, they keep to a grid, its dots showing while you drag. */
+type Mode = 'off' | 'guides' | 'grid';
+
+/** Off: items go where you drop them. Guides (`snap`): edges and centres line up with the surface and each other. Grid (`grid`, here with `snap`): they keep to a 20-unit grid, its dots showing while you drag. */
 export default function Snapping() {
+    const [mode, setMode] = useState<Mode>('guides');
     const [items, setItems] = useState<CanvasItemRect[]>([
         { id: 'a', x: 20, y: 20, w: 120, h: 70 },
         { id: 'b', x: 210, y: 70, w: 100, h: 100 },
@@ -10,27 +13,34 @@ export default function Snapping() {
     ]);
     const [selected, setSelected] = useState<string[]>([]);
     return (
-        <Canvas
-            aria-label="Layout"
-            width={460}
-            height={220}
-            snap
-            grid={10}
-            items={items}
-            onChange={setItems}
-            selected={selected}
-            onSelect={setSelected}
-        >
-            {items.map((item, n) => (
-                <CanvasItem
-                    key={item.id}
-                    id={item.id}
-                    label={`Card ${n + 1}`}
-                    className="glass text-muted-foreground grid place-items-center rounded-lg text-sm"
-                >
-                    Card {n + 1}
-                </CanvasItem>
-            ))}
-        </Canvas>
+        <div className="flex flex-col items-start gap-3">
+            <Segmented label="Snapping" value={mode} onChange={setMode}>
+                <SegmentedItem value="off">Off</SegmentedItem>
+                <SegmentedItem value="guides">Guides</SegmentedItem>
+                <SegmentedItem value="grid">Grid</SegmentedItem>
+            </Segmented>
+            <Canvas
+                aria-label="Layout"
+                width={460}
+                height={220}
+                snap={mode !== 'off'}
+                grid={mode === 'grid' ? 20 : undefined}
+                items={items}
+                onChange={setItems}
+                selected={selected}
+                onSelect={setSelected}
+            >
+                {items.map((item, n) => (
+                    <CanvasItem
+                        key={item.id}
+                        id={item.id}
+                        label={`Card ${n + 1}`}
+                        className="glass text-muted-foreground grid place-items-center rounded-lg text-sm tabular-nums"
+                    >
+                        {item.x}, {item.y}
+                    </CanvasItem>
+                ))}
+            </Canvas>
+        </div>
     );
 }
