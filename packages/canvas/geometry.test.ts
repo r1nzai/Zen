@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test';
 
-import { moveRect, resizeRect } from './geometry';
+import { boundsOf, intersects, moveRect, resizeRect } from './geometry';
 
 const bounds = { width: 400, height: 120, min: 8 };
 const box = { x: 100, y: 40, w: 80, h: 40 };
@@ -68,8 +68,36 @@ describe('resizeRect', () => {
     });
 
     it('snaps a dragged edge, with a guide', () => {
-        const r = resizeRect(box, 'e', 17, 0, bounds, { snap: { others: [], threshold: 4 } });
+        const r = resizeRect(box, 'e', 17, 0, bounds, { others: [], threshold: 4 });
         expect(r.rect.w).toBe(100);
         expect(r.guides).toEqual([{ axis: 'x', at: 200 }]);
+    });
+});
+
+describe('grid', () => {
+    it('rounds a moved corner to the grid', () => {
+        expect(moveRect(box, 5, 3, bounds, { grid: 8 }).rect).toEqual({ x: 104, y: 40, w: 80, h: 40 });
+    });
+
+    it('prefers a line in reach to the grid', () => {
+        const r = moveRect(box, 18, 0, bounds, { grid: 8, threshold: 4 });
+        // Its centre, at 158, is in reach of nothing; its right edge, at 198, of the surface's middle.
+        expect(r.rect.x).toBe(120);
+        expect(r.guides).toContainEqual({ axis: 'x', at: 200 });
+    });
+
+    it('rounds a dragged edge to the grid', () => {
+        expect(resizeRect(box, 'se', 3, 5, bounds, { grid: 8 }).rect).toEqual({ x: 100, y: 40, w: 84, h: 48 });
+    });
+});
+
+describe('helpers', () => {
+    it('boxes several rects', () => {
+        expect(boundsOf([box, { x: 10, y: 90, w: 20, h: 20 }])).toEqual({ x: 10, y: 40, w: 170, h: 70 });
+    });
+
+    it('knows overlap from touching', () => {
+        expect(intersects(box, { x: 170, y: 70, w: 50, h: 50 })).toBe(true);
+        expect(intersects(box, { x: 180, y: 40, w: 10, h: 10 })).toBe(false);
     });
 });

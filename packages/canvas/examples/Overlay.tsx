@@ -1,28 +1,42 @@
-import { Canvas, CanvasItem, type CanvasItemRect } from '@rinzai/zen';
+import { Button, Canvas, CanvasItem, type CanvasItemRect } from '@rinzai/zen';
 import { useState } from 'react';
 
-/** A 400×120 stream overlay shown at 1.5×: positions stay in the design's own pixels. Drag a card, or pull a handle; Shift keeps its shape. */
+const START: CanvasItemRect[] = [
+    { id: 'backdrop', x: 0, y: 0, w: 400, h: 120, locked: true },
+    { id: 'avatar', x: 12, y: 12, w: 96, h: 96 },
+    { id: 'title', x: 124, y: 20, w: 240, h: 36 },
+    { id: 'goal', x: 124, y: 72, w: 240, h: 18 },
+];
+
+/**
+ * A 400×120 stream overlay that fills the width it's given (`scale="fit"`); positions stay in the
+ * design's own pixels. Drag a card or pull a handle (Shift keeps its shape, Escape puts it back), or
+ * draw a box to move several. The backdrop is `locked`. `onChangeEnd` keeps the history for Undo.
+ */
 export default function Overlay() {
-    const [items, setItems] = useState<CanvasItemRect[]>([
-        { id: 'avatar', x: 12, y: 12, w: 96, h: 96 },
-        { id: 'title', x: 124, y: 20, w: 240, h: 36 },
-        { id: 'goal', x: 124, y: 72, w: 240, h: 18 },
-    ]);
-    const [selected, setSelected] = useState<string | null>('title');
-    const at = items.find((i) => i.id === selected);
+    const [items, setItems] = useState(START);
+    const [selected, setSelected] = useState<string[]>(['title']);
+    const [history, setHistory] = useState<(readonly CanvasItemRect[])[]>([]);
+    const one = selected.length === 1 ? items.find((i) => i.id === selected[0]) : undefined;
     return (
-        <div className="flex flex-col gap-3">
+        <div className="flex w-full max-w-xl flex-col gap-3">
             <Canvas
                 aria-label="Overlay"
                 width={400}
                 height={120}
-                scale={1.5}
+                scale="fit"
                 snap
                 items={items}
-                onChange={(id, rect) => setItems((all) => all.map((i) => (i.id === id ? { id, ...rect } : i)))}
+                onChange={setItems}
+                onChangeEnd={(_, before) => setHistory((h) => [...h, before])}
                 selected={selected}
                 onSelect={setSelected}
             >
+                <CanvasItem
+                    id="backdrop"
+                    label="Backdrop"
+                    className="rounded-lg bg-[linear-gradient(120deg,oklch(var(--primary)/0.12),transparent_60%)]"
+                />
                 <CanvasItem
                     id="avatar"
                     label="Picture"
@@ -35,9 +49,26 @@ export default function Overlay() {
                     <div className="bg-primary h-full w-3/5 rounded-full" />
                 </CanvasItem>
             </Canvas>
-            <p className="text-muted-foreground mt-0! text-xs tabular-nums">
-                {at ? `${selected}: ${at.x}, ${at.y} · ${at.w} × ${at.h}` : 'Nothing selected'}
-            </p>
+            <div className="flex items-center justify-between gap-3">
+                <p className="text-muted-foreground mt-0! text-xs tabular-nums">
+                    {one
+                        ? `${one.id}: ${one.x}, ${one.y} · ${one.w} × ${one.h}`
+                        : selected.length
+                          ? `${selected.length} selected`
+                          : 'Nothing selected'}
+                </p>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={!history.length}
+                    onClick={() => {
+                        setItems([...history[history.length - 1]]);
+                        setHistory((h) => h.slice(0, -1));
+                    }}
+                >
+                    Undo
+                </Button>
+            </div>
         </div>
     );
 }

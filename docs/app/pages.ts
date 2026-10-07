@@ -71,7 +71,7 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'canvas',
         title: 'Canvas',
         description:
-            'A fixed-size surface where items sit anywhere, like the cards of a stream overlay: drag to move, handles to resize, arrow keys too, and snapping to edges and each other.',
+            'A fixed-size surface where items sit anywhere, like the cards of a stream overlay: drag, resize and select several, by pointer, touch or keyboard, with snapping, a grid, undo and a fit-to-width scale.',
         parts: ['Canvas', 'CanvasItem'],
         examples: ['Overlay', 'Snapping'],
     },

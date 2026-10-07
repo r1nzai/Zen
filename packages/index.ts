@@ -31,7 +31,6 @@ export {
 } from './card';
 export {
     Canvas,
-    type CanvasGuide,
     CanvasItem,
     type CanvasItemProps,
     type CanvasItemRect,

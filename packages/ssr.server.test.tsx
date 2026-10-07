@@ -183,12 +183,13 @@ const components = {
             width={100}
             height={50}
             items={[{ id: 'a', x: 1, y: 2, w: 10, h: 10 }]}
-            selected="a"
+            selected={['a']}
             onChange={() => {}}
         >
             <CanvasItem id="a" label="A" />
         </Canvas>
     ),
+    CanvasFit: <Canvas aria-label="x" width={100} height={50} scale="fit" items={[]} onChange={() => {}} />,
     ColorPicker: <ColorPicker aria-label="x" value="#7c5cff" onChange={() => {}} />,
     ColorPanel: <ColorPanel value="#7c5cff80" onChange={() => {}} alpha swatches={[{ label: 'x', value: '#fff' }]} />,
     AnimatedNumber: <AnimatedNumber value={42} />,
