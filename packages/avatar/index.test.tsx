@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import Avatar, { cropImageToSquare, ImageCropError } from './index';
 
@@ -20,6 +20,16 @@ describe('Avatar', () => {
         expect(container.querySelector('span > span')).toHaveTextContent('R');
         expect(container.querySelector('span > span')).toHaveClass('invisible');
         expect(container.querySelector('img')).toHaveClass('absolute', 'inset-0');
+    });
+
+    it('shows the initial when the image fails to load, and tries a new src', () => {
+        const { container, rerender } = render(<Avatar name="rin" src="/missing.webp" />);
+        fireEvent.error(container.querySelector('img')!);
+        expect(container.querySelector('img')).toBeNull();
+        expect(container.querySelector('span > span')).not.toHaveClass('invisible');
+        rerender(<Avatar name="rin" src="/me.webp" />);
+        expect(container.querySelector('img')).toHaveAttribute('src', '/me.webp');
+        expect(container.querySelector('span > span')).toHaveClass('invisible');
     });
 
     it('refuses non-images for cropping', async () => {
