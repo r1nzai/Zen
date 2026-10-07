@@ -207,6 +207,7 @@ export { prepareThemeWave, themeWave } from './utils/theme-wave';
 export { followSectionLink } from './utils/section-link';
 export { reducedMotion } from './utils/motion';
 export { useHydrated } from './utils/useHydrated';
+export { type CopyToClipboardOptions, useCopyToClipboard } from './utils/useCopyToClipboard';
 export {
     addMonths,
     currentMonth,

@@ -115,9 +115,11 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'code-block',
         title: 'Code Block',
-        description: 'Code with a copy button; bring your own highlighter for colours.',
+        description:
+            'Code with a copy button; bring your own highlighter for colours. The copy button runs on useCopyToClipboard, which you can use for copy buttons anywhere.',
         parts: ['CodeBlock'],
-        examples: ['Highlighted', 'Plain', 'InCard'],
+        imports: ['CodeBlock', 'useCopyToClipboard'],
+        examples: ['Highlighted', 'Plain', 'InCard', 'CopyButton'],
     },
     {
         slug: 'code-input',

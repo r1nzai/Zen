@@ -1,4 +1,5 @@
 import preview from '../../.storybook/preview';
+import CopyButtonExample from './examples/CopyButton';
 import HighlightedExample from './examples/Highlighted';
 import PlainExample from './examples/Plain';
 import InCardExample from './examples/InCard';
@@ -14,3 +15,5 @@ export const Highlighted = meta.story({ render: () => <HighlightedExample /> });
 export const Plain = meta.story({ render: () => <PlainExample /> });
 
 export const InCard = meta.story({ render: () => <InCardExample /> });
+
+export const CopyButton = meta.story({ render: () => <CopyButtonExample /> });

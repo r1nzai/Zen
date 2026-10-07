@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { useCopyToClipboard } from '@zen/utils/useCopyToClipboard';
 import { ComponentProps, useEffect, useRef, useState } from 'react';
 
 /**
@@ -16,12 +17,7 @@ export default function CodeBlock({
     ...rest
 }: CodeBlockProps) {
     const text = code.trim();
-    const [copied, setCopied] = useState(false);
-    useEffect(() => {
-        if (!copied) return;
-        const t = setTimeout(() => setCopied(false), 1500);
-        return () => clearTimeout(t);
-    }, [copied]);
+    const { copy, copied } = useCopyToClipboard();
     // While it scrolls, keyboards need to reach it to scroll it too.
     const pre = useRef<HTMLPreElement>(null);
     const [scrolls, setScrolls] = useState(false);
@@ -61,10 +57,7 @@ export default function CodeBlock({
             {copyable && (
                 <button
                     type="button"
-                    onClick={async () => {
-                        await navigator.clipboard?.writeText(text);
-                        setCopied(true);
-                    }}
+                    onClick={() => copy(text)}
                     className={cx(
                         'zen__code-copy inline-flex items-center justify-center text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute top-2.5 right-2.5 cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium outline-hidden transition-[opacity,background-color,color] focus-visible:ring-2',
                         'opacity-0 group-hover:opacity-100 focus-visible:opacity-100 pointer-coarse:min-h-11 pointer-coarse:min-w-11 [@media(hover:none)]:bg-card/90 [@media(hover:none)]:opacity-100',

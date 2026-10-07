@@ -3,6 +3,8 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import CodeBlock from './index';
 
 describe('CodeBlock', () => {
+    afterEach(() => Reflect.deleteProperty(navigator, 'clipboard'));
+
     it('shows trimmed code as plain text without a highlighter', () => {
         const { container } = render(<CodeBlock code={'\n  const a = 1;\n'} />);
         expect(container.querySelector('code')?.textContent).toBe('const a = 1;');
@@ -27,6 +29,12 @@ describe('CodeBlock', () => {
         act(() => vi.advanceTimersByTime(1500));
         expect(screen.getByRole('button', { name: 'Copy' })).toBeInTheDocument();
         vi.useRealTimers();
+    });
+
+    it('stays "Copy" when there is no clipboard to copy to', async () => {
+        render(<CodeBlock code="x" />);
+        await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Copy' })));
+        expect(screen.getByRole('button', { name: 'Copy' })).toBeInTheDocument();
     });
 
     it('can hide the copy button', () => {
