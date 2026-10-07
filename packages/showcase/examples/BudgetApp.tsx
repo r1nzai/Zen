@@ -15,6 +15,7 @@ import {
     CardHeader,
     CardTitle,
     Collapse,
+    ColorPicker,
     Combobox,
     ComboboxEmpty,
     ComboboxList,
@@ -31,6 +32,7 @@ import {
     EditableCell,
     EmptyState,
     Field,
+    hexToOklch,
     FileDrop,
     formatMoney,
     formatMonth,
@@ -56,6 +58,7 @@ import {
     PillIndicator,
     Pills,
     type PresetId,
+    oklchToHex,
     PRESETS,
     ProgressRing,
     reducedMotion,
@@ -1065,12 +1068,17 @@ function Goals() {
 
 // ── Appearance ──
 
-const HUES = `linear-gradient(to right, ${Array.from({ length: 13 }, (_, i) => `oklch(0.72 0.13 ${i * 30})`).join(', ')})`;
-
-/** A live theme editor: presets, any hue, glow and motion, in dark and light. */
+/** A live theme editor: presets, an accent colour, glow and motion, in dark and light. */
 function Appearance() {
     const [theme, setTheme] = useState<ThemeSettings>(DEFAULT_THEME);
     const [reduceMotion, setReduceMotion] = useState(false);
+    // The colour picked, while it's still the theme's hue; after a preset, that hue's own colour.
+    const [picked, setPicked] = useState<string | null>(null);
+    const pickedHue = picked === null ? undefined : hexToOklch(picked)?.h;
+    const accent =
+        picked !== null && pickedHue !== undefined && Math.round(pickedHue) === theme.hue
+            ? picked
+            : oklchToHex({ l: 0.72, c: 0.13, h: theme.hue });
 
     useEffect(() => {
         const root = document.documentElement;
@@ -1116,19 +1124,16 @@ function Appearance() {
                         ))}
                     </Select>
                 </Field>
-                <div className="flex flex-col gap-2">
-                    <span className="text-sm font-medium">Hue</span>
-                    <Slider
-                        aria-label="Hue"
-                        min={0}
-                        max={359}
-                        value={theme.hue}
-                        onValueChange={(hue) => setTheme((t) => customize(t, { hue }))}
-                        trackBackground={HUES}
-                        thumbColor={`oklch(0.72 0.13 ${theme.hue})`}
-                        valueText={(v) => `Hue ${v} degrees`}
+                <Field label="Accent" hint="Its hue tints the whole app; lightness stays readable.">
+                    <ColorPicker
+                        value={accent}
+                        onChange={(hex) => {
+                            setPicked(hex);
+                            const hue = hexToOklch(hex)?.h;
+                            if (hue !== undefined) setTheme((t) => customize(t, { hue: Math.round(hue) }));
+                        }}
                     />
-                </div>
+                </Field>
                 <Segmented label="Glow" value={theme.glow} onChange={(glow) => setTheme((t) => ({ ...t, glow }))}>
                     <SegmentedItem value="off">Off</SegmentedItem>
                     <SegmentedItem value="soft">Soft</SegmentedItem>
