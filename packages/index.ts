@@ -391,3 +391,12 @@ export {
 } from './hover-card';
 export { default as NumberField, type NumberFieldProps } from './number-field';
 export { default as TimeField, type TimeFieldProps, type TimeString } from './time-field';
+export {
+    default as Carousel,
+    CarouselContent,
+    CarouselDots,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+    type CarouselProps,
+} from './carousel';

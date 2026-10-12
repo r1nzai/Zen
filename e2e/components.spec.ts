@@ -464,3 +464,22 @@ test('menu: a submenu opens beside its item on hover and by keyboard, and stays 
     await page.keyboard.press('Enter');
     await expect(page.getByRole('menu')).toHaveCount(0);
 });
+
+test('carousel: buttons, dots and arrow keys snap from slide to slide', async ({ page }) => {
+    errors = await open(page, '/components/carousel/');
+    const carousel = page.getByRole('region', { name: 'Savings goals' });
+    const dot = (n: number) => carousel.getByRole('button', { name: `Slide ${n}` });
+    const slide = (n: number) => carousel.getByRole('group', { name: `${n} of 4` });
+    await expect(dot(1)).toHaveAttribute('aria-current', 'true');
+    await carousel.getByRole('button', { name: 'Next slide' }).click();
+    await expect(dot(2)).toHaveAttribute('aria-current', 'true');
+    await expect(slide(2)).toBeInViewport({ ratio: 1 });
+    await dot(4).click();
+    await expect(dot(4)).toHaveAttribute('aria-current', 'true');
+    await expect(carousel.getByRole('button', { name: 'Next slide' })).toHaveAttribute('aria-disabled', 'true');
+    // Focused, the arrow keys scroll it natively, and it snaps to the slide before.
+    await slide(4).locator('xpath=..').focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(dot(3)).toHaveAttribute('aria-current', 'true');
+    await expect(slide(3)).toBeInViewport({ ratio: 1 });
+});

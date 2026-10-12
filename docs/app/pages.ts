@@ -15,6 +15,7 @@ export interface ComponentDoc {
     examples?: string[];
 }
 
+/** In the sidebar by title, whatever order they are written in. */
 export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'accordion',
@@ -89,6 +90,14 @@ export const COMPONENTS: ComponentDoc[] = [
         description: 'Glass panels for grouping content, and stats for single figures.',
         parts: ['Card', 'CardHeader', 'CardTitle', 'CardDescription', 'Stat', 'StatRow'],
         examples: ['Goal', 'Stats', 'Morph'],
+    },
+    {
+        slug: 'carousel',
+        title: 'Carousel',
+        description:
+            'Slides in a row that snap as you swipe or scroll, with glass buttons, dots that light the current one, and the arrow keys. Native scrolling, so it follows the finger exactly.',
+        parts: ['Carousel', 'CarouselContent', 'CarouselItem', 'CarouselPrevious', 'CarouselNext', 'CarouselDots'],
+        examples: ['Default', 'Several'],
     },
     {
         slug: 'button-group',
@@ -624,7 +633,7 @@ export const COMPONENTS: ComponentDoc[] = [
         description: 'A change, like +12% with an arrow, coloured by whether it is good news.',
         parts: ['Trend'],
     },
-];
+].sort((a, b) => a.title.localeCompare(b.title));
 
 // Trailing slashes throughout: pages are built as <path>/index.html, which Cloudflare serves at
 // <path>/ (and Storybook's relative asset paths need its slash too).

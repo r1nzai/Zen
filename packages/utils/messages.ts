@@ -149,6 +149,12 @@ export const ENGLISH = {
     previousPage: 'Previous page',
     nextPage: 'Next page',
     breadcrumb: 'Breadcrumb',
+    carousel: 'carousel',
+    slide: 'slide',
+    slideOf: (n: number, total: number) => `${n} of ${total}`,
+    goToSlide: (n: number) => `Slide ${n}`,
+    previousSlide: 'Previous slide',
+    nextSlide: 'Next slide',
     notifications: 'Notifications (F8)',
 };
 
