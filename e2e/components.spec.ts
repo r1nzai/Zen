@@ -506,3 +506,80 @@ test('resizable: drag a handle, within the panel’s limits, and nudge it with t
     await page.keyboard.press('ArrowLeft');
     await expect(handle).toHaveAttribute('aria-valuenow', '45');
 });
+
+test('sortable tree table: drag rows into another group, into an open sub-item, and under another item', async ({
+    page,
+}) => {
+    errors = await open(page, '/components/sortable/');
+    const section = example(page, 'Table');
+    await section.getByRole('region').evaluate((el) => {
+        el.scrollIntoView({ block: 'center' });
+        el.scrollLeft = 200;
+    });
+    // Each row's name and how far it's set in (its depth).
+    const rows = () =>
+        section.locator('tbody tr').evaluateAll((trs) =>
+            trs.map((tr) => {
+                const name = tr.querySelector('[data-sortable-label]')!.getAttribute('data-sortable-label');
+                const inset = parseInt(getComputedStyle(tr.querySelector('td span')!).paddingInlineStart);
+                return `${name}${inset ? `:${inset}` : ''}`;
+            }),
+        );
+    const row = (name: string) =>
+        section.locator('tbody tr').filter({ has: page.getByRole('button', { name: `Reorder ${name}`, exact: true }) });
+    /** Drags `name` by its grip to the boundary above `above` (a fraction of its height down), `dx` sideways. */
+    const drag = async (name: string, above: string, dx = 0, shot?: string) => {
+        const grip = (await section.getByRole('button', { name: `Reorder ${name}`, exact: true }).boundingBox())!;
+        const to = (await row(above).boundingBox())!;
+        const [x, y] = [grip.x + grip.width / 2, grip.y + grip.height / 2];
+        await page.mouse.move(x, y);
+        await page.mouse.down();
+        await page.mouse.move(x + dx, to.y + 4, { steps: 12 });
+        if (shot) await page.screenshot({ path: test.info().outputPath(shot) });
+        await page.mouse.up();
+        await page.waitForTimeout(300);
+    };
+
+    // Into the other category: Rent between Groceries and Eating out.
+    await drag('Rent', 'Eating out', 0, 'into-group.png');
+    expect(await rows()).toEqual([
+        'Home',
+        'Electricity',
+        'Internet',
+        'Food',
+        'Groceries',
+        'Rent',
+        'Eating out',
+        'Coffee:24',
+        'Takeaway:24',
+    ]);
+    // Into the open sub-item: Electricity between Coffee and Takeaway.
+    await drag('Electricity', 'Takeaway', 0, 'into-sub-item.png');
+    expect(await rows()).toEqual([
+        'Home',
+        'Internet',
+        'Food',
+        'Groceries',
+        'Rent',
+        'Eating out',
+        'Coffee:24',
+        'Electricity:24',
+        'Takeaway:24',
+    ]);
+    // Sideways, a level in: Groceries under Rent... dragged to just below Rent, 30px over.
+    await drag('Groceries', 'Eating out', 30, 'nest.png');
+    expect(await rows()).toEqual([
+        'Home',
+        'Internet',
+        'Food',
+        'Rent',
+        'Groceries:24',
+        'Eating out',
+        'Coffee:24',
+        'Electricity:24',
+        'Takeaway:24',
+    ]);
+    // A category can't go into anything: dropped among items, nothing changes.
+    await drag('Home', 'Takeaway');
+    expect((await rows())[0]).toBe('Home');
+});

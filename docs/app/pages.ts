@@ -487,8 +487,11 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'sortable',
         title: 'Sortable List',
-        description: 'Put a list in order by dragging items by a grip, or with the keyboard, each step announced.',
-        parts: ['SortableList', 'SortableItem', 'SortableHandle'],
+        description:
+            'Put a list in order, or a tree of groups (a table’s rows, say), by dragging items by a grip or with the keyboard, each step announced: into other groups, open sub-items, or under another item.',
+        parts: ['SortableList', 'SortableTree', 'SortableItem', 'SortableHandle'],
+        imports: ['SortableList', 'SortableTree', 'SortableItem', 'SortableHandle', 'flattenTree'],
+        examples: ['Default', 'Table'],
     },
     {
         slug: 'sparkline',

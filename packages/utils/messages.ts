@@ -109,6 +109,7 @@ export const ENGLISH = {
     movedTo: (item: string, place: string) => `${item}, ${place}.`,
     putBack: (item: string, place?: string) => (place ? `${item} put back, ${place}.` : `${item} put back.`),
     place: (position: number, count: number) => `${position} of ${count}`,
+    placeIn: (position: number, count: number, group: string) => `${position} of ${count} in ${group}`,
 
     // Canvas
     resized: (item: string, width: number, height: number) => `${item} resized to ${width} by ${height}.`,

@@ -364,12 +364,17 @@ export { default as LoadMore, type LoadMoreProps } from './load-more';
 export { default as LocaleProvider, type LocaleProviderProps, useLocale, useMessages } from './locale-provider';
 export { ENGLISH, type Messages } from './utils/messages';
 export {
+    flattenTree,
     SortableHandle,
     type SortableHandleProps,
     SortableItem,
     type SortableItemProps,
     SortableList,
     type SortableListProps,
+    type SortableNode,
+    SortableTree,
+    type SortableRow,
+    type SortableTreeProps,
 } from './sortable';
 export { default as PageTransition } from './page-transition';
 export { default as Separator, type SeparatorProps } from './separator';

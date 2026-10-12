@@ -78,3 +78,54 @@ describe('SortableList', () => {
         expect(items[1].style.translate).toBe('');
     });
 });
+
+describe('SortableList asChild', () => {
+    function Rows({ onChange }: { onChange: (v: string[]) => void }) {
+        const [order, setOrder] = useState(['a', 'b']);
+        return (
+            <table>
+                <SortableList
+                    asChild
+                    value={order}
+                    onValueChange={(v) => {
+                        setOrder(v);
+                        onChange(v);
+                    }}
+                >
+                    <tbody className="mine">
+                        <tr>
+                            <th>Heading</th>
+                        </tr>
+                        {order.map((id) => (
+                            <SortableItem key={id} id={id} asChild>
+                                <tr>
+                                    <td>
+                                        <SortableHandle id={id} label={NAMES[id]} />
+                                        {NAMES[id]}
+                                    </td>
+                                </tr>
+                            </SortableItem>
+                        ))}
+                    </tbody>
+                </SortableList>
+            </table>
+        );
+    }
+
+    it('sorts your own rows, leaving others (a heading row) where they are, with valid table markup', () => {
+        const onChange = vi.fn();
+        const errors = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const { container } = render(<Rows onChange={onChange} />);
+        const body = container.querySelector('tbody')!;
+        expect(body).toHaveClass('mine', 'zen__sortable');
+        expect(body).not.toHaveClass('flex');
+        fireEvent.keyDown(handle('Rent'), { key: ' ' });
+        fireEvent.keyDown(handle('Rent'), { key: 'ArrowDown' });
+        expect(onChange).toHaveBeenLastCalledWith(['b', 'a']);
+        expect([...body.rows].map((r) => r.textContent)).toEqual(['Heading', 'Food', 'Rent']);
+        expect(body.rows[2]).toHaveAttribute('data-lifted');
+        // Announced from outside the table.
+        expect(screen.getByText('Rent, 2 of 2.').closest('table')).toBeNull();
+        expect(errors).not.toHaveBeenCalled();
+    });
+});
