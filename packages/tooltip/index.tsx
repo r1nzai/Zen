@@ -2,9 +2,9 @@ import { cx } from '@zen/utils/cx';
 import { useGraphicsMode } from '@zen/utils/graphics';
 import { Slot } from '@zen/utils/slot';
 import { POPUP } from '@zen/utils/styles';
-import { anchoredStyle, anchorFor } from '@zen/utils/useAnchoredPopup';
+import { anchoredStyle, anchorFor, useAnchorFallback } from '@zen/utils/useAnchoredPopup';
 import { type HoverPopup, useHoverPopup } from '@zen/utils/useHoverPopup';
-import { ComponentProps, createContext, ReactNode, useContext } from 'react';
+import { ComponentProps, createContext, ReactNode, useContext, useRef } from 'react';
 
 const TooltipContext = createContext<HoverPopup | null>(null);
 
@@ -66,10 +66,12 @@ export function TooltipContent({
     ...rest
 }: TooltipContentProps) {
     const tip = useTooltip('TooltipContent');
+    const ref = useRef<HTMLDivElement>(null);
+    useAnchorFallback(ref);
     return (
         <div
             {...rest}
-            ref={tip.ref}
+            ref={ref}
             id={tip.id}
             role="tooltip"
             // Manual: it doesn't close other popovers, and the trigger decides when it shows.

@@ -2,10 +2,10 @@ import { cx } from '@zen/utils/cx';
 import { useGraphicsMode } from '@zen/utils/graphics';
 import { Slot } from '@zen/utils/slot';
 import { POPUP } from '@zen/utils/styles';
-import { anchoredStyle, anchorFor } from '@zen/utils/useAnchoredPopup';
+import { anchoredStyle, anchorFor, useAnchorFallback } from '@zen/utils/useAnchoredPopup';
 import { type HoverPopup, useHoverPopup } from '@zen/utils/useHoverPopup';
 import { useHydrated } from '@zen/utils/useHydrated';
-import { ComponentProps, createContext, ReactNode, useContext } from 'react';
+import { ComponentProps, createContext, ReactNode, useContext, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 const HoverCardContext = createContext<HoverPopup | null>(null);
@@ -67,7 +67,14 @@ export function HoverCardTrigger({
 }
 
 /** The card: glass, below the trigger (above it if there's no room), lined up with its start by default. */
-export function HoverCardContent({
+export function HoverCardContent(props: HoverCardContentProps) {
+    // In <body>: a card is a block, and its trigger is often in running text, where a block can't go.
+    // Only once hydrated, as there's no <body> to portal into on the server (and it starts hidden).
+    if (!useHydrated()) return null;
+    return createPortal(<Card {...props} />, document.body);
+}
+
+function Card({
     align = 'start',
     offset = 8,
     className,
@@ -80,13 +87,12 @@ export function HoverCardContent({
     ...rest
 }: HoverCardContentProps) {
     const card = useHoverCard('HoverCardContent');
-    // In <body>: a card is a block, and its trigger is often in running text, where a block can't go.
-    // Only once hydrated, as there's no <body> to portal into on the server (and it starts hidden).
-    if (!useHydrated()) return null;
-    return createPortal(
+    const ref = useRef<HTMLDivElement>(null);
+    useAnchorFallback(ref);
+    return (
         <div
             {...rest}
-            ref={card.ref}
+            ref={ref}
             id={card.id}
             // Manual: it doesn't close other popovers, and the trigger decides when it shows.
             popover="manual"
@@ -95,8 +101,7 @@ export function HoverCardContent({
             className={cx('zen__popover fixed z-50 w-72 overflow-visible p-4', POPUP, className)}
         >
             {children}
-        </div>,
-        document.body,
+        </div>
     );
 }
 

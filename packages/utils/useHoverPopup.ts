@@ -1,29 +1,32 @@
 import { FocusEvent, KeyboardEvent, PointerEvent, useCallback, useEffect, useId, useMemo, useRef } from 'react';
 
-import { useAnchorFallback } from './useAnchoredPopup';
-
 export type HoverPopup = ReturnType<typeof useHoverPopup>;
 
 /**
  * A manual popover shown while its trigger is pointed at or has keyboard
  * focus (Tooltip's, HoverCard's): after `openDelay` for the pointer, hidden
  * `closeDelay` after it leaves (so it can move onto the popup), on blur and
- * on Escape. Spread `triggerProps` and `contentProps` from it.
+ * on Escape. Spread `triggerProps` and `contentProps` from it, give the
+ * popup its `id`, and place it with useAnchorFallback where it renders.
  */
 export function useHoverPopup(prefix: string, { openDelay = 0, closeDelay = 100 } = {}) {
     const id = `${prefix}-${useId().replace(/[^\w-]/g, '')}`;
-    const ref = useRef<HTMLDivElement>(null);
     const timer = useRef(0);
 
-    const set = useCallback((open: boolean) => {
-        clearTimeout(timer.current);
-        try {
-            if (open) ref.current?.showPopover?.();
-            else ref.current?.hidePopover?.();
-        } catch {
-            // Already so.
-        }
-    }, []);
+    // Found by id: the popup may mount after this (HoverCard's, in a portal once hydrated).
+    const set = useCallback(
+        (open: boolean) => {
+            clearTimeout(timer.current);
+            const popup = document.getElementById(id);
+            try {
+                if (open) popup?.showPopover?.();
+                else popup?.hidePopover?.();
+            } catch {
+                // Already so.
+            }
+        },
+        [id],
+    );
     const after = useCallback(
         (open: boolean, delay: number) => {
             clearTimeout(timer.current);
@@ -33,7 +36,6 @@ export function useHoverPopup(prefix: string, { openDelay = 0, closeDelay = 100 
         [set],
     );
     useEffect(() => () => clearTimeout(timer.current), []);
-    useAnchorFallback(ref);
 
     return useMemo(() => {
         const show = () => set(true);
@@ -42,11 +44,10 @@ export function useHoverPopup(prefix: string, { openDelay = 0, closeDelay = 100 
         // Focus moving between the trigger and the popup (a link in a hover card) keeps it.
         const leaving = (e: FocusEvent) => {
             const to = e.relatedTarget as Node | null;
-            if (!to || !ref.current?.contains(to)) hide();
+            if (!to || !document.getElementById(id)?.contains(to)) hide();
         };
         return {
             id,
-            ref,
             show,
             hide,
             triggerProps: <E extends Element>(own: TriggerHandlers<E>) => ({

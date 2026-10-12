@@ -404,6 +404,10 @@ test('hover card: shows once the pointer rests on the link, and for keyboard foc
     const card = page.getByText('Flatmate · shares rent and bills');
     await link.hover();
     await expect(card).toBeVisible();
+    // Placed against the link: natively, or by the fallback where anchor positioning is missing.
+    const [at, under] = [(await link.boundingBox())!, (await card.boundingBox())!];
+    expect(under.y).toBeGreaterThan(at.y + at.height);
+    expect(under.y).toBeLessThan(at.y + at.height + 60);
     await page.mouse.move(0, 0);
     await expect(card).toBeHidden();
     await link.focus();
