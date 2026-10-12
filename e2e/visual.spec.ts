@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { COMPONENTS, componentPath } from '../docs/app/pages';
+import { NOW } from './now';
 
 /*
  * Every example on every component page, against its last approved look.
@@ -12,7 +13,7 @@ test.use({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
 
 for (const { slug } of COMPONENTS) {
     test(`looks: ${slug}`, async ({ page }) => {
-        await page.clock.setFixedTime(new Date('2026-10-06T12:00:00'));
+        await page.clock.setFixedTime(new Date(NOW));
         await page.goto(componentPath(slug));
         await page.waitForLoadState('networkidle');
         await page.evaluate(() => document.fonts.ready);

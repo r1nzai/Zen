@@ -1,10 +1,13 @@
 import { expect, type Page, test } from '@playwright/test';
 
+import { NOW } from './now';
+
 /** Opens a docs page once it's hydrated, failing the test on any console error. */
 async function open(page: Page, path: string) {
     const errors: string[] = [];
     page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
     page.on('pageerror', (e) => errors.push(e.message));
+    await page.clock.setSystemTime(new Date(NOW));
     await page.goto(path);
     await page.waitForLoadState('networkidle');
     return errors;
@@ -181,6 +184,8 @@ test("a dialog sits above a table's sticky cells, without scrolling itself", asy
     await page.getByRole('button', { name: 'Add entry' }).first().click();
     const dialog = page.getByRole('dialog');
     const save = dialog.getByRole('button', { name: /Add|Save/ }).last();
+    // The form is taller than the window, so its footer scrolls into view with the dialog's body.
+    await save.scrollIntoViewIfNeeded();
     const onTop = await save.evaluate((el) => {
         const r = el.getBoundingClientRect();
         const hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
@@ -332,14 +337,16 @@ test('the pointer light follows lit elements near it, re-measured when the page 
     page,
 }) => {
     // Headless browsers render in software, which Zen treats as lite graphics (no pointer light).
-    // Set before the page's scripts run, once <html> exists.
-    await page.addInitScript(() =>
+    // Set before the page's scripts run, once <html> exists (it already does in Firefox).
+    await page.addInitScript(() => {
+        const full = () => document.documentElement?.setAttribute('data-zen-graphics', 'full');
+        if (document.documentElement) return full();
         new MutationObserver((_, watch) => {
             if (!document.documentElement) return;
-            document.documentElement.setAttribute('data-zen-graphics', 'full');
+            full();
             watch.disconnect();
-        }).observe(document, { childList: true }),
-    );
+        }).observe(document, { childList: true });
+    });
     errors = await open(page, '/showcase/');
     // A lit element of our own, placed where we know: pointer offsets are exact.
     const add = (top: number) =>
