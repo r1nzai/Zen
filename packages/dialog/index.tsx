@@ -106,7 +106,7 @@ export default function Dialog({
                     aria-label={closeLabel}
                     onClick={() => onOpenChange?.(false)}
                     className={cx(
-                        'text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute end-4 grid size-8 cursor-pointer place-items-center rounded-lg outline-hidden transition-colors focus-visible:ring-2',
+                        'text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground absolute end-4 grid size-8 cursor-pointer place-items-center rounded-lg outline-hidden transition-colors focus-ring',
                         side === 'bottom' ? 'top-7.5' : 'top-5.5',
                     )}
                 >

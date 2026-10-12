@@ -1,16 +1,17 @@
 import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
-import { FIELD } from '@zen/utils/styles';
+import { FIELD, FIELD_SIZE, type FieldSize } from '@zen/utils/styles';
 import { ComponentProps } from 'react';
 
 export default function Input(props: InputProps) {
-    const { className, ...rest } = props;
+    const { className, size = 'default', ...rest } = props;
     const field = useFieldProps(rest);
     return (
         <input
             className={cx(
                 'zen__input',
                 FIELD,
+                FIELD_SIZE[size],
                 'w-full',
                 'read-only:text-foreground read-only:cursor-default read-only:border-none! read-only:bg-transparent read-only:shadow-none! read-only:outline-hidden!',
                 'file:text-foreground file:border-0 file:bg-transparent file:text-sm file:font-medium',
@@ -24,4 +25,7 @@ export default function Input(props: InputProps) {
     );
 }
 
-export type InputProps = ComponentProps<'input'>;
+export interface InputProps extends Omit<ComponentProps<'input'>, 'size'> {
+    /** Height, matching Button's: sm (32px), default (40px) or lg (44px). */
+    size?: FieldSize;
+}

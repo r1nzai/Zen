@@ -461,7 +461,7 @@ function Toast({
                                     toast.action?.onClick();
                                     onDismiss(toast.id);
                                 }}
-                                className="border-tint/10 bg-tint/[0.06] hover:bg-tint/[0.12] focus-visible:ring-ring/50 mt-2 cursor-pointer self-start rounded-lg border px-3 py-1 text-xs font-medium outline-hidden transition-colors focus-visible:ring-2"
+                                className="border-tint/10 bg-tint/[0.06] hover:bg-tint/[0.12] focus-ring mt-2 cursor-pointer self-start rounded-lg border px-3 py-1 text-xs font-medium outline-hidden transition-colors"
                             >
                                 {toast.action.label}
                             </button>
@@ -471,7 +471,7 @@ function Toast({
                         type="button"
                         aria-label="Dismiss"
                         onClick={() => onDismiss(toast.id)}
-                        className="text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute top-2.5 right-2.5 grid size-7 cursor-pointer place-items-center rounded-lg outline-hidden transition-colors focus-visible:ring-2"
+                        className="text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-ring absolute top-2.5 right-2.5 grid size-7 cursor-pointer place-items-center rounded-lg outline-hidden transition-colors"
                     >
                         <XMarkMicro className="size-3.5" />
                     </button>

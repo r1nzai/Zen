@@ -124,4 +124,17 @@ describe('Input', () => {
         expect(el).toHaveClass('ring-2');
         expect(el).toHaveClass('w-full');
     });
+
+    it('takes the same heights as Button, so a row of both lines up', () => {
+        render(
+            <>
+                <Input aria-label="Small" size="sm" />
+                <Input aria-label="Default" />
+                <Input aria-label="Large" size="lg" />
+            </>,
+        );
+        expect(screen.getByRole('textbox', { name: 'Small' })).toHaveClass('h-8');
+        expect(screen.getByRole('textbox', { name: 'Default' })).toHaveClass('h-10');
+        expect(screen.getByRole('textbox', { name: 'Large' })).toHaveClass('h-11');
+    });
 });

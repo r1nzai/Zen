@@ -6,7 +6,7 @@ export default function Badge({ variant, tone, className, ...rest }: BadgeProps)
     return <span {...rest} className={badgeVariants({ variant, tone, className })} />;
 }
 const badgeVariants = cva(
-    'zen__badge inline-flex items-center rounded-md border px-1.5 py-0.5 text-xs font-medium whitespace-nowrap focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-glow/50',
+    'zen__badge inline-flex items-center rounded-md border px-1.5 py-0.5 text-xs font-medium whitespace-nowrap focus-ring',
     {
         variants: {
             variant: {

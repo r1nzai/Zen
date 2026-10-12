@@ -68,7 +68,7 @@ export function TableContainer({ label, className, ref, onScroll, ...rest }: Tab
                 role={label ? 'region' : undefined}
                 aria-label={label}
                 tabIndex={label ? 0 : undefined}
-                className="zen__table-container focus-visible:ring-ring/30 relative min-h-0 overflow-auto rounded-[inherit] outline-hidden will-change-scroll focus-visible:ring-2 focus-visible:ring-inset"
+                className="zen__table-container focus-ring relative min-h-0 overflow-auto rounded-[inherit] outline-hidden will-change-scroll focus-visible:ring-inset"
                 {...rest}
             />
         </div>

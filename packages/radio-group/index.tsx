@@ -82,7 +82,7 @@ export function Radio({ value, disabled, description, className, children }: Rad
                     className={cx(
                         'peer bg-tint/[0.04] m-0 size-full cursor-pointer appearance-none rounded-full border border-[color:oklch(var(--tint)/var(--zen-control-edge))] outline-hidden',
                         'transition-[border-color,box-shadow] duration-200',
-                        'focus-visible:ring-ring/50 focus-visible:ring-2 hover:enabled:border-[color:oklch(var(--tint)/var(--zen-control-edge-hover))]',
+                        ' focus-ring hover:enabled:border-[color:oklch(var(--tint)/var(--zen-control-edge-hover))]',
                         'checked:border-primary checked:shadow-[0_0_14px_-3px_oklch(var(--glow)/calc(0.8*var(--glow-k)))] disabled:cursor-not-allowed',
                     )}
                 />

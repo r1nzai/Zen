@@ -145,7 +145,7 @@ export default function Calendar(props: CalendarProps) {
                     setYear(Number(view.slice(0, 4)));
                     setPicking((p) => (p === 'days' ? 'months' : 'days'));
                 }}
-                className="hover:bg-tint/[0.07] focus-visible:ring-ring/50 cursor-pointer rounded-md px-2 py-1 text-sm font-semibold tabular-nums outline-hidden transition-colors focus-visible:ring-2"
+                className="hover:bg-tint/[0.07] focus-ring cursor-pointer rounded-md px-2 py-1 text-sm font-semibold tabular-nums outline-hidden transition-colors"
             >
                 {picking === 'days'
                     ? months === 1
@@ -312,7 +312,7 @@ export default function Calendar(props: CalendarProps) {
 }
 
 const DAY =
-    'relative grid size-9 cursor-pointer place-items-center rounded-lg text-sm tabular-nums outline-hidden transition-[background-color,color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-ring/60';
+    'relative grid size-9 cursor-pointer place-items-center rounded-lg text-sm tabular-nums outline-hidden transition-[background-color,color,box-shadow] duration-150 focus-ring';
 
 /** Other props (aria-*, data-*, an id) go on the calendar's outer element. */
 interface CalendarBaseProps extends Omit<ComponentProps<'div'>, 'defaultValue' | 'onKeyDown' | 'children'> {

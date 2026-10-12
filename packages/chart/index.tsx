@@ -401,7 +401,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                 }}
                 onKeyDown={onKeyDown}
                 onBlur={() => setActive(null)}
-                className="focus-visible:ring-ring/50 relative rounded-lg outline-hidden focus-visible:ring-2"
+                className="focus-ring relative rounded-lg outline-hidden"
                 style={{ height }}
             >
                 {width > 0 && (

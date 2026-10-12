@@ -43,7 +43,7 @@ export default function CodeBlock({
             <pre
                 ref={pre}
                 tabIndex={scrolls ? 0 : undefined}
-                className="text-foreground focus-visible:ring-ring/50 m-0! min-h-0 overflow-auto rounded-none! bg-transparent! p-5! font-mono text-[13px]! leading-6 font-normal! outline-hidden focus-visible:ring-2 focus-visible:ring-inset"
+                className="text-foreground focus-ring m-0! min-h-0 overflow-auto rounded-none! bg-transparent! p-5! font-mono text-[13px]! leading-6 font-normal! outline-hidden focus-visible:ring-inset"
             >
                 {highlight ? (
                     <code
@@ -59,7 +59,7 @@ export default function CodeBlock({
                     type="button"
                     onClick={() => copy(text)}
                     className={cx(
-                        'zen__code-copy inline-flex items-center justify-center text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 absolute top-2.5 right-2.5 cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium outline-hidden transition-[opacity,background-color,color] focus-visible:ring-2',
+                        'zen__code-copy inline-flex items-center justify-center text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground absolute top-2.5 right-2.5 cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium outline-hidden transition-[opacity,background-color,color] focus-ring',
                         'opacity-0 group-hover:opacity-100 focus-visible:opacity-100 pointer-coarse:min-h-11 pointer-coarse:min-w-11 [@media(hover:none)]:bg-card/90 [@media(hover:none)]:opacity-100',
                         copied && 'text-primary opacity-100',
                     )}

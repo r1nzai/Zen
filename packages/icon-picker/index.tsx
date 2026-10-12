@@ -45,7 +45,7 @@ export default function IconPicker({
                 aria-label={`${label}: ${[icon?.label, color?.label].filter(Boolean).join(', ') || 'none'}`}
                 style={tint(color?.color)}
                 className={cx(
-                    'zen__icon-picker focus-visible:ring-ring/50 grid size-10 shrink-0 place-items-center rounded-xl bg-[color-mix(in_oklch,var(--icon-color)_18%,transparent)] text-lg text-(--icon-color) outline-hidden transition-colors focus-visible:ring-2',
+                    'zen__icon-picker grid size-10 shrink-0 place-items-center rounded-xl bg-[color-mix(in_oklch,var(--icon-color)_18%,transparent)] text-lg text-(--icon-color) outline-hidden transition-colors focus-ring',
                     className,
                 )}
             >
@@ -68,7 +68,7 @@ export default function IconPicker({
                                 <span
                                     aria-hidden
                                     style={{ background: c.color }}
-                                    className="ring-offset-background peer-focus-visible:ring-ring/60 peer-checked:ring-foreground/70 block size-6 rounded-full ring-offset-2 transition-shadow peer-checked:ring-2 peer-focus-visible:ring-2"
+                                    className="ring-offset-background peer- peer-checked:ring-foreground/70 peer-focus-ring block size-6 rounded-full ring-offset-2 transition-shadow peer-checked:ring-2"
                                 />
                             </label>
                         ))}
@@ -88,7 +88,7 @@ export default function IconPicker({
                             />
                             <span
                                 aria-hidden
-                                className="hover:bg-tint/[0.07] peer-focus-visible:ring-ring/50 grid size-10 place-items-center rounded-lg text-lg transition-colors peer-checked:bg-[color-mix(in_oklch,var(--icon-color)_22%,transparent)] peer-checked:text-(--icon-color) peer-focus-visible:ring-2"
+                                className="hover:bg-tint/[0.07] peer- peer-focus-ring grid size-10 place-items-center rounded-lg text-lg transition-colors peer-checked:bg-[color-mix(in_oklch,var(--icon-color)_22%,transparent)] peer-checked:text-(--icon-color)"
                             >
                                 {i.icon}
                             </span>

@@ -6,7 +6,7 @@ import { cx } from '@zen/utils/cx';
 import { FormValue } from '@zen/utils/form-value';
 import { useControllable } from '@zen/utils/useControllable';
 import { FieldChevron } from '@zen/utils/field-chevron';
-import { POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
+import { FIELD_SIZE, type FieldSize, POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import { ComponentProps, KeyboardEvent, PointerEvent, useId, useState } from 'react';
 
@@ -112,7 +112,7 @@ export function ColorPanel({
                 style={{
                     background: `linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, hsl(${hsv.h} 100% 50%))`,
                 }}
-                className="focus-visible:ring-ring/50 relative h-40 cursor-crosshair touch-none rounded-lg shadow-[inset_0_0_0_1px_oklch(var(--tint)/0.1)] outline-hidden focus-visible:ring-2"
+                className="focus-ring relative h-40 cursor-crosshair touch-none rounded-lg shadow-[inset_0_0_0_1px_oklch(var(--tint)/0.1)] outline-hidden"
             >
                 <span
                     aria-hidden
@@ -177,7 +177,7 @@ export function ColorPanel({
                                 <span
                                     aria-hidden
                                     style={{ background: `linear-gradient(${sw.value}, ${sw.value}), ${CHECKER}` }}
-                                    className="ring-offset-background peer-focus-visible:ring-ring/60 peer-checked:ring-foreground/70 block size-6 rounded-full shadow-[inset_0_0_0_1px_oklch(var(--tint)/0.12)] ring-offset-2 transition-shadow peer-checked:ring-2 peer-focus-visible:ring-2"
+                                    className="ring-offset-background peer- peer-checked:ring-foreground/70 peer-focus-ring block size-6 rounded-full shadow-[inset_0_0_0_1px_oklch(var(--tint)/0.12)] ring-offset-2 transition-shadow peer-checked:ring-2"
                                 />
                             </label>
                         );
@@ -201,6 +201,7 @@ export default function ColorPicker({
     alpha,
     swatches,
     name,
+    size = 'default',
     id,
     disabled,
     className,
@@ -220,7 +221,14 @@ export default function ColorPicker({
                 disabled={disabled}
                 {...popup.triggerProps}
                 style={{ ...popup.triggerProps.style, ...style }}
-                className={cx('zen__color-picker group', TRIGGER, 'w-full', popup.open && TRIGGER_OPEN, className)}
+                className={cx(
+                    'zen__color-picker group',
+                    TRIGGER,
+                    FIELD_SIZE[size],
+                    'w-full',
+                    popup.open && TRIGGER_OPEN,
+                    className,
+                )}
             >
                 <span className="flex min-w-0 items-center gap-2.5">
                     <span
@@ -277,4 +285,6 @@ export interface ColorPanelProps extends ColorValueProps, Omit<ComponentProps<'d
 export interface ColorPickerProps extends ColorValueProps, Omit<ComponentProps<'button'>, 'value' | 'defaultValue'> {
     /** Form field name: the hex is submitted with the form. */
     name?: string;
+    /** Height, matching Button's: sm (32px), default (40px) or lg (44px). */
+    size?: FieldSize;
 }

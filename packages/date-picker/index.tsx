@@ -4,7 +4,7 @@ import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { FormValue } from '@zen/utils/form-value';
 import { type DateRange, type DateString, formatDate, formatDateRange } from '@zen/utils/date';
-import { POPUP, TRIGGER, TRIGGER_OPEN, PLACEHOLDER } from '@zen/utils/styles';
+import { FIELD_SIZE, type FieldSize, PLACEHOLDER, POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import { useControllable } from '@zen/utils/useControllable';
 import { ComponentProps, ReactNode } from 'react';
@@ -126,7 +126,7 @@ export function DateRangePicker({
                                             setValue(p.range);
                                             close();
                                         }}
-                                        className="text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground aria-pressed:bg-primary/12 aria-pressed:text-foreground focus-visible:ring-ring/40 cursor-pointer rounded-lg px-2.5 py-1.5 text-start text-sm whitespace-nowrap outline-hidden focus-visible:ring-2"
+                                        className="text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground aria-pressed:bg-primary/12 aria-pressed:text-foreground focus-ring cursor-pointer rounded-lg px-2.5 py-1.5 text-start text-sm whitespace-nowrap outline-hidden"
                                     >
                                         {p.label}
                                     </button>
@@ -152,12 +152,14 @@ function PickerField({
     name,
     formValue,
     onReset,
+    size = 'default',
     id,
     className,
     disabled = false,
     style,
     ...rest
 }: Omit<ComponentProps<'button'>, 'value' | 'onChange' | 'defaultValue'> & {
+    size?: FieldSize;
     shown: string | null;
     formValue: string;
     onReset: () => void;
@@ -180,7 +182,14 @@ function PickerField({
                 disabled={disabled}
                 {...popup.triggerProps}
                 style={{ ...popup.triggerProps.style, ...style }}
-                className={cx('zen__date-picker group', TRIGGER, 'w-full', popup.open && TRIGGER_OPEN, className)}
+                className={cx(
+                    'zen__date-picker group',
+                    TRIGGER,
+                    FIELD_SIZE[size],
+                    'w-full',
+                    popup.open && TRIGGER_OPEN,
+                    className,
+                )}
             >
                 <span className={cx('truncate', !shown && PLACEHOLDER)}>{shown ?? placeholder}</span>
                 <CalendarIcon />
@@ -196,7 +205,7 @@ function PickerField({
                             onClear();
                             close();
                         }}
-                        className="border-tint/[0.06] text-muted-foreground hover:text-foreground focus-visible:ring-ring/40 mt-2 w-full cursor-pointer rounded-lg border-t px-2 pt-2.5 pb-1.5 text-sm outline-hidden focus-visible:ring-2"
+                        className="border-tint/[0.06] text-muted-foreground hover:text-foreground focus-ring mt-2 w-full cursor-pointer rounded-lg border-t px-2 pt-2.5 pb-1.5 text-sm outline-hidden"
                     >
                         {clearLabel}
                     </button>
@@ -225,6 +234,8 @@ interface PickerProps extends Omit<ComponentProps<'button'>, 'value' | 'onChange
     weekStartsOn?: number;
     /** Classes for the trigger (e.g. a width, instead of the default full width). */
     className?: string;
+    /** Height, matching Button's: sm (32px), default (40px) or lg (44px). */
+    size?: FieldSize;
     placeholder?: string;
     /** Offers a clear option in the popup (shown when a value is set); clearing reports null. */
     clearable?: boolean;

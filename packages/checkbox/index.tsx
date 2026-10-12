@@ -47,7 +47,7 @@ export default function Checkbox({
                 className={cx(
                     'peer bg-tint/[0.04] m-0 size-full cursor-pointer appearance-none rounded-[5px] border border-[color:oklch(var(--tint)/var(--zen-control-edge))]',
                     'outline-hidden transition-[background-color,border-color,box-shadow] duration-200',
-                    'focus-visible:ring-ring/50 focus-visible:ring-2 hover:enabled:border-[color:oklch(var(--tint)/var(--zen-control-edge-hover))]',
+                    ' focus-ring hover:enabled:border-[color:oklch(var(--tint)/var(--zen-control-edge-hover))]',
                     'checked:border-primary checked:bg-primary indeterminate:border-primary indeterminate:bg-primary',
                     'checked:shadow-[0_0_14px_-2px_oklch(var(--glow)/calc(0.8*var(--glow-k)))] indeterminate:shadow-[0_0_14px_-2px_oklch(var(--glow)/calc(0.8*var(--glow-k)))]',
                     'aria-invalid:border-destructive disabled:cursor-not-allowed disabled:opacity-50',

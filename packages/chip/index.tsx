@@ -13,7 +13,7 @@ export default function Chip({ pressed, className, ...rest }: ChipProps) {
             aria-pressed={pressed}
             className={cx(
                 'zen__chip border-tint/10 text-muted-foreground cursor-pointer rounded-full border px-3 py-1 text-xs outline-hidden transition-colors disabled:cursor-not-allowed',
-                'hover:border-tint/20 hover:text-foreground focus-visible:ring-ring/50 focus-visible:ring-2',
+                'hover:border-tint/20 hover:text-foreground focus-ring',
                 'aria-pressed:border-primary/40 aria-pressed:bg-primary/15 aria-pressed:text-foreground',
                 className,
             )}

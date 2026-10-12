@@ -78,7 +78,7 @@ export function SegmentedItem({ value, disabled, className, children }: Segmente
         <label
             className={cx(
                 'text-muted-foreground relative cursor-pointer rounded-lg px-3 py-1.5 text-sm transition-colors duration-300',
-                'hover:text-foreground has-checked:text-foreground has-focus-visible:ring-ring/50 has-focus-visible:ring-2',
+                'hover:text-foreground has-checked:text-foreground has- has-focus-ring',
                 'has-disabled:hover:text-muted-foreground has-disabled:cursor-not-allowed has-disabled:opacity-50',
                 !group.measured &&
                     'has-checked:bg-primary/15 has-checked:shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.4)]',

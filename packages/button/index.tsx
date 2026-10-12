@@ -45,7 +45,7 @@ export default function Button({
 export const buttonVariants = cva(
     'zen__button inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap outline-hidden select-none ' +
         'transition-[background-color,border-color,box-shadow,color,transform] duration-200 ease-out active:scale-[0.97] ' +
-        'focus-visible:ring-2 focus-visible:ring-glow/50 disabled:pointer-events-none disabled:opacity-50',
+        'focus-ring disabled:pointer-events-none disabled:opacity-50',
     {
         variants: {
             variant: {
@@ -82,7 +82,7 @@ export const buttonVariants = cva(
             {
                 variant: 'default',
                 tone: 'negative',
-                class: 'bg-destructive/90 bg-none text-destructive-foreground shadow-[0_0_0_1px_oklch(var(--destructive)/0.6),0_0_22px_-8px_oklch(var(--destructive)/calc(0.7*var(--glow-k)))] hover:bg-destructive hover:shadow-[0_0_0_1px_oklch(var(--destructive)/0.6),0_0_22px_-8px_oklch(var(--destructive)/calc(0.7*var(--glow-k)))] focus-visible:ring-destructive/40',
+                class: 'bg-destructive/90 bg-none text-destructive-foreground shadow-[0_0_0_1px_oklch(var(--destructive)/0.6),0_0_22px_-8px_oklch(var(--destructive)/calc(0.7*var(--glow-k)))] hover:bg-destructive hover:shadow-[0_0_0_1px_oklch(var(--destructive)/0.6),0_0_22px_-8px_oklch(var(--destructive)/calc(0.7*var(--glow-k)))]',
             },
             // A secondary action in words ("Use a password instead"): muted, so always underlined to read as a link.
             { variant: 'link', tone: 'muted', class: 'text-muted-foreground underline hover:text-foreground' },
@@ -93,7 +93,7 @@ export const buttonVariants = cva(
             {
                 variant: 'ghost',
                 tone: 'negative',
-                class: 'hover:bg-destructive/10 hover:text-destructive focus-visible:ring-destructive/40',
+                class: 'hover:bg-destructive/10 hover:text-destructive',
             },
         ],
         defaultVariants: {

@@ -115,7 +115,7 @@ export function SelectionBar({
                 type="button"
                 aria-label={clearLabel}
                 onClick={onClear}
-                className="text-muted-foreground hover:text-foreground hover:bg-tint/10 focus-visible:ring-ring/50 touch-target grid size-8 cursor-pointer place-items-center rounded-lg outline-hidden focus-visible:ring-2"
+                className="text-muted-foreground hover:text-foreground hover:bg-tint/10 touch-target focus-ring grid size-8 cursor-pointer place-items-center rounded-lg outline-hidden"
             >
                 <XMark className="size-4" />
             </button>

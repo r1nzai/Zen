@@ -35,7 +35,7 @@ export default function Breadcrumbs({
  */
 export function Breadcrumb({ current, asChild, className, ...rest }: BreadcrumbProps) {
     const classes = cx(
-        'truncate rounded-sm outline-hidden transition-colors focus-visible:ring-2 focus-visible:ring-ring/50',
+        'truncate rounded-sm outline-hidden transition-colors focus-ring',
         current ? 'text-foreground font-medium' : 'hover:text-foreground touch-target',
         className,
     );

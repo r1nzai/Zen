@@ -150,7 +150,7 @@ export function Tab({ value, className, onClick, ...rest }: TabProps) {
             className={cx(
                 variant === 'pills'
                     ? PILL
-                    : 'focus-visible:ring-ring text-muted-foreground hover:text-foreground data-active:text-foreground cursor-pointer px-3 py-2 text-sm whitespace-nowrap outline-hidden select-none focus-visible:ring-1 disabled:cursor-not-allowed',
+                    : 'focus-ring text-muted-foreground hover:text-foreground data-active:text-foreground cursor-pointer px-3 py-2 text-sm whitespace-nowrap select-none disabled:cursor-not-allowed',
                 className,
             )}
             {...rest}

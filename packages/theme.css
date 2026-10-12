@@ -119,6 +119,14 @@
 }
 
 /*
+ * The keyboard focus ring every control shows: 2px in the ring colour, at half. Inline
+ * text links use an outline instead, which follows the text as it wraps.
+ */
+@utility focus-ring {
+    @apply focus-visible:ring-ring/50 outline-hidden focus-visible:ring-2;
+}
+
+/*
  * Border that lights up near the pointer. <Backdrop> writes the pointer
  * position into each element's --gx/--gy, so neighbouring cards light up
  * consistently as if from one light source.
@@ -1071,7 +1079,7 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
 /* Sheets slide from their edge instead of scaling up. */
 .zen__dialog[data-side] {
     transition:
-        translate 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        translate 320ms var(--ease-out-soft),
         opacity 200ms,
         overlay 320ms allow-discrete,
         display 320ms allow-discrete;
@@ -1182,7 +1190,7 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     overflow: hidden;
 }
 .zen__tree-row-enter .zen__tree-cell {
-    animation: zen-row-open 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation: zen-row-open 260ms var(--ease-out-soft) both;
 }
 .zen__tree-row-exit .zen__tree-cell {
     animation: zen-row-close 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
@@ -1303,7 +1311,7 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
  */
 ::view-transition-group(*.zen-morph) {
     animation-duration: 0.42s;
-    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation-timing-function: var(--ease-out-soft);
 }
 ::view-transition-image-pair(*.zen-morph) {
     overflow: clip;
@@ -1323,13 +1331,13 @@ html:active-view-transition .zen__page-transition {
 }
 ::view-transition-group(zen-page) {
     animation-duration: 0.34s;
-    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation-timing-function: var(--ease-out-soft);
 }
 ::view-transition-old(zen-page) {
     animation: zen-page-out 0.16s ease-in both;
 }
 ::view-transition-new(zen-page) {
-    animation: zen-page-in 0.34s cubic-bezier(0.2, 0.8, 0.2, 1) 0.06s both;
+    animation: zen-page-in 0.34s var(--ease-out-soft) 0.06s both;
 }
 @keyframes zen-page-out {
     to {
@@ -1369,7 +1377,7 @@ html.reduce-motion::view-transition-new(zen-page) {
 
 /* Content arriving where its placeholder was. */
 .zen__reveal {
-    animation: zen-reveal 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation: zen-reveal 0.45s var(--ease-out-soft) both;
 }
 @keyframes zen-reveal {
     from {
@@ -1380,7 +1388,7 @@ html.reduce-motion::view-transition-new(zen-page) {
 
 /* A progress ring reaching its goal: a ring of glow goes out from the arc as it closes. */
 .zen__ring-burst {
-    animation: zen-ring-burst 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s both;
+    animation: zen-ring-burst 0.9s var(--ease-out-soft) 0.5s both;
     box-shadow: 0 0 18px oklch(var(--glow) / calc(0.6 * var(--glow-k)));
 }
 @keyframes zen-ring-burst {
@@ -1396,7 +1404,7 @@ html.reduce-motion::view-transition-new(zen-page) {
 
 /* A value just changed by an edit. */
 .zen__editable-cell[data-changed] {
-    animation: zen-cell-changed 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: zen-cell-changed 1s var(--ease-out-soft);
 }
 @keyframes zen-cell-changed {
     from {
@@ -1499,7 +1507,7 @@ html.reduce-motion::view-transition-new(zen-page) {
 .zen__chart-grow {
     transform-box: fill-box;
     transform-origin: bottom;
-    animation: zen-chart-grow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation: zen-chart-grow 0.6s var(--ease-out-soft) both;
 }
 .zen__chart-grow[data-negative] {
     transform-origin: top;

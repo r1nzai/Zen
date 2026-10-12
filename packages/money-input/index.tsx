@@ -1,4 +1,5 @@
 import InputGroup, { InputGroupAddon, InputGroupInput } from '@zen/input-group';
+import { type FieldSize } from '@zen/utils/styles';
 import Menu, { MenuContent, MenuItem, MenuSeparator, MenuTrigger } from '@zen/menu';
 import Spinner from '@zen/spinner';
 import { cx } from '@zen/utils/cx';
@@ -35,6 +36,7 @@ export default function MoneyInput({
     start,
     end,
     compact = false,
+    size,
     disabled = false,
     className,
     onFocus,
@@ -61,6 +63,7 @@ export default function MoneyInput({
         <div className={cx('zen__money-input flex flex-col gap-1', className)}>
             <InputGroup
                 invalid={!!money.error}
+                size={size}
                 data-foreign={foreign || undefined}
                 className={cx(compact && 'h-7', 'data-foreign:border-primary/50')}
             >
@@ -124,7 +127,7 @@ export function MoneyCurrencyMenu({ money, className }: { money: MoneyInputState
             <MenuTrigger
                 aria-label={`Currency: ${c.currency}. Change to enter another currency`}
                 className={cx(
-                    'group/currency hover:bg-tint/[0.07] focus-visible:ring-ring/50 -ml-1 flex shrink-0 items-center gap-0.5 rounded-md px-1 py-0.5 text-sm outline-hidden focus-visible:ring-2',
+                    'group/currency hover:bg-tint/[0.07] -ml-1 flex shrink-0 items-center gap-0.5 rounded-md px-1 py-0.5 text-sm outline-hidden focus-ring',
                     c.foreign ? 'text-primary' : 'text-muted-foreground',
                     className,
                 )}
@@ -537,11 +540,16 @@ export interface MoneyInputOptions {
 export interface MoneyInputProps
     extends
         MoneyInputOptions,
-        Omit<ComponentProps<'input'>, keyof MoneyInputOptions | 'defaultValue' | 'type' | 'inputMode' | 'children'> {
+        Omit<
+            ComponentProps<'input'>,
+            keyof MoneyInputOptions | 'defaultValue' | 'size' | 'type' | 'inputMode' | 'children'
+        > {
     /** Replaces the currency symbol (or the currency switch), e.g. with your own. */
     start?: ReactNode;
     /** Content after the input, e.g. a unit or a clear button. */
     end?: ReactNode;
-    /** Smaller, for editing inside table rows. */
+    /** Height, matching Button's: sm (32px), default (40px) or lg (44px). */
+    size?: FieldSize;
+    /** Smaller still and right-aligned, for editing inside table rows. */
     compact?: boolean;
 }

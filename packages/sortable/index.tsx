@@ -232,7 +232,7 @@ export function SortableHandle({ id, label, className, children, ...rest }: Sort
             onPointerDown={(e) => grab(e, id)}
             onKeyDown={(e) => key(e, id, label)}
             className={cx(
-                'text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 grid size-8 shrink-0 cursor-grab touch-none place-items-center rounded-md outline-hidden select-none focus-visible:ring-2 active:cursor-grabbing',
+                'text-muted-foreground hover:text-foreground grid size-8 shrink-0 cursor-grab touch-none place-items-center rounded-md outline-hidden select-none focus-ring active:cursor-grabbing',
                 className,
             )}
             {...rest}

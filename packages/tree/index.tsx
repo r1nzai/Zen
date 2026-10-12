@@ -267,7 +267,7 @@ export function TreeToggle({ expanded, onToggle, className, ...rest }: TreeToggl
             aria-label={expanded ? 'Collapse' : 'Expand'}
             aria-expanded={expanded}
             className={cx(
-                'text-muted-foreground hover:bg-tint/[0.08] hover:text-foreground focus-visible:ring-ring/50 -ml-1 grid size-6 shrink-0 cursor-pointer place-items-center rounded-md outline-hidden transition-colors focus-visible:ring-2',
+                'text-muted-foreground hover:bg-tint/[0.08] hover:text-foreground -ml-1 grid size-6 shrink-0 cursor-pointer place-items-center rounded-md outline-hidden transition-colors focus-ring',
                 className,
             )}
             {...rest}

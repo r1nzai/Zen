@@ -41,7 +41,7 @@ export default function FilterBar({
                 <button
                     type="button"
                     onClick={onClear}
-                    className="zen__filter-clear text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 touch-target ml-1 cursor-pointer rounded-md px-1.5 py-1 text-xs outline-hidden focus-visible:ring-2"
+                    className="zen__filter-clear text-muted-foreground hover:text-foreground touch-target focus-ring ml-1 cursor-pointer rounded-md px-1.5 py-1 text-xs outline-hidden"
                 >
                     {clearLabel}
                 </button>
@@ -111,7 +111,7 @@ export function FilterChip({ onRemove, removeLabel = 'Remove filter', className,
                 type="button"
                 aria-label={removeLabel}
                 onClick={onRemove}
-                className="text-muted-foreground hover:text-foreground hover:bg-tint/10 focus-visible:ring-ring/50 touch-target grid size-5 cursor-pointer place-items-center rounded-full outline-hidden focus-visible:ring-2"
+                className="text-muted-foreground hover:text-foreground hover:bg-tint/10 touch-target focus-ring grid size-5 cursor-pointer place-items-center rounded-full outline-hidden"
             >
                 <XMark className="size-3" />
             </button>

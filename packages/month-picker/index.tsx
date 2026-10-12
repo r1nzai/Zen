@@ -13,6 +13,8 @@ import {
     TRIGGER,
     TRIGGER_OPEN,
     PLACEHOLDER,
+    FIELD_SIZE,
+    type FieldSize,
 } from '@zen/utils/styles';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import { useControllable } from '@zen/utils/useControllable';
@@ -33,6 +35,7 @@ export default function MonthPicker({
     id,
     className,
     disabled = false,
+    size = 'default',
     placeholder = 'Pick a month',
     clearable = false,
     clearLabel = 'Clear',
@@ -60,7 +63,14 @@ export default function MonthPicker({
                 disabled={disabled}
                 {...popup.triggerProps}
                 style={{ ...popup.triggerProps.style, ...style }}
-                className={cx('zen__month-picker group', TRIGGER, 'w-full', popup.open && TRIGGER_OPEN, className)}
+                className={cx(
+                    'zen__month-picker group',
+                    TRIGGER,
+                    FIELD_SIZE[size],
+                    'w-full',
+                    popup.open && TRIGGER_OPEN,
+                    className,
+                )}
             >
                 <span className={value ? undefined : PLACEHOLDER}>
                     {value ? formatMonth(value, locale) : placeholder}
@@ -124,7 +134,7 @@ export default function MonthPicker({
                             setValue(null);
                             popup.setOpen(false);
                         }}
-                        className="border-tint/[0.06] text-muted-foreground hover:text-foreground focus-visible:ring-ring/40 mt-2 w-full cursor-pointer rounded-lg border-t px-2 pt-2.5 pb-1.5 text-sm outline-hidden focus-visible:ring-2"
+                        className="border-tint/[0.06] text-muted-foreground hover:text-foreground focus-ring mt-2 w-full cursor-pointer rounded-lg border-t px-2 pt-2.5 pb-1.5 text-sm outline-hidden"
                     >
                         {clearLabel}
                     </button>
@@ -151,6 +161,8 @@ export interface MonthPickerProps extends Omit<ComponentProps<'button'>, 'value'
     /** Classes for the trigger (e.g. a width, instead of the default full width). */
     className?: string;
     disabled?: boolean;
+    /** Height, matching Button's: sm (32px), default (40px) or lg (44px). */
+    size?: FieldSize;
     placeholder?: string;
     /** Offers a clear option in the popup (shown when a month is set); clearing reports null. */
     clearable?: boolean;

@@ -43,7 +43,7 @@ export default function Keypad({
                     aria-label={key === 'back' ? deleteLabel : undefined}
                     disabled={key === '.' && decimals === 0}
                     onClick={() => press(key)}
-                    className="bg-tint/[0.05] hover:bg-tint/[0.09] focus-visible:ring-ring/50 grid h-14 cursor-pointer place-items-center rounded-xl text-xl font-medium tabular-nums outline-hidden transition-[background-color,scale] duration-150 select-none focus-visible:ring-2 active:scale-95 disabled:invisible"
+                    className="bg-tint/[0.05] hover:bg-tint/[0.09] focus-ring grid h-14 cursor-pointer place-items-center rounded-xl text-xl font-medium tabular-nums outline-hidden transition-[background-color,scale] duration-150 select-none active:scale-95 disabled:invisible"
                 >
                     {key === 'back' ? <ArrowLeft className="size-5" /> : key}
                 </button>

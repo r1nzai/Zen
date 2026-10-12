@@ -84,7 +84,7 @@ export function TableSwipeAction({ tone = 'default', className, ...rest }: Table
         <button
             type="button"
             className={cx(
-                'focus-visible:ring-ring/60 cursor-pointer px-4 text-sm font-medium whitespace-nowrap outline-hidden transition-colors focus-visible:ring-2 focus-visible:ring-inset',
+                ' cursor-pointer px-4 text-sm font-medium whitespace-nowrap outline-hidden transition-colors focus-ring focus-visible:ring-inset',
                 tone === 'negative'
                     ? 'bg-destructive/90 text-destructive-foreground hover:bg-destructive'
                     : 'bg-tint/[0.09] hover:bg-tint/[0.14]',

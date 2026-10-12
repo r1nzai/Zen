@@ -87,7 +87,7 @@ export default function CalendarHeatmap({
                                             onClick={() => onSelectedChange(day)}
                                             className={cx(
                                                 look,
-                                                'focus-visible:ring-ring/60 cursor-pointer outline-hidden hover:shadow-[0_0_0_1px_oklch(var(--tint)/0.3)] focus-visible:ring-2',
+                                                ' cursor-pointer outline-hidden hover:shadow-[0_0_0_1px_oklch(var(--tint)/0.3)] focus-ring',
                                             )}
                                             style={style}
                                         >

@@ -1,6 +1,6 @@
 import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
-import { FIELD_WITHIN } from '@zen/utils/styles';
+import { FIELD_SIZE, FIELD_WITHIN, type FieldSize } from '@zen/utils/styles';
 import { ComponentProps } from 'react';
 
 /**
@@ -9,13 +9,14 @@ import { ComponentProps } from 'react';
  * The whole group looks like one field and glows while anything in it has
  * focus; clicking an addon's text focuses the input.
  */
-export default function InputGroup({ invalid, className, onMouseDown, ...rest }: InputGroupProps) {
+export default function InputGroup({ invalid, size = 'default', className, onMouseDown, ...rest }: InputGroupProps) {
     return (
         <div
             data-invalid={invalid || undefined}
             className={cx(
                 'zen__input-group cursor-text',
                 FIELD_WITHIN,
+                FIELD_SIZE[size],
                 'has-disabled:bg-muted has-disabled:text-muted-foreground has-disabled:cursor-not-allowed',
                 // Red, focused or not: the focused state is named too, so it outranks the field's focus glow.
                 'data-invalid:border-destructive data-invalid:focus-within:border-destructive data-invalid:focus-within:shadow-[0_0_0_3px_oklch(var(--destructive)/0.16)]',
@@ -68,4 +69,6 @@ export function InputGroupAddon({ className, ...rest }: ComponentProps<'span'>) 
 export interface InputGroupProps extends ComponentProps<'div'> {
     /** Show the field in its error state (e.g. alongside aria-invalid on the input). */
     invalid?: boolean;
+    /** Height, matching Button's: sm (32px), default (40px) or lg (44px). */
+    size?: FieldSize;
 }

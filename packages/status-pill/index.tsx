@@ -35,10 +35,7 @@ export function StatusPillAction({ className, type = 'button', ...rest }: Compon
         <button
             type={type}
             {...rest}
-            className={cx(
-                'ml-0.5 cursor-pointer rounded-full underline underline-offset-2 outline-hidden focus-visible:ring-2 focus-visible:ring-current/50',
-                className,
-            )}
+            className={cx('ml-0.5 cursor-pointer rounded-full underline underline-offset-2 focus-ring', className)}
         />
     );
 }

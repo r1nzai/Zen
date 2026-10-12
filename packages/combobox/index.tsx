@@ -10,7 +10,7 @@ import { FormValue } from '@zen/utils/form-value';
 import { useControllable } from '@zen/utils/useControllable';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { CheckIcon } from '@zen/utils/status-icons';
-import { POPUP, TRIGGER, TRIGGER_OPEN, PLACEHOLDER } from '@zen/utils/styles';
+import { FIELD_SIZE, type FieldSize, PLACEHOLDER, POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
 import { anchoredStyle, useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import { useVirtualList } from '@zen/utils/useVirtualList';
 import {
@@ -153,6 +153,7 @@ export default function Combobox<T>(props: ComboboxProps<T>) {
 export function ComboboxTrigger({
     placeholder = 'Select an Item',
     disabled,
+    size = 'default',
     className,
     style,
     children,
@@ -205,6 +206,7 @@ export function ComboboxTrigger({
             }}
             className={cx(
                 TRIGGER,
+                FIELD_SIZE[size],
                 // A set width that doesn't shrink in a crowded row (className can change both).
                 'w-56 shrink-0',
                 disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
@@ -482,6 +484,8 @@ export interface ComboboxTriggerProps extends Omit<ComponentProps<'div'>, 'child
     /** Shown while nothing is chosen. */
     placeholder?: string;
     disabled?: boolean;
+    /** Height, matching Button's: sm (32px), default (40px) or lg (44px). */
+    size?: FieldSize;
     /** Your own display of the value (default: its text, or chips). */
     children?: ReactNode;
 }

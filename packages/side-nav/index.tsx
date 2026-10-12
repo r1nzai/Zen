@@ -29,7 +29,7 @@ export function SideNavGroup({
 
 const LINK = cx(
     'rounded-lg px-3 py-1.5 text-sm outline-hidden transition-[background-color,color,box-shadow] duration-200',
-    'text-muted-foreground hover:bg-tint/[0.05] hover:text-foreground focus-visible:ring-ring/50 focus-visible:ring-2',
+    'text-muted-foreground hover:bg-tint/[0.05] hover:text-foreground focus-ring',
     'aria-[current=page]:bg-primary/15 aria-[current=page]:text-foreground aria-[current=page]:shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.25)]',
 );
 

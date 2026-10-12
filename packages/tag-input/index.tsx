@@ -69,7 +69,7 @@ export default function TagInput({
                                 disabled={disabled}
                                 aria-label={removeLabel(tag)}
                                 onClick={() => set(value.filter((t) => t !== tag))}
-                                className="text-muted-foreground hover:text-foreground hover:bg-tint/10 focus-visible:ring-ring/50 touch-target grid size-4 cursor-pointer place-items-center rounded-sm outline-hidden focus-visible:ring-2"
+                                className="text-muted-foreground hover:text-foreground hover:bg-tint/10 touch-target focus-ring grid size-4 cursor-pointer place-items-center rounded-sm outline-hidden"
                             >
                                 <XMark className="size-3" />
                             </button>

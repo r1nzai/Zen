@@ -8,6 +8,10 @@ export const FIELD =
     'focus-visible:border-glow/60 focus-visible:[--glow-border-color:transparent] focus-visible:bg-tint/[0.05] focus-visible:shadow-glow-focus focus-visible:outline-hidden ' +
     'disabled:cursor-not-allowed disabled:opacity-50';
 
+/** Field heights, matching Button's sizes (sm, default, lg) so a row of both lines up. */
+export const FIELD_SIZE = { sm: 'h-8 px-2.5', default: '', lg: 'h-11 px-3.5' } as const;
+export type FieldSize = keyof typeof FIELD_SIZE;
+
 /**
  * Placeholder text in a trigger that shows one (Select, MonthPicker, DatePicker…). Fields use the same
  * colours through placeholder: in FIELD. --zen-placeholder dims it on dark glass, so a placeholder can't
@@ -17,11 +21,11 @@ export const PLACEHOLDER = 'text-[color:oklch(var(--muted-foreground)/var(--zen-
 
 /** A picker's previous/next arrows (Calendar, MonthPicker). */
 export const PICKER_NAV =
-    'text-muted-foreground cursor-pointer hover:bg-tint/[0.07] hover:text-foreground focus-visible:ring-ring/50 grid size-8 place-items-center rounded-md outline-hidden transition-colors focus-visible:ring-2';
+    'text-muted-foreground cursor-pointer hover:bg-tint/[0.07] hover:text-foreground grid size-8 place-items-center rounded-md outline-hidden transition-colors focus-ring';
 
 /** A month in a picker's month grid (Calendar, MonthPicker); add PICKER_MONTH_ON for the chosen one. */
 export const PICKER_MONTH =
-    'cursor-pointer rounded-lg py-2 text-sm outline-hidden transition-colors disabled:cursor-not-allowed disabled:opacity-35 focus-visible:ring-ring/50 focus-visible:ring-2 hover:bg-tint/[0.07]';
+    'cursor-pointer rounded-lg py-2 text-sm outline-hidden transition-colors disabled:cursor-not-allowed disabled:opacity-35 focus-ring hover:bg-tint/[0.07]';
 export const PICKER_MONTH_ON = 'bg-primary text-primary-foreground hover:bg-primary';
 
 /** Glow a trigger carries while its popup is open. */
@@ -45,7 +49,7 @@ export const PILL_INDICATOR =
 /** …and items that sit above it, lit when current (a link) or selected (a tab). Only their text colour
  * transitions: the pill they wear before the indicator is measured (theme.css) must go at once. */
 export const PILL =
-    'relative z-10 cursor-pointer disabled:cursor-not-allowed rounded-full px-3.5 py-1.5 text-sm whitespace-nowrap outline-hidden transition-[color] duration-300 select-none focus-visible:ring-2 focus-visible:ring-ring/40 ' +
+    'relative z-10 cursor-pointer disabled:cursor-not-allowed rounded-full px-3.5 py-1.5 text-sm whitespace-nowrap outline-hidden transition-[color] duration-300 select-none focus-ring ' +
     'text-muted-foreground hover:text-foreground aria-[current=page]:text-foreground aria-selected:text-foreground';
 
 /**

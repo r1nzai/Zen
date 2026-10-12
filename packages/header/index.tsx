@@ -37,7 +37,7 @@ export default function Header({ skipLabel = 'Skip to content', className, child
                         }
                         main.focus();
                     }}
-                    className="bg-primary text-primary-foreground focus-visible:ring-glow/50 sr-only rounded-lg px-3 py-2 text-sm font-medium outline-hidden focus:not-sr-only focus:absolute focus:top-2 focus:left-4 focus:z-50 focus-visible:ring-2"
+                    className="bg-primary text-primary-foreground focus-ring sr-only rounded-lg px-3 py-2 text-sm font-medium outline-hidden focus:not-sr-only focus:absolute focus:top-2 focus:left-4 focus:z-50"
                 >
                     {skipLabel}
                 </a>
