@@ -384,7 +384,13 @@ export {
     type ToggleGroupItemProps,
     type ToggleGroupProps,
 } from './toggle-group';
-export { default as Toolbar, type ToolbarProps, ToolbarSeparator, useInToolbar } from './toolbar';
+export {
+    default as Toolbar,
+    type ToolbarProps,
+    ToolbarSeparator,
+    useInToolbar,
+    useToolbarOrientation,
+} from './toolbar';
 export { default as ButtonGroup, type ButtonGroupProps } from './button-group';
 export {
     default as HoverCard,

@@ -7,7 +7,9 @@ import { ComponentProps, createContext, useContext, useRef } from 'react';
 const ToolbarContext = createContext<'horizontal' | 'vertical' | null>(null);
 
 /** Whether this is inside a Toolbar, which then moves focus through its items (a ToggleGroup's too). */
-export const useInToolbar = () => useContext(ToolbarContext) !== null;
+/** Which way the Toolbar this is in runs, or null outside one. */
+export const useToolbarOrientation = () => useContext(ToolbarContext);
+export const useInToolbar = () => useToolbarOrientation() !== null;
 
 const CONTROLS = 'button, a[href], input:not([type=hidden]), select, textarea, [role=button], [role=combobox]';
 // Arrow keys in a text field move its caret, not out of it.

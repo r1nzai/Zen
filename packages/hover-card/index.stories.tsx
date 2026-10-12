@@ -1,5 +1,6 @@
 import preview from '../../.storybook/preview';
 import DefaultExample from './examples/Default';
+import TrendExample from './examples/Trend';
 import HoverCard from './index';
 
 const meta = preview.meta({
@@ -8,3 +9,4 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({ render: () => <DefaultExample /> });
+export const Trend = meta.story({ render: () => <TrendExample /> });

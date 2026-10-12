@@ -1,4 +1,4 @@
-import { useInToolbar } from '@zen/toolbar';
+import { useToolbarOrientation } from '@zen/toolbar';
 import { cx } from '@zen/utils/cx';
 import { FormValue } from '@zen/utils/form-value';
 import { useMergedRefs } from '@zen/utils/refs';
@@ -50,7 +50,8 @@ export default function ToggleGroup(props: ToggleGroupProps) {
     const ref = useRef<HTMLDivElement>(null);
     const refs = useMergedRefs(ref, refProp);
     // In a Toolbar, its items are the Toolbar's to move through.
-    const own = !useInToolbar();
+    const toolbar = useToolbarOrientation();
+    const own = !toolbar;
     useRovingTabIndex(ref, ITEM, '[aria-pressed=true]', own);
 
     return (
@@ -68,6 +69,7 @@ export default function ToggleGroup(props: ToggleGroupProps) {
                     'zen__toggle-group relative inline-flex w-fit flex-wrap gap-1',
                     // Its own glass track, unless a Toolbar already is one.
                     own && 'glow-edge border-tint/10 bg-tint/[0.03] rounded-xl border p-1',
+                    toolbar === 'vertical' && 'flex-col',
                     className,
                 )}
             >

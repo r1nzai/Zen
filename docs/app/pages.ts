@@ -97,7 +97,7 @@ export const COMPONENTS: ComponentDoc[] = [
         description:
             'Panels with handles between them to drag, or to move with the arrow keys, within limits you set; groups nest, and the layout is reported to keep.',
         parts: ['ResizablePanelGroup', 'ResizablePanel', 'ResizableHandle'],
-        examples: ['Default'],
+        examples: ['Default', 'Stacked'],
     },
     {
         slug: 'carousel',
@@ -280,6 +280,7 @@ export const COMPONENTS: ComponentDoc[] = [
         description:
             'A preview of what a link points to, like a person or an account: a glass card once the pointer rests on the link, or while it has keyboard focus.',
         parts: ['HoverCard', 'HoverCardTrigger', 'HoverCardContent'],
+        examples: ['Default', 'Trend'],
     },
     {
         slug: 'icon-picker',
@@ -471,6 +472,7 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Separator',
         description: 'A hairline between groups of content, across or upright.',
         parts: ['Separator'],
+        examples: ['Default', 'Stats'],
     },
     {
         slug: 'side-nav',
@@ -621,6 +623,7 @@ export const COMPONENTS: ComponentDoc[] = [
         description:
             'A row of controls for one thing, like a table’s: one stop for Tab, and the arrow keys through its buttons, toggles and fields.',
         parts: ['Toolbar', 'ToolbarSeparator'],
+        examples: ['Default', 'Vertical'],
     },
     {
         slug: 'tooltip',

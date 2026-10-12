@@ -1,5 +1,6 @@
 import preview from '../../.storybook/preview';
 import DefaultExample from './examples/Default';
+import StackedExample from './examples/Stacked';
 import ResizablePanelGroup from './index';
 
 const meta = preview.meta({
@@ -8,3 +9,4 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({ render: () => <DefaultExample /> });
+export const Stacked = meta.story({ render: () => <StackedExample /> });

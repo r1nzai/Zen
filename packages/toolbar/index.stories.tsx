@@ -1,5 +1,6 @@
 import preview from '../../.storybook/preview';
 import DefaultExample from './examples/Default';
+import VerticalExample from './examples/Vertical';
 import Toolbar from './index';
 
 const meta = preview.meta({
@@ -8,3 +9,4 @@ const meta = preview.meta({
 });
 
 export const Default = meta.story({ render: () => <DefaultExample /> });
+export const Vertical = meta.story({ render: () => <VerticalExample /> });
