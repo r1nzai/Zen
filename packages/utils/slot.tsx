@@ -1,6 +1,7 @@
 import { cloneElement, ComponentProps, isValidElement, ReactElement, ReactNode, Ref } from 'react';
 
 import { cx } from './cx';
+import { mergeRefs } from './refs';
 
 type Props = Record<string, unknown>;
 
@@ -31,13 +32,4 @@ export function Slot({ children, ...props }: ComponentProps<'a'> & { children?: 
     if (own.style || theirs.style) merged.style = { ...(own.style as object), ...(theirs.style as object) };
     if (own.ref && theirs.ref) merged.ref = mergeRefs(own.ref as Ref<unknown>, theirs.ref as Ref<unknown>);
     return cloneElement(child, merged);
-}
-
-function mergeRefs<T>(...refs: Ref<T>[]) {
-    return (node: T | null) => {
-        for (const ref of refs) {
-            if (typeof ref === 'function') ref(node);
-            else if (ref) ref.current = node;
-        }
-    };
 }

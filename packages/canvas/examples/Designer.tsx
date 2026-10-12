@@ -39,7 +39,7 @@ const NEW: Record<Layer['kind'], Omit<Layer, 'id' | 'x' | 'y'>> = {
 
 /**
  * A small overlay designer: a 640×360 scene that fits its width, a layers list whose order is the
- * stacking (drag to reorder), and an inspector for the selected card. `onChangeEnd` gives each change
+ * stacking (drag to reorder), and an inspector for the selected card. `onItemsChangeEnd` gives each change
  * with the items before it, which is all Undo needs. Try `⌘Z`, `⇧⌘Z` and `Delete`.
  */
 export default function Designer() {
@@ -162,10 +162,10 @@ export default function Designer() {
                 scale="fit"
                 snap
                 items={items}
-                onChange={setItems}
-                onChangeEnd={(_, before) => remember([...before])}
+                onItemsChange={setItems}
+                onItemsChangeEnd={(_, before) => remember([...before])}
                 selected={selected}
-                onSelect={setSelected}
+                onSelectedChange={setSelected}
             >
                 {items.map((layer) => (
                     <CanvasItem key={layer.id} id={layer.id} label={layer.name} className="flex items-center">
@@ -202,7 +202,7 @@ export default function Designer() {
                     <SortableList
                         aria-label="Layers"
                         value={layers.map((i) => i.id)}
-                        onChange={(order) =>
+                        onValueChange={(order) =>
                             commit([
                                 ...items.filter((i) => i.locked),
                                 ...[...order].reverse().map((id) => items.find((i) => i.id === id)!),
@@ -265,7 +265,9 @@ export default function Designer() {
                         aria-label="Colour"
                         value={one?.color ?? '#000000'}
                         disabled={!one}
-                        onChange={(color) => one && live(items.map((i) => (i.id === one.id ? { ...i, color } : i)))}
+                        onValueChange={(color) =>
+                            one && live(items.map((i) => (i.id === one.id ? { ...i, color } : i)))
+                        }
                         onValueCommit={settle}
                     />
                     <p className="text-muted-foreground mt-0! text-xs">

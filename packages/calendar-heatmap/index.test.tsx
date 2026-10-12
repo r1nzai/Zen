@@ -24,20 +24,20 @@ describe('CalendarHeatmap', () => {
         expect(shade('Sep 4')).toBe('');
     });
 
-    it('says each day and its figure; with onSelect, days are buttons', () => {
-        const onSelect = vi.fn();
+    it('says each day and its figure; with onSelectedChange, days are buttons', () => {
+        const onSelectedChange = vi.fn();
         render(
             <CalendarHeatmap
                 month="2026-09"
                 values={values}
                 locale="en-US"
                 format={(v) => `$${v / 100}`}
-                onSelect={onSelect}
+                onSelectedChange={onSelectedChange}
                 selected="2026-09-03"
             />,
         );
         expect(screen.getByRole('button', { name: 'Sep 3: $42' })).toHaveAttribute('aria-pressed', 'true');
         fireEvent.click(screen.getByRole('button', { name: 'Sep 12: $164.5' }));
-        expect(onSelect).toHaveBeenCalledWith('2026-09-12');
+        expect(onSelectedChange).toHaveBeenCalledWith('2026-09-12');
     });
 });

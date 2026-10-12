@@ -1,9 +1,11 @@
 import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
+import { FormValue } from '@zen/utils/form-value';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { CheckIcon } from '@zen/utils/status-icons';
 import { POPUP, TRIGGER, TRIGGER_OPEN, PLACEHOLDER } from '@zen/utils/styles';
 import { useTypeahead } from '@zen/utils/typeahead';
+import { useControllable } from '@zen/utils/useControllable';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import {
     Children,
@@ -41,8 +43,9 @@ const SelectContext = createContext<SelectContextValue | null>(null);
  * SelectSeparator. For long or searchable lists, use Combobox.
  */
 export default function Select<V extends string>({
-    value,
-    onChange,
+    value: valueProp,
+    defaultValue = null,
+    onValueChange,
     placeholder = 'Select…',
     disabled = false,
     name,
@@ -54,6 +57,7 @@ export default function Select<V extends string>({
     onKeyDown,
     ...rest
 }: SelectProps<V>) {
+    const [value, setValue, reset] = useControllable<V | null, V>(valueProp, defaultValue, onValueChange);
     const listRef = useRef<HTMLDivElement>(null);
     const generatedId = useId();
     const triggerId = id ?? generatedId;
@@ -87,7 +91,7 @@ export default function Select<V extends string>({
 
     const choose = (v: string) => {
         if (items().find((o) => o.value === v)?.disabled) return;
-        onChange(v as V);
+        setValue(v as V);
         popup.setOpen(false);
     };
     const register = useCallback((v: string, label: string) => {
@@ -164,7 +168,7 @@ export default function Select<V extends string>({
                 </span>
                 <FieldChevron open={popup.open} />
             </button>
-            {name && <input type="hidden" name={name} value={value ?? ''} />}
+            <FormValue name={name} value={value ?? ''} onReset={reset} />
             <div {...popup.popupProps} className={cx('zen__popover', POPUP, 'overflow-visible py-1', listClassName)}>
                 <div
                     ref={listRef}
@@ -268,8 +272,11 @@ export interface SelectProps<V extends string> extends Omit<
     ComponentProps<'button'>,
     'value' | 'onChange' | 'children' | 'defaultValue' | 'name'
 > {
-    value: V | null;
-    onChange: (value: V) => void;
+    /** The chosen value, when you keep it; null for none. */
+    value?: V | null;
+    /** The first value, when the select keeps its own. */
+    defaultValue?: V | null;
+    onValueChange?: (value: V) => void;
     /** Shown while nothing is chosen. */
     placeholder?: string;
     disabled?: boolean;

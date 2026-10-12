@@ -1,7 +1,9 @@
 import { useFieldProps } from '@zen/field';
 import XMark from '@zen/icons/micro/x-mark';
 import { cx } from '@zen/utils/cx';
+import { FormValue } from '@zen/utils/form-value';
 import { FIELD } from '@zen/utils/styles';
+import { useControllable } from '@zen/utils/useControllable';
 import { ClipboardEvent, ComponentProps, KeyboardEvent, useLayoutEffect, useRef, useState } from 'react';
 
 /**
@@ -19,10 +21,10 @@ export default function TagInput({
     removeLabel = (tag) => `Remove ${tag}`,
     className,
     disabled,
+    name,
     ...rest
 }: TagInputProps) {
-    const [own, setOwn] = useState(defaultValue);
-    const value = controlled ?? own;
+    const [value, set, reset] = useControllable(controlled, defaultValue, onValueChange);
     const [text, setText] = useState('');
     const field = useFieldProps(rest);
     const tags = useRef<HTMLDivElement>(null);
@@ -34,10 +36,6 @@ export default function TagInput({
         if (el?.parentElement?.contains(document.activeElement)) el.scrollTop = el.scrollHeight;
     }, [count]);
 
-    const set = (next: string[]) => {
-        if (controlled === undefined) setOwn(next);
-        onValueChange?.(next);
-    };
     const add = (entries: string[]) => {
         const next = [...value];
         for (const entry of entries.map((e) => e.trim())) {
@@ -114,6 +112,7 @@ export default function TagInput({
                 }}
                 className="h-7 w-full shrink-0 bg-transparent outline-hidden placeholder:text-[color:oklch(var(--muted-foreground)/var(--zen-placeholder))]"
             />
+            <FormValue name={name} value={value} onReset={reset} />
         </div>
     );
 }
@@ -126,4 +125,6 @@ export interface TagInputProps extends Omit<ComponentProps<'input'>, 'value' | '
     validate?: (entry: string) => boolean;
     /** The × button's label, for screen readers. */
     removeLabel?: (tag: string) => string;
+    /** Form field name: each tag is submitted under it. */
+    name?: string;
 }

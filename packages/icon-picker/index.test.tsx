@@ -15,7 +15,7 @@ function Picker({ onChange = () => {} }: { onChange?: (v: { icon: string; color?
             label="Category icon"
             icons={ICONS}
             value={value}
-            onChange={(v) => {
+            onValueChange={(v) => {
                 setValue(v);
                 onChange(v);
             }}

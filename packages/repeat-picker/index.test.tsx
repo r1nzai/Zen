@@ -9,7 +9,7 @@ function Picker({ initial, onChange = () => {} }: { initial: Repeat; onChange?: 
     return (
         <RepeatPicker
             value={value}
-            onChange={(r) => {
+            onValueChange={(r) => {
                 setValue(r);
                 onChange(r);
             }}

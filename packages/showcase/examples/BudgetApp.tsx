@@ -367,7 +367,7 @@ function Budget({ nav }: { nav: boolean }) {
                         <MonthPicker
                             aria-label="Month"
                             value={month}
-                            onChange={setMonth}
+                            onValueChange={setMonth}
                             locale={LOCALE}
                             className="w-40 max-sm:w-full"
                         />
@@ -719,7 +719,7 @@ function EntryTable({
                                                         value={e.amount}
                                                         currency={CURRENCY}
                                                         locale={LOCALE}
-                                                        onChange={(v) => {
+                                                        onValueChange={(v) => {
                                                             if (v !== null && v > 0) onAmount(e.id, v);
                                                             close();
                                                         }}
@@ -985,7 +985,7 @@ function Goals() {
                                 icons={GOAL_ICONS}
                                 colors={[]}
                                 value={{ icon: icons[open.id] }}
-                                onChange={(v) => setIcons((i) => ({ ...i, [open.id]: v.icon }))}
+                                onValueChange={(v) => setIcons((i) => ({ ...i, [open.id]: v.icon }))}
                             />
                             <ProgressRing value={open.saved / open.target} size={88} stroke={7} label={open.name}>
                                 <span className="text-base font-semibold tabular-nums">{percent(open)}%</span>
@@ -1012,7 +1012,7 @@ function Goals() {
                 <div className="flex flex-col gap-4">
                     <SortableList
                         value={order}
-                        onChange={setOrder}
+                        onValueChange={setOrder}
                         aria-label="Goals, first funded first"
                         className="gap-3"
                     >
@@ -1115,7 +1115,7 @@ function Appearance() {
                     <Select
                         value={theme.preset === 'custom' ? null : theme.preset}
                         placeholder="Custom"
-                        onChange={(id: PresetId) => setTheme((t) => applyPreset(t, id))}
+                        onValueChange={(id: PresetId) => setTheme((t) => applyPreset(t, id))}
                     >
                         {PRESETS.map((p) => (
                             <SelectItem key={p.id} value={p.id}>
@@ -1127,21 +1127,21 @@ function Appearance() {
                 <Field label="Accent" hint="Its hue tints the whole app; lightness stays readable.">
                     <ColorPicker
                         value={accent}
-                        onChange={(hex) => {
+                        onValueChange={(hex) => {
                             setPicked(hex);
                             const hue = hexToOklch(hex)?.h;
                             if (hue !== undefined) setTheme((t) => customize(t, { hue: Math.round(hue) }));
                         }}
                     />
                 </Field>
-                <Segmented label="Glow" value={theme.glow} onChange={(glow) => setTheme((t) => ({ ...t, glow }))}>
+                <Segmented label="Glow" value={theme.glow} onValueChange={(glow) => setTheme((t) => ({ ...t, glow }))}>
                     <SegmentedItem value="off">Off</SegmentedItem>
                     <SegmentedItem value="soft">Soft</SegmentedItem>
                     <SegmentedItem value="bright">Bright</SegmentedItem>
                 </Segmented>
                 <label className="flex items-center justify-between gap-4 text-sm">
                     Reduce motion
-                    <Toggle checked={reduceMotion} onChange={setReduceMotion} aria-label="Reduce motion" />
+                    <Toggle checked={reduceMotion} onCheckedChange={setReduceMotion} aria-label="Reduce motion" />
                 </label>
             </div>
         </Card>
@@ -1213,7 +1213,7 @@ function AddEntryDialog({
                     close();
                 }}
             >
-                <Segmented label="Type" value={form.kind} onChange={(kind) => set('kind', kind)}>
+                <Segmented label="Type" value={form.kind} onValueChange={(kind) => set('kind', kind)}>
                     <SegmentedItem value="expense">Expense</SegmentedItem>
                     <SegmentedItem value="income">Income</SegmentedItem>
                 </Segmented>
@@ -1230,7 +1230,7 @@ function AddEntryDialog({
                             live
                             allowEmpty
                             value={form.amount}
-                            onChange={(v) => set('amount', v)}
+                            onValueChange={(v) => set('amount', v)}
                             currency={CURRENCY}
                             locale={LOCALE}
                         />
@@ -1256,7 +1256,7 @@ function AddEntryDialog({
                         </Combobox>
                     </div>
                     <Field label="Month">
-                        <MonthPicker value={form.month} onChange={(m) => set('month', m)} locale={LOCALE} />
+                        <MonthPicker value={form.month} onValueChange={(m) => set('month', m)} locale={LOCALE} />
                     </Field>
                 </div>
                 <Field label="Tags" hint="Press Enter or a comma after each.">
@@ -1269,7 +1269,7 @@ function AddEntryDialog({
                     Repeats
                     <Toggle
                         checked={!!form.repeat}
-                        onChange={(on) => set('repeat', on ? MONTHLY : null)}
+                        onCheckedChange={(on) => set('repeat', on ? MONTHLY : null)}
                         aria-label="Repeats"
                     />
                 </label>
@@ -1277,7 +1277,7 @@ function AddEntryDialog({
                     <RepeatPicker
                         label="How often"
                         value={form.repeat}
-                        onChange={(r) => set('repeat', r)}
+                        onValueChange={(r) => set('repeat', r)}
                         locale={LOCALE}
                         start={`${form.month ?? '2026-09'}-01`}
                     />

@@ -1,4 +1,6 @@
 import { cx } from '@zen/utils/cx';
+import { useFormReset } from '@zen/utils/form-value';
+import { useControllable } from '@zen/utils/useControllable';
 import { ComponentProps, CSSProperties, useEffect, useRef } from 'react';
 
 /**
@@ -8,7 +10,8 @@ import { ComponentProps, CSSProperties, useEffect, useRef } from 'react';
  * gradient), and a glowing thumb.
  */
 export default function Slider({
-    value,
+    value: valueProp,
+    defaultValue,
     min = 0,
     max = 100,
     step = 1,
@@ -19,9 +22,12 @@ export default function Slider({
     valueText,
     className,
     style,
+    onChange,
     ...rest
 }: SliderProps) {
+    const [value, setValue, reset] = useControllable(valueProp, defaultValue ?? min, onValueChange);
     const ref = useRef<HTMLInputElement>(null);
+    useFormReset(ref, reset);
     // The native change event fires once the user lets go (pointer up, key up).
     const commit = useRef(onValueCommit);
     commit.current = onValueCommit;
@@ -46,7 +52,10 @@ export default function Slider({
             step={step}
             value={value}
             aria-valuetext={valueText?.(value)}
-            onChange={(e) => onValueChange?.(Number(e.target.value))}
+            onChange={(e) => {
+                onChange?.(e);
+                setValue(Number(e.target.value));
+            }}
             style={
                 {
                     ...style,
@@ -76,9 +85,12 @@ export const THUMB =
 
 export interface SliderProps extends Omit<
     ComponentProps<'input'>,
-    'type' | 'value' | 'min' | 'max' | 'step' | 'onChange' | 'defaultValue'
+    'type' | 'value' | 'min' | 'max' | 'step' | 'defaultValue'
 > {
-    value: number;
+    /** The value, when you keep it. */
+    value?: number;
+    /** The first value, when the slider keeps its own (default `min`). */
+    defaultValue?: number;
     min?: number;
     max?: number;
     step?: number;

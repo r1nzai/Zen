@@ -7,7 +7,7 @@ describe('Checkbox', () => {
     it('is a native checkbox named by its children, reporting checked', () => {
         const onChange = vi.fn();
         render(
-            <Checkbox checked={false} onChange={onChange} description="Once a month.">
+            <Checkbox checked={false} onCheckedChange={onChange} description="Once a month.">
                 Remind me
             </Checkbox>,
         );
@@ -18,11 +18,13 @@ describe('Checkbox', () => {
     });
 
     it('indeterminate is set on the element and announced as mixed', () => {
-        const { rerender } = render(<Checkbox aria-label="All" checked={false} indeterminate onChange={() => {}} />);
+        const { rerender } = render(
+            <Checkbox aria-label="All" checked={false} indeterminate onCheckedChange={() => {}} />,
+        );
         const box = screen.getByRole('checkbox', { name: 'All' }) as HTMLInputElement;
         expect(box.indeterminate).toBe(true);
         expect(box).toHaveAttribute('aria-checked', 'mixed');
-        rerender(<Checkbox aria-label="All" checked onChange={() => {}} />);
+        rerender(<Checkbox aria-label="All" checked onCheckedChange={() => {}} />);
         expect(box.indeterminate).toBe(false);
         expect(box).toBeChecked();
     });

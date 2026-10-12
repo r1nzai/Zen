@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { useControllable } from '@zen/utils/useControllable';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { ComponentProps, createContext, ReactNode, useContext, useEffect, useId, useRef, useState } from 'react';
 
@@ -22,13 +23,8 @@ function useDisclosure(part: string) {
  * own). Opens and closes on its own, or follows `open`/`onOpenChange`.
  */
 export default function Disclosure({ open, defaultOpen = false, onOpenChange, children }: DisclosureProps) {
-    const [own, setOwn] = useState(defaultOpen);
+    const [shown, setOpen] = useControllable(open, defaultOpen, onOpenChange);
     const contentId = useId();
-    const shown = open ?? own;
-    const setOpen = (next: boolean) => {
-        if (open === undefined) setOwn(next);
-        onOpenChange?.(next);
-    };
     return (
         <DisclosureContext.Provider value={{ open: shown, setOpen, contentId }}>{children}</DisclosureContext.Provider>
     );

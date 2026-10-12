@@ -4,13 +4,13 @@ import MonthPicker from './index';
 
 describe('MonthPicker', () => {
     it('shows the month for the locale', () => {
-        render(<MonthPicker aria-label="Start" value="2026-09" onChange={() => {}} locale="en-US" />);
+        render(<MonthPicker aria-label="Start" value="2026-09" onValueChange={() => {}} locale="en-US" />);
         expect(screen.getByRole('button', { name: 'Start' })).toHaveTextContent('Sep 2026');
     });
 
     it('picks a month from the grid, in the shown year', () => {
         const onChange = vi.fn();
-        render(<MonthPicker aria-label="Start" value="2026-09" onChange={onChange} locale="en-US" />);
+        render(<MonthPicker aria-label="Start" value="2026-09" onValueChange={onChange} locale="en-US" />);
         fireEvent.click(screen.getByRole('button', { name: 'Next year', hidden: true }));
         fireEvent.click(screen.getByRole('button', { name: 'March 2027', hidden: true }));
         expect(onChange).toHaveBeenCalledWith('2027-03');
@@ -21,7 +21,7 @@ describe('MonthPicker', () => {
             <MonthPicker
                 aria-label="Start"
                 value="2026-09"
-                onChange={() => {}}
+                onValueChange={() => {}}
                 locale="en-US"
                 min="2026-06"
                 max="2026-10"
@@ -41,19 +41,25 @@ describe('MonthPicker', () => {
             <MonthPicker
                 aria-label="End"
                 value="2026-09"
-                onChange={() => {}}
+                onValueChange={onClear}
                 locale="en-US"
-                onClear={onClear}
+                clearable
                 clearLabel="No end"
             />,
         );
         fireEvent.click(screen.getByRole('button', { name: 'No end', hidden: true }));
-        expect(onClear).toHaveBeenCalled();
+        expect(onClear).toHaveBeenCalledWith(null);
     });
 
     it('shows the placeholder without a value', () => {
         render(
-            <MonthPicker aria-label="End" value={null} onChange={() => {}} locale="en-US" placeholder="Open-ended" />,
+            <MonthPicker
+                aria-label="End"
+                value={null}
+                onValueChange={() => {}}
+                locale="en-US"
+                placeholder="Open-ended"
+            />,
         );
         expect(screen.getByRole('button', { name: 'End' })).toHaveTextContent('Open-ended');
     });

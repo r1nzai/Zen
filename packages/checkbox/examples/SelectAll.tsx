@@ -12,7 +12,7 @@ export default function SelectAll() {
             <Checkbox
                 checked={all}
                 indeterminate={picked.length > 0 && !all}
-                onChange={() => setPicked(all ? [] : ACCOUNTS)}
+                onCheckedChange={() => setPicked(all ? [] : ACCOUNTS)}
                 className="font-medium"
             >
                 All accounts
@@ -22,7 +22,7 @@ export default function SelectAll() {
                     <Checkbox
                         key={a}
                         checked={picked.includes(a)}
-                        onChange={(on) => setPicked((p) => (on ? [...p, a] : p.filter((x) => x !== a)))}
+                        onCheckedChange={(on) => setPicked((p) => (on ? [...p, a] : p.filter((x) => x !== a)))}
                     >
                         {a}
                     </Checkbox>

@@ -5,7 +5,7 @@ import { useState } from 'react';
 export default function Default() {
     const [repay, setRepay] = useState<'emi' | 'tenure'>('emi');
     return (
-        <RadioGroup label="After a prepayment" value={repay} onChange={setRepay}>
+        <RadioGroup label="After a prepayment" value={repay} onValueChange={setRepay}>
             <Radio value="emi" description="Keep the end date; pay less each month.">
                 Lower the EMI
             </Radio>

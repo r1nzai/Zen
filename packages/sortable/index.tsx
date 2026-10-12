@@ -45,7 +45,7 @@ const move = <T,>(list: readonly T[], from: number, to: number) => {
  * keys move it, Space or Enter drops it and Escape puts it back; each step is
  * announced. `value` is the ids in order; render a SortableItem for each.
  */
-export function SortableList({ value, onChange, className, children, ...rest }: SortableListProps) {
+export function SortableList({ value, onValueChange, className, children, ...rest }: SortableListProps) {
     const list = useRef<HTMLUListElement>(null);
     const [lifted, setLifted] = useState<string | null>(null);
     const [said, say] = useState('');
@@ -57,7 +57,7 @@ export function SortableList({ value, onChange, className, children, ...rest }: 
     const tops = () => new Map(items().map((el) => [el.dataset.sortableId!, el.getBoundingClientRect().top]));
     const reorder = (next: string[]) => {
         flip.current = tops();
-        onChange(next);
+        onValueChange(next);
     };
 
     useIsoLayoutEffect(() => {
@@ -254,10 +254,10 @@ function scrollerOf(el: HTMLElement): HTMLElement {
     return (document.scrollingElement as HTMLElement) ?? document.documentElement;
 }
 
-export interface SortableListProps extends Omit<ComponentProps<'ul'>, 'onChange'> {
+export interface SortableListProps extends ComponentProps<'ul'> {
     /** The items' ids, in order. */
     value: readonly string[];
-    onChange: (value: string[]) => void;
+    onValueChange: (value: string[]) => void;
 }
 
 export interface SortableItemProps extends ComponentProps<'li'> {

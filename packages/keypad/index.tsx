@@ -1,5 +1,7 @@
 import ArrowLeft from '@zen/icons/arrow-left';
 import { cx } from '@zen/utils/cx';
+import { useControllable } from '@zen/utils/useControllable';
+import { ComponentProps } from 'react';
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'back'] as const;
 
@@ -10,14 +12,17 @@ const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'back'] as 
  * point, at most `decimals` digits after it.
  */
 export default function Keypad({
-    value,
-    onValueChange,
+    value: valueProp,
+    defaultValue = '',
+    onValueChange: onValueChangeProp,
     decimals = 2,
     maxLength = 12,
     deleteLabel = 'Delete',
     'aria-label': label = 'Keypad',
     className,
+    ...rest
 }: KeypadProps) {
+    const [value, onValueChange] = useControllable(valueProp, defaultValue, onValueChangeProp);
     const press = (key: (typeof KEYS)[number]) => {
         if (key === 'back') return onValueChange(value.slice(0, -1));
         const point = value.indexOf('.');
@@ -30,7 +35,7 @@ export default function Keypad({
         onValueChange(value === '0' ? key : value + key);
     };
     return (
-        <div role="group" aria-label={label} className={cx('zen__keypad grid grid-cols-3 gap-2', className)}>
+        <div role="group" aria-label={label} className={cx('zen__keypad grid grid-cols-3 gap-2', className)} {...rest}>
             {KEYS.map((key) => (
                 <button
                     key={key}
@@ -47,15 +52,16 @@ export default function Keypad({
     );
 }
 
-export interface KeypadProps {
-    /** What's been typed, e.g. "12.5". */
-    value: string;
-    onValueChange: (value: string) => void;
+/** Other props (data-*, an id) go on the group. */
+export interface KeypadProps extends Omit<ComponentProps<'div'>, 'defaultValue' | 'children'> {
+    /** What's been typed, e.g. "12.5", when you keep it. */
+    value?: string;
+    /** What's typed at first, when the keypad keeps its own. */
+    defaultValue?: string;
+    onValueChange?: (value: string) => void;
     /** Digits allowed after the point (default 2; 0 hides the point). */
     decimals?: number;
     maxLength?: number;
     /** The delete key's name for screen readers. */
     deleteLabel?: string;
-    'aria-label'?: string;
-    className?: string;
 }

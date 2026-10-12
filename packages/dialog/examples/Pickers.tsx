@@ -41,7 +41,7 @@ export default function Pickers() {
                 <div className="grid gap-3 sm:grid-cols-2">
                     <label className="flex flex-col gap-2 text-sm">
                         Category
-                        <Select aria-label="Category" value={category} onChange={setCategory}>
+                        <Select aria-label="Category" value={category} onValueChange={setCategory}>
                             {CATEGORIES.map((c) => (
                                 <SelectItem key={c.value} value={c.value}>
                                     {c.label}
@@ -51,12 +51,12 @@ export default function Pickers() {
                     </label>
                     <label className="flex flex-col gap-2 text-sm">
                         From
-                        <MonthPicker aria-label="From" value={month} onChange={setMonth} locale="en-IN" />
+                        <MonthPicker aria-label="From" value={month} onValueChange={setMonth} locale="en-IN" />
                     </label>
                 </div>
                 <label className="flex flex-col gap-2 text-sm">
                     Starts on
-                    <DatePicker aria-label="Starts on" value={start} onChange={setStart} locale="en-IN" />
+                    <DatePicker aria-label="Starts on" value={start} onValueChange={setStart} locale="en-IN" />
                 </label>
                 <div className="flex flex-col gap-2 text-sm">
                     <span>Tags</span>

@@ -8,23 +8,23 @@ const day = (label: RegExp | string) => screen.getByRole('button', { name: label
 
 describe('Calendar', () => {
     it('shows the month of the chosen date, marks it, and starts weeks on the locale’s first day', () => {
-        render(<Calendar value="2026-09-30" onChange={() => {}} locale="en-US" />);
+        render(<Calendar value="2026-09-30" onValueChange={() => {}} locale="en-US" />);
         expect(screen.getByRole('grid', { name: 'September 2026' })).toBeInTheDocument();
         expect(day('Wednesday, September 30, 2026')).toHaveAttribute('aria-pressed', 'true');
         expect(screen.getAllByRole('columnheader')[0]).toHaveAttribute('abbr', 'Sunday');
-        render(<Calendar value="2026-09-30" onChange={() => {}} locale="en-GB" />);
+        render(<Calendar value="2026-09-30" onValueChange={() => {}} locale="en-GB" />);
         expect(screen.getAllByRole('columnheader')[7]).toHaveAttribute('abbr', 'Monday');
     });
 
     it('picks a day', () => {
         const onChange = vi.fn();
-        render(<Calendar value="2026-09-30" onChange={onChange} locale="en-US" />);
+        render(<Calendar value="2026-09-30" onValueChange={onChange} locale="en-US" />);
         fireEvent.click(day('Monday, September 14, 2026'));
         expect(onChange).toHaveBeenCalledWith('2026-09-14');
     });
 
     it('has one tab stop, moved by the keyboard across months', () => {
-        render(<Calendar value="2026-09-30" onChange={() => {}} locale="en-US" />);
+        render(<Calendar value="2026-09-30" onValueChange={() => {}} locale="en-US" />);
         const chosen = day('Wednesday, September 30, 2026');
         expect(chosen).toHaveAttribute('tabindex', '0');
         chosen.focus();
@@ -44,7 +44,7 @@ describe('Calendar', () => {
         render(
             <Calendar
                 value={null}
-                onChange={onChange}
+                onValueChange={onChange}
                 locale="en-US"
                 defaultMonth="2026-09"
                 min="2026-09-10"
@@ -59,7 +59,7 @@ describe('Calendar', () => {
     });
 
     it('the title jumps to another month and year', () => {
-        render(<Calendar value="2026-09-30" onChange={() => {}} locale="en-US" />);
+        render(<Calendar value="2026-09-30" onValueChange={() => {}} locale="en-US" />);
         fireEvent.click(screen.getByRole('button', { name: /September 2026, choose month and year/ }));
         fireEvent.click(screen.getByRole('button', { name: 'Previous year' }));
         fireEvent.click(screen.getByRole('button', { name: 'March 2025' }));
@@ -74,7 +74,7 @@ describe('Calendar', () => {
                 <Calendar
                     mode="range"
                     value={value}
-                    onChange={(r) => {
+                    onValueChange={(r) => {
                         setValue(r);
                         onChange(r);
                     }}
@@ -96,7 +96,14 @@ describe('Calendar', () => {
 
     it('several months show side by side', () => {
         render(
-            <Calendar mode="range" months={2} value={null} onChange={() => {}} locale="en-US" defaultMonth="2026-12" />,
+            <Calendar
+                mode="range"
+                months={2}
+                value={null}
+                onValueChange={() => {}}
+                locale="en-US"
+                defaultMonth="2026-12"
+            />,
         );
         expect(screen.getByRole('grid', { name: 'December 2026' })).toBeInTheDocument();
         expect(screen.getByRole('grid', { name: 'January 2027' })).toBeInTheDocument();

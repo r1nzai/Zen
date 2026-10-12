@@ -8,7 +8,7 @@ export default function Limits() {
     return (
         <Calendar
             value={date}
-            onChange={setDate}
+            onValueChange={setDate}
             locale="en-US"
             weekStartsOn={1}
             min={start}

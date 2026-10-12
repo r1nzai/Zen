@@ -2,44 +2,50 @@ import CalendarMicro from '@zen/icons/micro/calendar';
 import Calendar from '@zen/calendar';
 import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
+import { FormValue } from '@zen/utils/form-value';
 import { type DateRange, type DateString, formatDate, formatDateRange } from '@zen/utils/date';
 import { POPUP, TRIGGER, TRIGGER_OPEN, PLACEHOLDER } from '@zen/utils/styles';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
+import { useControllable } from '@zen/utils/useControllable';
 import { ComponentProps, ReactNode } from 'react';
 
 /**
  * Date field: shows the date ("Sep 30, 2026" for the locale) and opens a
  * Calendar to pick one, focused on the chosen date so the keyboard works at
- * once. Dates are "YYYY-MM-DD" strings. With `onClear`, the popup also offers
- * `clearLabel` to empty it.
+ * once. Dates are "YYYY-MM-DD" strings. When `clearable`, the popup also offers
+ * `clearLabel` to empty it. With `name`, it's submitted with a form.
  */
 export default function DatePicker({
-    value,
-    onChange,
+    value: valueProp,
+    defaultValue = null,
+    onValueChange,
     locale,
     min,
     max,
     isDisabled,
     weekStartsOn,
     placeholder = 'Pick a date',
-    onClear,
+    clearable = false,
     clearLabel = 'Clear',
     ...rest
 }: DatePickerProps) {
+    const [value, setValue, reset] = useControllable(valueProp, defaultValue, onValueChange);
     return (
         <PickerField
             {...rest}
             shown={value ? formatDate(value, locale) : null}
+            formValue={value ?? ''}
+            onReset={reset}
             placeholder={placeholder}
             label="Choose date"
-            onClear={value ? onClear : undefined}
+            onClear={clearable && value ? () => setValue(null) : undefined}
             clearLabel={clearLabel}
             calendar={(close) => (
                 <Calendar
                     autoFocus
                     value={value}
-                    onChange={(d) => {
-                        onChange(d);
+                    onValueChange={(d) => {
+                        setValue(d);
                         close();
                     }}
                     {...{ locale, min, max, isDisabled, weekStartsOn }}
@@ -57,8 +63,9 @@ export default function DatePicker({
  * commonRanges).
  */
 export function DateRangePicker({
-    value,
-    onChange,
+    value: valueProp,
+    defaultValue = null,
+    onValueChange,
     locale,
     min,
     max,
@@ -66,11 +73,12 @@ export function DateRangePicker({
     weekStartsOn,
     months = 1,
     placeholder = 'Pick dates',
-    onClear,
+    clearable = false,
     clearLabel = 'Clear',
     presets,
     ...rest
 }: DateRangePickerProps) {
+    const [value, setValue, reset] = useControllable(valueProp, defaultValue, onValueChange);
     const shown = !value
         ? null
         : value.end
@@ -80,9 +88,11 @@ export function DateRangePicker({
         <PickerField
             {...rest}
             shown={shown}
+            formValue={value ? `${value.start}/${value.end ?? ''}` : ''}
+            onReset={reset}
             placeholder={placeholder}
             label="Choose dates"
-            onClear={value ? onClear : undefined}
+            onClear={clearable && value ? () => setValue(null) : undefined}
             clearLabel={clearLabel}
             calendar={(close) => {
                 const calendar = (
@@ -90,8 +100,8 @@ export function DateRangePicker({
                         autoFocus
                         mode="range"
                         value={value}
-                        onChange={(r) => {
-                            onChange(r);
+                        onValueChange={(r) => {
+                            setValue(r);
                             if (r.end) close();
                         }}
                         {...{ locale, min, max, isDisabled, weekStartsOn, months }}
@@ -113,7 +123,7 @@ export function DateRangePicker({
                                         type="button"
                                         aria-pressed={on}
                                         onClick={() => {
-                                            onChange(p.range);
+                                            setValue(p.range);
                                             close();
                                         }}
                                         className="text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground aria-pressed:bg-primary/12 aria-pressed:text-foreground focus-visible:ring-ring/40 cursor-pointer rounded-lg px-2.5 py-1.5 text-start text-sm whitespace-nowrap outline-hidden focus-visible:ring-2"
@@ -139,6 +149,9 @@ function PickerField({
     calendar,
     onClear,
     clearLabel,
+    name,
+    formValue,
+    onReset,
     id,
     className,
     disabled = false,
@@ -146,6 +159,8 @@ function PickerField({
     ...rest
 }: Omit<ComponentProps<'button'>, 'value' | 'onChange' | 'defaultValue'> & {
     shown: string | null;
+    formValue: string;
+    onReset: () => void;
     placeholder: string;
     label: string;
     calendar: (close: () => void) => ReactNode;
@@ -170,6 +185,7 @@ function PickerField({
                 <span className={cx('truncate', !shown && PLACEHOLDER)}>{shown ?? placeholder}</span>
                 <CalendarIcon />
             </button>
+            <FormValue name={name} value={formValue} onReset={onReset} />
             <div {...popup.popupProps} role="dialog" aria-label={label} className={cx('zen__popover', POPUP, 'p-3')}>
                 {/* Rendered while open only, so each opening starts at the chosen date. */}
                 {popup.open && calendar(close)}
@@ -210,22 +226,28 @@ interface PickerProps extends Omit<ComponentProps<'button'>, 'value' | 'onChange
     /** Classes for the trigger (e.g. a width, instead of the default full width). */
     className?: string;
     placeholder?: string;
-    /** Offers a clear option in the popup (shown when a value is set). */
-    onClear?: () => void;
+    /** Offers a clear option in the popup (shown when a value is set); clearing reports null. */
+    clearable?: boolean;
     clearLabel?: string;
+    /** Form field name: the value is submitted with the form ("YYYY-MM-DD", a range as "start/end"). */
+    name?: string;
 }
 
 /** Also takes the trigger button's props (aria-*, data-*, onBlur…), so Field can wire it up. */
 export interface DatePickerProps extends PickerProps {
-    /** "YYYY-MM-DD", or null for none. */
-    value: DateString | null;
-    onChange: (date: DateString) => void;
+    /** "YYYY-MM-DD", or null for none, when you keep it. */
+    value?: DateString | null;
+    /** The first date, when the picker keeps its own. */
+    defaultValue?: DateString | null;
+    onValueChange?: (date: DateString | null) => void;
 }
 
 export interface DateRangePickerProps extends PickerProps {
-    /** The range; `end` is null while only the start is picked. */
-    value: DateRange | null;
-    onChange: (range: DateRange) => void;
+    /** The range when you keep it; `end` is null while only the start is picked. */
+    value?: DateRange | null;
+    /** The first range, when the picker keeps its own. */
+    defaultValue?: DateRange | null;
+    onValueChange?: (range: DateRange | null) => void;
     /** Months shown side by side (2 suits wide screens). */
     months?: number;
     /** Ranges picked in one tap, beside the calendar. */

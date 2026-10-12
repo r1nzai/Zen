@@ -155,7 +155,7 @@ const components = {
     Dialog: <Dialog open title="Title" />,
     ProgressRing: <ProgressRing value={0.5} label="Progress" />,
     Segmented: (
-        <Segmented label="Pick" value="a" onChange={() => {}}>
+        <Segmented label="Pick" value="a" onValueChange={() => {}}>
             <SegmentedItem value="a">A</SegmentedItem>
         </Segmented>
     ),
@@ -172,11 +172,11 @@ const components = {
     ),
     ToastProvider: <ToastProvider>app</ToastProvider>,
     Select: (
-        <Select aria-label="x" value="a" onChange={() => {}}>
+        <Select aria-label="x" value="a" onValueChange={() => {}}>
             <SelectItem value="a">A</SelectItem>
         </Select>
     ),
-    MonthPicker: <MonthPicker aria-label="x" value="2026-09" onChange={() => {}} locale="en-US" />,
+    MonthPicker: <MonthPicker aria-label="x" value="2026-09" onValueChange={() => {}} locale="en-US" />,
     Canvas: (
         <Canvas
             aria-label="x"
@@ -184,14 +184,16 @@ const components = {
             height={50}
             items={[{ id: 'a', x: 1, y: 2, w: 10, h: 10 }]}
             selected={['a']}
-            onChange={() => {}}
+            onItemsChange={() => {}}
         >
             <CanvasItem id="a" label="A" />
         </Canvas>
     ),
-    CanvasFit: <Canvas aria-label="x" width={100} height={50} scale="fit" items={[]} onChange={() => {}} />,
-    ColorPicker: <ColorPicker aria-label="x" value="#7c5cff" onChange={() => {}} />,
-    ColorPanel: <ColorPanel value="#7c5cff80" onChange={() => {}} alpha swatches={[{ label: 'x', value: '#fff' }]} />,
+    CanvasFit: <Canvas aria-label="x" width={100} height={50} scale="fit" items={[]} onItemsChange={() => {}} />,
+    ColorPicker: <ColorPicker aria-label="x" value="#7c5cff" onValueChange={() => {}} />,
+    ColorPanel: (
+        <ColorPanel value="#7c5cff80" onValueChange={() => {}} alpha swatches={[{ label: 'x', value: '#fff' }]} />
+    ),
     AnimatedNumber: <AnimatedNumber value={42} />,
     Avatar: <Avatar name="Rin" />,
     Field: (
@@ -215,7 +217,7 @@ const components = {
             <InputGroupInput />
         </InputGroup>
     ),
-    MoneyInput: <MoneyInput value={15200000} onChange={() => {}} currency="INR" locale="en-IN" />,
+    MoneyInput: <MoneyInput value={15200000} onValueChange={() => {}} currency="INR" locale="en-IN" />,
     Header: <Header>Zen</Header>,
     PageHeader: <PageHeader title="Title" lead="Lead" />,
     SideNav: (

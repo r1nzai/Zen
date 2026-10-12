@@ -55,7 +55,7 @@ export function TableSelectCell({ checked, onSelect, label, className, ...rest }
                 aria-label={label}
                 checked={checked}
                 onClick={(e: MouseEvent<HTMLInputElement>) => onSelect(e.currentTarget.checked, e.shiftKey)}
-                onChange={() => {}}
+                onCheckedChange={() => {}}
                 className="touch-target grid"
             />
         </td>
@@ -77,7 +77,7 @@ export function TableSelectHead({
                 aria-label={label}
                 checked={checked}
                 indeterminate={indeterminate}
-                onChange={(on) => onSelect(indeterminate ? false : on)}
+                onCheckedChange={(on) => onSelect(indeterminate ? false : on)}
                 className="touch-target grid"
             />
         </th>

@@ -16,7 +16,7 @@ export default function Stylesheet() {
     const code = `:root, .dark {\n${css(themeVars(theme, 'dark'))}\n}\n.light {\n${css(themeVars(theme, 'light'))}\n}`;
     return (
         <div className="flex w-full max-w-2xl flex-col gap-3">
-            <Segmented label="Preset" value={preset} onChange={setPreset}>
+            <Segmented label="Preset" value={preset} onValueChange={setPreset}>
                 <SegmentedItem value="teal">Teal</SegmentedItem>
                 <SegmentedItem value="amber">Amber</SegmentedItem>
             </Segmented>

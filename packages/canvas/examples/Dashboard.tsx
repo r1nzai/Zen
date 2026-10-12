@@ -48,7 +48,7 @@ const WIDGETS: Record<string, { label: string; render: () => ReactNode }> = {
 /**
  * A dashboard you lay out yourself: widgets on a 20-unit `grid`, lining up with each other as you drag
  * (`snap`), with `minSize` so none gets too small. Widgets are any content; here Stat, Meter and
- * Sparkline. `onChangeEnd` is the moment to save the layout.
+ * Sparkline. `onItemsChangeEnd` is the moment to save the layout.
  */
 export default function Dashboard() {
     const [items, setItems] = useState<CanvasItemRect[]>([
@@ -70,10 +70,10 @@ export default function Dashboard() {
                 grid={20}
                 minSize={100}
                 items={items}
-                onChange={setItems}
-                onChangeEnd={() => setSaves((n) => n + 1)}
+                onItemsChange={setItems}
+                onItemsChangeEnd={() => setSaves((n) => n + 1)}
                 selected={selected}
-                onSelect={setSelected}
+                onSelectedChange={setSelected}
                 className="bg-transparent shadow-none"
             >
                 {items.map((item) => (

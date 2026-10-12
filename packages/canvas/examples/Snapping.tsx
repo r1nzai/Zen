@@ -14,7 +14,7 @@ export default function Snapping() {
     const [selected, setSelected] = useState<string[]>([]);
     return (
         <div className="flex flex-col items-start gap-3">
-            <Segmented label="Snapping" value={mode} onChange={setMode}>
+            <Segmented label="Snapping" value={mode} onValueChange={setMode}>
                 <SegmentedItem value="off">Off</SegmentedItem>
                 <SegmentedItem value="guides">Guides</SegmentedItem>
                 <SegmentedItem value="grid">Grid</SegmentedItem>
@@ -26,9 +26,9 @@ export default function Snapping() {
                 snap={mode !== 'off'}
                 grid={mode === 'grid' ? 20 : undefined}
                 items={items}
-                onChange={setItems}
+                onItemsChange={setItems}
                 selected={selected}
-                onSelect={setSelected}
+                onSelectedChange={setSelected}
             >
                 {items.map((item, n) => (
                     <CanvasItem

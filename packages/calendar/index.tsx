@@ -2,6 +2,7 @@ import ChevronLeft from '@zen/icons/chevron-left';
 import ChevronRight from '@zen/icons/chevron-right';
 import { cx } from '@zen/utils/cx';
 import { PICKER_MONTH, PICKER_MONTH_ON, PICKER_NAV } from '@zen/utils/styles';
+import { useControllable } from '@zen/utils/useControllable';
 import {
     addDays,
     addMonthsToDate,
@@ -15,7 +16,7 @@ import {
     weekStart,
 } from '@zen/utils/date';
 import { addMonths, formatMonth, type Month, monthNames, monthsBetween } from '@zen/utils/month';
-import { KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
+import { ComponentProps, KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
 
 /**
  * A month grid to pick a date, or a range of dates, fully keyboard-driven:
@@ -35,9 +36,19 @@ export default function Calendar(props: CalendarProps) {
         defaultMonth,
         className,
         autoFocus,
+        mode,
+        value: valueProp,
+        defaultValue = null,
+        onValueChange,
+        ...rest
     } = props;
-    const range = props.mode === 'range' ? props.value : null;
-    const single = props.mode === 'range' ? null : props.value;
+    const [value, set] = useControllable<DateString | DateRange | null>(
+        valueProp,
+        defaultValue,
+        onValueChange as ((value: DateString | DateRange | null) => void) | undefined,
+    );
+    const range = mode === 'range' ? (value as DateRange | null) : null;
+    const single = mode === 'range' ? null : (value as DateString | null);
     const selected = single ?? range?.start ?? null;
     const now = todayDate();
 
@@ -76,12 +87,12 @@ export default function Calendar(props: CalendarProps) {
     const pick = (d: DateString) => {
         if (blocked(d)) return;
         setActive(d);
-        if (props.mode === 'range') {
-            const r = props.value;
+        if (mode === 'range') {
+            const r = range;
             // A new range starts on the first click, and ends on the second (either way round).
-            if (!r || r.end !== null) props.onChange({ start: d, end: null });
-            else props.onChange(d < r.start ? { start: d, end: r.start } : { start: r.start, end: d });
-        } else props.onChange(d);
+            if (!r || r.end !== null) set({ start: d, end: null });
+            else set(d < r.start ? { start: d, end: r.start } : { start: r.start, end: d });
+        } else set(d);
     };
 
     const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -156,7 +167,7 @@ export default function Calendar(props: CalendarProps) {
     if (picking === 'months') {
         const names = monthNames(locale);
         return (
-            <div className={cx('zen__calendar w-fit', className)}>
+            <div className={cx('zen__calendar w-fit', className)} {...rest}>
                 {header}
                 <div className="grid w-64 grid-cols-3 gap-1" role="group" aria-labelledby={titleId}>
                     {names.map((name, i) => {
@@ -191,7 +202,7 @@ export default function Calendar(props: CalendarProps) {
     const order = Array.from({ length: 7 }, (_, i) => (weekStartsOn + i) % 7);
 
     return (
-        <div className={cx('zen__calendar w-fit', className)}>
+        <div className={cx('zen__calendar w-fit', className)} {...rest}>
             {header}
             <div ref={grid} className="flex gap-4" onKeyDown={onKeyDown} onMouseLeave={() => setHover(null)}>
                 {Array.from({ length: months }, (_, k) => {
@@ -303,7 +314,8 @@ export default function Calendar(props: CalendarProps) {
 const DAY =
     'relative grid size-9 cursor-pointer place-items-center rounded-lg text-sm tabular-nums outline-hidden transition-[background-color,color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-ring/60';
 
-interface CalendarBaseProps {
+/** Other props (aria-*, data-*, an id) go on the calendar's outer element. */
+interface CalendarBaseProps extends Omit<ComponentProps<'div'>, 'defaultValue' | 'onKeyDown' | 'children'> {
     /** Decides month and weekday names, and the first day of the week, e.g. "en-IN". */
     locale: string;
     /** Earliest date that can be picked ("YYYY-MM-DD"). */
@@ -325,16 +337,21 @@ interface CalendarBaseProps {
 
 export interface CalendarSingleProps extends CalendarBaseProps {
     mode?: 'single';
-    /** "YYYY-MM-DD", or null for none. */
-    value: DateString | null;
-    onChange: (date: DateString) => void;
+    /** "YYYY-MM-DD", or null for none, when you keep it. */
+    value?: DateString | null;
+    /** The first date, when the calendar keeps its own. */
+    defaultValue?: DateString | null;
+    onValueChange?: (date: DateString) => void;
 }
 
 export interface CalendarRangeProps extends CalendarBaseProps {
     /** Pick a start and then an end; the days between are highlighted, previewed while pointing. */
     mode: 'range';
-    value: DateRange | null;
-    onChange: (range: DateRange) => void;
+    /** The range when you keep it; `end` is null while only the start is picked. */
+    value?: DateRange | null;
+    /** The first range, when the calendar keeps its own. */
+    defaultValue?: DateRange | null;
+    onValueChange?: (range: DateRange) => void;
 }
 
 export type CalendarProps = CalendarSingleProps | CalendarRangeProps;

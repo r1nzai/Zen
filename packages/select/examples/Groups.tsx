@@ -5,7 +5,7 @@ import { useState } from 'react';
 export default function Groups() {
     const [category, setCategory] = useState<string | null>('groceries');
     return (
-        <Select aria-label="Category" value={category} onChange={setCategory} className="w-64">
+        <Select aria-label="Category" value={category} onValueChange={setCategory} className="w-64">
             <SelectGroup label="Essentials">
                 <SelectItem value="rent">Rent</SelectItem>
                 <SelectItem value="groceries">Groceries</SelectItem>

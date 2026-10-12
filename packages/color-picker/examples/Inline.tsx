@@ -7,7 +7,7 @@ export default function Inline() {
     const [saved, setSaved] = useState(color);
     return (
         <Card className="flex flex-col gap-3 p-4!">
-            <ColorPanel value={color} onChange={setColor} onValueCommit={setSaved} />
+            <ColorPanel value={color} onValueChange={setColor} onValueCommit={setSaved} />
             <p className="text-muted-foreground mt-0! text-xs">
                 Saved: <span className="text-foreground font-mono">{saved}</span>
             </p>

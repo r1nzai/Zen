@@ -45,7 +45,7 @@ describe('Field with Zen controls', () => {
     it('wires a Select: label, hint, error', () => {
         render(
             <Field label="Currency" hint="Used for every amount." error="Pick one.">
-                <Select value={null} onChange={() => {}}>
+                <Select value={null} onValueChange={() => {}}>
                     <SelectItem value="inr">INR</SelectItem>
                 </Select>
             </Field>,
@@ -58,7 +58,7 @@ describe('Field with Zen controls', () => {
     it('wires a MonthPicker', () => {
         render(
             <Field label="Start" hint="The first month it counts.">
-                <MonthPicker value={null} onChange={() => {}} locale="en-IN" />
+                <MonthPicker value={null} onValueChange={() => {}} locale="en-IN" />
             </Field>,
         );
         expect(screen.getByRole('button', { name: 'Start' })).toHaveAccessibleDescription('The first month it counts.');
@@ -109,7 +109,7 @@ describe('Field hint and error', () => {
             <Field label="Tenure" hint="Up to 30 years." error="Too long." htmlFor="tenure">
                 <div>
                     <Input id="tenure" />
-                    <Select aria-label="Unit" value="years" onChange={() => {}}>
+                    <Select aria-label="Unit" value="years" onValueChange={() => {}}>
                         <SelectItem value="years">years</SelectItem>
                     </Select>
                 </div>

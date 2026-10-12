@@ -8,8 +8,8 @@ export default function Range() {
         <DateRangePicker
             aria-label="Trip dates"
             value={trip}
-            onChange={setTrip}
-            onClear={() => setTrip(null)}
+            onValueChange={setTrip}
+            clearable
             months={2}
             locale="en-US"
             className="w-64"

@@ -4,15 +4,19 @@ import { useState } from 'react';
 import Field from '../field';
 import ColorPicker, { ColorPanel, type ColorPanelProps } from './index';
 
-function Panel({ onChange = () => {}, initial = '#ff0000', ...rest }: Partial<ColorPanelProps> & { initial?: string }) {
+function Panel({
+    onValueChange = () => {},
+    initial = '#ff0000',
+    ...rest
+}: Partial<ColorPanelProps> & { initial?: string }) {
     const [value, setValue] = useState(initial);
     return (
         <>
             <ColorPanel
                 value={value}
-                onChange={(v) => {
+                onValueChange={(v) => {
                     setValue(v);
-                    onChange(v);
+                    onValueChange(v);
                 }}
                 {...rest}
             />
@@ -93,7 +97,7 @@ describe('ColorPicker', () => {
     it('shows the value, and is labelled and described by its Field', () => {
         render(
             <Field label="Text colour" hint="Used for titles">
-                <ColorPicker value="#7c5cff" onChange={() => {}} />
+                <ColorPicker value="#7c5cff" onValueChange={() => {}} />
             </Field>,
         );
         const trigger = screen.getByRole('button', { name: /Text colour/ });
@@ -104,7 +108,7 @@ describe('ColorPicker', () => {
 
     it('changes the value from its panel', () => {
         const onChange = vi.fn();
-        render(<ColorPicker aria-label="Colour" value="#ff0000" onChange={onChange} />);
+        render(<ColorPicker aria-label="Colour" value="#ff0000" onValueChange={onChange} />);
         fireEvent.keyDown(screen.getByRole('slider', { name: 'Saturation and brightness', hidden: true }), {
             key: 'ArrowLeft',
         });

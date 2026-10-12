@@ -15,7 +15,7 @@ export default function Default() {
         <RadioCards
             label="Palette"
             value={palette}
-            onChange={setPalette}
+            onValueChange={setPalette}
             className="grid grid-cols-2 gap-2 sm:grid-cols-4"
         >
             {PALETTES.map((p) => (

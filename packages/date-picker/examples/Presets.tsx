@@ -9,7 +9,7 @@ export default function Presets() {
         <DateRangePicker
             aria-label="Entries between"
             value={range}
-            onChange={setRange}
+            onValueChange={setRange}
             locale="en-US"
             className="w-64"
             presets={[

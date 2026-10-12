@@ -1,10 +1,11 @@
 import { cx } from '@zen/utils/cx';
-import { createContext, ReactNode, useContext, useId } from 'react';
+import { useControllable } from '@zen/utils/useControllable';
+import { ComponentProps, createContext, ReactNode, useContext, useId } from 'react';
 
 interface RadioGroupContextValue {
     name: string;
     value: string | null;
-    onChange: (value: string) => void;
+    select: (value: string) => void;
     disabled: boolean;
 }
 
@@ -18,15 +19,17 @@ const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
  */
 export default function RadioGroup<V extends string>({
     label,
-    value,
-    onChange,
+    value: valueProp,
+    defaultValue = null,
+    onValueChange,
     name,
     disabled = false,
     orientation = 'vertical',
     className,
     children,
-    ...aria
+    ...rest
 }: RadioGroupProps<V>) {
+    const [value, setValue] = useControllable<V | null, V>(valueProp, defaultValue, onValueChange);
     const id = useId();
     return (
         <div className="zen__radio-group flex flex-col gap-2">
@@ -40,7 +43,7 @@ export default function RadioGroup<V extends string>({
                 aria-labelledby={label ? id : undefined}
                 aria-orientation={orientation}
                 aria-disabled={disabled || undefined}
-                {...aria}
+                {...rest}
                 className={cx(
                     'flex',
                     orientation === 'vertical' ? 'flex-col gap-2.5' : 'flex-wrap gap-x-5 gap-y-2',
@@ -48,7 +51,7 @@ export default function RadioGroup<V extends string>({
                 )}
             >
                 <RadioGroupContext.Provider
-                    value={{ name: name ?? id, value, onChange: onChange as (value: string) => void, disabled }}
+                    value={{ name: name ?? id, value, select: setValue as (value: string) => void, disabled }}
                 >
                     {children}
                 </RadioGroupContext.Provider>
@@ -75,7 +78,7 @@ export function Radio({ value, disabled, description, className, children }: Rad
                     value={value}
                     checked={group.value === value}
                     disabled={disabled || group.disabled}
-                    onChange={() => group.onChange(value)}
+                    onChange={() => group.select(value)}
                     className={cx(
                         'peer bg-tint/[0.04] m-0 size-full cursor-pointer appearance-none rounded-full border border-[color:oklch(var(--tint)/var(--zen-control-edge))] outline-hidden',
                         'transition-[border-color,box-shadow] duration-200',
@@ -96,19 +99,20 @@ export function Radio({ value, disabled, description, className, children }: Rad
     );
 }
 
-export interface RadioGroupProps<V extends string> {
+/** Other props (aria-*, data-*, an id) go on the options' container, the radiogroup. */
+export interface RadioGroupProps<V extends string> extends Omit<ComponentProps<'div'>, 'defaultValue' | 'children'> {
     /** Shown above the options, naming the group. Without it, give the group an aria-label. */
     label?: ReactNode;
-    /** The chosen option, or null for none yet. */
-    value: V | null;
-    onChange: (value: V) => void;
+    /** The chosen option when you keep it, or null for none yet. */
+    value?: V | null;
+    /** The first chosen option, when the group keeps its own. */
+    defaultValue?: V | null;
+    onValueChange?: (value: V) => void;
     /** Form field name; defaults to a generated one. */
     name?: string;
     disabled?: boolean;
     /** Options in a column (default) or wrapping in a row. */
     orientation?: 'vertical' | 'horizontal';
-    'aria-label'?: string;
-    'aria-describedby'?: string;
     /** Classes for the options' container. */
     className?: string;
     /** The Radios. */

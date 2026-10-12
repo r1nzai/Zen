@@ -1,10 +1,11 @@
 import { cx } from '@zen/utils/cx';
-import { createContext, CSSProperties, ReactNode, useContext, useId } from 'react';
+import { useControllable } from '@zen/utils/useControllable';
+import { ComponentProps, createContext, CSSProperties, ReactNode, useContext, useId } from 'react';
 
 interface RadioCardsContextValue {
     name: string;
-    value: string;
-    onChange: (value: string) => void;
+    value: string | undefined;
+    select: (value: string) => void;
 }
 
 const RadioCardsContext = createContext<RadioCardsContextValue | null>(null);
@@ -17,21 +18,24 @@ const RadioCardsContext = createContext<RadioCardsContextValue | null>(null);
  */
 export default function RadioCards<V extends string>({
     label,
-    value,
-    onChange,
+    value: valueProp,
+    defaultValue,
+    onValueChange,
     name,
     className,
     children,
+    ...rest
 }: RadioCardsProps<V>) {
+    const [value, setValue] = useControllable<V | undefined, V>(valueProp, defaultValue, onValueChange);
     const id = useId();
     return (
         <div className="zen__radio-cards flex flex-col gap-2">
             <span id={id} className="text-sm font-medium">
                 {label}
             </span>
-            <div role="radiogroup" aria-labelledby={id} className={className}>
+            <div role="radiogroup" aria-labelledby={id} className={className} {...rest}>
                 <RadioCardsContext.Provider
-                    value={{ name: name ?? id, value, onChange: onChange as (value: string) => void }}
+                    value={{ name: name ?? id, value, select: setValue as (value: string) => void }}
                 >
                     {children}
                 </RadioCardsContext.Provider>
@@ -64,7 +68,7 @@ export function RadioCard({ value, disabled, className, style, children }: Radio
                 value={value}
                 checked={group.value === value}
                 disabled={disabled}
-                onChange={() => group.onChange(value)}
+                onChange={() => group.select(value)}
                 className="absolute inset-0 z-10 m-0 size-full cursor-pointer appearance-none rounded-[inherit] opacity-0 disabled:cursor-not-allowed"
             />
             {children}
@@ -72,10 +76,14 @@ export function RadioCard({ value, disabled, className, style, children }: Radio
     );
 }
 
-export interface RadioCardsProps<V extends string> {
+/** Other props (aria-*, data-*, an id) go on the cards' container, the radiogroup. */
+export interface RadioCardsProps<V extends string> extends Omit<ComponentProps<'div'>, 'defaultValue' | 'children'> {
     label: string;
-    value: V;
-    onChange: (value: V) => void;
+    /** The chosen card, when you keep it. */
+    value?: V;
+    /** The first chosen card, when the group keeps its own. */
+    defaultValue?: V;
+    onValueChange?: (value: V) => void;
     /** Form field name; defaults to a generated one. */
     name?: string;
     /** Classes for the cards' container: its layout (e.g. a grid). */

@@ -20,7 +20,7 @@ describe('Segmented', () => {
         Object.assign(HTMLElement.prototype, { checkVisibility: visible });
         try {
             render(
-                <Segmented label="Glow" value="soft" onChange={() => {}}>
+                <Segmented label="Glow" value="soft" onValueChange={() => {}}>
                     {ITEMS}
                 </Segmented>,
             );
@@ -32,7 +32,7 @@ describe('Segmented', () => {
 
     it('is a labelled radio group with the value checked', () => {
         render(
-            <Segmented label="Glow" value="soft" onChange={() => {}}>
+            <Segmented label="Glow" value="soft" onValueChange={() => {}}>
                 {ITEMS}
             </Segmented>,
         );
@@ -44,7 +44,7 @@ describe('Segmented', () => {
     it('reports the picked value', () => {
         const onChange = vi.fn();
         render(
-            <Segmented label="Glow" value="soft" onChange={onChange}>
+            <Segmented label="Glow" value="soft" onValueChange={onChange}>
                 {ITEMS}
             </Segmented>,
         );
@@ -54,7 +54,7 @@ describe('Segmented', () => {
 
     it('groups its radios under one name', () => {
         render(
-            <Segmented label="Glow" name="glow" value="off" onChange={() => {}}>
+            <Segmented label="Glow" name="glow" value="off" onValueChange={() => {}}>
                 {ITEMS}
             </Segmented>,
         );
@@ -62,7 +62,7 @@ describe('Segmented', () => {
     });
     it('each radio is the click target for its option (an invisible layer over it)', () => {
         render(
-            <Segmented label="Glow" value="soft" onChange={() => {}}>
+            <Segmented label="Glow" value="soft" onValueChange={() => {}}>
                 {ITEMS}
             </Segmented>,
         );
@@ -76,7 +76,7 @@ describe('Segmented', () => {
         it('takes any content, and is a radio named by it', () => {
             const onChange = vi.fn();
             render(
-                <Segmented label="Pattern" value="contours" onChange={onChange}>
+                <Segmented label="Pattern" value="contours" onValueChange={onChange}>
                     <SegmentedItem value="contours">
                         <svg data-testid="icon" /> Contours
                     </SegmentedItem>
@@ -92,7 +92,7 @@ describe('Segmented', () => {
         it('a disabled option cannot be chosen', async () => {
             const onChange = vi.fn();
             render(
-                <Segmented label="Glow" value="soft" onChange={onChange}>
+                <Segmented label="Glow" value="soft" onValueChange={onChange}>
                     <SegmentedItem value="off">Off</SegmentedItem>
                     <SegmentedItem value="soft">Soft</SegmentedItem>
                     <SegmentedItem value="bright" disabled>

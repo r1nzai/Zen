@@ -1,5 +1,6 @@
 import Pills, { PillIndicator } from '@zen/pills';
 import { cx } from '@zen/utils/cx';
+import { useControllable } from '@zen/utils/useControllable';
 import { useIndicator } from '@zen/utils/indicator';
 import { reducedMotion } from '@zen/utils/motion';
 import { PILL } from '@zen/utils/styles';
@@ -37,8 +38,7 @@ function useTabs(component: string) {
 
 /** Tab set with an underline that slides to the active tab. Controlled (`value`) or not (`defaultValue`). */
 export default function Tabs({ value, defaultValue = '', onValueChange, className, ...rest }: TabsProps) {
-    const [uncontrolled, setUncontrolled] = useState(defaultValue);
-    const current = value ?? uncontrolled;
+    const [current, select] = useControllable(value, defaultValue, onValueChange);
     const [seen, setSeen] = useState<{ value: string; before?: string }>({ value: current });
     if (seen.value !== current) setSeen({ value: current, before: seen.value });
     const shown = useRef<HTMLElement | null>(null);
@@ -48,10 +48,6 @@ export default function Tabs({ value, defaultValue = '', onValueChange, classNam
         return last;
     };
     const baseId = useId();
-    const select = (next: string) => {
-        if (value === undefined) setUncontrolled(next);
-        onValueChange?.(next);
-    };
     const idFor = (part: 'tab' | 'panel', v: string) => `${baseId}-${part}-${v.replace(/\s+/g, '-')}`;
 
     return (

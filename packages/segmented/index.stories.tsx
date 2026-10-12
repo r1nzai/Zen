@@ -14,7 +14,7 @@ export const Primary = meta.story({
     args: {
         label: 'Glow',
         value: 'soft',
-        onChange: fn(),
+        onValueChange: fn(),
         children: [
             <SegmentedItem key="off" value="off">
                 Off
@@ -32,8 +32,8 @@ export const Primary = meta.story({
         return (
             <Segmented
                 {...args}
-                onChange={(value) => {
-                    args.onChange(value);
+                onValueChange={(value) => {
+                    args.onValueChange?.(value);
                     updateArgs({ value });
                 }}
             />

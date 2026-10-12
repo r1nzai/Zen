@@ -2,6 +2,7 @@ import CheckMicro from '@zen/icons/micro/check';
 import MinusMicro from '@zen/icons/micro/minus';
 import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
+import { useMergedRefs } from '@zen/utils/refs';
 import { ComponentProps, ReactNode, useEffect, useRef } from 'react';
 
 /**
@@ -15,13 +16,15 @@ export default function Checkbox({
     description,
     indeterminate = false,
     onChange,
+    onCheckedChange,
     className,
     ...rest
 }: CheckboxProps) {
-    const ref = useRef<HTMLInputElement>(null);
+    const own = useRef<HTMLInputElement>(null);
+    const ref = useMergedRefs(own, rest.ref);
     // Only settable from script: there's no indeterminate attribute.
     useEffect(() => {
-        if (ref.current) ref.current.indeterminate = indeterminate;
+        if (own.current) own.current.indeterminate = indeterminate;
     }, [indeterminate]);
     const field = useFieldProps(rest);
     const box = (
@@ -32,12 +35,15 @@ export default function Checkbox({
             )}
         >
             <input
-                ref={ref}
                 type="checkbox"
                 {...rest}
                 {...field}
+                ref={ref}
                 aria-checked={indeterminate ? 'mixed' : undefined}
-                onChange={(e) => onChange?.(e.target.checked)}
+                onChange={(e) => {
+                    onChange?.(e);
+                    onCheckedChange?.(e.target.checked);
+                }}
                 className={cx(
                     'peer bg-tint/[0.04] m-0 size-full cursor-pointer appearance-none rounded-[5px] border border-[color:oklch(var(--tint)/var(--zen-control-edge))]',
                     'outline-hidden transition-[background-color,border-color,box-shadow] duration-200',
@@ -69,8 +75,8 @@ export default function Checkbox({
     );
 }
 
-export interface CheckboxProps extends Omit<ComponentProps<'input'>, 'onChange' | 'type' | 'children'> {
-    onChange?: (checked: boolean) => void;
+export interface CheckboxProps extends Omit<ComponentProps<'input'>, 'type' | 'children'> {
+    onCheckedChange?: (checked: boolean) => void;
     /** Shows a dash instead of the tick, e.g. when some of a group are checked. */
     indeterminate?: boolean;
     /** The label. */

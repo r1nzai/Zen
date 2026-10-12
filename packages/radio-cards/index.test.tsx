@@ -4,7 +4,7 @@ import RadioCards, { RadioCard } from './index';
 
 function Palette({ onChange = () => {}, value = 'violet' }: { onChange?: (v: string) => void; value?: string }) {
     return (
-        <RadioCards label="Palette" value={value} onChange={onChange} className="grid">
+        <RadioCards label="Palette" value={value} onValueChange={onChange} className="grid">
             <RadioCard value="violet">Violet</RadioCard>
             <RadioCard value="ocean">Ocean</RadioCard>
             <RadioCard value="custom" disabled>

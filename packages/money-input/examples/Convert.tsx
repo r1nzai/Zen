@@ -18,7 +18,7 @@ export default function Convert() {
             <MoneyInput
                 aria-label="Amount"
                 value={amount}
-                onChange={setAmount}
+                onValueChange={setAmount}
                 currency="INR"
                 locale="en-IN"
                 convert={{

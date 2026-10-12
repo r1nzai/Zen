@@ -13,15 +13,15 @@ const meta = preview.meta({
 export const Primary = meta.story({
     args: {
         checked: false,
-        onChange: fn(),
+        onCheckedChange: fn(),
     },
     render: function Render(args) {
         const [, updateArgs] = useArgs();
         return (
             <Toggle
                 {...args}
-                onChange={(checked) => {
-                    args.onChange?.(checked);
+                onCheckedChange={(checked) => {
+                    args.onCheckedChange?.(checked);
                     updateArgs({ checked });
                 }}
             />

@@ -1,8 +1,8 @@
 import { cx } from '@zen/utils/cx';
 import { ComponentProps } from 'react';
 
-export interface ToggleProps extends Omit<ComponentProps<'input'>, 'onChange' | 'type'> {
-    onChange?: (checked: boolean) => void;
+export interface ToggleProps extends Omit<ComponentProps<'input'>, 'type'> {
+    onCheckedChange?: (checked: boolean) => void;
 }
 
 /**
@@ -11,7 +11,7 @@ export interface ToggleProps extends Omit<ComponentProps<'input'>, 'onChange' | 
  * flip it (Enter doesn't submit a surrounding form), as for a switch button.
  */
 export default function Toggle(props: ToggleProps) {
-    const { className, onChange, onKeyDown, disabled, ...rest } = props;
+    const { className, onChange, onCheckedChange, onKeyDown, disabled, ...rest } = props;
 
     // A span, not a label: it's usually inside your own label, and labels can't nest.
     return (
@@ -31,7 +31,10 @@ export default function Toggle(props: ToggleProps) {
                 // and focused, so the pointer and assistive tech hit the same element.
                 className="peer absolute inset-0 z-10 m-0 size-full cursor-pointer appearance-none rounded-full opacity-0 disabled:cursor-not-allowed"
                 disabled={disabled}
-                onChange={(e) => onChange?.(e.target.checked)}
+                onChange={(e) => {
+                    onChange?.(e);
+                    onCheckedChange?.(e.target.checked);
+                }}
                 onKeyDown={(e) => {
                     onKeyDown?.(e);
                     if (e.key === 'Enter' && !e.defaultPrevented) {

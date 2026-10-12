@@ -1,5 +1,6 @@
-import Popover, { PopoverContent, PopoverTrigger } from '@zen/popover';
+import Popover, { PopoverContent, PopoverTrigger, type PopoverTriggerProps } from '@zen/popover';
 import { cx } from '@zen/utils/cx';
+import { useControllable } from '@zen/utils/useControllable';
 import { CSSProperties, ReactNode, useId } from 'react';
 
 /** The chart palette, so a category's colour matches it in charts. */
@@ -23,18 +24,24 @@ export const ICON_COLORS: IconColor[] = [
 export default function IconPicker({
     icons,
     colors = ICON_COLORS,
-    value,
-    onChange,
+    value: valueProp,
+    defaultValue = { icon: '' },
+    onValueChange,
     label,
+    name: nameProp,
     className,
+    ...rest
 }: IconPickerProps) {
-    const name = useId();
+    const [value, onChange] = useControllable(valueProp, defaultValue, onValueChange);
+    const id = useId();
+    const name = nameProp ?? id;
     const icon = icons.find((i) => i.value === value.icon);
     const color = colors.find((c) => c.value === value.color);
     const tint = (c: string | undefined) => ({ '--icon-color': c ?? 'var(--color-muted-foreground)' }) as CSSProperties;
     return (
         <Popover>
             <PopoverTrigger
+                {...rest}
                 aria-label={`${label}: ${[icon?.label, color?.label].filter(Boolean).join(', ') || 'none'}`}
                 style={tint(color?.color)}
                 className={cx(
@@ -73,7 +80,7 @@ export default function IconPicker({
                         <label key={i.value} title={i.label} className="cursor-pointer">
                             <input
                                 type="radio"
-                                name={`${name}-icon`}
+                                name={name}
                                 aria-label={i.label}
                                 checked={value.icon === i.value}
                                 onChange={() => onChange({ ...value, icon: i.value })}
@@ -101,12 +108,18 @@ export interface IconColor {
     color: string;
 }
 
-export interface IconPickerProps {
+/** Other props (aria-*, data-*, an id) go on the button. */
+export interface IconPickerProps extends Omit<PopoverTriggerProps, 'value' | 'defaultValue' | 'children'> {
     icons: { value: string; label: string; icon: ReactNode }[];
     /** Default: ICON_COLORS, the chart palette. */
     colors?: IconColor[];
-    value: { icon: string; color?: string };
-    onChange: (value: { icon: string; color?: string }) => void;
+    /** The choice, when you keep it. */
+    value?: { icon: string; color?: string };
+    /** The first choice, when the picker keeps its own. */
+    defaultValue?: { icon: string; color?: string };
+    onValueChange?: (value: { icon: string; color?: string }) => void;
+    /** Form field name: the icon is submitted under it, the colour under `${name}-color`. */
+    name?: string;
     /** What it's the icon of, e.g. "Category icon"; the button also says the current choice. */
     label: string;
     className?: string;

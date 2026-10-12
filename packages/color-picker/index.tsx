@@ -3,6 +3,8 @@ import Input from '@zen/input';
 import Slider from '@zen/slider';
 import { type Hsv, hexToHsv, hsvToHex } from '@zen/utils/color';
 import { cx } from '@zen/utils/cx';
+import { FormValue } from '@zen/utils/form-value';
+import { useControllable } from '@zen/utils/useControllable';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { POPUP, TRIGGER, TRIGGER_OPEN } from '@zen/utils/styles';
 import { useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
@@ -31,14 +33,16 @@ function normalize(value: string, alpha: boolean) {
  * your own. Values are hex: "#rrggbb", or "#rrggbbaa" with `alpha`.
  */
 export function ColorPanel({
-    value,
-    onChange,
+    value: valueProp,
+    defaultValue = '#000000',
+    onValueChange,
     onValueCommit,
     alpha = false,
     swatches,
     className,
     ...rest
 }: ColorPanelProps) {
+    const [value, onChange] = useControllable(valueProp, defaultValue, onValueChange);
     const name = useId();
     // Kept as HSV, so the hue survives greys and black, where hex has none.
     const [hsv, setHsv] = useState(() => hexToHsv(value) ?? BLACK);
@@ -190,17 +194,20 @@ export function ColorPanel({
  * a hex or pick a swatch. Works in a Field like any input.
  */
 export default function ColorPicker({
-    value,
-    onChange,
+    value: valueProp,
+    defaultValue = '#000000',
+    onValueChange,
     onValueCommit,
     alpha,
     swatches,
+    name,
     id,
     disabled,
     className,
     style,
     ...rest
 }: ColorPickerProps) {
+    const [value, setValue, reset] = useControllable(valueProp, defaultValue, onValueChange);
     const popup = useAnchoredPopup<HTMLDivElement>();
     const field = useFieldProps({ ...rest, id });
     return (
@@ -225,6 +232,7 @@ export default function ColorPicker({
                 </span>
                 <FieldChevron open={popup.open} />
             </button>
+            <FormValue name={name} value={value} onReset={reset} />
             <div
                 {...popup.popupProps}
                 role="dialog"
@@ -233,7 +241,7 @@ export default function ColorPicker({
             >
                 <ColorPanel
                     value={value}
-                    onChange={onChange}
+                    onValueChange={setValue}
                     onValueCommit={onValueCommit}
                     alpha={alpha}
                     swatches={swatches}
@@ -250,10 +258,12 @@ export interface ColorSwatch {
 }
 
 interface ColorValueProps {
-    /** "#rrggbb", or "#rrggbbaa" with `alpha`. */
-    value: string;
+    /** "#rrggbb", or "#rrggbbaa" with `alpha`, when you keep it. */
+    value?: string;
+    /** The first colour, when the picker keeps its own. Black by default. */
+    defaultValue?: string;
     /** Every change, while dragging too. */
-    onChange: (value: string) => void;
+    onValueChange?: (value: string) => void;
     /** Once a change is made: let go of the area or a slider, a key, a hex entered, a swatch picked. */
     onValueCommit?: (value: string) => void;
     /** Offer opacity; values may then be "#rrggbbaa". */
@@ -262,6 +272,9 @@ interface ColorValueProps {
     swatches?: ColorSwatch[];
 }
 
-export interface ColorPanelProps extends ColorValueProps, Omit<ComponentProps<'div'>, 'onChange'> {}
+export interface ColorPanelProps extends ColorValueProps, Omit<ComponentProps<'div'>, 'defaultValue'> {}
 
-export interface ColorPickerProps extends ColorValueProps, Omit<ComponentProps<'button'>, 'value' | 'onChange'> {}
+export interface ColorPickerProps extends ColorValueProps, Omit<ComponentProps<'button'>, 'value' | 'defaultValue'> {
+    /** Form field name: the hex is submitted with the form. */
+    name?: string;
+}

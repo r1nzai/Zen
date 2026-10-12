@@ -5,7 +5,7 @@ import { useState } from 'react';
 export default function Horizontal() {
     const [every, setEvery] = useState<string | null>(null);
     return (
-        <RadioGroup label="Repeat" value={every} onChange={setEvery} orientation="horizontal">
+        <RadioGroup label="Repeat" value={every} onValueChange={setEvery} orientation="horizontal">
             <Radio value="week">Weekly</Radio>
             <Radio value="month">Monthly</Radio>
             <Radio value="year">Yearly</Radio>

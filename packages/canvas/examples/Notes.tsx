@@ -32,9 +32,9 @@ export default function Notes() {
                 scale="fit"
                 minSize={120}
                 items={notes}
-                onChange={setNotes}
+                onItemsChange={setNotes}
                 selected={selected}
-                onSelect={setSelected}
+                onSelectedChange={setSelected}
             >
                 {notes.map((note, i) => (
                     <CanvasItem

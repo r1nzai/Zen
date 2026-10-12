@@ -1,6 +1,8 @@
 import { THUMB } from '@zen/slider';
 import { cx } from '@zen/utils/cx';
-import { CSSProperties } from 'react';
+import { useFormReset } from '@zen/utils/form-value';
+import { useControllable } from '@zen/utils/useControllable';
+import { ComponentProps, CSSProperties, useRef } from 'react';
 
 /**
  * Two thumbs on one track, for a span such as an amount from $50 to $500:
@@ -8,7 +10,8 @@ import { CSSProperties } from 'react';
  * Slider), the span between them filled. The thumbs can meet but not cross.
  */
 export default function RangeSlider({
-    value: [low, high],
+    value: valueProp,
+    defaultValue,
     min = 0,
     max = 100,
     step = 1,
@@ -17,9 +20,19 @@ export default function RangeSlider({
     label,
     thumbLabels = ['Minimum', 'Maximum'],
     valueText,
+    name,
     disabled,
     className,
+    style,
+    ...rest
 }: RangeSliderProps) {
+    const [[low, high], setValue, reset] = useControllable<readonly [number, number], [number, number]>(
+        valueProp,
+        defaultValue ?? [min, max],
+        onValueChange,
+    );
+    const first = useRef<HTMLInputElement>(null);
+    useFormReset(first, reset);
     const at = (v: number) => (max > min ? ((v - min) / (max - min)) * 100 : 0);
     const thumbs = [
         { value: low, set: (v: number) => [Math.min(v, high), high] as const },
@@ -29,8 +42,9 @@ export default function RangeSlider({
         <div
             role="group"
             aria-label={label}
+            {...rest}
             className={cx('zen__range-slider relative h-5 w-full', disabled && 'opacity-50', className)}
-            style={{ '--zen-thumb': 'oklch(var(--primary))' } as CSSProperties}
+            style={{ '--zen-thumb': 'oklch(var(--primary))', ...style } as CSSProperties}
         >
             <div
                 aria-hidden
@@ -42,7 +56,9 @@ export default function RangeSlider({
             {thumbs.map((thumb, i) => (
                 <input
                     key={i}
+                    ref={i === 0 ? first : undefined}
                     type="range"
+                    name={name}
                     min={min}
                     max={max}
                     step={step}
@@ -52,7 +68,7 @@ export default function RangeSlider({
                     aria-valuetext={valueText?.(thumb.value)}
                     onChange={(e) => {
                         const [a, b] = thumb.set(Number(e.target.value));
-                        onValueChange?.([a, b]);
+                        setValue([a, b]);
                     }}
                     onPointerUp={() => onValueCommit?.([low, high])}
                     onKeyUp={() => onValueCommit?.([low, high])}
@@ -70,9 +86,14 @@ export default function RangeSlider({
     );
 }
 
-export interface RangeSliderProps {
-    /** The span, low then high. */
-    value: readonly [number, number];
+/** Other props (aria-*, data-*, an id) go on the group around the thumbs. */
+export interface RangeSliderProps extends Omit<ComponentProps<'div'>, 'defaultValue' | 'children'> {
+    /** The span, low then high, when you keep it. */
+    value?: readonly [number, number];
+    /** The first span, when the slider keeps its own (default the whole range). */
+    defaultValue?: readonly [number, number];
+    /** Form field name: low and high are submitted under it, in that order. */
+    name?: string;
     min?: number;
     max?: number;
     step?: number;

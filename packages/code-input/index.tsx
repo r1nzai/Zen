@@ -1,6 +1,9 @@
 import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
-import { ComponentProps, useState } from 'react';
+import { useFormReset } from '@zen/utils/form-value';
+import { useMergedRefs } from '@zen/utils/refs';
+import { useControllable } from '@zen/utils/useControllable';
+import { ComponentProps, useRef, useState } from 'react';
 
 /**
  * A one-time code (sign-in, verification): a box per character. It's one real
@@ -19,8 +22,10 @@ export default function CodeInput({
     disabled,
     ...rest
 }: CodeInputProps) {
-    const [own, setOwn] = useState(defaultValue);
-    const value = controlled ?? own;
+    const [value, setValue, reset] = useControllable(controlled, defaultValue, onValueChange);
+    const input = useRef<HTMLInputElement>(null);
+    const ref = useMergedRefs(input, rest.ref);
+    useFormReset(input, reset);
     const [focused, setFocused] = useState(false);
     const field = useFieldProps(rest);
     const digits = allowed.source === '\\d';
@@ -34,6 +39,7 @@ export default function CodeInput({
                 maxLength={length}
                 {...rest}
                 {...field}
+                ref={ref}
                 disabled={disabled}
                 value={value}
                 onChange={(e) => {
@@ -42,8 +48,8 @@ export default function CodeInput({
                         .filter((c) => allowed.test(c))
                         .join('')
                         .slice(0, length);
-                    if (controlled === undefined) setOwn(next);
-                    onValueChange?.(next);
+                    rest.onChange?.(e);
+                    setValue(next);
                     if (next.length === length && value.length !== length) onComplete?.(next);
                 }}
                 onFocus={(e) => {

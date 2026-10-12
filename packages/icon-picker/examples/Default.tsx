@@ -21,7 +21,7 @@ export default function Default() {
     const [look, setLook] = useState<{ icon: string; color?: string }>({ icon: 'groceries', color: 'teal' });
     return (
         <div className="flex w-full max-w-sm items-end gap-3">
-            <IconPicker label="Category icon" icons={ICONS} value={look} onChange={setLook} />
+            <IconPicker label="Category icon" icons={ICONS} value={look} onValueChange={setLook} />
             <Field label="Name" className="flex-1">
                 <Input defaultValue="Groceries" />
             </Field>

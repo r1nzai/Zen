@@ -17,16 +17,16 @@ const open = (name: string) => {
 describe('DatePicker', () => {
     it('shows the date for the locale, or the placeholder', () => {
         const { rerender } = render(
-            <DatePicker aria-label="Due" value="2026-09-30" onChange={() => {}} locale="en-GB" />,
+            <DatePicker aria-label="Due" value="2026-09-30" onValueChange={() => {}} locale="en-GB" />,
         );
         expect(screen.getByRole('button', { name: 'Due' })).toHaveTextContent('30 Sept 2026');
-        rerender(<DatePicker aria-label="Due" value={null} onChange={() => {}} locale="en-GB" />);
+        rerender(<DatePicker aria-label="Due" value={null} onValueChange={() => {}} locale="en-GB" />);
         expect(screen.getByRole('button', { name: 'Due' })).toHaveTextContent('Pick a date');
     });
 
     it('opens on the chosen date, and picking a day closes it', () => {
         const onChange = vi.fn();
-        render(<DatePicker aria-label="Due" value="2026-09-30" onChange={onChange} locale="en-US" />);
+        render(<DatePicker aria-label="Due" value="2026-09-30" onValueChange={onChange} locale="en-US" />);
         open('Due');
         const chosen = screen.getByRole('button', { name: 'Wednesday, September 30, 2026', hidden: true });
         expect(document.activeElement).toBe(chosen);
@@ -41,21 +41,21 @@ describe('DatePicker', () => {
             <DatePicker
                 aria-label="Due"
                 value="2026-09-30"
-                onChange={() => {}}
-                onClear={onClear}
+                onValueChange={onClear}
+                clearable
                 clearLabel="No due date"
                 locale="en-US"
             />,
         );
         open('Due');
         fireEvent.click(screen.getByRole('button', { name: 'No due date', hidden: true }));
-        expect(onClear).toHaveBeenCalled();
+        expect(onClear).toHaveBeenCalledWith(null);
     });
 
     it('is wired to a Field', () => {
         render(
             <Field label="Start" error="Pick a start date.">
-                <DatePicker value={null} onChange={() => {}} locale="en-US" />
+                <DatePicker value={null} onValueChange={() => {}} locale="en-US" />
             </Field>,
         );
         const trigger = screen.getByRole('button', { name: 'Start' });
@@ -68,7 +68,7 @@ describe('DateRangePicker', () => {
     it('stays open for the end, then closes, showing the range', () => {
         function Trip() {
             const [value, setValue] = useState<DateRange | null>(null);
-            return <DateRangePicker aria-label="Trip" value={value} onChange={setValue} locale="en-US" />;
+            return <DateRangePicker aria-label="Trip" value={value} onValueChange={setValue} locale="en-US" />;
         }
         render(<Trip />);
         open('Trip');
@@ -91,7 +91,7 @@ describe('DateRangePicker', () => {
             <DateRangePicker
                 aria-label="Range"
                 value={null}
-                onChange={onChange}
+                onValueChange={onChange}
                 locale="en-US"
                 presets={[{ label: 'That week', range: week }]}
             />,
@@ -104,7 +104,7 @@ describe('DateRangePicker', () => {
             <DateRangePicker
                 aria-label="Range"
                 value={week}
-                onChange={onChange}
+                onValueChange={onChange}
                 locale="en-US"
                 presets={[{ label: 'That week', range: week }]}
             />,

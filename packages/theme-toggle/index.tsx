@@ -3,7 +3,7 @@ import SunMicro from '@zen/icons/micro/sun';
 import { cx } from '@zen/utils/cx';
 import type { Appearance } from '@zen/utils/theme';
 import { prepareThemeWave, themeWave } from '@zen/utils/theme-wave';
-import { type RefObject, useSyncExternalStore } from 'react';
+import { type ComponentProps, type RefObject, useSyncExternalStore } from 'react';
 import { flushSync } from 'react-dom';
 
 /** The inline script ThemeScript renders (for frameworks that take a raw string). */
@@ -39,12 +39,19 @@ const current = (): Appearance => (document.documentElement.classList.contains('
  *
  * On its own, it switches <html>'s class and remembers the choice (localStorage):
  * add ThemeScript to <head> to apply it on the next visit. Give it `value` and
- * `onChange` and the theme is yours: it shows `value` and leaves applying and
- * storing the choice to `onChange` (in your state, a database, a cookie…).
+ * `onValueChange` and the theme is yours: it shows `value` and leaves applying and
+ * storing the choice to `onValueChange` (in your state, a database, a cookie…).
  * With `target` too, it switches the theme of one element (a panel, a preview),
  * and the water stays inside it.
  */
-export default function ThemeToggle({ value, onChange, target, storageKey = 'theme', className }: ThemeToggleProps) {
+export default function ThemeToggle({
+    value,
+    onValueChange,
+    target,
+    storageKey = 'theme',
+    className,
+    ...rest
+}: ThemeToggleProps) {
     // Dark on the server; the real theme once hydrated.
     const shown = useSyncExternalStore(subscribe, current, () => 'dark' as const);
     const theme = value ?? shown;
@@ -54,6 +61,7 @@ export default function ThemeToggle({ value, onChange, target, storageKey = 'the
         <button
             type="button"
             aria-label={`Switch to ${next} theme`}
+            {...rest}
             onPointerEnter={prepareThemeWave}
             onFocus={prepareThemeWave}
             onClick={(e) =>
@@ -72,7 +80,7 @@ export default function ThemeToggle({ value, onChange, target, storageKey = 'the
                         // Synchronously, effects included: the wave captures the page in the new
                         // theme as soon as this returns.
                         flushSync(() => {
-                            onChange?.(next);
+                            onValueChange?.(next);
                             listeners.forEach((notify) => notify());
                         });
                     },
@@ -90,17 +98,18 @@ export default function ThemeToggle({ value, onChange, target, storageKey = 'the
     );
 }
 
-export interface ThemeToggleProps {
+/** Other props (aria-*, data-*, an id) go on the button. */
+export interface ThemeToggleProps extends Omit<ComponentProps<'button'>, 'value' | 'onClick'> {
     /**
-     * The theme, when you keep it: the toggle shows it, and `onChange` must apply
+     * The theme, when you keep it: the toggle shows it, and `onValueChange` must apply
      * the new one (by the end of a synchronous render and its effects). Without it,
      * the toggle switches <html>'s class itself.
      */
     value?: Appearance;
     /** Called with the theme switched to. */
-    onChange?: (theme: Appearance) => void;
+    onValueChange?: (theme: Appearance) => void;
     /**
-     * The element whose theme `onChange` switches, when it's not the page (a panel
+     * The element whose theme `onValueChange` switches, when it's not the page (a panel
      * with its own .dark or .light): the wave plays inside it. Needs `value`.
      */
     target?: RefObject<HTMLElement | null>;

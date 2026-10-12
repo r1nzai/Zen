@@ -8,7 +8,7 @@ describe('Toggle', () => {
             render(
                 <label>
                     Repeats every month
-                    <Toggle onChange={onChange} />
+                    <Toggle onCheckedChange={onChange} />
                 </label>,
             );
             expect(screen.getByRole('switch', { name: 'Repeats every month' })).toBeInTheDocument();
@@ -25,12 +25,12 @@ describe('Toggle', () => {
 
     describe('switch state', () => {
         it('is announced as an unchecked switch', () => {
-            render(<Toggle checked={false} onChange={() => {}} />);
+            render(<Toggle checked={false} onCheckedChange={() => {}} />);
             expect(screen.getByRole('switch')).not.toBeChecked();
         });
 
         it('is announced as a checked switch', () => {
-            render(<Toggle checked={true} onChange={() => {}} />);
+            render(<Toggle checked={true} onCheckedChange={() => {}} />);
             expect(screen.getByRole('switch')).toBeChecked();
         });
 
@@ -43,7 +43,7 @@ describe('Toggle', () => {
     describe('onChange behaviour', () => {
         it('calls onChange(true) when clicked while unchecked', () => {
             const onChange = vi.fn();
-            render(<Toggle checked={false} onChange={onChange} />);
+            render(<Toggle checked={false} onCheckedChange={onChange} />);
             fireEvent.click(screen.getByRole('switch'));
             expect(onChange).toHaveBeenCalledTimes(1);
             expect(onChange).toHaveBeenCalledWith(true);
@@ -51,7 +51,7 @@ describe('Toggle', () => {
 
         it('calls onChange(false) when clicked while checked', () => {
             const onChange = vi.fn();
-            render(<Toggle checked={true} onChange={onChange} />);
+            render(<Toggle checked={true} onCheckedChange={onChange} />);
             fireEvent.click(screen.getByRole('switch'));
             expect(onChange).toHaveBeenCalledTimes(1);
             expect(onChange).toHaveBeenCalledWith(false);
@@ -62,7 +62,7 @@ describe('Toggle', () => {
             const onSubmit = vi.fn((e: Event) => e.preventDefault());
             render(
                 <form onSubmit={onSubmit as never}>
-                    <Toggle aria-label="Placeholder" onChange={onChange} />
+                    <Toggle aria-label="Placeholder" onCheckedChange={onChange} />
                 </form>,
             );
             fireEvent.keyDown(screen.getByRole('switch'), { key: 'Enter' });

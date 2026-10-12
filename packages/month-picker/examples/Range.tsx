@@ -9,17 +9,17 @@ export default function Range() {
         <div className="flex items-end gap-3">
             <label className="flex flex-col gap-2 text-sm font-medium">
                 Starts
-                <MonthPicker value={start} onChange={setStart} locale="en-US" className="w-40" />
+                <MonthPicker value={start} onValueChange={setStart} locale="en-US" className="w-40" />
             </label>
             <label className="flex flex-col gap-2 text-sm font-medium">
                 Ends
                 <MonthPicker
                     value={end}
-                    onChange={setEnd}
+                    onValueChange={setEnd}
                     locale="en-US"
                     min={start ? addMonths(start, 1) : undefined}
                     placeholder="No end"
-                    onClear={() => setEnd(null)}
+                    clearable
                     clearLabel="No end"
                     className="w-40"
                 />

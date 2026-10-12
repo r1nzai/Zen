@@ -63,14 +63,14 @@ describe('ThemeToggle', () => {
 
     it('with value, shows it and leaves the theme to onChange', () => {
         const onChange = vi.fn();
-        const { rerender } = render(<ThemeToggle value="light" onChange={onChange} />);
+        const { rerender } = render(<ThemeToggle value="light" onValueChange={onChange} />);
         fireEvent.click(screen.getByRole('button', { name: 'Switch to dark theme' }));
         expect(onChange).toHaveBeenCalledWith('dark');
         expect(document.documentElement).toHaveClass('dark');
         expect(localStorage.getItem('theme')).toBeNull();
         // Not switched until the value is.
         expect(screen.getByRole('button', { name: 'Switch to dark theme' })).toBeInTheDocument();
-        rerender(<ThemeToggle value="dark" onChange={onChange} />);
+        rerender(<ThemeToggle value="dark" onValueChange={onChange} />);
         expect(screen.getByRole('button', { name: 'Switch to light theme' })).toBeInTheDocument();
     });
 
@@ -80,7 +80,7 @@ describe('ThemeToggle', () => {
             useEffect(() => {
                 document.documentElement.dataset.mode = mode;
             }, [mode]);
-            return <ThemeToggle value={mode} onChange={setMode} />;
+            return <ThemeToggle value={mode} onValueChange={setMode} />;
         }
         render(<App />);
         fireEvent.click(screen.getByRole('button', { name: 'Switch to light theme' }));
@@ -93,7 +93,7 @@ describe('ThemeToggle', () => {
             const panel = useRef<HTMLDivElement>(null);
             return (
                 <div ref={panel} data-testid="panel" className={mode}>
-                    <ThemeToggle value={mode} onChange={setMode} target={panel} />
+                    <ThemeToggle value={mode} onValueChange={setMode} target={panel} />
                 </div>
             );
         }
@@ -105,7 +105,7 @@ describe('ThemeToggle', () => {
 
     it('without value, onChange is told too', () => {
         const onChange = vi.fn();
-        render(<ThemeToggle onChange={onChange} />);
+        render(<ThemeToggle onValueChange={onChange} />);
         fireEvent.click(screen.getByRole('button', { name: 'Switch to light theme' }));
         expect(onChange).toHaveBeenCalledWith('light');
         expect(captured).toEqual(['light']);

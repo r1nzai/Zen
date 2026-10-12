@@ -1,11 +1,12 @@
 import { cx } from '@zen/utils/cx';
 import { useIndicator } from '@zen/utils/indicator';
-import { createContext, ReactNode, useContext, useId, useRef } from 'react';
+import { useControllable } from '@zen/utils/useControllable';
+import { ComponentProps, createContext, ReactNode, useContext, useId, useRef } from 'react';
 
 interface SegmentedContextValue {
     name: string;
-    value: string;
-    onChange: (value: string) => void;
+    value: string | undefined;
+    select: (value: string) => void;
     /** Whether the sliding indicator is measured (until then, the checked option has its own background). */
     measured: boolean;
 }
@@ -20,12 +21,15 @@ const SegmentedContext = createContext<SegmentedContextValue | null>(null);
  */
 export default function Segmented<V extends string>({
     label,
-    value,
-    onChange,
+    value: valueProp,
+    defaultValue,
+    onValueChange,
     name,
     className,
     children,
+    ...rest
 }: SegmentedProps<V>) {
+    const [value, setValue] = useControllable<V | undefined, V>(valueProp, defaultValue, onValueChange);
     const id = useId();
     const trackRef = useRef<HTMLDivElement>(null);
     // Where the checked option is, for the sliding indicator (null until measured:
@@ -34,7 +38,7 @@ export default function Segmented<V extends string>({
     const box = useIndicator(trackRef, 'label:has(input:checked)', [value, children]);
 
     return (
-        <div className={cx('zen__segmented flex flex-col gap-2', className)}>
+        <div className={cx('zen__segmented flex flex-col gap-2', className)} {...rest}>
             <span id={id} className="text-sm font-medium">
                 {label}
             </span>
@@ -55,7 +59,7 @@ export default function Segmented<V extends string>({
                     value={{
                         name: name ?? id,
                         value,
-                        onChange: onChange as (value: string) => void,
+                        select: setValue as (value: string) => void,
                         measured: box !== null,
                     }}
                 >
@@ -90,17 +94,20 @@ export function SegmentedItem({ value, disabled, className, children }: Segmente
                 value={value}
                 checked={group.value === value}
                 disabled={disabled}
-                onChange={() => group.onChange(value)}
+                onChange={() => group.select(value)}
             />
             {children}
         </label>
     );
 }
 
-export interface SegmentedProps<V extends string> {
+export interface SegmentedProps<V extends string> extends Omit<ComponentProps<'div'>, 'defaultValue' | 'children'> {
     label: string;
-    value: V;
-    onChange: (value: V) => void;
+    /** The chosen option, when you keep it. */
+    value?: V;
+    /** The first chosen option, when the control keeps its own. */
+    defaultValue?: V;
+    onValueChange?: (value: V) => void;
     /** Form field name; defaults to a generated one. */
     name?: string;
     className?: string;

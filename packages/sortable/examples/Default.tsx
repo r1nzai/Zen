@@ -13,7 +13,7 @@ const BUDGETS: Record<string, { name: string; spent: number; limit: number }> = 
 export default function Default() {
     const [order, setOrder] = useState(Object.keys(BUDGETS));
     return (
-        <SortableList value={order} onChange={setOrder} aria-label="Budgets" className="w-full max-w-md gap-2">
+        <SortableList value={order} onValueChange={setOrder} aria-label="Budgets" className="w-full max-w-md gap-2">
             {order.map((id) => {
                 const b = BUDGETS[id];
                 return (

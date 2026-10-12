@@ -12,7 +12,7 @@ function Repay({
     disabled?: boolean;
 }) {
     return (
-        <RadioGroup label="Repay" value={value} onChange={onChange} disabled={disabled}>
+        <RadioGroup label="Repay" value={value} onValueChange={onChange} disabled={disabled}>
             <Radio value="emi" description="Pay less each month.">
                 Lower the EMI
             </Radio>

@@ -21,7 +21,7 @@ export default function Settings() {
                             {label}
                             <Toggle
                                 checked={settings[key]}
-                                onChange={(on) => setSettings((s) => ({ ...s, [key]: on }))}
+                                onCheckedChange={(on) => setSettings((s) => ({ ...s, [key]: on }))}
                             />
                         </label>
                     ))}

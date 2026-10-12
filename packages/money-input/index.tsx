@@ -2,6 +2,8 @@ import InputGroup, { InputGroupAddon, InputGroupInput } from '@zen/input-group';
 import Menu, { MenuContent, MenuItem, MenuSeparator, MenuTrigger } from '@zen/menu';
 import Spinner from '@zen/spinner';
 import { cx } from '@zen/utils/cx';
+import { FormValue } from '@zen/utils/form-value';
+import { useControllable } from '@zen/utils/useControllable';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { convertMinor, type ForeignAmount, rateBetween, type RateTable } from '@zen/utils/fx';
 import { currencySymbol, formatAmount, formatMoney, minorDigits, type Money, parseMoneyInput } from '@zen/utils/money';
@@ -21,7 +23,8 @@ import { ChangeEvent, ComponentProps, KeyboardEvent, ReactNode, useEffect, useId
  */
 export default function MoneyInput({
     value,
-    onChange,
+    defaultValue,
+    onValueChange,
     currency,
     locale,
     allowNegative,
@@ -38,11 +41,13 @@ export default function MoneyInput({
     onBlur,
     onKeyDown,
     'aria-describedby': describedBy,
+    name,
     ...input
 }: MoneyInputProps) {
     const money = useMoneyInput({
         value,
-        onChange,
+        defaultValue,
+        onValueChange,
         currency,
         locale,
         allowNegative,
@@ -89,6 +94,7 @@ export default function MoneyInput({
                 />
                 {end}
             </InputGroup>
+            <FormValue name={name} value={money.value === null ? '' : String(money.value)} onReset={money.reset} />
             {money.error ? (
                 <p
                     id={money.errorId}
@@ -200,8 +206,9 @@ export function MoneyConversionHint({ money, className }: { money: MoneyInputSta
  * With `convert`, `conversion` drives MoneyCurrencyMenu and MoneyConversionHint.
  */
 export function useMoneyInput({
-    value,
-    onChange,
+    value: valueProp,
+    defaultValue = null,
+    onValueChange,
     currency,
     locale,
     allowNegative = false,
@@ -210,6 +217,7 @@ export function useMoneyInput({
     onCancel,
     convert,
 }: MoneyInputOptions) {
+    const [value, onChange, reset] = useControllable(valueProp, defaultValue, onValueChange);
     const initial = convert?.initial ?? null;
     // The currency being typed in: `currency`, or a foreign one converted into it.
     const [inputCurrency, setInputCurrency] = useState(() => initial?.currency ?? currency);
@@ -398,6 +406,10 @@ export function useMoneyInput({
 
     return {
         inputProps,
+        /** The amount in minor units, or null. */
+        value,
+        /** Back to the first amount (on a form's reset). */
+        reset,
         /** The symbol of the currency being typed in, in this locale, e.g. "₹" or "$". */
         symbol: currencySymbol(inputCurrency, locale),
         error,
@@ -494,9 +506,11 @@ export interface CurrencyConversion {
 }
 
 export interface MoneyInputOptions {
-    /** Amount in minor units (paise, cents), or null when empty. */
-    value: Money | null;
-    onChange: (value: Money | null) => void;
+    /** Amount in minor units (paise, cents), or null when empty, when you keep it. */
+    value?: Money | null;
+    /** The first amount, when the field keeps its own. */
+    defaultValue?: Money | null;
+    onValueChange?: (value: Money | null) => void;
     /** ISO 4217 code, e.g. "INR", "USD". */
     currency: string;
     /** Decides digit grouping and the symbol, e.g. "en-IN" (1,52,000) or "en-US" (152,000). */
@@ -516,8 +530,9 @@ export interface MoneyInputOptions {
 }
 
 /**
- * Also takes the input's own props (placeholder, name, aria-*, onBlur…), except
+ * Also takes the input's own props (placeholder, aria-*, onBlur…), except
  * the value and its typing, which MoneyInput runs. className goes on the wrapper.
+ * With `name`, the amount in minor units (e.g. "15200000") is submitted with a form.
  */
 export interface MoneyInputProps
     extends

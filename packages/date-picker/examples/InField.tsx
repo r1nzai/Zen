@@ -14,7 +14,7 @@ export default function InField() {
         >
             <DatePicker
                 value={date}
-                onChange={setDate}
+                onValueChange={setDate}
                 onBlur={() => setTouched(true)}
                 locale="en-US"
                 min={today()}

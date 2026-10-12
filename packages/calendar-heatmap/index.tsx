@@ -5,7 +5,7 @@ import { formatMonth, type Month } from '@zen/utils/month';
 /**
  * A month as a grid of days, each shaded by its value (e.g. what was spent
  * that day): busy days stand out at a glance. Hover a day for its figure;
- * with `onSelect`, days are buttons.
+ * with `onSelectedChange`, days are buttons.
  */
 export default function CalendarHeatmap({
     month,
@@ -13,7 +13,7 @@ export default function CalendarHeatmap({
     locale,
     format = String,
     weekStartsOn = weekStart(locale),
-    onSelect,
+    onSelectedChange,
     selected,
     label,
     className,
@@ -77,11 +77,11 @@ export default function CalendarHeatmap({
                             );
                             return (
                                 <td key={day} title={said} className="p-0">
-                                    {onSelect ? (
+                                    {onSelectedChange ? (
                                         <button
                                             type="button"
                                             aria-pressed={day === selected}
-                                            onClick={() => onSelect(day)}
+                                            onClick={() => onSelectedChange(day)}
                                             className={cx(
                                                 look,
                                                 'focus-visible:ring-ring/60 cursor-pointer outline-hidden hover:shadow-[0_0_0_1px_oklch(var(--tint)/0.3)] focus-visible:ring-2',
@@ -115,7 +115,7 @@ export interface CalendarHeatmapProps {
     /** 0 for Sunday … 6 for Saturday (default: the locale's). */
     weekStartsOn?: number;
     /** Makes the days buttons. */
-    onSelect?: (day: DateString) => void;
+    onSelectedChange?: (day: DateString) => void;
     selected?: DateString | null;
     /** Accessible name (default: the month, e.g. "September 2026"). */
     label?: string;

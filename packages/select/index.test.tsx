@@ -24,7 +24,7 @@ function Controlled({ onValue }: { onValue?: (v: string) => void }) {
             aria-label="Currency"
             name="currency"
             value={value}
-            onChange={(v) => {
+            onValueChange={(v) => {
                 setValue(v);
                 onValue?.(v);
             }}
@@ -44,7 +44,7 @@ describe('Select', () => {
         expect(trigger()).toHaveTextContent('US dollar');
         expect(trigger()).toHaveAttribute('aria-haspopup', 'listbox');
         expect(trigger()).toHaveAttribute('aria-expanded', 'false');
-        expect(container.querySelector('input[type=hidden]')).toHaveAttribute('value', 'usd');
+        expect(container.querySelector('input[type=hidden][name]')).toHaveAttribute('value', 'usd');
         expect(option('US dollar')).toHaveAttribute('aria-selected', 'true');
     });
 
@@ -89,7 +89,7 @@ describe('Select', () => {
 
     it('shows the placeholder when nothing is chosen', () => {
         render(
-            <Select aria-label="Currency" value={null} onChange={() => {}} placeholder="Pick one">
+            <Select aria-label="Currency" value={null} onValueChange={() => {}} placeholder="Pick one">
                 {ITEMS}
             </Select>,
         );
@@ -108,7 +108,7 @@ describe('Select', () => {
             value?: string;
             onChange?: (v: string) => void;
         }) => (
-            <Select aria-label="Currency" value={value} onChange={onChange}>
+            <Select aria-label="Currency" value={value} onValueChange={onChange}>
                 <SelectGroup label="Popular">
                     <SelectItem value="usd">US dollar</SelectItem>
                     <SelectItem value="eur" label="Euro">
@@ -164,7 +164,7 @@ describe('Select', () => {
                 <SelectItem value={value}>{children}</SelectItem>
             );
             render(
-                <Select aria-label="Size" value="m" onChange={() => {}}>
+                <Select aria-label="Size" value="m" onValueChange={() => {}}>
                     <Wrapped value="s">Small</Wrapped>
                     <Wrapped value="m">Medium</Wrapped>
                 </Select>,

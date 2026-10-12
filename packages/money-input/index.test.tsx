@@ -13,7 +13,7 @@ function Controlled(props: Partial<MoneyInputProps> & { onValue?: (v: number | n
             locale="en-IN"
             {...props}
             value={value}
-            onChange={(v) => {
+            onValueChange={(v) => {
                 setValue(v);
                 props.onValue?.(v);
             }}
@@ -107,7 +107,9 @@ describe('MoneyInput', () => {
     });
 
     it('uses the locale: dollars in en-US', () => {
-        render(<MoneyInput aria-label="Amount" value={15200000} onChange={() => {}} currency="USD" locale="en-US" />);
+        render(
+            <MoneyInput aria-label="Amount" value={15200000} onValueChange={() => {}} currency="USD" locale="en-US" />,
+        );
         expect(input()).toHaveValue('152,000');
         expect(screen.getByText('$')).toBeInTheDocument();
     });
@@ -123,7 +125,13 @@ describe('useMoneyInput', () => {
     it('drives your own field', () => {
         const onChange = vi.fn();
         function Custom() {
-            const money = useMoneyInput({ value: null, onChange, currency: 'USD', locale: 'en-US', allowEmpty: true });
+            const money = useMoneyInput({
+                value: null,
+                onValueChange: onChange,
+                currency: 'USD',
+                locale: 'en-US',
+                allowEmpty: true,
+            });
             return (
                 <InputGroup>
                     <InputGroupInput aria-label="Amount" {...money.inputProps} />
@@ -158,7 +166,7 @@ describe('MoneyInput convert', () => {
                 allowEmpty
                 {...props}
                 value={value}
-                onChange={(v) => {
+                onValueChange={(v) => {
                     setValue(v);
                     props.onValue?.(v);
                 }}
@@ -249,7 +257,7 @@ describe('MoneyInput convert', () => {
             <MoneyInput
                 aria-label="Amount"
                 value={80000}
-                onChange={() => {}}
+                onValueChange={() => {}}
                 currency="INR"
                 locale="en-IN"
                 convert={{
@@ -274,7 +282,7 @@ describe('MoneyInput convert', () => {
                 aria-describedby="note"
                 value={null}
                 allowEmpty
-                onChange={onChange}
+                onValueChange={onChange}
                 onBlur={onBlur}
                 currency="INR"
                 locale="en-IN"
@@ -282,7 +290,7 @@ describe('MoneyInput convert', () => {
         );
         const input = screen.getByRole('textbox', { name: 'Cost' });
         expect(input).toHaveAttribute('placeholder', 'Cost');
-        expect(input).toHaveAttribute('name', 'cost');
+        expect(input).not.toHaveAttribute('name');
         expect(input.getAttribute('aria-describedby')).toContain('note');
         fireEvent.change(input, { target: { value: '1200' } });
         fireEvent.blur(input);

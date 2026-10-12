@@ -8,8 +8,8 @@ export default function Default() {
         <DatePicker
             aria-label="Due date"
             value={date}
-            onChange={setDate}
-            onClear={() => setDate(null)}
+            onValueChange={setDate}
+            clearable
             locale="en-IN"
             className="w-56"
         />

@@ -11,7 +11,7 @@ function List({ onChange = () => {} }: { onChange?: (v: string[]) => void }) {
         <SortableList
             aria-label="Budgets"
             value={order}
-            onChange={(v) => {
+            onValueChange={(v) => {
                 setOrder(v);
                 onChange(v);
             }}

@@ -77,7 +77,7 @@ const CanvasContext = createContext<CanvasContextValue | null>(null);
  * Items stay on the surface; with `snap` they line up with its edges and
  * centre and with each other, and with `grid` they keep to a grid. `scale`
  * shows the design larger or smaller, or `"fit"` fills the width it's given.
- * `onChange` gets the items with every step of a change; `onChangeEnd`, once
+ * `onItemsChange` gets the items with every step of a change; `onItemsChangeEnd`, once
  * it's made, with the items before it, for undo or saving.
  */
 export function Canvas<T extends CanvasItemRect>({
@@ -85,10 +85,10 @@ export function Canvas<T extends CanvasItemRect>({
     height,
     scale = 1,
     items,
-    onChange,
-    onChangeEnd,
+    onItemsChange,
+    onItemsChangeEnd,
     selected = [],
-    onSelect,
+    onSelectedChange,
     minSize = 8,
     snap = false,
     grid,
@@ -129,7 +129,7 @@ export function Canvas<T extends CanvasItemRect>({
         grid,
     });
     const select = (ids: string[]) => {
-        if (!sameIds(ids, selected)) onSelect?.(ids);
+        if (!sameIds(ids, selected)) onSelectedChange?.(ids);
     };
     const apply = (rects: ReadonlyMap<string, CanvasRect>) =>
         items.map((i) => {
@@ -198,7 +198,7 @@ export function Canvas<T extends CanvasItemRect>({
             } else step = moveGroup(starts, dx, dy, snapping(moving));
             end = step.box;
             next = apply(step.rects);
-            onChange(next);
+            onItemsChange(next);
             setGuides(step.guides);
             setReadout({
                 box: step.box,
@@ -216,10 +216,10 @@ export function Canvas<T extends CanvasItemRect>({
             setDragging(false);
             if (!started) return;
             if (made) {
-                onChangeEnd?.(next, before);
+                onItemsChangeEnd?.(next, before);
                 tell(who, startBox, end);
             } else {
-                onChange([...before]);
+                onItemsChange([...before]);
                 say(`${who} put back.`);
             }
         };
@@ -268,7 +268,7 @@ export function Canvas<T extends CanvasItemRect>({
             const ids = [...base, ...hits.filter((h) => !base.includes(h))];
             if (!sameIds(ids, last)) {
                 last = ids;
-                onSelect?.(ids);
+                onSelectedChange?.(ids);
             }
         };
         // Cancelled (on touch, the page took the gesture to scroll): no box, and nothing deselected.
@@ -318,8 +318,8 @@ export function Canvas<T extends CanvasItemRect>({
             : moveGroup(starts, dx, dy).rects;
         if ([...rects].every(([rid, r]) => sameRect(r, byId.get(rid)!))) return;
         const next = apply(rects);
-        onChange(next);
-        onChangeEnd?.(next, items);
+        onItemsChange(next);
+        onItemsChangeEnd?.(next, items);
         tell(nameOf(starts, id, label), boundsOf(starts), boundsOf([...rects.values()]));
     };
 
@@ -498,10 +498,7 @@ export interface CanvasItemRect extends CanvasRect {
     locked?: boolean;
 }
 
-export interface CanvasProps<T extends CanvasItemRect = CanvasItemRect> extends Omit<
-    ComponentProps<'div'>,
-    'onChange' | 'onSelect'
-> {
+export interface CanvasProps<T extends CanvasItemRect = CanvasItemRect> extends ComponentProps<'div'> {
     /** The surface's size, in your design's units (px at scale 1). */
     width: number;
     height: number;
@@ -510,12 +507,12 @@ export interface CanvasProps<T extends CanvasItemRect = CanvasItemRect> extends 
     /** Where each item is (other fields are kept); render a CanvasItem for each. */
     items: readonly T[];
     /** The items, with every step of a move or resize. */
-    onChange: (items: T[]) => void;
+    onItemsChange: (items: T[]) => void;
     /** The items once a change is made (a drag let go, a key pressed), and as they were before: for undo or saving. */
-    onChangeEnd?: (items: T[], before: readonly T[]) => void;
+    onItemsChangeEnd?: (items: T[], before: readonly T[]) => void;
     /** The selected items' ids. */
     selected?: readonly string[];
-    onSelect?: (ids: string[]) => void;
+    onSelectedChange?: (ids: string[]) => void;
     /** Smallest width and height an item can be resized to. */
     minSize?: number;
     /** Line items up with the surface and each other: true, or how close counts, in screen px (true is 6). */

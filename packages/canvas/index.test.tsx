@@ -14,8 +14,8 @@ const START: Card[] = [
 ];
 
 function Board({
-    onChange = () => {},
-    onChangeEnd,
+    onItemsChange = () => {},
+    onItemsChangeEnd,
     withInput,
     ...rest
 }: Partial<CanvasProps<Card>> & { withInput?: boolean }) {
@@ -28,12 +28,12 @@ function Board({
             height={120}
             items={items}
             selected={selected}
-            onSelect={setSelected}
-            onChange={(next) => {
+            onSelectedChange={setSelected}
+            onItemsChange={(next) => {
                 setItems(next);
-                onChange(next);
+                onItemsChange(next);
             }}
-            onChangeEnd={onChangeEnd}
+            onItemsChangeEnd={onItemsChangeEnd}
             {...rest}
         >
             <CanvasItem id="bg" label="Background" />
@@ -63,13 +63,13 @@ describe('Canvas', () => {
     });
 
     it('moves with the arrow keys, Shift by 10, keeping other fields, and says where', () => {
-        const onChangeEnd = vi.fn();
-        render(<Board onChangeEnd={onChangeEnd} />);
+        const onItemsChangeEnd = vi.fn();
+        render(<Board onItemsChangeEnd={onItemsChangeEnd} />);
         fireEvent.keyDown(item('Title'), { key: 'ArrowRight' });
         fireEvent.keyDown(item('Title'), { key: 'ArrowUp', shiftKey: true });
         expect(place(item('Title'))).toBe('101px 30px 80px 40px');
         expect(screen.getByText('Title moved to 101, 30.')).toBeInTheDocument();
-        const [next, before] = onChangeEnd.mock.lastCall!;
+        const [next, before] = onItemsChangeEnd.mock.lastCall!;
         expect(next.find((i: Card) => i.id === 'title')).toEqual({
             id: 'title',
             kind: 'text',
@@ -92,15 +92,15 @@ describe('Canvas', () => {
 
     it('stays on the surface, and reports nothing when nothing moves', () => {
         const onChange = vi.fn();
-        render(<Board onChange={onChange} />);
+        render(<Board onItemsChange={onChange} />);
         for (let i = 0; i < 3; i++) fireEvent.keyDown(item('Bar'), { key: 'ArrowLeft', shiftKey: true });
         expect(place(item('Bar'))).toBe('0px 10px 40px 10px');
         expect(onChange).toHaveBeenCalledTimes(1);
     });
 
     it('drags by the pointer distance over the scale, ending once', () => {
-        const onChangeEnd = vi.fn();
-        render(<Board scale={2} onChangeEnd={onChangeEnd} />);
+        const onItemsChangeEnd = vi.fn();
+        render(<Board scale={2} onItemsChangeEnd={onItemsChangeEnd} />);
         press(item('Title'), 300, 100);
         drag(item('Title'), 320, 110);
         drag(item('Title'), 340, 120);
@@ -108,13 +108,13 @@ describe('Canvas', () => {
         expect(place(item('Title'))).toBe('120px 50px 80px 40px');
         expect(item('Title')).toHaveAttribute('data-selected');
         expect(item('Title')).toHaveFocus();
-        expect(onChangeEnd).toHaveBeenCalledTimes(1);
+        expect(onItemsChangeEnd).toHaveBeenCalledTimes(1);
         expect(screen.getByText('Title moved to 120, 50.')).toBeInTheDocument();
     });
 
     it('moves nothing for a press that barely moves', () => {
         const onChange = vi.fn();
-        render(<Board onChange={onChange} />);
+        render(<Board onItemsChange={onChange} />);
         press(item('Title'), 0, 0);
         drag(item('Title'), 2, 1);
         release(item('Title'));
@@ -123,8 +123,8 @@ describe('Canvas', () => {
     });
 
     it('puts a drag back on Escape', () => {
-        const onChangeEnd = vi.fn();
-        render(<Board onChangeEnd={onChangeEnd} />);
+        const onItemsChangeEnd = vi.fn();
+        render(<Board onItemsChangeEnd={onItemsChangeEnd} />);
         press(item('Title'), 0, 0);
         drag(item('Title'), 50, 0);
         expect(place(item('Title'))).toBe('150px 40px 80px 40px');
@@ -133,7 +133,7 @@ describe('Canvas', () => {
         expect(item('Title')).toHaveAttribute('data-selected');
         drag(item('Title'), 80, 0);
         expect(place(item('Title'))).toBe('100px 40px 80px 40px');
-        expect(onChangeEnd).not.toHaveBeenCalled();
+        expect(onItemsChangeEnd).not.toHaveBeenCalled();
         expect(screen.getByText('Title put back.')).toBeInTheDocument();
     });
 

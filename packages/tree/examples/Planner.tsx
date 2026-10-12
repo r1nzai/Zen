@@ -133,7 +133,7 @@ export default function Planner() {
                                                         currency="INR"
                                                         locale="en-IN"
                                                         className="w-28"
-                                                        onChange={(v) => {
+                                                        onValueChange={(v) => {
                                                             setAmount(line.key, m, v);
                                                             close();
                                                         }}

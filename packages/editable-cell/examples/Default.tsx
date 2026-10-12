@@ -19,7 +19,7 @@ export default function Default() {
                         value={amount}
                         currency="INR"
                         locale="en-IN"
-                        onChange={(v) => {
+                        onValueChange={(v) => {
                             setAmount(v);
                             close();
                         }}

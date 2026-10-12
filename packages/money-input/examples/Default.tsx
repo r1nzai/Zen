@@ -6,7 +6,7 @@ export default function Default() {
     const [amount, setAmount] = useState<number | null>(15200000);
     return (
         <div className="flex w-64 flex-col gap-2">
-            <MoneyInput aria-label="Amount" value={amount} onChange={setAmount} currency="INR" locale="en-IN" />
+            <MoneyInput aria-label="Amount" value={amount} onValueChange={setAmount} currency="INR" locale="en-IN" />
             <p className="text-muted-foreground mt-0! text-xs">
                 Value: {amount === null ? 'empty' : `${amount} paise (${formatMoney(amount, 'INR', 'en-IN')})`}
             </p>

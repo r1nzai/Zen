@@ -7,10 +7,10 @@ export default function Default() {
     const [share, setShare] = useState(false);
     return (
         <div className="flex flex-col gap-4">
-            <Checkbox checked={remind} onChange={setRemind} description="A nudge on the 1st of each month.">
+            <Checkbox checked={remind} onCheckedChange={setRemind} description="A nudge on the 1st of each month.">
                 Remind me to log spending
             </Checkbox>
-            <Checkbox checked={share} onChange={setShare}>
+            <Checkbox checked={share} onCheckedChange={setShare}>
                 Share anonymous usage data
             </Checkbox>
             <Checkbox disabled>Sync to the cloud (coming soon)</Checkbox>

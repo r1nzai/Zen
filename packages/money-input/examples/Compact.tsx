@@ -9,7 +9,7 @@ export default function Compact() {
             compact
             aria-label="Groceries"
             value={amount}
-            onChange={setAmount}
+            onValueChange={setAmount}
             currency="INR"
             locale="en-IN"
             className="w-36"

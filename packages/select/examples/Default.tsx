@@ -7,7 +7,7 @@ const CATEGORIES = ['Groceries', 'Rent', 'Transport', 'Dining out', 'Subscriptio
 export default function Default() {
     const [category, setCategory] = useState<string | null>('rent');
     return (
-        <Select aria-label="Category" value={category} onChange={setCategory} className="w-56">
+        <Select aria-label="Category" value={category} onValueChange={setCategory} className="w-56">
             {CATEGORIES.map((label) => (
                 <SelectItem key={label} value={label.toLowerCase().replace(/\s+/g, '-')}>
                     {label}

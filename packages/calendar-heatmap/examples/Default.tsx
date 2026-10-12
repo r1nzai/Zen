@@ -28,7 +28,7 @@ export default function Default() {
                 values={SPENT}
                 locale="en-US"
                 format={money}
-                onSelect={setDay}
+                onSelectedChange={setDay}
                 selected={day}
             />
             <p className="text-muted-foreground mt-0! text-sm">

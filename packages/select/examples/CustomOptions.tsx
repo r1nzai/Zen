@@ -16,7 +16,7 @@ export default function CustomOptions() {
             aria-label="Currency"
             placeholder="Choose a currency"
             value={currency}
-            onChange={setCurrency}
+            onValueChange={setCurrency}
             className="w-64"
         >
             {CURRENCIES.map((c) => (

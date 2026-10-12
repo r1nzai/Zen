@@ -15,7 +15,7 @@ export default function Swatches() {
     const [color, setColor] = useState('#2bb3a3cc');
     return (
         <Field label="Card background" className="w-64">
-            <ColorPicker value={color} onChange={setColor} alpha swatches={SWATCHES} />
+            <ColorPicker value={color} onValueChange={setColor} alpha swatches={SWATCHES} />
         </Field>
     );
 }

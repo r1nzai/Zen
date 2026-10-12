@@ -8,7 +8,7 @@ import { useState } from 'react';
 export default function WithIcons() {
     const [view, setView] = useState('list');
     return (
-        <Segmented label="View" value={view} onChange={setView}>
+        <Segmented label="View" value={view} onValueChange={setView}>
             <SegmentedItem value="list">
                 <span className="flex items-center gap-1.5">
                     <ListBullet className="size-4" /> List

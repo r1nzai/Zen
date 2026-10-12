@@ -6,7 +6,7 @@ export default function Default() {
     return (
         <label className="flex w-64 items-center justify-between">
             Repeats every month
-            <Toggle checked={on} onChange={setOn} />
+            <Toggle checked={on} onCheckedChange={setOn} />
         </label>
     );
 }

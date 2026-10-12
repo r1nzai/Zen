@@ -53,7 +53,7 @@ export default function ThemeEditor() {
                     aria-label="Preset"
                     value={theme.preset === 'custom' ? null : theme.preset}
                     placeholder="Custom"
-                    onChange={(id: PresetId) => setTheme((t) => applyPreset(t, id))}
+                    onValueChange={(id: PresetId) => setTheme((t) => applyPreset(t, id))}
                 >
                     {PRESETS.map((p) => (
                         <SelectItem key={p.id} value={p.id}>
@@ -74,7 +74,7 @@ export default function ThemeEditor() {
                 <Segmented
                     label="Intensity"
                     value={theme.intensity}
-                    onChange={(intensity) => setTheme((t) => customize(t, { intensity }))}
+                    onValueChange={(intensity) => setTheme((t) => customize(t, { intensity }))}
                 >
                     {INTENSITIES.map((i) => (
                         <SegmentedItem key={i} value={i}>
@@ -86,7 +86,7 @@ export default function ThemeEditor() {
                     Tinted greys
                     <Toggle
                         checked={theme.tint === 'tinted'}
-                        onChange={(on) => setTheme((t) => customize(t, { tint: on ? 'tinted' : 'neutral' }))}
+                        onCheckedChange={(on) => setTheme((t) => customize(t, { tint: on ? 'tinted' : 'neutral' }))}
                         aria-label="Tinted greys"
                     />
                 </label>
@@ -94,7 +94,7 @@ export default function ThemeEditor() {
                     High contrast
                     <Toggle
                         checked={theme.contrast === 'high'}
-                        onChange={(on) => setTheme((t) => ({ ...t, contrast: on ? 'high' : 'standard' }))}
+                        onCheckedChange={(on) => setTheme((t) => ({ ...t, contrast: on ? 'high' : 'standard' }))}
                         aria-label="High contrast"
                     />
                 </label>

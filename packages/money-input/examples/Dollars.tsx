@@ -8,7 +8,7 @@ export default function Dollars() {
         <MoneyInput
             aria-label="Budget"
             value={amount}
-            onChange={setAmount}
+            onValueChange={setAmount}
             currency="USD"
             locale="en-US"
             allowEmpty

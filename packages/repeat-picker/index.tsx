@@ -2,9 +2,11 @@ import Chip from '@zen/chip';
 import Input from '@zen/input';
 import Select, { SelectItem } from '@zen/select';
 import { cx } from '@zen/utils/cx';
+import { FormValue } from '@zen/utils/form-value';
+import { useControllable } from '@zen/utils/useControllable';
 import { type DateString, dayOfWeek, formatDate, weekdayNames, weekStart } from '@zen/utils/date';
 import { describeRepeat, nextOccurrences, type Repeat } from '@zen/utils/repeat';
-import { useState } from 'react';
+import { ComponentProps, useState } from 'react';
 
 const UNITS = ['day', 'week', 'month', 'year'] as const;
 
@@ -14,14 +16,18 @@ const UNITS = ['day', 'week', 'month', 'year'] as const;
  * words, and with a `start` date, the next few dates it falls on.
  */
 export default function RepeatPicker({
-    value,
-    onChange,
+    value: valueProp,
+    defaultValue = { every: 1, unit: 'month' },
+    onValueChange,
     locale,
     start,
     weekStartsOn = weekStart(locale),
     label = 'Repeats',
+    name,
     className,
+    ...rest
 }: RepeatPickerProps) {
+    const [value, onChange, reset] = useControllable(valueProp, defaultValue, onValueChange);
     const [count, setCount] = useState(String(value.every));
     if (Number(count) !== value.every && count !== '') setCount(String(value.every));
     const names = weekdayNames(locale);
@@ -37,7 +43,8 @@ export default function RepeatPicker({
     };
 
     return (
-        <fieldset className={cx('zen__repeat-picker flex flex-col gap-3', className)}>
+        <fieldset className={cx('zen__repeat-picker flex flex-col gap-3', className)} {...rest}>
+            <FormValue name={name} value={JSON.stringify(value)} onReset={reset} />
             <legend className="sr-only">{label}</legend>
             <div className="flex items-center gap-2 text-sm">
                 <span className="text-muted-foreground">Every</span>
@@ -53,7 +60,7 @@ export default function RepeatPicker({
                     onBlur={() => setCount(String(value.every))}
                     className="w-16 text-center tabular-nums"
                 />
-                <Select aria-label="Unit" value={value.unit} onChange={setUnit} className="w-32">
+                <Select aria-label="Unit" value={value.unit} onValueChange={setUnit} className="w-32">
                     {UNITS.map((u) => (
                         <SelectItem key={u} value={u}>
                             {plural ? `${u}s` : u}
@@ -88,7 +95,7 @@ export default function RepeatPicker({
                 <Select
                     aria-label="On"
                     value={String(value.day ?? (start ? Number(start.slice(8)) : 1))}
-                    onChange={(d) => onChange({ ...value, day: Number(d) })}
+                    onValueChange={(d) => onChange({ ...value, day: Number(d) })}
                     className="w-40"
                 >
                     {Array.from({ length: 31 }, (_, i) => (
@@ -115,9 +122,15 @@ export default function RepeatPicker({
     );
 }
 
-export interface RepeatPickerProps {
-    value: Repeat;
-    onChange: (value: Repeat) => void;
+/** Other props (aria-*, data-*, an id) go on the fieldset. */
+export interface RepeatPickerProps extends Omit<ComponentProps<'fieldset'>, 'defaultValue' | 'children'> {
+    /** The rule, when you keep it. */
+    value?: Repeat;
+    /** The first rule, when the picker keeps its own. Every month by default. */
+    defaultValue?: Repeat;
+    onValueChange?: (value: Repeat) => void;
+    /** Form field name: the rule is submitted as JSON. */
+    name?: string;
     /** For weekday and date names, and the week's first day. */
     locale: string;
     /** When it starts: its weekday and day of the month are the defaults, and the next dates are shown. */

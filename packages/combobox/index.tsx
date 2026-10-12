@@ -6,6 +6,8 @@ import Search from '@zen/icons/search';
 import XMark from '@zen/icons/x-mark';
 import { InputGroupAddon, InputGroupInput } from '@zen/input-group';
 import { cx } from '@zen/utils/cx';
+import { FormValue } from '@zen/utils/form-value';
+import { useControllable } from '@zen/utils/useControllable';
 import { FieldChevron } from '@zen/utils/field-chevron';
 import { CheckIcon } from '@zen/utils/status-icons';
 import { POPUP, TRIGGER, TRIGGER_OPEN, PLACEHOLDER } from '@zen/utils/styles';
@@ -73,10 +75,16 @@ export default function Combobox<T>(props: ComboboxProps<T>) {
         itemText = (item: T) => (item as { text: string }).text,
         filter = (item: T, query: string) => itemText(item).toLowerCase().includes(query.toLowerCase()),
         selectedItems = [],
+        name,
         children,
     } = props;
     const multiple = props.multiple === true;
-    const chosen = multiple ? props.value : props.value === null ? [] : [props.value];
+    const [value, setValue, reset] = useControllable<string | null | readonly string[]>(
+        props.value,
+        props.defaultValue ?? (multiple ? [] : null),
+        props.onValueChange as ((value: string | null | readonly string[]) => void) | undefined,
+    );
+    const chosen = typeof value === 'string' ? [value] : (value ?? []);
 
     const [query, setQuery] = useState('');
     const [active, setActive] = useState<string | null>(null);
@@ -101,11 +109,11 @@ export default function Combobox<T>(props: ComboboxProps<T>) {
     });
 
     const toggle = (key: string) => {
-        if (props.multiple === true) {
-            const has = props.value.includes(key);
-            props.onValueChange(has ? props.value.filter((k) => k !== key) : [...props.value, key]);
+        if (multiple) {
+            const has = chosen.includes(key);
+            setValue(has ? chosen.filter((k) => k !== key) : [...chosen, key]);
         } else {
-            props.onValueChange(key);
+            setValue(key);
             popup.setOpen(false);
         }
     };
@@ -130,7 +138,12 @@ export default function Combobox<T>(props: ComboboxProps<T>) {
         optionId: (key) => `${popup.id}-option-${key}`,
         itemHeight,
     };
-    return <ComboboxContext.Provider value={context as ComboboxContextValue}>{children}</ComboboxContext.Provider>;
+    return (
+        <ComboboxContext.Provider value={context as ComboboxContextValue}>
+            {children}
+            <FormValue name={name} value={multiple ? chosen : (chosen[0] ?? '')} onReset={reset} />
+        </ComboboxContext.Provider>
+    );
 }
 
 /**
@@ -445,12 +458,25 @@ interface ComboboxBaseProps<T> {
     filter?: (item: T, query: string) => boolean;
     /** Chosen items that aren't in `items` (e.g. just created), so the field can still show them. */
     selectedItems?: readonly T[];
+    /** Form field name: the chosen key is submitted with the form (with `multiple`, each key). */
+    name?: string;
     children: ReactNode;
 }
+/** `value` when you keep the choice; `defaultValue` for the first one when the combobox keeps its own. */
 export type ComboboxProps<T> = ComboboxBaseProps<T> &
     (
-        | { multiple?: false; value: string | null; onValueChange: (key: string) => void }
-        | { multiple: true; value: readonly string[]; onValueChange: (keys: string[]) => void }
+        | {
+              multiple?: false;
+              value?: string | null;
+              defaultValue?: string | null;
+              onValueChange?: (key: string) => void;
+          }
+        | {
+              multiple: true;
+              value?: readonly string[];
+              defaultValue?: readonly string[];
+              onValueChange?: (keys: string[]) => void;
+          }
     );
 export interface ComboboxTriggerProps extends Omit<ComponentProps<'div'>, 'children'> {
     /** Shown while nothing is chosen. */

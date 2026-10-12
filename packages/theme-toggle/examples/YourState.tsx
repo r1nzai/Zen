@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 
 /**
  * The theme kept by your app (state here; an account setting, a cookie or a database in yours):
- * the toggle shows `value`, and `onChange` applies the new one. This one themes just its panel,
+ * the toggle shows `value`, and `onValueChange` applies the new one. This one themes just its panel,
  * so `target` keeps the water inside it.
  */
 export default function YourState() {
@@ -16,7 +16,7 @@ export default function YourState() {
         >
             <div className="flex items-center justify-between">
                 <span className="font-medium">Preview</span>
-                <ThemeToggle value={theme} onChange={setTheme} target={panel} />
+                <ThemeToggle value={theme} onValueChange={setTheme} target={panel} />
             </div>
             <span className="text-muted-foreground">This panel is {theme}; the page around it stays as it is.</span>
         </div>

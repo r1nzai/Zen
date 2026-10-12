@@ -23,7 +23,7 @@ export default function Accent() {
     return (
         <div className="flex flex-wrap items-end gap-6">
             <Field label="Accent" className="w-56">
-                <ColorPicker value={color} onChange={setColor} />
+                <ColorPicker value={color} onValueChange={setColor} />
             </Field>
             <div ref={preview} className="flex items-center gap-3">
                 <Button>Save</Button>
