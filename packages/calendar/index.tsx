@@ -19,6 +19,7 @@ import {
 import { addMonths, formatMonth, type Month, monthNames, monthsBetween } from '@zen/utils/month';
 import { ComponentProps, KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
 import { readingKey } from '@zen/utils/direction';
+import { useHydrated } from '@zen/utils/useHydrated';
 
 /**
  * A month grid to pick a date, or a range of dates, fully keyboard-driven:
@@ -57,6 +58,8 @@ export default function Calendar(props: CalendarProps) {
     const single = mode === 'range' ? null : (value as DateString | null);
     const selected = single ?? range?.start ?? null;
     const now = todayDate();
+    // The server's today may not be the reader's (another time zone, or just past midnight): marked once hydrated.
+    const today = useHydrated() ? now : null;
 
     const [view, setView] = useState<Month>(() => defaultMonth ?? (selected ?? now).slice(0, 7));
     // The date that has keyboard focus (the grid's one tab stop).
@@ -280,7 +283,7 @@ export default function Calendar(props: CalendarProps) {
                                                         aria-label={formatDate(d, locale, 'full')}
                                                         aria-pressed={chosen}
                                                         aria-disabled={off || undefined}
-                                                        aria-current={d === now ? 'date' : undefined}
+                                                        aria-current={d === today ? 'date' : undefined}
                                                         onClick={() => pick(d)}
                                                         onFocus={() => {
                                                             setActive(d);
@@ -294,9 +297,9 @@ export default function Calendar(props: CalendarProps) {
                                                             chosen
                                                                 ? 'bg-primary text-primary-foreground shadow-[0_0_20px_-4px_oklch(var(--glow)/calc(0.8*var(--glow-k)))]'
                                                                 : !off && 'hover:bg-tint/[0.08]',
-                                                            d === now &&
+                                                            d === today &&
                                                                 'after:bg-primary after:absolute after:bottom-1 after:left-1/2 after:size-1 after:-translate-x-1/2 after:rounded-full',
-                                                            d === now && chosen && 'after:bg-primary-foreground',
+                                                            d === today && chosen && 'after:bg-primary-foreground',
                                                         )}
                                                     >
                                                         {digits.format(Number(d.slice(8)))}

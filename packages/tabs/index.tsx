@@ -7,6 +7,7 @@ import { PILL } from '@zen/utils/styles';
 import {
     ComponentProps,
     createContext,
+    useCallback,
     KeyboardEvent,
     useContext,
     useEffect,
@@ -27,6 +28,9 @@ interface TabsContextValue {
     show: (panel: HTMLElement | null) => HTMLElement | null;
     select: (value: string) => void;
     idFor: (part: 'tab' | 'panel', value: string) => string;
+    /** Whether any TabPanels are rendered: tabs used only as a switcher control nothing. */
+    hasPanels: boolean;
+    addPanel: () => () => void;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -48,11 +52,18 @@ export default function Tabs({ value, defaultValue = '', onValueChange, classNam
         shown.current = panel;
         return last;
     };
+    const [panels, setPanels] = useState(0);
+    const addPanel = useCallback(() => {
+        setPanels((n) => n + 1);
+        return () => setPanels((n) => n - 1);
+    }, []);
     const baseId = useId();
     const idFor = (part: 'tab' | 'panel', v: string) => `${baseId}-${part}-${v.replace(/\s+/g, '-')}`;
 
     return (
-        <TabsContext.Provider value={{ value: current, before: seen.before, show, select, idFor }}>
+        <TabsContext.Provider
+            value={{ value: current, before: seen.before, show, select, idFor, hasPanels: panels > 0, addPanel }}
+        >
             <div className={cx('zen__tabs relative flex flex-col gap-4', className)} {...rest} />
         </TabsContext.Provider>
     );
@@ -134,7 +145,7 @@ function UnderlineTrack({ ref, className, children, ...rest }: ComponentProps<'d
 }
 
 export function Tab({ value, className, onClick, ...rest }: TabProps) {
-    const { value: current, select, idFor } = useTabs('Tab');
+    const { value: current, select, idFor, hasPanels } = useTabs('Tab');
     const variant = useContext(VariantContext);
     const active = current === value;
     return (
@@ -143,7 +154,7 @@ export function Tab({ value, className, onClick, ...rest }: TabProps) {
             role="tab"
             id={idFor('tab', value)}
             aria-selected={active}
-            aria-controls={idFor('panel', value)}
+            aria-controls={hasPanels ? idFor('panel', value) : undefined}
             tabIndex={active ? 0 : -1}
             data-active={active || undefined}
             onClick={(e) => {
@@ -162,8 +173,9 @@ export function Tab({ value, className, onClick, ...rest }: TabProps) {
 }
 
 export function TabPanel({ value, className, ...rest }: TabPanelProps) {
-    const { value: current, before, show, idFor } = useTabs('TabPanel');
+    const { value: current, before, show, idFor, addPanel } = useTabs('TabPanel');
     const active = current === value;
+    useEffect(addPanel, [addPanel]);
     useIsoLayoutEffect(() => {
         if (!active) return;
         const panel = document.getElementById(idFor('panel', value));

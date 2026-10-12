@@ -26,6 +26,17 @@ describe('Tabs', () => {
         expect(screen.queryByText('Year panel')).not.toBeInTheDocument();
     });
 
+    it('without panels, the tabs control nothing', () => {
+        render(
+            <Tabs defaultValue="a">
+                <TabList>
+                    <Tab value="a">A</Tab>
+                </TabList>
+            </Tabs>,
+        );
+        expect(screen.getByRole('tab', { name: 'A' })).not.toHaveAttribute('aria-controls');
+    });
+
     it('switches on click', () => {
         const onValueChange = vi.fn();
         render(<Example onValueChange={onValueChange} />);

@@ -51,6 +51,9 @@ interface ComboboxContextValue<T = unknown> {
     listRef: RefObject<HTMLUListElement | null>;
     optionId: (key: string) => string;
     itemHeight: RefObject<number>;
+    /** What names the list: whatever names the field (ComboboxTrigger says). */
+    listLabelledBy: string | undefined;
+    setListLabelledBy: (ids: string | undefined) => void;
 }
 
 const ComboboxContext = createContext<ComboboxContextValue | null>(null);
@@ -89,6 +92,7 @@ export default function Combobox<T>(props: ComboboxProps<T>) {
 
     const [query, setQuery] = useState('');
     const [active, setActive] = useState<string | null>(null);
+    const [listLabelledBy, setListLabelledBy] = useState<string>();
     const create = useRef<((text: string) => void) | null>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
@@ -138,6 +142,8 @@ export default function Combobox<T>(props: ComboboxProps<T>) {
         listRef,
         optionId: (key) => `${popup.id}-option-${key}`,
         itemHeight,
+        listLabelledBy,
+        setListLabelledBy,
     };
     return (
         <ComboboxContext.Provider value={context as ComboboxContextValue}>
@@ -166,6 +172,12 @@ export function ComboboxTrigger({
     const { popup } = box;
     // Inside a Field: its id, label (a div can't be a <label>'s target), hint and error.
     const field = useField();
+    const id = rest.id ?? field?.id ?? `${popup.id}-field`;
+    // The list is named like the field: by the same labels, or by the field when it has an aria-label
+    // (a name isn't followed through two aria-labelledby hops).
+    const labelledBy = rest['aria-labelledby'] ?? (rest['aria-label'] ? id : field?.labelId);
+    const { setListLabelledBy } = box;
+    useEffect(() => setListLabelledBy(labelledBy), [labelledBy, setListLabelledBy]);
     // Whether the panel was open when this press began (a press on the field closes an
     // open panel before the click arrives, so the click mustn't reopen it).
     const wasOpen = useRef(false);
@@ -173,7 +185,7 @@ export function ComboboxTrigger({
 
     return (
         <div
-            id={field?.id}
+            id={id}
             aria-labelledby={rest['aria-label'] ? undefined : field?.labelId}
             aria-invalid={field?.['aria-invalid']}
             {...rest}
@@ -368,6 +380,7 @@ export function ComboboxList<T>({ renderItem, itemHeight = 35, children }: Combo
         <ul
             id={`${box.popup.id}-list`}
             role="listbox"
+            aria-labelledby={box.listLabelledBy}
             aria-multiselectable={box.multiple || undefined}
             className="max-h-72 grow overflow-y-auto py-1 focus:ring-0 focus:outline-hidden"
             ref={box.listRef}
