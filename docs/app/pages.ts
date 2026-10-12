@@ -335,7 +335,7 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'menu',
         title: 'Menu',
         description:
-            'A button that opens a menu, or a context menu from a right-click or long press, with your own trigger, a header, icons, groups, destructive items, checkbox and radio items, and submenus.',
+            'A button that opens a menu, or a context menu from a right-click or long press, with your own trigger, a header, icons, groups, destructive items, checkbox and radio items, submenus, and a menubar of menus.',
         parts: [
             'Menu',
             'MenuTrigger',
@@ -350,8 +350,9 @@ export const COMPONENTS: ComponentDoc[] = [
             'MenuSubContent',
             'MenuSeparator',
             'MenuHeader',
+            'Menubar',
         ],
-        examples: ['Account', 'Actions', 'Context', 'Options'],
+        examples: ['Account', 'Actions', 'Context', 'Options', 'Bar'],
     },
     {
         slug: 'meter',

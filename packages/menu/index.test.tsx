@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import Menu, {
+    Menubar,
     MenuCheckboxItem,
     MenuContent,
     MenuContextTrigger,
@@ -401,5 +402,60 @@ describe('MenuContextTrigger', () => {
     it('when disabled, leaves the browser its own menu', () => {
         render(<Row disabled />);
         expect(fireEvent.contextMenu(screen.getByText('Weekly shop'))).toBe(true);
+    });
+});
+
+describe('Menubar', () => {
+    function Bar() {
+        return (
+            <Menubar aria-label="App">
+                <Menu>
+                    <MenuTrigger>File</MenuTrigger>
+                    <MenuContent>
+                        <MenuItem>New</MenuItem>
+                        <MenuItem>Open</MenuItem>
+                    </MenuContent>
+                </Menu>
+                <Menu>
+                    <MenuTrigger>Edit</MenuTrigger>
+                    <MenuContent>
+                        <MenuItem>Undo</MenuItem>
+                    </MenuContent>
+                </Menu>
+            </Menubar>
+        );
+    }
+    const label = (name: string) => screen.getByRole('menuitem', { name });
+
+    it('is a menubar whose labels are its items, one Tab stop, the arrows between them', () => {
+        render(<Bar />);
+        expect(screen.getByRole('menubar', { name: 'App' })).toBeInTheDocument();
+        expect(label('File')).toHaveAttribute('aria-haspopup', 'menu');
+        expect(label('File')).toHaveAttribute('tabindex', '0');
+        expect(label('Edit')).toHaveAttribute('tabindex', '-1');
+        label('File').focus();
+        fireEvent.keyDown(label('File'), { key: 'ArrowRight' });
+        expect(label('Edit')).toHaveFocus();
+        fireEvent.keyDown(label('Edit'), { key: 'ArrowRight' });
+        expect(label('File')).toHaveFocus();
+    });
+
+    it('↓ opens a menu at its first item; ↑ at its last', () => {
+        render(<Bar />);
+        fireEvent.keyDown(label('File'), { key: 'ArrowDown' });
+        expect(label('File')).toHaveAttribute('aria-expanded', 'true');
+        expect(screen.getByRole('menuitem', { name: 'New', hidden: true })).toHaveFocus();
+        fireEvent.keyDown(label('Edit'), { key: 'ArrowUp' });
+        expect(screen.getByRole('menuitem', { name: 'Undo', hidden: true })).toHaveFocus();
+    });
+
+    it('with a menu open, the arrows across open the one beside it', () => {
+        render(<Bar />);
+        fireEvent.keyDown(label('File'), { key: 'ArrowDown' });
+        fireEvent.keyDown(screen.getByRole('menuitem', { name: 'New', hidden: true }), { key: 'ArrowRight' });
+        expect(label('Edit')).toHaveAttribute('aria-expanded', 'true');
+        expect(screen.getByRole('menuitem', { name: 'Undo', hidden: true })).toHaveFocus();
+        fireEvent.keyDown(screen.getByRole('menuitem', { name: 'Undo', hidden: true }), { key: 'ArrowRight' });
+        expect(screen.getByRole('menuitem', { name: 'New', hidden: true })).toHaveFocus();
     });
 });

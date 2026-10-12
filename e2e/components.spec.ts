@@ -604,3 +604,34 @@ test('sortable tree: drag a budget into the other group', async ({ page }) => {
         /^Books/,
     ]);
 });
+
+test('menubar: arrows between menus, hover switches, Escape back to the label', async ({ page }) => {
+    errors = await open(page, '/components/menu/');
+    const bar = page.getByRole('menubar', { name: 'Ledger' });
+    await bar.scrollIntoViewIfNeeded();
+    const label = (name: string) => bar.getByRole('menuitem', { name, exact: true });
+    await label('File').focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(label('Edit')).toBeFocused();
+    await page.keyboard.press('ArrowDown');
+    await expect(page.getByRole('menuitem', { name: 'Undo' })).toBeFocused();
+    await page.keyboard.press('ArrowRight');
+    await expect(page.getByRole('menuitemradio', { name: 'Week' })).toBeFocused();
+    await expect(page.getByRole('menu', { name: 'Edit' })).toBeHidden();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('menu', { name: 'View' })).toBeHidden();
+    await expect(label('View')).toBeFocused();
+    // Open one by click, then point at another label: it switches.
+    await label('File').click();
+    await expect(page.getByRole('menu', { name: 'File' })).toBeVisible();
+    await label('Edit').hover();
+    await expect(page.getByRole('menu', { name: 'Edit' })).toBeVisible();
+    await expect(page.getByRole('menu', { name: 'File' })).toBeHidden();
+    // Under its label, lined up with its start.
+    const [at, menu] = [
+        (await label('Edit').boundingBox())!,
+        (await page.getByRole('menu', { name: 'Edit' }).boundingBox())!,
+    ];
+    expect(Math.abs(menu.x - at.x)).toBeLessThan(2);
+    expect(menu.y).toBeGreaterThan(at.y + at.height);
+});

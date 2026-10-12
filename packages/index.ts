@@ -5,6 +5,8 @@ export {
     type MenuCheckboxItemProps,
     MenuContent,
     type MenuContentProps,
+    Menubar,
+    type MenubarProps,
     MenuContextTrigger,
     type MenuContextTriggerProps,
     MenuHeader,

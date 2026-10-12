@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 import { useTypeahead } from '@zen/utils/typeahead';
 import { useGraphicsMode } from '@zen/utils/graphics';
 import { useMergedRefs } from '@zen/utils/refs';
+import { moveFocus, rovingItems, useRovingTabIndex } from '@zen/utils/roving';
 import { Slot } from '@zen/utils/slot';
 import { useControllable } from '@zen/utils/useControllable';
 import { anchoredStyle, anchorFor, useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
@@ -27,6 +28,10 @@ import {
 
 const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
+/** Inside a Menubar: how to open each of its menus, by trigger id. Its triggers are its items. */
+const MenubarContext = createContext<Map<string, (edge: 'first' | 'last') => void> | null>(null);
+const BAR_TRIGGER = '[data-zen-menubar-trigger]';
+
 /** Closes the menu; items call it when chosen. */
 const CloseContext = createContext<() => void>(() => {});
 
@@ -36,6 +41,8 @@ interface MenuContextValue {
     /** Where a context menu was asked for; it opens there instead of under a button. */
     point: Point | null;
     openAt: (point: Point) => void;
+    /** Opens it from its trigger by keyboard, at its first or last item. */
+    openFrom: (edge: 'first' | 'last') => void;
 }
 
 interface Point {
@@ -70,11 +77,16 @@ export default function Menu({ onOpenChange, children }: MenuProps) {
     // Opened at a point, nothing gets focus back natively: whatever had it does.
     const returnTo = useRef<HTMLElement | null>(null);
     const isOpen = useRef(false);
+    const openEdge = useRef<'first' | 'last' | null>(null);
     const popup = useAnchoredPopup<HTMLDivElement>({
         onOpenChange: (open) => {
             isOpen.current = open;
-            // Focus the menu itself, so arrow keys work without highlighting an item for mouse users.
-            if (open) popup.popupRef.current?.focus();
+            const menu = popup.popupRef.current;
+            const items = menu ? itemsOf(menu) : [];
+            const edge = openEdge.current;
+            openEdge.current = null;
+            // At an item when opened by an arrow key; else the menu itself, so arrow keys work without highlighting an item for mouse users.
+            if (open) (edge ? items[edge === 'first' ? 0 : items.length - 1] : menu)?.focus();
             else forgetPoint();
             if (!open && returnTo.current) {
                 const active = document.activeElement;
@@ -110,29 +122,68 @@ export default function Menu({ onOpenChange, children }: MenuProps) {
         returnTo.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
         setPoint({ ...at });
     };
+    const openFrom = (edge: 'first' | 'last') => {
+        const menu = popup.popupRef.current;
+        if (popup.open && menu) {
+            itemsOf(menu)
+                .at(edge === 'first' ? 0 : -1)
+                ?.focus();
+            return;
+        }
+        openEdge.current = edge;
+        // Opened from code, the browser won't give focus back to the trigger on Escape.
+        returnTo.current = document.getElementById(triggerId);
+        popup.setOpen(true);
+    };
+    const bar = useContext(MenubarContext);
+    useEffect(() => {
+        bar?.set(triggerId, openFrom);
+        return () => void bar?.delete(triggerId);
+    });
     return (
-        <MenuContext.Provider value={{ popup, triggerId, point, openAt }}>
+        <MenuContext.Provider value={{ popup, triggerId, point, openAt, openFrom }}>
             <CloseContext.Provider value={() => popup.setOpen(false)}>{children}</CloseContext.Provider>
         </MenuContext.Provider>
     );
 }
 
 /**
- * The button that opens the menu. Give it an `aria-label` when it shows only an
- * icon or avatar; the menu is named after it. With `asChild`, your own button instead.
+ * The button that opens the menu (↓ or ↑ opens it at its first or last item).
+ * Give it an `aria-label` when it shows only an icon or avatar; the menu is
+ * named after it. In a Menubar it's one of the bar's items, and looks it. With
+ * `asChild`, your own button instead.
  */
-export function MenuTrigger({ asChild, style, children, ...rest }: MenuTriggerProps) {
-    const { popup, triggerId, point } = useMenu('MenuTrigger');
+export function MenuTrigger({ asChild, style, onKeyDown, onPointerEnter, children, ...rest }: MenuTriggerProps) {
+    const { popup, triggerId, point, openFrom } = useMenu('MenuTrigger');
+    const inBar = !!useContext(MenubarContext);
     const props = {
         id: triggerId,
         'aria-haspopup': 'menu' as const,
         ...popup.triggerProps,
         // Opened by a MenuContextTrigger, not by this button.
         ...(point && { 'aria-expanded': false, 'data-popup-open': undefined }),
+        ...(inBar && { role: 'menuitem', 'data-zen-menubar-trigger': '' }),
         ...rest,
+        className: cx(inBar && BAR_LOOK, rest.className),
         style: { ...popup.triggerProps.style, ...style },
+        onKeyDown: (e: KeyboardEvent<HTMLButtonElement>) => {
+            onKeyDown?.(e);
+            if (e.defaultPrevented || (e.key !== 'ArrowDown' && e.key !== 'ArrowUp')) return;
+            e.preventDefault();
+            openFrom(e.key === 'ArrowDown' ? 'first' : 'last');
+        },
+        // In a menubar with one of its menus open, pointing at another switches to it.
+        onPointerEnter: (e: PointerEvent<HTMLButtonElement>) => {
+            onPointerEnter?.(e);
+            const bar = inBar && e.currentTarget.closest('[role="menubar"]');
+            if (!bar || popup.open || e.pointerType === 'touch') return;
+            if (bar.querySelector('[data-zen-menubar-trigger][data-popup-open]')) {
+                popup.setOpen(true);
+                e.currentTarget.focus();
+            }
+        },
     };
-    if (asChild) return <Slot {...(props as ComponentProps<'a'>)}>{children}</Slot>;
+    if (asChild) return <Slot {...(props as unknown as ComponentProps<'a'>)}>{children}</Slot>;
     return (
         <button type="button" {...props} className={cx('cursor-pointer', props.className)}>
             {children}
@@ -142,15 +193,33 @@ export function MenuTrigger({ asChild, style, children, ...rest }: MenuTriggerPr
 
 /**
  * The menu panel: glass, below the button (above it if there's no room), lined
- * up with its end edge by default. A context menu opens from the pointer
+ * up with its end edge by default (its start edge in a Menubar). A context menu opens from the pointer
  * instead; name it with `aria-label`.
  */
 export function MenuContent({ align, offset, ref, className, style, children, ...rest }: MenuContentProps) {
     const { popup, triggerId, point } = useMenu('MenuContent');
     const refs = useMergedRefs(popup.popupRef, ref);
-    align ??= point ? 'start' : 'end';
+    const bar = useContext(MenubarContext);
+    // Under its label in a menubar, as menus there do; under a button's end edge otherwise.
+    align ??= point || bar ? 'start' : 'end';
     offset ??= point ? 2 : 6;
     const onKeyDown = useMenuKeys();
+    // In a menubar, the arrows across go to the menu beside this one, open at its first item.
+    const nextInBar = (e: KeyboardEvent<HTMLDivElement>) => {
+        if (e.defaultPrevented || (e.target as Element).closest('[role="menu"]') !== e.currentTarget) return;
+        const key = readingKey(e.key, e.currentTarget);
+        if (key !== 'ArrowLeft' && key !== 'ArrowRight') return;
+        const trigger = document.getElementById(triggerId);
+        const row = trigger?.closest<HTMLElement>('[role="menubar"]');
+        if (!trigger || !row) return;
+        const triggers = rovingItems(row, BAR_TRIGGER);
+        const next =
+            triggers[(triggers.indexOf(trigger) + (key === 'ArrowRight' ? 1 : -1) + triggers.length) % triggers.length];
+        if (!next || next === trigger) return;
+        e.preventDefault();
+        next.focus();
+        bar?.get(next.id)?.('first');
+    };
 
     return (
         <div
@@ -163,6 +232,7 @@ export function MenuContent({ align, offset, ref, className, style, children, ..
             onKeyDown={(e) => {
                 rest.onKeyDown?.(e);
                 onKeyDown(e);
+                if (bar) nextInBar(e);
             }}
             style={{ ...anchoredStyle(popup.id, { align, offset }), ...style }}
             className={cx(
@@ -637,6 +707,42 @@ export function MenuSubContent({
     );
 }
 
+/**
+ * A row of menus, as at the top of an app (File, Edit, View): put a Menu for
+ * each inside, its MenuTrigger a label. One Tab stop: ←→ move between the
+ * menus, ↓ or Enter opens one; while one is open, ←→ open the one beside it
+ * and pointing at another switches to it. Name it with `aria-label`.
+ */
+export function Menubar({ ref, className, onKeyDown, children, ...rest }: MenubarProps) {
+    const own = useRef<HTMLDivElement>(null);
+    const refs = useMergedRefs(own, ref);
+    const [openers] = useState(() => new Map<string, (edge: 'first' | 'last') => void>());
+    useRovingTabIndex(own, BAR_TRIGGER);
+    return (
+        <MenubarContext.Provider value={openers}>
+            <div
+                role="menubar"
+                {...rest}
+                ref={refs}
+                data-zen-roving=""
+                onKeyDown={(e) => {
+                    onKeyDown?.(e);
+                    moveFocus(e, BAR_TRIGGER);
+                }}
+                className={cx(
+                    'zen__menubar glow-edge border-tint/10 bg-tint/[0.03] relative flex w-fit items-center gap-0.5 rounded-xl border p-1',
+                    className,
+                )}
+            >
+                {children}
+            </div>
+        </MenubarContext.Provider>
+    );
+}
+
+const BAR_LOOK =
+    'text-muted-foreground hover:text-foreground focus-ring h-8 rounded-lg px-3 text-sm transition-colors outline-hidden data-popup-open:bg-tint/[0.07] data-popup-open:text-foreground';
+
 /** A hairline between groups of items. */
 export function MenuSeparator({ className }: { className?: string }) {
     return <div role="separator" className={cx('bg-tint/[0.07] mx-2 my-1 h-px', className)} />;
@@ -710,3 +816,5 @@ export interface MenuSubContentProps extends ComponentProps<'div'> {
     /** Gap between the item and the submenu, in px (counting the menu's own padding). */
     offset?: number;
 }
+
+export type MenubarProps = ComponentProps<'div'>;
