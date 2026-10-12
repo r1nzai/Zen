@@ -10,6 +10,10 @@
         /* Room for the scrollbar is always kept, so the page doesn't jump when one appears. */
         scrollbar-gutter: stable;
     }
+    /* Nothing painted behind the content, for pages composited over something else (an OBS overlay). */
+    html[data-zen-page='transparent'] {
+        background: transparent;
+    }
     body {
         /* Transparent: an opaque body would paint over the z-index −1 <Backdrop>. */
         background: transparent;

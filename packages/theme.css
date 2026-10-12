@@ -215,6 +215,62 @@
 }
 
 /*
+ * Ambient glow, for pages that never get a pointer (an OBS browser source, a
+ * kiosk): data-zen-glow="ambient" on an element or any ancestor (<html> for the
+ * whole page) sends the edge light slowly round each border by itself. The
+ * position is registered so it can animate; it's animated per element, so only
+ * lit elements restyle. Still (at the top-left corner) with reduced motion or
+ * lite graphics.
+ */
+@property --zen-glow-x {
+    syntax: '<length-percentage>';
+    inherits: false;
+    initial-value: 0%;
+}
+@property --zen-glow-y {
+    syntax: '<length-percentage>';
+    inherits: false;
+    initial-value: 0%;
+}
+@keyframes zen-glow-orbit {
+    0%,
+    100% {
+        --zen-glow-x: 0%;
+        --zen-glow-y: 0%;
+    }
+    25% {
+        --zen-glow-x: 100%;
+        --zen-glow-y: 0%;
+    }
+    50% {
+        --zen-glow-x: 100%;
+        --zen-glow-y: 100%;
+    }
+    75% {
+        --zen-glow-x: 0%;
+        --zen-glow-y: 100%;
+    }
+}
+:is([data-zen-glow='ambient'], [data-zen-glow='ambient'] *).glow-edge::before,
+:is([data-zen-glow='ambient'], [data-zen-glow='ambient'] *).glow-border {
+    --gx: var(--zen-glow-x);
+    --gy: var(--zen-glow-y);
+    animation: zen-glow-orbit 12s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    :is([data-zen-glow='ambient'], [data-zen-glow='ambient'] *).glow-edge::before,
+    :is([data-zen-glow='ambient'], [data-zen-glow='ambient'] *).glow-border {
+        animation: none;
+    }
+}
+:is(html.reduce-motion, html[data-zen-graphics='lite'])
+    :is([data-zen-glow='ambient'], [data-zen-glow='ambient'] *).glow-edge::before,
+:is(html.reduce-motion, html[data-zen-graphics='lite'])
+    :is([data-zen-glow='ambient'], [data-zen-glow='ambient'] *).glow-border {
+    animation: none;
+}
+
+/*
  * Built from Tailwind's backdrop utilities, which emit the standard and -webkit-
  * properties correctly. Where there's no live blur, the surface is solid: a
  * translucent one lets sharp text behind show through (the blur is what hides

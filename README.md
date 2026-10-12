@@ -84,6 +84,16 @@ import { applyPreset, applyTheme, DEFAULT_THEME } from '@rinzai/zen';
 applyTheme(applyPreset(DEFAULT_THEME, 'ocean'));
 ```
 
+## Overlays
+
+For a page composited over something else, such as an OBS browser source, which never gets a pointer:
+
+```html
+<html data-zen-glow="ambient" data-zen-page="transparent"></html>
+```
+
+`data-zen-glow="ambient"` sends the edge light round each glowing border by itself (on any element, it does so for what's inside). `data-zen-page="transparent"` paints nothing behind the content; it needs the base stylesheet.
+
 ## Browser support
 
 Chrome and Edge 114+, Safari 17+ and Firefox 128+: the versions with the native Popover API that popups, menus and toasts are built on, and with what Tailwind v4 needs.

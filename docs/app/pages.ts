@@ -43,9 +43,9 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'backdrop',
         title: 'Backdrop',
         description:
-            'The page background: aurora glows over contours or dots, and a light that follows the pointer and catches card edges.',
+            'The page background: aurora glows over contours or dots, and a light that follows the pointer and catches card edges, or drifts round them by itself on pages with no pointer.',
         parts: ['Backdrop'],
-        examples: ['Contours', 'Dots'],
+        examples: ['Contours', 'Dots', 'Ambient'],
     },
     { slug: 'badge', title: 'Badge', description: 'A small label for status, counts and tags.', parts: ['Badge'] },
     {
