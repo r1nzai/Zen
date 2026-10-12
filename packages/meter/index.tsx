@@ -43,7 +43,7 @@ export default function Meter({
             {detail && (
                 <span
                     className={cx(
-                        'col-start-2 text-right text-sm tabular-nums',
+                        'col-start-2 text-end text-sm tabular-nums',
                         resolved === 'negative' ? 'text-destructive' : 'text-muted-foreground',
                     )}
                 >

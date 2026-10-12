@@ -16,7 +16,7 @@ export default function Breadcrumbs({ className, children, 'aria-label': labelPr
                     <Fragment key={crumb.key ?? i}>
                         {i > 0 && (
                             <li aria-hidden className="text-muted-foreground/60 flex">
-                                <ChevronRight className="size-3.5" />
+                                <ChevronRight className="size-3.5 rtl:-scale-x-100" />
                             </li>
                         )}
                         <li className="flex min-w-0">{crumb}</li>

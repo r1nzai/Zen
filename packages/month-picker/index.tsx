@@ -96,7 +96,7 @@ export default function MonthPicker({
                         onClick={() => setYear((y) => y - 1)}
                         className={PICKER_NAV}
                     >
-                        <ChevronLeft className="size-4" />
+                        <ChevronLeft className="size-4 rtl:-scale-x-100" />
                     </button>
                     <span className="text-sm font-semibold tabular-nums" aria-live="polite">
                         {year}
@@ -107,7 +107,7 @@ export default function MonthPicker({
                         onClick={() => setYear((y) => y + 1)}
                         className={PICKER_NAV}
                     >
-                        <ChevronRight className="size-4" />
+                        <ChevronRight className="size-4 rtl:-scale-x-100" />
                     </button>
                 </div>
                 <div className="grid grid-cols-3 gap-1">

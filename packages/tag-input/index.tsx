@@ -64,7 +64,7 @@ export default function TagInput({
                     {value.map((tag) => (
                         <span
                             key={tag}
-                            className="zen__tag bg-primary/12 text-foreground inline-flex items-center gap-1 rounded-md py-0.5 pr-1 pl-2 text-xs shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.25)]"
+                            className="zen__tag bg-primary/12 text-foreground inline-flex items-center gap-1 rounded-md py-0.5 ps-2 pe-1 text-xs shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.25)]"
                         >
                             {tag}
                             <button

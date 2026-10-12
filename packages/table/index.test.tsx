@@ -39,7 +39,7 @@ describe('Table', () => {
         expect(container.firstChild!.firstChild).toHaveClass('overflow-auto');
         expect(screen.getByRole('table')).toHaveClass('min-w-96');
         expect(screen.getByRole('columnheader', { name: 'Prop' }).closest('thead')).toHaveClass('sticky', 'top-0');
-        expect(screen.getByRole('columnheader', { name: 'Amount' })).toHaveClass('text-right');
+        expect(screen.getByRole('columnheader', { name: 'Amount' })).toHaveClass('text-end');
         expect(screen.getByRole('cell', { name: '12' })).toHaveClass('tabular-nums');
     });
 
@@ -62,11 +62,11 @@ describe('Table', () => {
         };
         scroll(0, 0);
         expect(el).not.toHaveAttribute('data-under-top');
-        expect(el).not.toHaveAttribute('data-under-left');
+        expect(el).not.toHaveAttribute('data-under-start');
         expect(el).toHaveAttribute('data-under-bottom');
         scroll(200, 30);
         expect(el).toHaveAttribute('data-under-top');
-        expect(el).toHaveAttribute('data-under-left');
+        expect(el).toHaveAttribute('data-under-start');
         expect(el).not.toHaveAttribute('data-under-bottom');
     });
 
@@ -75,17 +75,17 @@ describe('Table', () => {
             <Table>
                 <TableBody>
                     <TableRow>
-                        <TableCell sticky="left">Rent</TableCell>
+                        <TableCell sticky="start">Rent</TableCell>
                     </TableRow>
                 </TableBody>
                 <TableFooter>
                     <TableRow>
-                        <TableFooterCell sticky="left">Total</TableFooterCell>
+                        <TableFooterCell sticky="start">Total</TableFooterCell>
                     </TableRow>
                 </TableFooter>
             </Table>,
         );
-        expect(screen.getByRole('cell', { name: 'Rent' })).toHaveClass('sticky', 'left-0', 'zen__sticky-left');
+        expect(screen.getByRole('cell', { name: 'Rent' })).toHaveClass('sticky', 'start-0', 'zen__sticky-start');
         expect(screen.getByRole('cell', { name: 'Total' }).closest('tfoot')).toHaveClass('sticky', 'bottom-0');
     });
 

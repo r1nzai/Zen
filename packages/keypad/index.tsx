@@ -49,7 +49,7 @@ export default function Keypad({
                     onClick={() => press(key)}
                     className="bg-tint/[0.05] hover:bg-tint/[0.09] focus-ring grid h-14 cursor-pointer place-items-center rounded-xl text-xl font-medium tabular-nums outline-hidden transition-[background-color,scale] duration-150 select-none active:scale-95 disabled:invisible"
                 >
-                    {key === 'back' ? <ArrowLeft className="size-5" /> : key}
+                    {key === 'back' ? <ArrowLeft className="size-5 rtl:-scale-x-100" /> : key}
                 </button>
             ))}
         </div>

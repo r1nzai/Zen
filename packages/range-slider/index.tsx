@@ -51,9 +51,9 @@ export default function RangeSlider({
         >
             <div
                 aria-hidden
-                className="absolute inset-x-0 top-1/2 h-2.5 -translate-y-1/2 rounded-full"
+                className="absolute inset-x-0 top-1/2 h-2.5 -translate-y-1/2 rounded-full [--zen-end:right] rtl:[--zen-end:left]"
                 style={{
-                    background: `linear-gradient(to right, oklch(var(--muted)) ${at(low)}%, oklch(var(--primary)) ${at(low)}% ${at(high)}%, oklch(var(--muted)) ${at(high)}%)`,
+                    background: `linear-gradient(to var(--zen-end), oklch(var(--muted)) ${at(low)}%, oklch(var(--primary)) ${at(low)}% ${at(high)}%, oklch(var(--muted)) ${at(high)}%)`,
                 }}
             />
             {thumbs.map((thumb, i) => (

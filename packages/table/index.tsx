@@ -8,7 +8,7 @@ import { ComponentProps, ReactNode, useCallback, useEffect, useLayoutEffect, use
 /*
  * Sticky parts (the header row, the footer row, a first column) are clear glass
  * at rest, and frost only while content passes under them: TableContainer marks
- * the scroller with data-under-top/left/bottom, and the zen__sticky-* rules in
+ * the scroller with data-under-top/start/bottom, and the zen__sticky-* rules in
  * theme.css frost (or, without blur, fill) that edge. Header and footer frost
  * as whole rows, so the blur has no seams between columns.
  */
@@ -30,7 +30,8 @@ export function TableContainer({ label, className, ref, onScroll, ...rest }: Tab
         // Only on a change: touching the attribute restyles every sticky cell.
         const set = (name: string, on: boolean) => on !== el.hasAttribute(name) && el.toggleAttribute(name, on);
         set('data-under-top', el.scrollTop > 0);
-        set('data-under-left', el.scrollLeft > 0);
+        // scrollLeft runs from 0 down to -max in right-to-left.
+        set('data-under-start', Math.abs(el.scrollLeft) > 0);
         set('data-under-bottom', el.scrollTop + el.clientHeight < el.scrollHeight - 1);
     }, []);
 
@@ -200,8 +201,8 @@ export function TableHead({
             aria-sort={sortDirection === 'asc' ? 'ascending' : sortDirection === 'desc' ? 'descending' : undefined}
             className={cx(
                 'border-tint/[0.07] text-muted-foreground border-b px-3 py-2.5 align-middle text-xs leading-5 font-medium tracking-wider whitespace-nowrap uppercase',
-                sticky === 'left' && 'zen__sticky-left sticky left-0 z-10',
-                numeric ? 'text-right' : 'text-left',
+                sticky === 'start' && 'zen__sticky-start sticky start-0 z-10',
+                numeric ? 'text-end' : 'text-start',
                 className,
             )}
             {...rest}
@@ -232,7 +233,7 @@ export function TableHead({
     );
 }
 
-/** A cell: hairline below, lit with its row on hover. `sticky="left"` keeps it in view when scrolling sideways. */
+/** A cell: hairline below, lit with its row on hover. `sticky="start"` keeps it in view when scrolling sideways. */
 export function TableCell({ numeric, sticky, className, ...rest }: TableCellProps) {
     return (
         <td
@@ -242,9 +243,9 @@ export function TableCell({ numeric, sticky, className, ...rest }: TableCellProp
                 'border-tint/[0.045] border-b px-3 py-2.5 transition-colors duration-150',
                 'group-hover:[background-image:linear-gradient(oklch(var(--tint)/0.035),oklch(var(--tint)/0.035))]',
                 'group-data-selected:[background-image:linear-gradient(oklch(var(--primary)/0.09),oklch(var(--primary)/0.09))]',
-                sticky === 'left' &&
-                    'zen__sticky-left sticky left-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)]',
-                numeric && 'text-right tabular-nums',
+                sticky === 'start' &&
+                    'zen__sticky-start sticky start-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)] rtl:shadow-[inset_1px_0_0_oklch(var(--tint)/0.06)]',
+                numeric && 'text-end tabular-nums',
                 className,
             )}
             {...rest}
@@ -259,9 +260,9 @@ export function TableFooterCell({ numeric, sticky, className, ...rest }: TableCe
         <td
             className={cx(
                 'border-tint/[0.07] h-9 border-t px-3 font-medium whitespace-nowrap',
-                sticky === 'left' &&
-                    'zen__sticky-left sticky left-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)]',
-                numeric && 'text-right tabular-nums',
+                sticky === 'start' &&
+                    'zen__sticky-start sticky start-0 z-10 shadow-[inset_-1px_0_0_oklch(var(--tint)/0.06)] rtl:shadow-[inset_1px_0_0_oklch(var(--tint)/0.06)]',
+                numeric && 'text-end tabular-nums',
                 className,
             )}
             {...rest}
@@ -328,20 +329,20 @@ export interface TableContainerProps extends ComponentProps<'div'> {
 }
 
 export interface TableHeadProps extends ComponentProps<'th'> {
-    /** Right-aligned, for numbers. */
+    /** Aligned to the end, for numbers. */
     numeric?: boolean;
     /** Stay in view when the table scrolls sideways. */
-    sticky?: 'left';
+    sticky?: 'start';
     sortDirection?: SortDirection;
     /** Makes the heading a sort button. */
     onSort?: () => void;
 }
 
 export interface TableCellProps extends ComponentProps<'td'> {
-    /** Right-aligned, tabular digits. */
+    /** Aligned to the end, tabular digits. */
     numeric?: boolean;
     /** Stay in view when the table scrolls sideways. */
-    sticky?: 'left';
+    sticky?: 'start';
 }
 
 export {

@@ -68,9 +68,9 @@ describe('Menu', () => {
         expect(screen.getByRole('menuitem', { name: 'Log out', hidden: true })).toHaveClass('text-destructive');
     });
 
-    it('items are left-aligned (a button centres its text), so fixed-width columns line up', () => {
+    it('items are start-aligned (a button centres its text), so fixed-width columns line up', () => {
         render(<Account />);
-        expect(screen.getByRole('menuitem', { name: 'Settings', hidden: true })).toHaveClass('text-left');
+        expect(screen.getByRole('menuitem', { name: 'Settings', hidden: true })).toHaveClass('text-start');
     });
 
     it('arrow keys move between items only, wrapping', () => {

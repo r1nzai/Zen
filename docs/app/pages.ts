@@ -274,6 +274,7 @@ export const COMPONENTS: ComponentDoc[] = [
             'The language for everything inside: how dates, numbers and money read, and every word components show or announce. Without it, "en-US" and English.',
         parts: ['LocaleProvider'],
         imports: ['LocaleProvider', 'useLocale', 'useMessages', 'ENGLISH'],
+        examples: ['French', 'RightToLeft'],
     },
     {
         slug: 'load-more',

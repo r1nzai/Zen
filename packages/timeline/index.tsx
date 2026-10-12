@@ -16,7 +16,7 @@ export function TimelineItem({ title, time, icon, active, className, children, .
             {/* The line on to the next event. */}
             <span
                 aria-hidden
-                className="bg-tint/10 absolute top-7 bottom-1 left-[11px] w-px group-last/timeline:hidden"
+                className="bg-tint/10 absolute start-[11px] top-7 bottom-1 w-px group-last/timeline:hidden"
             />
             <span
                 aria-hidden

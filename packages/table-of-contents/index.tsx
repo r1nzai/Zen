@@ -38,13 +38,13 @@ export default function TableOfContents({ items, title: titleProp, className, ..
             {title && <p className="text-muted-foreground text-2xs mt-0! tracking-widest uppercase">{title}</p>}
             <ul className="border-tint/[0.07] flex flex-col gap-2 border-l text-sm">
                 {items.map((item) => (
-                    <li key={item.id} className={cx('-ml-px', item.depth === 2 && 'pl-3')}>
+                    <li key={item.id} className={cx('-ms-px', item.depth === 2 && 'ps-3')}>
                         <a
                             href={`#${item.id}`}
                             onClick={followSectionLink}
                             aria-current={item.id === activeId ? 'location' : undefined}
                             className={cx(
-                                'text-muted-foreground hover:text-foreground block border-l border-transparent pl-3 transition-colors pointer-coarse:py-1.5',
+                                'text-muted-foreground hover:text-foreground block border-s border-transparent ps-3 transition-colors pointer-coarse:py-1.5',
                                 'aria-[current=location]:border-primary aria-[current=location]:text-foreground',
                             )}
                         >

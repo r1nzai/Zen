@@ -45,7 +45,7 @@ export default function FilterBar({
                 <button
                     type="button"
                     onClick={onClear}
-                    className="zen__filter-clear text-muted-foreground hover:text-foreground touch-target focus-ring ml-1 cursor-pointer rounded-md px-1.5 py-1 text-xs outline-hidden"
+                    className="zen__filter-clear text-muted-foreground hover:text-foreground touch-target focus-ring ms-1 cursor-pointer rounded-md px-1.5 py-1 text-xs outline-hidden"
                 >
                     {clearLabel}
                 </button>
@@ -108,7 +108,7 @@ export function FilterChip({ onRemove, removeLabel: removeLabelProp, className, 
     return (
         <span
             className={cx(
-                'zen__filter-chip bg-primary/12 text-foreground inline-flex items-center gap-1 rounded-full py-1 pr-1 pl-3 text-xs shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.25)]',
+                'zen__filter-chip bg-primary/12 text-foreground inline-flex items-center gap-1 rounded-full py-1 ps-3 pe-1 text-xs shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.25)]',
                 className,
             )}
         >

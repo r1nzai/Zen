@@ -23,7 +23,7 @@ describe('TableOfContents', () => {
         render(<TableOfContents items={items} />);
         expect(screen.getByRole('navigation', { name: 'On this page' })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: 'Usage' })).toHaveAttribute('href', '#usage');
-        expect(screen.getByRole('link', { name: 'Usage' }).parentElement).toHaveClass('pl-3');
+        expect(screen.getByRole('link', { name: 'Usage' }).parentElement).toHaveClass('ps-3');
     });
 
     it('marks the section in view', () => {

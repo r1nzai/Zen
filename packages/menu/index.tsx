@@ -296,7 +296,7 @@ export function MenuContextTrigger({
 }
 
 const ITEM =
-    'flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-left text-sm outline-hidden select-none hover:bg-tint/[0.07] focus:bg-tint/[0.07] disabled:cursor-not-allowed disabled:opacity-50';
+    'flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-start text-sm outline-hidden select-none hover:bg-tint/[0.07] focus:bg-tint/[0.07] disabled:cursor-not-allowed disabled:opacity-50';
 
 /**
  * One choice in a Menu: closes the menu, then runs `onSelect`. An `icon` sits

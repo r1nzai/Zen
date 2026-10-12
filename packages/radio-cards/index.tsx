@@ -56,7 +56,7 @@ export function RadioCard({ value, disabled, className, style, children }: Radio
         <label
             style={style}
             className={cx(
-                'zen__radio-card border-tint/10 relative flex items-center gap-3 rounded-xl border p-2.5 text-left text-sm transition-[border-color,box-shadow] duration-200',
+                'zen__radio-card border-tint/10 relative flex items-center gap-3 rounded-xl border p-2.5 text-start text-sm transition-[border-color,box-shadow] duration-200',
                 'hover:has-enabled:border-tint/20 has-checked:border-primary/60 has-checked:shadow-[0_0_0_3px_oklch(var(--primary)/0.15)]',
                 'has- has-focus-ring has-disabled:opacity-60',
                 className,

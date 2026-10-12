@@ -36,7 +36,7 @@ export default function EditableCell({
 
     if (readOnly) {
         return (
-            <span title={title} className={cx('zen__editable-cell block px-1 text-right tabular-nums', className)}>
+            <span title={title} className={cx('zen__editable-cell block px-1 text-end tabular-nums', className)}>
                 {children}
             </span>
         );
@@ -55,7 +55,7 @@ export default function EditableCell({
                 setEditing(true);
             }}
             className={cx(
-                'zen__editable-cell hover:bg-primary/10 w-full cursor-pointer rounded-md px-1.5 py-0.5 text-right tabular-nums transition-colors focus-ring',
+                'zen__editable-cell hover:bg-primary/10 w-full cursor-pointer rounded-md px-1.5 py-0.5 text-end tabular-nums transition-colors focus-ring',
                 className,
             )}
         >

@@ -94,7 +94,7 @@ export default function MoneyInput({
                     }}
                     aria-describedby={cx(money.inputProps['aria-describedby'], describedBy) || undefined}
                     disabled={disabled}
-                    className={cx('tabular-nums', compact ? 'text-right' : 'text-left')}
+                    className={cx('tabular-nums', compact ? 'text-end' : 'text-start')}
                 />
                 {end}
             </InputGroup>
@@ -129,7 +129,7 @@ export function MoneyCurrencyMenu({ money, className }: { money: MoneyInputState
             <MenuTrigger
                 aria-label={m.changeCurrency(c.currency)}
                 className={cx(
-                    'group/currency hover:bg-tint/[0.07] -ml-1 flex shrink-0 items-center gap-0.5 rounded-md px-1 py-0.5 text-sm outline-hidden focus-ring',
+                    'group/currency hover:bg-tint/[0.07] -ms-1 flex shrink-0 items-center gap-0.5 rounded-md px-1 py-0.5 text-sm outline-hidden focus-ring',
                     c.foreign ? 'text-primary' : 'text-muted-foreground',
                     className,
                 )}

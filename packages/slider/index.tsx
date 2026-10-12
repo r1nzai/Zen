@@ -41,7 +41,8 @@ export default function Slider({
 
     const pct = max > min ? ((value - min) / (max - min)) * 100 : 0;
     const track =
-        trackBackground ?? `linear-gradient(to right, oklch(var(--primary)) ${pct}%, oklch(var(--muted)) ${pct}%)`;
+        trackBackground ??
+        `linear-gradient(to var(--zen-end), oklch(var(--primary)) ${pct}%, oklch(var(--muted)) ${pct}%)`;
 
     return (
         <input
@@ -64,7 +65,7 @@ export default function Slider({
                 } as CSSProperties
             }
             className={cx(
-                'zen__slider h-5 w-full cursor-pointer appearance-none bg-transparent outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
+                'zen__slider h-5 w-full cursor-pointer [--zen-end:right] rtl:[--zen-end:left] appearance-none bg-transparent outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
                 // Track
                 '[&::-webkit-slider-runnable-track]:h-2.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:[background:var(--zen-track)]',
                 '[&::-moz-range-track]:h-2.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:[background:var(--zen-track)]',

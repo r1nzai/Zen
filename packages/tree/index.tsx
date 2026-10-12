@@ -14,6 +14,7 @@ import {
     useRef,
     useState,
 } from 'react';
+import { readingKey } from '@zen/utils/direction';
 
 /** One visible row of a tree. */
 export interface TreeRowData<T> {
@@ -145,14 +146,15 @@ export function useTree<T>({ items, getKey, getChildren, defaultExpanded = true,
         if (e.target !== e.currentTarget) return;
         const i = rows.indexOf(row);
         let to: TreeRowData<T> | undefined;
-        if (e.key === 'ArrowDown') to = rows[i + 1];
-        else if (e.key === 'ArrowUp') to = rows[i - 1];
-        else if (e.key === 'Home') to = rows[0];
-        else if (e.key === 'End') to = rows.at(-1);
-        else if (e.key === 'ArrowRight' && row.hasChildren) {
+        const key = readingKey(e.key, e.currentTarget);
+        if (key === 'ArrowDown') to = rows[i + 1];
+        else if (key === 'ArrowUp') to = rows[i - 1];
+        else if (key === 'Home') to = rows[0];
+        else if (key === 'End') to = rows.at(-1);
+        else if (key === 'ArrowRight' && row.hasChildren) {
             if (!open(row)) toggle(row.key);
             else to = rows[i + 1];
-        } else if (e.key === 'ArrowLeft') {
+        } else if (key === 'ArrowLeft') {
             if (open(row)) toggle(row.key);
             else to = rows.find((r) => r.key === row.parentKey);
         } else return;
@@ -253,7 +255,7 @@ export function TreeLabel<T>({ row, tree, indent = 20, children, className }: Tr
             className={cx('flex min-w-0 flex-1 items-center gap-1', className)}
             style={{ paddingLeft: row.depth * indent }}
         >
-            {row.hasChildren ? <TreeToggle {...tree.toggleProps(row)} /> : <span className="-ml-1 w-6 shrink-0" />}
+            {row.hasChildren ? <TreeToggle {...tree.toggleProps(row)} /> : <span className="-ms-1 w-6 shrink-0" />}
             {children}
         </div>
     );
@@ -269,15 +271,15 @@ export function TreeToggle({ expanded, onToggle, className, ...rest }: TreeToggl
             aria-label={expanded ? m.collapse : m.expand}
             aria-expanded={expanded}
             className={cx(
-                'text-muted-foreground hover:bg-tint/[0.08] hover:text-foreground -ml-1 grid size-6 shrink-0 cursor-pointer place-items-center rounded-md outline-hidden transition-colors focus-ring',
+                'text-muted-foreground hover:bg-tint/[0.08] hover:text-foreground -ms-1 grid size-6 shrink-0 cursor-pointer place-items-center rounded-md outline-hidden transition-colors focus-ring',
                 className,
             )}
             {...rest}
         >
             <ChevronRightMicro
                 className={cx(
-                    'zen__tree-chevron size-4 transition-transform duration-200 ease-out',
-                    expanded && 'rotate-90',
+                    'zen__tree-chevron size-4 transition-transform duration-200 ease-out rtl:-scale-x-100',
+                    expanded && 'rotate-90 rtl:-rotate-90',
                 )}
             />
         </button>

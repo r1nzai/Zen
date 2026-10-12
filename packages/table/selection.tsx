@@ -51,7 +51,7 @@ export function useSelection<K>(keys: readonly K[]) {
 /** A row's checkbox cell; spread `rowProps(key)` from useSelection into it. */
 export function TableSelectCell({ checked, onSelect, label, className, ...rest }: TableSelectCellProps) {
     return (
-        <td className={cx('border-tint/[0.045] w-10 border-b py-2.5 pr-0 pl-3', className)} {...rest}>
+        <td className={cx('border-tint/[0.045] w-10 border-b py-2.5 ps-3 pe-0', className)} {...rest}>
             <Checkbox
                 aria-label={label}
                 checked={checked}
@@ -75,7 +75,7 @@ export function TableSelectHead({
     const m = useMessages();
     const label = labelProp ?? m.selectAll;
     return (
-        <th className={cx('w-10 py-2.5 pr-0 pl-3', className)} {...rest}>
+        <th className={cx('w-10 py-2.5 ps-3 pe-0', className)} {...rest}>
             <Checkbox
                 aria-label={label}
                 checked={checked}
@@ -109,7 +109,7 @@ export function SelectionBar({
             role="toolbar"
             aria-label={m.selection}
             className={cx(
-                'zen__selection-bar glass glass-blur glow-edge fixed inset-x-0 bottom-6 z-40 mx-auto flex w-fit max-w-[calc(100vw-2rem)] items-center gap-2 rounded-2xl py-2 pr-2 pl-4 shadow-[0_12px_40px_-12px_oklch(0_0_0/0.6)]',
+                'zen__selection-bar glass glass-blur glow-edge fixed inset-x-0 bottom-6 z-40 mx-auto flex w-fit max-w-[calc(100vw-2rem)] items-center gap-2 rounded-2xl py-2 ps-4 pe-2 shadow-[0_12px_40px_-12px_oklch(0_0_0/0.6)]',
                 className,
             )}
         >

@@ -15,6 +15,7 @@ import {
     useRef,
     useState,
 } from 'react';
+import { readingKey } from '@zen/utils/direction';
 
 const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
@@ -75,7 +76,9 @@ export function TabList({ variant = 'underline', className, children, ...rest }:
         );
         const i = tabs.indexOf(document.activeElement as HTMLButtonElement);
         if (i === -1) return;
-        const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+        const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[
+            readingKey(e.key, e.currentTarget)
+        ];
         if (next === undefined) return;
         e.preventDefault();
         const tab = tabs[(next + tabs.length) % tabs.length];

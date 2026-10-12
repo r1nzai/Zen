@@ -252,7 +252,7 @@ function ComboboxValue({ placeholder }: { placeholder: string }) {
             className="w-full gap-1"
         >
             {(text, index, chip) => (
-                <Badge key={chip?.key ?? index} className="flex h-6 min-w-min gap-2 pr-1" variant="secondary">
+                <Badge key={chip?.key ?? index} className="flex h-6 min-w-min gap-2 pe-1" variant="secondary">
                     {text}
                     <Button
                         aria-label={m.remove(text)}

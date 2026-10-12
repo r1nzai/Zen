@@ -61,7 +61,7 @@ export const buttonVariants = cva(
                     'glow-edge border border-tint/10 bg-tint/[0.03] text-foreground hover:border-tint/20 hover:bg-tint/[0.07]',
                 ghost: 'text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground',
                 // Inline in running text (no padding, sits on the line) and truncates in a tight cell.
-                link: 'inline-block h-auto! max-w-full truncate rounded-sm px-0! text-left align-bottom text-[length:inherit] text-primary underline-offset-4 hover:underline active:scale-100',
+                link: 'inline-block h-auto! max-w-full truncate rounded-sm px-0! text-start align-bottom text-[length:inherit] text-primary underline-offset-4 hover:underline active:scale-100',
             },
             // Heights match the fields' (Input, Select…) size for size, so they line up in a row.
             size: {

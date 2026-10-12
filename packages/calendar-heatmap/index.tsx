@@ -22,6 +22,7 @@ export default function CalendarHeatmap({
     ...rest
 }: CalendarHeatmapProps) {
     const locale = useLocale(localeProp);
+    const digits = new Intl.NumberFormat(locale);
     const weekStartsOn = weekStartsOnProp ?? weekStart(locale);
     const count = daysInMonth(month);
     const days = Array.from({ length: count }, (_, i) => `${month}-${String(i + 1).padStart(2, '0')}` as DateString);
@@ -77,7 +78,7 @@ export default function CalendarHeatmap({
                                 : undefined;
                             const content = (
                                 <>
-                                    <span aria-hidden>{Number(day.slice(8))}</span>
+                                    <span aria-hidden>{digits.format(Number(day.slice(8)))}</span>
                                     <span className="sr-only">{said}</span>
                                 </>
                             );

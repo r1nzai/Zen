@@ -203,7 +203,7 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
                         }}
                         className={cx(
                             // The popover's own defaults (centred, bordered, opaque) reset to a plain corner box.
-                            'zen__toast-viewport fixed top-auto right-4 bottom-[calc(var(--zen-toast-offset,1rem)+env(safe-area-inset-bottom))] left-auto z-50 m-0 w-[calc(100vw-2rem)] overflow-visible border-0 bg-transparent p-0 text-inherit outline-hidden md:bottom-5 md:w-[24rem]',
+                            'zen__toast-viewport fixed top-auto end-4 bottom-[calc(var(--zen-toast-offset,1rem)+env(safe-area-inset-bottom))] start-auto z-50 m-0 w-[calc(100vw-2rem)] overflow-visible border-0 bg-transparent p-0 text-inherit outline-hidden md:bottom-5 md:w-[24rem]',
                             // Its height follows the deck, so hovering the gaps between fanned-out toasts keeps it open.
                             'ease-out-soft transition-[height] duration-300',
                             viewportClassName,
@@ -444,7 +444,7 @@ function Toast({
                 {/* Faded out on the cards behind, whose edges are all that show. */}
                 <div
                     ref={body}
-                    className="flex items-start gap-3 p-3.5 pr-10 transition-opacity duration-300 group-data-behind:opacity-0"
+                    className="flex items-start gap-3 p-3.5 pe-10 transition-opacity duration-300 group-data-behind:opacity-0"
                 >
                     <span
                         className={cx('mt-0.5 grid size-8 shrink-0 place-items-center rounded-full', tone.badge)}
@@ -474,7 +474,7 @@ function Toast({
                         type="button"
                         aria-label={m.dismiss}
                         onClick={() => onDismiss(toast.id)}
-                        className="text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-ring absolute top-2.5 right-2.5 grid size-7 cursor-pointer place-items-center rounded-lg outline-hidden transition-colors"
+                        className="text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-ring absolute end-2.5 top-2.5 grid size-7 cursor-pointer place-items-center rounded-lg outline-hidden transition-colors"
                     >
                         <XMarkMicro className="size-3.5" />
                     </button>
@@ -484,7 +484,7 @@ function Toast({
                     <span
                         aria-hidden
                         className={cx(
-                            'zen__toast-timer absolute bottom-0 left-0 h-0.5 w-full origin-left opacity-60 transition-opacity group-data-behind:opacity-0',
+                            'zen__toast-timer absolute start-0 bottom-0 h-0.5 w-full origin-left opacity-60 rtl:origin-right transition-opacity group-data-behind:opacity-0',
                             tone.bar,
                         )}
                         // Picks up where it was after a move between hosts.

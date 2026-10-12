@@ -94,7 +94,7 @@ export default function Planner() {
             <Table {...tree.tableProps} className="w-max min-w-full">
                 <TableHeader>
                     <TableRow>
-                        <TableHead sticky="left" className="min-w-44">
+                        <TableHead sticky="start" className="min-w-44">
                             Budget
                         </TableHead>
                         {MONTHS.map((m) => (
@@ -111,7 +111,7 @@ export default function Planner() {
                         const line = row.item;
                         return (
                             <TreeRow key={row.key} row={row} tree={tree}>
-                                <TreeCell sticky="left" className={row.hasChildren ? 'font-medium' : undefined}>
+                                <TreeCell sticky="start" className={row.hasChildren ? 'font-medium' : undefined}>
                                     <TreeLabel row={row} tree={tree}>
                                         <span className="truncate">{line.label}</span>
                                     </TreeLabel>
@@ -153,7 +153,7 @@ export default function Planner() {
                 </TableBody>
                 <TableFooter>
                     <TableRow>
-                        <TableFooterCell sticky="left">Total</TableFooterCell>
+                        <TableFooterCell sticky="start">Total</TableFooterCell>
                         {MONTHS.map((month, m) => (
                             <TableFooterCell key={month} numeric>
                                 {inr(plan.reduce((sum, g) => sum + total(g, m), 0))}

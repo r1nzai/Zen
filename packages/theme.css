@@ -397,7 +397,7 @@ html[data-zen-graphics='lite'] :is(.zen-topo--lit, .zen-dots--lit) {
  * No transition: animating every sticky cell's frost costs frames mid-scroll.
  */
 .zen__table-container[data-under-top] .zen__sticky-top,
-.zen__table-container[data-under-left] .zen__sticky-left,
+.zen__table-container[data-under-start] .zen__sticky-start,
 .zen__table-container[data-under-bottom] .zen__sticky-bottom {
     --zen-sticky-fill: oklch(var(--card) / 0.6);
     background-color: var(--zen-sticky-fill);
@@ -405,7 +405,7 @@ html[data-zen-graphics='lite'] :is(.zen-topo--lit, .zen-dots--lit) {
     backdrop-filter: blur(18px) saturate(1.4);
 }
 html[data-zen-graphics='lite'] .zen__table-container[data-under-top] .zen__sticky-top,
-html[data-zen-graphics='lite'] .zen__table-container[data-under-left] .zen__sticky-left,
+html[data-zen-graphics='lite'] .zen__table-container[data-under-start] .zen__sticky-start,
 html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__sticky-bottom {
     --zen-sticky-fill: oklch(var(--card));
     -webkit-backdrop-filter: none;
@@ -413,7 +413,7 @@ html[data-zen-graphics='lite'] .zen__table-container[data-under-bottom] .zen__st
 }
 @media (hover: none), (pointer: coarse), (prefers-reduced-transparency: reduce) {
     .zen__table-container[data-under-top] .zen__sticky-top,
-    .zen__table-container[data-under-left] .zen__sticky-left,
+    .zen__table-container[data-under-start] .zen__sticky-start,
     .zen__table-container[data-under-bottom] .zen__sticky-bottom {
         --zen-sticky-fill: oklch(var(--card));
         -webkit-backdrop-filter: none;

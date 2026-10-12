@@ -18,6 +18,7 @@ import {
 } from '@zen/utils/date';
 import { addMonths, formatMonth, type Month, monthNames, monthsBetween } from '@zen/utils/month';
 import { ComponentProps, KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
+import { readingKey } from '@zen/utils/direction';
 
 /**
  * A month grid to pick a date, or a range of dates, fully keyboard-driven:
@@ -44,6 +45,7 @@ export default function Calendar(props: CalendarProps) {
         ...rest
     } = props;
     const locale = useLocale(localeProp);
+    const digits = new Intl.NumberFormat(locale);
     const m = useMessages();
     const weekStartsOn = weekStartsOnProp ?? weekStart(locale);
     const [value, set] = useControllable<DateString | DateRange | null>(
@@ -111,7 +113,7 @@ export default function Calendar(props: CalendarProps) {
             End: addDays(from, 6 - dow),
             PageUp: addMonthsToDate(from, e.shiftKey ? -12 : -1),
             PageDown: addMonthsToDate(from, e.shiftKey ? 12 : 1),
-        }[e.key];
+        }[readingKey(e.key, e.currentTarget)];
         if (!next) return;
         e.preventDefault();
         moveTo(next);
@@ -134,7 +136,7 @@ export default function Calendar(props: CalendarProps) {
                 onClick={() => (picking === 'days' ? step(-1) : setYear((y) => y - 1))}
                 className={PICKER_NAV}
             >
-                <ChevronLeft className="size-4" />
+                <ChevronLeft className="size-4 rtl:-scale-x-100" />
             </button>
             <button
                 type="button"
@@ -161,7 +163,7 @@ export default function Calendar(props: CalendarProps) {
                 onClick={() => (picking === 'days' ? step(1) : setYear((y) => y + 1))}
                 className={PICKER_NAV}
             >
-                <ChevronRight className="size-4" />
+                <ChevronRight className="size-4 rtl:-scale-x-100" />
             </button>
         </div>
     );
@@ -260,15 +262,15 @@ export default function Calendar(props: CalendarProps) {
                                                         'p-0',
                                                         (between || ((isStart || isEnd) && from !== to)) &&
                                                             'bg-primary/15',
-                                                        isStart && 'rounded-l-lg',
-                                                        isEnd && 'rounded-r-lg',
+                                                        isStart && 'rounded-s-lg',
+                                                        isEnd && 'rounded-e-lg',
                                                         // The band rounds off at each row's ends, and at the month's when months sit side by side.
                                                         between &&
                                                             (i === 0 || (months > 1 && d === first)) &&
-                                                            'rounded-l-lg',
+                                                            'rounded-s-lg',
                                                         between &&
                                                             (i === 6 || (months > 1 && d === last)) &&
-                                                            'rounded-r-lg',
+                                                            'rounded-e-lg',
                                                     )}
                                                 >
                                                     <button
@@ -297,7 +299,7 @@ export default function Calendar(props: CalendarProps) {
                                                             d === now && chosen && 'after:bg-primary-foreground',
                                                         )}
                                                     >
-                                                        {Number(d.slice(8))}
+                                                        {digits.format(Number(d.slice(8)))}
                                                     </button>
                                                 </td>
                                             );

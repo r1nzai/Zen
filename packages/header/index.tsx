@@ -40,7 +40,7 @@ export default function Header({ skipLabel: skipLabelProp, className, children, 
                         }
                         main.focus();
                     }}
-                    className="bg-primary text-primary-foreground focus-ring sr-only rounded-lg px-3 py-2 text-sm font-medium outline-hidden focus:not-sr-only focus:absolute focus:top-2 focus:left-4 focus:z-50"
+                    className="bg-primary text-primary-foreground focus-ring sr-only rounded-lg px-3 py-2 text-sm font-medium outline-hidden focus:not-sr-only focus:absolute focus:start-4 focus:top-2 focus:z-50"
                 >
                     {skipLabel}
                 </a>

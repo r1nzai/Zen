@@ -26,11 +26,11 @@ export default function Stepper({ value, className, children, 'aria-label': labe
                         {i > 0 && (
                             <span
                                 aria-hidden
-                                className="bg-tint/10 absolute top-3.5 right-[calc(50%+1.25rem)] left-[calc(-50%+1.25rem)] h-px overflow-hidden"
+                                className="bg-tint/10 absolute start-[calc(-50%+1.25rem)] end-[calc(50%+1.25rem)] top-3.5 h-px overflow-hidden"
                             >
                                 <span
                                     className={cx(
-                                        'bg-primary ease-out-soft block h-full origin-left transition-transform duration-500',
+                                        'bg-primary ease-out-soft block h-full origin-left transition-transform rtl:origin-right duration-500',
                                         state === 'upcoming' && 'scale-x-0',
                                     )}
                                 />
