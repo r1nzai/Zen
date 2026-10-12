@@ -421,3 +421,13 @@ export {
     type ResizablePanelGroupProps,
     type ResizablePanelProps,
 } from './resizable';
+export {
+    default as NavigationMenu,
+    NavigationMenuContent,
+    type NavigationMenuContentProps,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    type NavigationMenuLinkProps,
+    type NavigationMenuProps,
+    NavigationMenuTrigger,
+} from './navigation-menu';

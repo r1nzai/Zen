@@ -378,6 +378,20 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'Range'],
     },
     {
+        slug: 'navigation-menu',
+        title: 'Navigation Menu',
+        description:
+            'A site’s navigation: links, and labels that open glass panels of links on hover or click, switching at once between them; works with any router.',
+        parts: [
+            'NavigationMenu',
+            'NavigationMenuItem',
+            'NavigationMenuTrigger',
+            'NavigationMenuContent',
+            'NavigationMenuLink',
+        ],
+        examples: ['Default', 'Router'],
+    },
+    {
         slug: 'number-field',
         title: 'Number Field',
         description:

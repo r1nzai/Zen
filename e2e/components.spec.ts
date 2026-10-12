@@ -635,3 +635,34 @@ test('menubar: arrows between menus, hover switches, Escape back to the label', 
     expect(Math.abs(menu.x - at.x)).toBeLessThan(2);
     expect(menu.y).toBeGreaterThan(at.y + at.height);
 });
+
+test('navigation menu: hover opens a panel under its label, switching at once; Escape returns focus', async ({
+    page,
+}) => {
+    errors = await open(page, '/components/navigation-menu/');
+    const nav = page.getByRole('navigation', { name: 'Site' });
+    const plan = nav.getByRole('button', { name: 'Plan' });
+    const budgets = nav.getByRole('link', { name: /Budgets/ });
+    await plan.hover();
+    await expect(budgets).toBeVisible();
+    const [at, panel] = [(await plan.boundingBox())!, (await budgets.locator('xpath=..').boundingBox())!];
+    expect(Math.abs(panel.x - at.x)).toBeLessThan(2);
+    expect(panel.y).toBeGreaterThan(at.y + at.height);
+    // Across to the panel (over the gap): it stays.
+    await page.mouse.move(at.x + 10, panel.y + 20, { steps: 5 });
+    await page.waitForTimeout(400);
+    await expect(budgets).toBeVisible();
+    await nav.getByRole('button', { name: 'Reports' }).hover();
+    await expect(nav.getByRole('link', { name: 'Spending' })).toBeVisible();
+    await expect(budgets).toBeHidden();
+    await page.mouse.move(0, 0);
+    await expect(nav.getByRole('link', { name: 'Spending' })).toBeHidden();
+    // Keyboard: Enter opens, Tab into it, Escape back to the label.
+    await plan.focus();
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Tab');
+    await expect(budgets).toBeFocused();
+    await page.keyboard.press('Escape');
+    await expect(budgets).toBeHidden();
+    await expect(plan).toBeFocused();
+});
