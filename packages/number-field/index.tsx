@@ -7,7 +7,7 @@ import { plainSpaces } from '@zen/utils/date';
 import { FormValue } from '@zen/utils/form-value';
 import { type FieldSize } from '@zen/utils/styles';
 import { useControllable } from '@zen/utils/useControllable';
-import { ComponentProps, ReactNode, useMemo, useState } from 'react';
+import { ComponentProps, ReactNode, useMemo, useRef, useState } from 'react';
 
 /**
  * A number to type or step: − and + on either side, ↑↓ by `step`, Page Up and
@@ -15,11 +15,18 @@ import { ComponentProps, ReactNode, useMemo, useState } from 'react';
  * locale's way (`formatOptions`: a percentage, a unit, decimals) and read back
  * from what's typed in it, digits, separators and all. Kept within `min` and
  * `max` once you leave the field; empty is null.
+ *
+ * Each change says how it came about: `{ reason: 'step', delta }` for − +,
+ * ↑↓ and Page Up/Down, `'input'` for typing, `'limit'` for Home and End. So a
+ * step can be sent on as a step, and the number kept by whoever owns it.
+ * `onValueCommit` fires once per finished change: each step, and what's typed
+ * on Enter or on leaving the field.
  */
 export default function NumberField({
     value: valueProp,
     defaultValue = null,
     onValueChange,
+    onValueCommit,
     min,
     max,
     step = 1,
@@ -38,20 +45,41 @@ export default function NumberField({
 }: NumberFieldProps) {
     const m = useMessages();
     const locale = useLocale(localeProp);
-    const [value, setValue, reset] = useControllable(valueProp, defaultValue, onValueChange);
+    const [value, setOwn, reset] = useControllable(valueProp, defaultValue, undefined);
     const number = useMemo(() => new NumberReader(locale, formatOptions), [locale, formatOptions]);
     // What's typed, while the field has focus; otherwise the value, formatted.
     const [draft, setDraft] = useState<string | null>(null);
-
+    const typed = useRef(false);
     const clamp = (n: number) => Math.min(max ?? Infinity, Math.max(min ?? -Infinity, n));
+
+    const change = (n: number | null, details: NumberFieldChange) => {
+        setOwn(n);
+        onValueChange?.(n, details);
+    };
+    const set = (n: number | null, details: NumberFieldChange) => {
+        change(n, details);
+        onValueCommit?.(n, details);
+        typed.current = false;
+        setDraft(null);
+    };
+    const finish = () => {
+        if (!typed.current) return;
+        // What's typed, not `value`: an owner may take up only finished changes.
+        const read = draft === null ? undefined : number.parse(draft);
+        const was = read === undefined ? value : read;
+        const n = was === null ? null : clamp(was);
+        if (n !== value) change(n, { reason: 'input' });
+        onValueCommit?.(n, { reason: 'input' });
+        typed.current = false;
+    };
+
     const by = (delta: number) => {
         const from = value ?? (delta > 0 ? (min ?? 0) - delta : (max ?? 0) - delta);
         // In whole steps from `min` (or 0), without float drift: 0.1 + 0.2 is 0.3.
         const base = min ?? 0;
         const next = clamp(base + Math.round((from + delta - base) / step) * step);
         const decimals = Math.max(places(step), places(base));
-        setValue(Number(next.toFixed(decimals)));
-        setDraft(null);
+        set(Number(next.toFixed(decimals)), { reason: 'step', delta });
     };
     const shown = draft ?? (value === null ? '' : number.format(value));
 
@@ -83,28 +111,33 @@ export default function NumberField({
                 }}
                 onChange={(e) => {
                     setDraft(e.target.value);
+                    typed.current = true;
                     const n = number.parse(e.target.value);
-                    if (n !== undefined) setValue(n);
+                    if (n !== undefined) change(n, { reason: 'input' });
                 }}
                 onBlur={(e) => {
                     onBlur?.(e);
                     setDraft(null);
-                    if (value !== null && clamp(value) !== value) setValue(clamp(value));
+                    finish();
                 }}
                 onKeyDown={(e) => {
                     onKeyDown?.(e);
+                    if (e.key === 'Enter' && !e.defaultPrevented) {
+                        finish();
+                        setDraft(null);
+                        return;
+                    }
                     const to = {
                         ArrowUp: () => by(step),
                         ArrowDown: () => by(-step),
                         PageUp: () => by(largeStep),
                         PageDown: () => by(-largeStep),
-                        Home: min === undefined ? undefined : () => setValue(min),
-                        End: max === undefined ? undefined : () => setValue(max),
+                        Home: min === undefined ? undefined : () => set(min, { reason: 'limit' }),
+                        End: max === undefined ? undefined : () => set(max, { reason: 'limit' }),
                     }[e.key];
                     if (!to || e.defaultPrevented) return;
                     e.preventDefault();
                     to();
-                    setDraft(null);
                 }}
                 className="text-center tabular-nums"
             />
@@ -188,6 +221,9 @@ class NumberReader {
     }
 }
 
+/** How a NumberField's number changed: a step (with what it adds), typing, or Home/End. */
+export type NumberFieldChange = { reason: 'step'; delta: number } | { reason: 'input' | 'limit' };
+
 export interface NumberFieldProps extends Omit<
     ComponentProps<'input'>,
     'value' | 'defaultValue' | 'size' | 'min' | 'max' | 'step' | 'onChange'
@@ -196,7 +232,10 @@ export interface NumberFieldProps extends Omit<
     value?: number | null;
     /** The first number, when the field keeps its own. */
     defaultValue?: number | null;
-    onValueChange?: (value: number | null) => void;
+    /** Every change, typing included; `details` says how it came about. */
+    onValueChange?: (value: number | null, details: NumberFieldChange) => void;
+    /** Each finished change: a step, Home or End, or what's typed, on Enter or on leaving the field. */
+    onValueCommit?: (value: number | null, details: NumberFieldChange) => void;
     min?: number;
     max?: number;
     /** What ↑↓ and − + add or take away. Default 1. */

@@ -395,9 +395,9 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'number-field',
         title: 'Number Field',
         description:
-            'A number to type or step with − and +, the arrow keys and Page Up and Down: shown the locale’s way, as a percentage or a unit, and kept within bounds.',
+            'A number to type or step with − and +, the arrow keys and Page Up and Down: shown the locale’s way, as a percentage or a unit, and kept within bounds. Each change says whether it was a step (and by how much) or typed, and onValueCommit fires once it’s finished.',
         parts: ['NumberField'],
-        examples: ['Default', 'Formats'],
+        examples: ['Default', 'Formats', 'Steps'],
     },
     {
         slug: 'page-header',

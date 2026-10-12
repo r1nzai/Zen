@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added to existing components
+
+- **NumberField**: `onValueChange` gets a second argument saying how the number changed: `{ reason: 'step', delta }` for − +, ↑↓ and Page Up/Down, `'input'` for typing, `'limit'` for Home and End. `onValueCommit` fires once per finished change: each step, and what's typed on Enter or on leaving the field. So a step can be sent on as a step to whatever keeps the number (see Number Field → Steps).
+
 ## 0.13.0
 
 Since 0.12.0. This release renames things. Every breaking change is listed first, with what to change.
