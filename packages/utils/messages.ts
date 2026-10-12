@@ -17,6 +17,9 @@ export const ENGLISH = {
     collapse: 'Collapse',
     minimum: 'Minimum',
     increase: 'Increase',
+    hour: 'Hour',
+    minute: 'Minute',
+    dayPeriod: 'AM/PM',
     decrease: 'Decrease',
     maximum: 'Maximum',
 

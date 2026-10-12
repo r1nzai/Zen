@@ -142,4 +142,4 @@ export function formatDateRange(
  * writes "5\u2009–\u200912 Oct", Chrome "5 – 12 Oct"). Plain spaces make text
  * rendered on the server match the browser's, so hydration doesn't fail.
  */
-const plainSpaces = (text: string) => text.replace(/[\u2009\u202f]/g, ' ');
+export const plainSpaces = (text: string) => text.replace(/[\u2009\u202f]/g, ' ');

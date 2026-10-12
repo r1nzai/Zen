@@ -30,17 +30,22 @@ async function violations(page: Page) {
 
 const PAGES = ['/showcase/', ...COMPONENTS.map((c) => componentPath(c.slug))];
 
-/* Every docs page and the showcase, with each example as it first shows, in both themes. */
+/* Every docs page and the showcase, with each example as it first shows, in both themes; and no console errors. */
 for (const colorScheme of ['dark', 'light'] as const) {
     test.describe(colorScheme, () => {
         test.use({ colorScheme });
         for (const path of PAGES) {
             test(`accessible: ${path}`, async ({ page }) => {
+                // And hydrates cleanly: the server's HTML is what the browser would render.
+                const errors: string[] = [];
+                page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+                page.on('pageerror', (e) => errors.push(e.message));
                 await page.clock.setSystemTime(new Date(NOW));
                 await page.goto(path);
                 await page.waitForLoadState('networkidle');
                 const found = await violations(page);
                 expect(found, found.join('\n')).toEqual([]);
+                expect(errors, 'console errors').toEqual([]);
             });
         }
     });

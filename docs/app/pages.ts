@@ -544,6 +544,14 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'YourState'],
     },
     {
+        slug: 'time-field',
+        title: 'Time Field',
+        description:
+            'A time of day, typed or stepped a part at a time, in the locale’s order, digits and 12- or 24-hour clock.',
+        parts: ['TimeField'],
+        examples: ['Default', 'WithDate'],
+    },
+    {
         slug: 'timeline',
         title: 'Timeline',
         description: 'Events in order, each on a dot joined by a line: an activity feed or a history.',

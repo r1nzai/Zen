@@ -3,6 +3,7 @@ import MinusMicro from '@zen/icons/micro/minus';
 import PlusMicro from '@zen/icons/micro/plus';
 import { useLocale, useMessages } from '@zen/locale-provider';
 import { cx } from '@zen/utils/cx';
+import { plainSpaces } from '@zen/utils/date';
 import { FormValue } from '@zen/utils/form-value';
 import { type FieldSize } from '@zen/utils/styles';
 import { useControllable } from '@zen/utils/useControllable';
@@ -168,7 +169,7 @@ class NumberReader {
     }
 
     format(n: number) {
-        return this.formatter.format(n);
+        return plainSpaces(this.formatter.format(n));
     }
 
     /** The number in the text, null when it's empty, or undefined when it isn't a number (yet). */

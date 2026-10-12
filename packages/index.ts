@@ -379,3 +379,4 @@ export {
     type HoverCardTriggerProps,
 } from './hover-card';
 export { default as NumberField, type NumberFieldProps } from './number-field';
+export { default as TimeField, type TimeFieldProps, type TimeString } from './time-field';
