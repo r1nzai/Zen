@@ -483,3 +483,26 @@ test('carousel: buttons, dots and arrow keys snap from slide to slide', async ({
     await expect(dot(3)).toHaveAttribute('aria-current', 'true');
     await expect(slide(3)).toBeInViewport({ ratio: 1 });
 });
+
+test('resizable: drag a handle, within the panel’s limits, and nudge it with the keys', async ({ page }) => {
+    errors = await open(page, '/components/resizable/');
+    const handle = page.getByRole('separator', { name: 'Resize accounts' });
+    const accounts = page.getByText('Accounts', { exact: true }).locator('xpath=../..');
+    await expect(handle).toHaveAttribute('aria-valuenow', '30');
+    const box = (await handle.boundingBox())!;
+    const width = (await accounts.boundingBox())!.width;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + 60, box.y + box.height / 2, { steps: 5 });
+    await page.mouse.up();
+    expect((await accounts.boundingBox())!.width).toBeCloseTo(width + 60, -1);
+    // Dragged far past its largest, it stops there.
+    await page.mouse.move(box.x + 60, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + 600, box.y + box.height / 2, { steps: 5 });
+    await page.mouse.up();
+    await expect(handle).toHaveAttribute('aria-valuenow', '50');
+    await handle.focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(handle).toHaveAttribute('aria-valuenow', '45');
+});

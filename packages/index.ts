@@ -400,3 +400,10 @@ export {
     CarouselPrevious,
     type CarouselProps,
 } from './carousel';
+export {
+    ResizableHandle,
+    ResizablePanel,
+    default as ResizablePanelGroup,
+    type ResizablePanelGroupProps,
+    type ResizablePanelProps,
+} from './resizable';

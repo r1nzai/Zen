@@ -92,6 +92,14 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Goal', 'Stats', 'Morph'],
     },
     {
+        slug: 'resizable',
+        title: 'Resizable',
+        description:
+            'Panels with handles between them to drag, or to move with the arrow keys, within limits you set; groups nest, and the layout is reported to keep.',
+        parts: ['ResizablePanelGroup', 'ResizablePanel', 'ResizableHandle'],
+        examples: ['Default'],
+    },
+    {
         slug: 'carousel',
         title: 'Carousel',
         description:

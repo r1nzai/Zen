@@ -155,6 +155,7 @@ export const ENGLISH = {
     goToSlide: (n: number) => `Slide ${n}`,
     previousSlide: 'Previous slide',
     nextSlide: 'Next slide',
+    resize: 'Resize',
     notifications: 'Notifications (F8)',
 };
 
