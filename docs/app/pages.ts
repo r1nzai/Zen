@@ -250,6 +250,13 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['Header'],
     },
     {
+        slug: 'hover-card',
+        title: 'Hover Card',
+        description:
+            'A preview of what a link points to, like a person or an account: a glass card once the pointer rests on the link, or while it has keyboard focus.',
+        parts: ['HoverCard', 'HoverCardTrigger', 'HoverCardContent'],
+    },
+    {
         slug: 'icon-picker',
         title: 'Icon Picker',
         description: 'An icon and a colour for something, like a spending category, from a grid in a popover.',

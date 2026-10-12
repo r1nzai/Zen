@@ -395,3 +395,21 @@ test('the pointer light follows lit elements near it, re-measured when the page 
     }, added);
     expect(nested).toBe('-999px');
 });
+
+test('hover card: shows once the pointer rests on the link, and for keyboard focus; Escape hides it', async ({
+    page,
+}) => {
+    errors = await open(page, '/components/hover-card/');
+    const link = page.getByRole('link', { name: 'Priya Sharma' });
+    const card = page.getByText('Flatmate · shares rent and bills');
+    await link.hover();
+    await expect(card).toBeVisible();
+    await page.mouse.move(0, 0);
+    await expect(card).toBeHidden();
+    await link.focus();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Tab');
+    await expect(card).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(card).toBeHidden();
+});

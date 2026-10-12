@@ -1059,10 +1059,13 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
         overlay 150ms allow-discrete,
         display 150ms allow-discrete;
 }
+/* Hidden when shut even if a className lays it out (flex, grid): those would beat the browser's own display: none. */
 .zen__popover:not(:popover-open) {
+    display: none;
     opacity: 0;
 }
 .zen__dialog:not([open]) {
+    display: none;
     opacity: 0;
     scale: 0.95;
 }
