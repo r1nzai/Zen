@@ -43,9 +43,13 @@ import {
     Kbd,
     LoadMore,
     Menu,
+    MenuCheckboxItem,
     MenuContent,
     MenuContextTrigger,
     MenuItem,
+    MenuRadioGroup,
+    MenuRadioItem,
+    MenuSeparator,
     MenuSub,
     MenuSubContent,
     MenuSubTrigger,
@@ -873,6 +877,8 @@ function SpendingByGroup({ entries }: { entries: Entry[] }) {
 
 /** The categories closest to their limit. */
 function BudgetMeters({ entries }: { entries: Entry[] }) {
+    const [order, setOrder] = useState<'used' | 'spent'>('used');
+    const [all, setAll] = useState(false);
     const rows = CATEGORIES.filter((c) => c.budget > 0)
         .map((c) => ({
             ...c,
@@ -880,12 +886,34 @@ function BudgetMeters({ entries }: { entries: Entry[] }) {
                 .filter((e) => e.kind === 'expense' && e.category === c.value)
                 .reduce((sum, e) => sum + e.amount, 0),
         }))
-        .sort((a, b) => b.spent / b.budget - a.spent / a.budget)
-        .slice(0, 3);
+        .sort((a, b) => (order === 'used' ? b.spent / b.budget - a.spent / a.budget : b.spent - a.spent))
+        .slice(0, all ? undefined : 3);
     return (
         <Card id="watch-list" className="scroll-mt-24">
             <CardHeader>
                 <CardTitle>Watch list</CardTitle>
+                <Menu>
+                    <MenuTrigger
+                        aria-label="Watch list options"
+                        className={buttonVariants({ variant: 'ghost', size: 'icon-sm' })}
+                    >
+                        <Ellipsis />
+                    </MenuTrigger>
+                    <MenuContent className="w-52">
+                        <MenuRadioGroup
+                            aria-label="Order"
+                            value={order}
+                            onValueChange={(v) => setOrder(v as typeof order)}
+                        >
+                            <MenuRadioItem value="used">Closest to budget</MenuRadioItem>
+                            <MenuRadioItem value="spent">Most spent</MenuRadioItem>
+                        </MenuRadioGroup>
+                        <MenuSeparator />
+                        <MenuCheckboxItem checked={all} onCheckedChange={setAll}>
+                            Every category
+                        </MenuCheckboxItem>
+                    </MenuContent>
+                </Menu>
             </CardHeader>
             <div className="flex flex-col gap-5">
                 {rows.map((c) => {
