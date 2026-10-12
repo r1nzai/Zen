@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.13.0
 
 Since 0.12.0. This release renames things. Every breaking change is listed first, with what to change.
 
