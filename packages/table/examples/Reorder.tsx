@@ -41,12 +41,14 @@ const MONTHS = ['Jul', 'Aug', 'Sep', 'Oct'];
 const CATEGORIES = new Set(['home', 'food']);
 
 /**
- * A table's rows in groups, dragged anywhere: within a category, into the
- * other one, into an open sub-item (Eating out), or under another item (drag
- * sideways to go a level in or out). Categories stay at the top level, and
- * can be reordered too. The first column stays in view as it scrolls sideways.
+ * Rows reordered by drag and drop (SortableTree, with asChild on the table and
+ * its rows). Drag a row by its grip within its category, into the other one,
+ * into an open sub-item (Eating out), or under another row (drag sideways a
+ * level in or out); or Tab to a grip and use Space and the arrow keys.
+ * Categories stay at the top level and can be reordered too. The first column
+ * stays in view as it scrolls sideways.
  */
-export default function SortableTable() {
+export default function Reorder() {
     const [tree, setTree] = useState<SortableNode[]>([
         { id: 'home', children: [{ id: 'rent' }, { id: 'power' }, { id: 'internet' }] },
         {

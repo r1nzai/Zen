@@ -499,7 +499,7 @@ export const COMPONENTS: ComponentDoc[] = [
             'Put a list in order, or a tree of groups (a table’s rows, say), by dragging items by a grip or with the keyboard, each step announced: into other groups, open sub-items, or under another item.',
         parts: ['SortableList', 'SortableTree', 'SortableItem', 'SortableHandle'],
         imports: ['SortableList', 'SortableTree', 'SortableItem', 'SortableHandle', 'flattenTree'],
-        examples: ['Default', 'Table'],
+        examples: ['Default', 'Groups'],
     },
     {
         slug: 'sparkline',
@@ -538,7 +538,7 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'table',
         title: 'Table',
         description:
-            'Composable tables: a glass panel that scrolls, sticky headers, first column and totals, sortable columns, and virtual rows for long lists.',
+            'Composable tables: a glass panel that scrolls, sticky headers, first column and totals, sortable columns, rows reordered by drag and drop (into groups and under other rows), and virtual rows for long lists.',
         parts: [
             'TableContainer',
             'Table',
@@ -553,7 +553,7 @@ export const COMPONENTS: ComponentDoc[] = [
             'TableSwipeRow',
             'TableSwipeAction',
         ],
-        examples: ['Default', 'Sortable', 'Selectable', 'Swipe', 'Detail', 'Virtual'],
+        examples: ['Default', 'Sortable', 'Reorder', 'Selectable', 'Swipe', 'Detail', 'Virtual'],
     },
     {
         slug: 'table-of-contents',

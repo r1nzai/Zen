@@ -510,8 +510,8 @@ test('resizable: drag a handle, within the panel’s limits, and nudge it with t
 test('sortable tree table: drag rows into another group, into an open sub-item, and under another item', async ({
     page,
 }) => {
-    errors = await open(page, '/components/sortable/');
-    const section = example(page, 'Table');
+    errors = await open(page, '/components/table/');
+    const section = example(page, 'Reorder');
     await section.getByRole('region').evaluate((el) => {
         el.scrollIntoView({ block: 'center' });
         el.scrollLeft = 200;
@@ -582,4 +582,25 @@ test('sortable tree table: drag rows into another group, into an open sub-item, 
     // A category can't go into anything: dropped among items, nothing changes.
     await drag('Home', 'Takeaway');
     expect((await rows())[0]).toBe('Home');
+});
+
+test('sortable tree: drag a budget into the other group', async ({ page }) => {
+    errors = await open(page, '/components/sortable/');
+    const tree = page.getByRole('list', { name: 'Budgets' }).last();
+    await tree.scrollIntoViewIfNeeded();
+    const grip = (await tree.getByRole('button', { name: 'Reorder Gym' }).boundingBox())!;
+    const to = (await tree.getByRole('button', { name: 'Reorder Phone' }).boundingBox())!;
+    await page.mouse.move(grip.x + grip.width / 2, grip.y + grip.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(grip.x + grip.width / 2, to.y + 2, { steps: 10 });
+    await page.mouse.up();
+    await expect(tree.getByRole('listitem')).toHaveText([
+        'Bills',
+        /^Rent/,
+        /^Gym/,
+        /^Phone/,
+        /^Streaming/,
+        'Lifestyle',
+        /^Books/,
+    ]);
 });
