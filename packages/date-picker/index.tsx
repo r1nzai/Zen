@@ -1,3 +1,4 @@
+import { useLocale, useMessages } from '@zen/locale-provider';
 import CalendarMicro from '@zen/icons/micro/calendar';
 import Calendar from '@zen/calendar';
 import { useFieldProps } from '@zen/field';
@@ -19,16 +20,20 @@ export default function DatePicker({
     value: valueProp,
     defaultValue = null,
     onValueChange,
-    locale,
+    locale: localeProp,
     min,
     max,
     isDisabled,
     weekStartsOn,
-    placeholder = 'Pick a date',
+    placeholder: placeholderProp,
     clearable = false,
-    clearLabel = 'Clear',
+    clearLabel: clearLabelProp,
     ...rest
 }: DatePickerProps) {
+    const m = useMessages();
+    const placeholder = placeholderProp ?? m.pickDate;
+    const clearLabel = clearLabelProp ?? m.clear;
+    const locale = useLocale(localeProp);
     const [value, setValue, reset] = useControllable(valueProp, defaultValue, onValueChange);
     return (
         <PickerField
@@ -37,7 +42,7 @@ export default function DatePicker({
             formValue={value ?? ''}
             onReset={reset}
             placeholder={placeholder}
-            label="Choose date"
+            label={m.chooseDate}
             onClear={clearable && value ? () => setValue(null) : undefined}
             clearLabel={clearLabel}
             calendar={(close) => (
@@ -66,18 +71,22 @@ export function DateRangePicker({
     value: valueProp,
     defaultValue = null,
     onValueChange,
-    locale,
+    locale: localeProp,
     min,
     max,
     isDisabled,
     weekStartsOn,
     months = 1,
-    placeholder = 'Pick dates',
+    placeholder: placeholderProp,
     clearable = false,
-    clearLabel = 'Clear',
+    clearLabel: clearLabelProp,
     presets,
     ...rest
 }: DateRangePickerProps) {
+    const m = useMessages();
+    const placeholder = placeholderProp ?? m.pickDates;
+    const clearLabel = clearLabelProp ?? m.clear;
+    const locale = useLocale(localeProp);
     const [value, setValue, reset] = useControllable(valueProp, defaultValue, onValueChange);
     const shown = !value
         ? null
@@ -91,7 +100,7 @@ export function DateRangePicker({
             formValue={value ? `${value.start}/${value.end ?? ''}` : ''}
             onReset={reset}
             placeholder={placeholder}
-            label="Choose dates"
+            label={m.chooseDates}
             onClear={clearable && value ? () => setValue(null) : undefined}
             clearLabel={clearLabel}
             calendar={(close) => {
@@ -112,7 +121,7 @@ export function DateRangePicker({
                     <div className="flex flex-col gap-3 sm:flex-row">
                         <div
                             role="group"
-                            aria-label="Presets"
+                            aria-label={m.presets}
                             className="border-tint/[0.06] flex flex-wrap gap-1 sm:flex-col sm:flex-nowrap sm:border-e sm:pe-3"
                         >
                             {presets.map((p) => {
@@ -222,8 +231,8 @@ function CalendarIcon() {
 }
 
 interface PickerProps extends Omit<ComponentProps<'button'>, 'value' | 'onChange' | 'defaultValue'> {
-    /** Decides the date format, month and weekday names, and the first day of the week, e.g. "en-IN". */
-    locale: string;
+    /** Decides the date format, month and weekday names, and the first day of the week, e.g. "en-IN". Defaults to the LocaleProvider's. */
+    locale?: string;
     /** Earliest date that can be picked ("YYYY-MM-DD"). */
     min?: DateString;
     /** Latest date that can be picked. */

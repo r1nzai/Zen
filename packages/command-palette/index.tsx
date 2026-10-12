@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { useModal } from '@zen/dialog';
 import { cx } from '@zen/utils/cx';
 import { useMergedRefs } from '@zen/utils/refs';
@@ -13,13 +14,17 @@ export default function CommandPalette({
     open,
     onOpenChange,
     items,
-    placeholder = 'Search…',
-    empty = 'No results',
-    label = 'Commands',
+    placeholder: placeholderProp,
+    empty: emptyProp,
+    label: labelProp,
     className,
     ref: refProp,
     ...rest
 }: CommandPaletteProps) {
+    const m = useMessages();
+    const placeholder = placeholderProp ?? m.search;
+    const empty = emptyProp ?? m.noResults;
+    const label = labelProp ?? m.commands;
     const ref = useRef<HTMLDialogElement>(null);
     const merged = useMergedRefs(ref, refProp);
     const input = useRef<HTMLInputElement>(null);

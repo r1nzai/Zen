@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import ChevronRightMicro from '@zen/icons/micro/chevron-right';
 import { TableCell, TableCellProps, TableRow } from '@zen/table';
 import { cx } from '@zen/utils/cx';
@@ -260,11 +261,12 @@ export function TreeLabel<T>({ row, tree, indent = 20, children, className }: Tr
 
 /** Chevron button that opens and closes a row: points right when closed, down when open. */
 export function TreeToggle({ expanded, onToggle, className, ...rest }: TreeToggleProps) {
+    const m = useMessages();
     return (
         <button
             type="button"
             onClick={onToggle}
-            aria-label={expanded ? 'Collapse' : 'Expand'}
+            aria-label={expanded ? m.collapse : m.expand}
             aria-expanded={expanded}
             className={cx(
                 'text-muted-foreground hover:bg-tint/[0.08] hover:text-foreground -ml-1 grid size-6 shrink-0 cursor-pointer place-items-center rounded-md outline-hidden transition-colors focus-ring',

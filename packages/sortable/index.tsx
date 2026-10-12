@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { cx } from '@zen/utils/cx';
 import { useMergedRefs } from '@zen/utils/refs';
 import { reducedMotion } from '@zen/utils/motion';
@@ -50,6 +51,7 @@ export function SortableList({ value, onValueChange, className, children, ref, .
     const list = useRef<HTMLUListElement>(null);
     const listRef = useMergedRefs(list, ref);
     const [lifted, setLifted] = useState<string | null>(null);
+    const m = useMessages();
     const [said, say] = useState('');
     // Where each item was on screen before a change we made, to move them from there.
     const flip = useRef<Map<string, number> | null>(null);
@@ -160,31 +162,31 @@ export function SortableList({ value, onValueChange, className, children, ref, .
 
     const key = (e: KeyboardEvent<HTMLElement>, id: string, label: string) => {
         const at = value.indexOf(id);
-        const of = `${at + 1} of ${value.length}`;
+        const of = m.place(at + 1, value.length);
         if (e.key === ' ' || e.key === 'Enter') {
             e.preventDefault();
             if (lifted === id) {
                 setLifted(null);
                 before.current = null;
-                say(`${label} dropped, ${of}.`);
+                say(m.dropped(label, of));
             } else if (!lifted) {
                 setLifted(id);
                 before.current = value;
-                say(`${label} picked up, ${of}. Arrow keys move it, Space drops it, Escape puts it back.`);
+                say(m.pickedUp(label, of));
             }
         } else if (lifted === id && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
             e.preventDefault();
             const to = at + (e.key === 'ArrowUp' ? -1 : 1);
             if (to < 0 || to >= value.length) return;
             reorder(move(value, at, to));
-            say(`${label}, ${to + 1} of ${value.length}.`);
+            say(m.movedTo(label, m.place(to + 1, value.length)));
         } else if (lifted === id && e.key === 'Escape') {
             e.preventDefault();
             const back = before.current ?? value;
             setLifted(null);
             before.current = null;
             if (back !== value) reorder([...back]);
-            say(`${label} put back, ${back.indexOf(id) + 1} of ${back.length}.`);
+            say(m.putBack(label, m.place(back.indexOf(id) + 1, back.length)));
         }
     };
 
@@ -224,10 +226,11 @@ export function SortableItem({ id, className, ...rest }: SortableItemProps) {
  */
 export function SortableHandle({ id, label, className, children, ...rest }: SortableHandleProps) {
     const { grab, key, lifted } = useSortable('SortableHandle');
+    const m = useMessages();
     return (
         <button
             type="button"
-            aria-label={`Reorder ${label}`}
+            aria-label={m.reorder(label)}
             aria-pressed={lifted === id}
             onPointerDown={(e) => grab(e, id)}
             onKeyDown={(e) => key(e, id, label)}

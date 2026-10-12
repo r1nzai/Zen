@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { useFieldProps } from '@zen/field';
 import XMark from '@zen/icons/micro/x-mark';
 import { cx } from '@zen/utils/cx';
@@ -18,12 +19,14 @@ export default function TagInput({
     defaultValue = [],
     onValueChange,
     validate,
-    removeLabel = (tag) => `Remove ${tag}`,
+    removeLabel: removeLabelProp,
     className,
     disabled,
     name,
     ...rest
 }: TagInputProps) {
+    const m = useMessages();
+    const removeLabel = removeLabelProp ?? m.remove;
     const [value, set, reset] = useControllable(controlled, defaultValue, onValueChange);
     const [text, setText] = useState('');
     const field = useFieldProps(rest);

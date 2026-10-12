@@ -268,6 +268,14 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['Keypad'],
     },
     {
+        slug: 'locale-provider',
+        title: 'Locale Provider',
+        description:
+            'The language for everything inside: how dates, numbers and money read, and every word components show or announce. Without it, "en-US" and English.',
+        parts: ['LocaleProvider'],
+        imports: ['LocaleProvider', 'useLocale', 'useMessages', 'ENGLISH'],
+    },
+    {
         slug: 'load-more',
         title: 'Load More',
         description:

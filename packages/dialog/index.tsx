@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import XMarkMicro from '@zen/icons/micro/x-mark';
 import { cx } from '@zen/utils/cx';
 import { useMergedRefs } from '@zen/utils/refs';
@@ -39,10 +40,12 @@ export default function Dialog({
     side,
     className,
     role,
-    closeLabel = 'Close',
+    closeLabel: closeLabelProp,
     ref: refProp,
     ...rest
 }: DialogProps) {
+    const m = useMessages();
+    const closeLabel = closeLabelProp ?? m.close;
     const ref = useRef<HTMLDialogElement>(null);
     const merged = useMergedRefs(ref, refProp);
     const titleId = useId();

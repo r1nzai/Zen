@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import Badge, { BadgeProps } from '@zen/badge';
 import Popover, { PopoverContent, PopoverTrigger } from '@zen/popover';
 import { cx } from '@zen/utils/cx';
@@ -22,6 +23,7 @@ export default function Collapse<TData>({
     ref,
     ...rest
 }: CollapseProps<TData>) {
+    const m = useMessages();
     const rowRef = useRef<HTMLDivElement>(null);
     const mergedRef = useMergedRefs(rowRef, ref);
     // How many items fit; null while measuring, when every item is rendered (also in server HTML).
@@ -104,7 +106,7 @@ export default function Collapse<TData>({
                             // Its own control: a click doesn't also reach what the row sits in (a Combobox field).
                             onClick={(e) => e.stopPropagation()}
                             className="flex shrink-0 rounded-md"
-                            aria-label={`Show ${label(hidden.length).slice(1)}`}
+                            aria-label={m.showMore(label(hidden.length).slice(1))}
                         >
                             <Badge variant={badgeVariant} className={cx('cursor-pointer', badgeClassName)}>
                                 {label(hidden.length)}

@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { cx } from '@zen/utils/cx';
 import { useCopyToClipboard } from '@zen/utils/useCopyToClipboard';
 import { ComponentProps, useEffect, useRef, useState } from 'react';
@@ -16,6 +17,7 @@ export default function CodeBlock({
     className,
     ...rest
 }: CodeBlockProps) {
+    const m = useMessages();
     const text = code.trim();
     const { copy, copied } = useCopyToClipboard();
     // While it scrolls, keyboards need to reach it to scroll it too.
@@ -64,7 +66,7 @@ export default function CodeBlock({
                         copied && 'text-primary opacity-100',
                     )}
                 >
-                    {copied ? 'Copied' : 'Copy'}
+                    {copied ? m.copied : m.copy}
                 </button>
             )}
         </div>

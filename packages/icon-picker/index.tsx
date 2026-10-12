@@ -1,18 +1,19 @@
 import Popover, { PopoverContent, PopoverTrigger, type PopoverTriggerProps } from '@zen/popover';
 import { cx } from '@zen/utils/cx';
+import { useMessages } from '@zen/locale-provider';
 import { useControllable } from '@zen/utils/useControllable';
 import { CSSProperties, ReactNode, useId } from 'react';
 
 /** The chart palette, so a category's colour matches it in charts. */
 export const ICON_COLORS: IconColor[] = [
-    { value: 'blue', label: 'Blue', color: 'var(--chart-1)' },
-    { value: 'orange', label: 'Orange', color: 'var(--chart-2)' },
-    { value: 'teal', label: 'Teal', color: 'var(--chart-3)' },
-    { value: 'amber', label: 'Amber', color: 'var(--chart-4)' },
-    { value: 'pink', label: 'Pink', color: 'var(--chart-5)' },
-    { value: 'green', label: 'Green', color: 'var(--chart-6)' },
-    { value: 'violet', label: 'Violet', color: 'var(--chart-7)' },
-    { value: 'red', label: 'Red', color: 'var(--chart-8)' },
+    { value: 'blue', color: 'var(--chart-1)' },
+    { value: 'orange', color: 'var(--chart-2)' },
+    { value: 'teal', color: 'var(--chart-3)' },
+    { value: 'amber', color: 'var(--chart-4)' },
+    { value: 'pink', color: 'var(--chart-5)' },
+    { value: 'green', color: 'var(--chart-6)' },
+    { value: 'violet', color: 'var(--chart-7)' },
+    { value: 'red', color: 'var(--chart-8)' },
 ];
 
 /**
@@ -33,6 +34,8 @@ export default function IconPicker({
     ...rest
 }: IconPickerProps) {
     const [value, onChange] = useControllable(valueProp, defaultValue, onValueChange);
+    const m = useMessages();
+    const colourName = (c: IconColor) => c.label ?? m.colourNames[c.value as keyof typeof m.colourNames] ?? c.value;
     const id = useId();
     const name = nameProp ?? id;
     const icon = icons.find((i) => i.value === value.icon);
@@ -42,7 +45,7 @@ export default function IconPicker({
         <Popover>
             <PopoverTrigger
                 {...rest}
-                aria-label={`${label}: ${[icon?.label, color?.label].filter(Boolean).join(', ') || 'none'}`}
+                aria-label={`${label}: ${[icon?.label, color && colourName(color)].filter(Boolean).join(', ') || m.none}`}
                 style={tint(color?.color)}
                 className={cx(
                     'zen__icon-picker grid size-10 shrink-0 place-items-center rounded-xl bg-[color-mix(in_oklch,var(--icon-color)_18%,transparent)] text-lg text-(--icon-color) outline-hidden transition-colors focus-ring',
@@ -54,13 +57,13 @@ export default function IconPicker({
             <PopoverContent aria-label={label} className="flex w-72 flex-col gap-3 p-3">
                 {colors.length > 0 && (
                     <fieldset className="flex flex-wrap gap-1.5">
-                        <legend className="text-muted-foreground mb-1.5 text-xs">Colour</legend>
+                        <legend className="text-muted-foreground mb-1.5 text-xs">{m.colour}</legend>
                         {colors.map((c) => (
-                            <label key={c.value} title={c.label} className="relative cursor-pointer">
+                            <label key={c.value} title={colourName(c)} className="relative cursor-pointer">
                                 <input
                                     type="radio"
                                     name={`${name}-color`}
-                                    aria-label={c.label}
+                                    aria-label={colourName(c)}
                                     checked={value.color === c.value}
                                     onChange={() => onChange({ ...value, color: c.value })}
                                     className="peer sr-only"
@@ -75,7 +78,7 @@ export default function IconPicker({
                     </fieldset>
                 )}
                 <fieldset className="grid grid-cols-6 gap-1" style={tint(color?.color)}>
-                    <legend className="text-muted-foreground mb-1.5 text-xs">Icon</legend>
+                    <legend className="text-muted-foreground mb-1.5 text-xs">{m.icon}</legend>
                     {icons.map((i) => (
                         <label key={i.value} title={i.label} className="cursor-pointer">
                             <input
@@ -103,7 +106,8 @@ export default function IconPicker({
 export interface IconColor {
     /** What's stored, e.g. "blue". */
     value: string;
-    label: string;
+    /** Defaults to the LocaleProvider's name for the chart colours ("Blue"…), else the value. */
+    label?: string;
     /** Any CSS colour. */
     color: string;
 }

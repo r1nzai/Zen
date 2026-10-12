@@ -1,3 +1,4 @@
+import { useLocale, useMessages } from '@zen/locale-provider';
 import Chip from '@zen/chip';
 import Input from '@zen/input';
 import Select, { SelectItem } from '@zen/select';
@@ -19,14 +20,18 @@ export default function RepeatPicker({
     value: valueProp,
     defaultValue = { every: 1, unit: 'month' },
     onValueChange,
-    locale,
+    locale: localeProp,
     start,
-    weekStartsOn = weekStart(locale),
-    label = 'Repeats',
+    weekStartsOn: weekStartsOnProp,
+    label: labelProp,
     name,
     className,
     ...rest
 }: RepeatPickerProps) {
+    const m = useMessages();
+    const label = labelProp ?? m.repeats;
+    const locale = useLocale(localeProp);
+    const weekStartsOn = weekStartsOnProp ?? weekStart(locale);
     const [value, onChange, reset] = useControllable(valueProp, defaultValue, onValueChange);
     const [count, setCount] = useState(String(value.every));
     if (Number(count) !== value.every && count !== '') setCount(String(value.every));
@@ -47,9 +52,9 @@ export default function RepeatPicker({
             <FormValue name={name} value={JSON.stringify(value)} onReset={reset} />
             <legend className="sr-only">{label}</legend>
             <div className="flex items-center gap-2 text-sm">
-                <span className="text-muted-foreground">Every</span>
+                <span className="text-muted-foreground">{m.every}</span>
                 <Input
-                    aria-label="How many"
+                    aria-label={m.howMany}
                     inputMode="numeric"
                     value={count}
                     onChange={(e) => {
@@ -60,16 +65,16 @@ export default function RepeatPicker({
                     onBlur={() => setCount(String(value.every))}
                     className="w-16 text-center tabular-nums"
                 />
-                <Select aria-label="Unit" value={value.unit} onValueChange={setUnit} className="w-32">
+                <Select aria-label={m.unit} value={value.unit} onValueChange={setUnit} className="w-32">
                     {UNITS.map((u) => (
                         <SelectItem key={u} value={u}>
-                            {plural ? `${u}s` : u}
+                            {m.repeatUnit(u, plural ? 2 : 1)}
                         </SelectItem>
                     ))}
                 </Select>
             </div>
             {value.unit === 'week' && (
-                <div role="group" aria-label="On" className="flex flex-wrap gap-1.5">
+                <div role="group" aria-label={m.on} className="flex flex-wrap gap-1.5">
                     {days.map((d) => {
                         const on = weekdays.includes(d);
                         return (
@@ -93,25 +98,25 @@ export default function RepeatPicker({
             )}
             {value.unit === 'month' && (
                 <Select
-                    aria-label="On"
+                    aria-label={m.on}
                     value={String(value.day ?? (start ? Number(start.slice(8)) : 1))}
                     onValueChange={(d) => onChange({ ...value, day: Number(d) })}
                     className="w-40"
                 >
                     {Array.from({ length: 31 }, (_, i) => (
                         <SelectItem key={i + 1} value={String(i + 1)}>
-                            Day {i + 1}
+                            {m.day(i + 1)}
                         </SelectItem>
                     ))}
-                    <SelectItem value="-1">Last day</SelectItem>
+                    <SelectItem value="-1">{m.lastDay}</SelectItem>
                 </Select>
             )}
             <p aria-live="polite" className="text-muted-foreground text-sm">
-                {describeRepeat(value, locale, start)}
+                {describeRepeat(value, locale, start, m)}
                 {start && (
                     <>
                         <br />
-                        Next:{' '}
+                        {m.next}{' '}
                         {nextOccurrences(value, start, 3)
                             .map((d) => formatDate(d, locale))
                             .join(', ')}
@@ -131,8 +136,8 @@ export interface RepeatPickerProps extends Omit<ComponentProps<'fieldset'>, 'def
     onValueChange?: (value: Repeat) => void;
     /** Form field name: the rule is submitted as JSON. */
     name?: string;
-    /** For weekday and date names, and the week's first day. */
-    locale: string;
+    /** For weekday and date names, and the week's first day. Defaults to the LocaleProvider's. */
+    locale?: string;
     /** When it starts: its weekday and day of the month are the defaults, and the next dates are shown. */
     start?: DateString;
     /** 0 for Sunday … 6. Defaults to the locale's. */

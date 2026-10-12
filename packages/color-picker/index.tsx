@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { useFieldProps } from '@zen/field';
 import Input from '@zen/input';
 import Slider from '@zen/slider';
@@ -42,6 +43,7 @@ export function ColorPanel({
     className,
     ...rest
 }: ColorPanelProps) {
+    const m = useMessages();
     const [value, onChange] = useControllable(valueProp, defaultValue, onValueChange);
     const name = useId();
     // Kept as HSV, so the hue survives greys and black, where hex has none.
@@ -95,11 +97,11 @@ export function ColorPanel({
             <div
                 role="slider"
                 tabIndex={0}
-                aria-label="Saturation and brightness"
+                aria-label={m.saturationBrightness}
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={pct(hsv.s)}
-                aria-valuetext={`Saturation ${pct(hsv.s)}%, brightness ${pct(hsv.v)}%`}
+                aria-valuetext={m.saturationBrightnessValue(pct(hsv.s), pct(hsv.v))}
                 onPointerDown={(e) => {
                     if (e.button !== 0) return;
                     e.currentTarget.setPointerCapture?.(e.pointerId);
@@ -121,7 +123,7 @@ export function ColorPanel({
                 />
             </div>
             <Slider
-                aria-label="Hue"
+                aria-label={m.hue}
                 min={0}
                 max={359}
                 value={Math.round(hsv.h)}
@@ -129,11 +131,11 @@ export function ColorPanel({
                 onValueCommit={() => commit()}
                 trackBackground={HUES}
                 thumbColor={`hsl(${hsv.h} 100% 50%)`}
-                valueText={(h) => `Hue ${h} degrees`}
+                valueText={m.hueValue}
             />
             {alpha && (
                 <Slider
-                    aria-label="Opacity"
+                    aria-label={m.opacity}
                     min={0}
                     max={100}
                     value={pct(hsv.a)}
@@ -141,11 +143,11 @@ export function ColorPanel({
                     onValueCommit={() => commit()}
                     trackBackground={`linear-gradient(to right, transparent, ${opaque}), ${CHECKER}`}
                     thumbColor={opaque}
-                    valueText={(a) => `Opacity ${a}%`}
+                    valueText={m.opacityValue}
                 />
             )}
             <Input
-                aria-label="Hex"
+                aria-label={m.hex}
                 spellCheck={false}
                 autoComplete="off"
                 value={draft ?? hex}
@@ -156,7 +158,7 @@ export function ColorPanel({
             />
             {swatches && swatches.length > 0 && (
                 <fieldset className="flex flex-wrap gap-1.5">
-                    <legend className="sr-only">Swatches</legend>
+                    <legend className="sr-only">{m.swatches}</legend>
                     {swatches.map((sw) => {
                         const swHex = normalize(sw.value, alpha);
                         return (
@@ -208,6 +210,7 @@ export default function ColorPicker({
     style,
     ...rest
 }: ColorPickerProps) {
+    const m = useMessages();
     const [value, setValue, reset] = useControllable(valueProp, defaultValue, onValueChange);
     const popup = useAnchoredPopup<HTMLDivElement>();
     const field = useFieldProps({ ...rest, id });
@@ -244,7 +247,7 @@ export default function ColorPicker({
             <div
                 {...popup.popupProps}
                 role="dialog"
-                aria-label="Choose colour"
+                aria-label={m.chooseColour}
                 className={cx('zen__popover', POPUP, 'p-3')}
             >
                 <ColorPanel

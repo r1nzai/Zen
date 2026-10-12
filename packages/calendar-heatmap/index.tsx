@@ -1,3 +1,4 @@
+import { useLocale } from '@zen/locale-provider';
 import { cx } from '@zen/utils/cx';
 import { type DateString, daysInMonth, dayOfWeek, formatDate, weekdayNames, weekStart } from '@zen/utils/date';
 import { formatMonth, type Month } from '@zen/utils/month';
@@ -11,15 +12,17 @@ import { ComponentProps } from 'react';
 export default function CalendarHeatmap({
     month,
     values,
-    locale,
+    locale: localeProp,
     format = String,
-    weekStartsOn = weekStart(locale),
+    weekStartsOn: weekStartsOnProp,
     onSelectedChange,
     selected,
     label,
     className,
     ...rest
 }: CalendarHeatmapProps) {
+    const locale = useLocale(localeProp);
+    const weekStartsOn = weekStartsOnProp ?? weekStart(locale);
     const count = daysInMonth(month);
     const days = Array.from({ length: count }, (_, i) => `${month}-${String(i + 1).padStart(2, '0')}` as DateString);
     const lead = (dayOfWeek(days[0]) - weekStartsOn + 7) % 7;
@@ -113,7 +116,7 @@ export interface CalendarHeatmapProps extends Omit<ComponentProps<'table'>, 'chi
     month: Month;
     /** Each day's value, by date ("2026-09-03"); days missing have none. */
     values: Partial<Record<DateString, number>>;
-    locale: string;
+    locale?: string;
     /** Turns a value into text for its label, e.g. as money. */
     format?: (value: number) => string;
     /** 0 for Sunday … 6 for Saturday (default: the locale's). */

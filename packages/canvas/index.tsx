@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { cx } from '@zen/utils/cx';
 import { useMergedRefs } from '@zen/utils/refs';
 import {
@@ -100,6 +101,7 @@ export function Canvas<T extends CanvasItemRect>({
     ref,
     ...rest
 }: CanvasProps<T>) {
+    const m = useMessages();
     const outer = useRef<HTMLDivElement>(null);
     const outerRef = useMergedRefs(outer, ref);
     const focusing = useRef(false);
@@ -147,8 +149,8 @@ export function Canvas<T extends CanvasItemRect>({
         return { rects, box: moved.rect, guides: moved.guides };
     };
     const tell = (who: string, before: CanvasRect, after: CanvasRect) => {
-        if (after.w !== before.w || after.h !== before.h) say(`${who} resized to ${after.w} by ${after.h}.`);
-        else if (after.x !== before.x || after.y !== before.y) say(`${who} moved to ${after.x}, ${after.y}.`);
+        if (after.w !== before.w || after.h !== before.h) say(m.resized(who, after.w, after.h));
+        else if (after.x !== before.x || after.y !== before.y) say(m.moved(who, after.x, after.y));
     };
     const nameOf = (starts: readonly CanvasItemRect[], id: string, label: string) =>
         starts.length === 1 && starts[0].id === id ? label : `${starts.length} items`;
@@ -223,7 +225,7 @@ export function Canvas<T extends CanvasItemRect>({
                 tell(who, startBox, end);
             } else {
                 onItemsChange([...before]);
-                say(`${who} put back.`);
+                say(m.putBack(who));
             }
         };
         const onUp = (u: globalThis.PointerEvent) => u.pointerId === e.pointerId && finish(true);
@@ -282,7 +284,7 @@ export function Canvas<T extends CanvasItemRect>({
             el.removeEventListener('pointercancel', onEnd);
             setMarquee(null);
             if (u.type === 'pointercancel') return;
-            if (started) say(`${last.length} ${last.length === 1 ? 'item' : 'items'} selected.`);
+            if (started) say(m.selected(last.length));
             else if (!base.length) select([]);
         };
         el.addEventListener('pointermove', onMove);
@@ -303,7 +305,7 @@ export function Canvas<T extends CanvasItemRect>({
             e.preventDefault();
             const all = items.filter((i) => !i.locked).map((i) => i.id);
             select(all);
-            say(`${all.length} items selected.`);
+            say(m.selected(all.length));
             return;
         }
         const arrow = ARROWS[e.key];
@@ -419,7 +421,7 @@ export function Canvas<T extends CanvasItemRect>({
                 </div>
             </div>
             <span id={hintId} hidden>
-                Arrow keys move the selection, Shift with them by 10. Alt with the arrow keys resizes. Escape deselects.
+                {m.canvasHelp}
             </span>
             <span aria-live="assertive" className="sr-only">
                 {said}

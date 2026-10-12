@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import ChevronDown from '@zen/icons/chevron-down';
 import ChevronUp from '@zen/icons/chevron-up';
 import { cx } from '@zen/utils/cx';
@@ -279,11 +280,12 @@ export function TableSpacerRow({ height, colSpan }: { height: number; colSpan: n
 }
 
 /** One row spanning the table, for "nothing here" messages. */
-export function TableEmpty({ colSpan, children = 'Nothing here yet.' }: { colSpan: number; children?: ReactNode }) {
+export function TableEmpty({ colSpan, children }: { colSpan: number; children?: ReactNode }) {
+    const m = useMessages();
     return (
         <tr>
             <td colSpan={colSpan} className="text-muted-foreground px-3 py-8 text-center">
-                {children}
+                {children ?? m.nothingHere}
             </td>
         </tr>
     );

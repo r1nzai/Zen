@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import XMark from '@zen/icons/micro/x-mark';
 import { cx } from '@zen/utils/cx';
 import { reducedMotion } from '@zen/utils/motion';
@@ -13,13 +14,16 @@ const LEAVE = { duration: 120, easing: 'ease-in' } satisfies KeyframeAnimationOp
  */
 export default function FilterBar({
     onClear,
-    clearLabel = 'Clear all',
-    'aria-label': label = 'Active filters',
+    clearLabel: clearLabelProp,
+    'aria-label': labelProp,
     className,
     children,
     ref,
     ...rest
 }: FilterBarProps) {
+    const m = useMessages();
+    const clearLabel = clearLabelProp ?? m.clearAll;
+    const label = labelProp ?? m.activeFilters;
     const count = Children.toArray(children).length;
     const bar = useRef<HTMLDivElement>(null);
     useSlide(bar);
@@ -98,7 +102,9 @@ function useSlide(ref: RefObject<HTMLDivElement | null>) {
 }
 
 /** One filter in a FilterBar: what it is (e.g. "Amount: $50–$500"), and its × to remove it. */
-export function FilterChip({ onRemove, removeLabel = 'Remove filter', className, children }: FilterChipProps) {
+export function FilterChip({ onRemove, removeLabel: removeLabelProp, className, children }: FilterChipProps) {
+    const m = useMessages();
+    const removeLabel = removeLabelProp ?? m.removeFilter;
     return (
         <span
             className={cx(

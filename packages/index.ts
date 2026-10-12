@@ -335,6 +335,8 @@ export { default as IconPicker, ICON_COLORS, type IconColor, type IconPickerProp
 export { default as RepeatPicker, type RepeatPickerProps } from './repeat-picker';
 export { describeRepeat, nextOccurrences, type Repeat } from './utils/repeat';
 export { default as LoadMore, type LoadMoreProps } from './load-more';
+export { default as LocaleProvider, type LocaleProviderProps, useLocale, useMessages } from './locale-provider';
+export { ENGLISH, type Messages } from './utils/messages';
 export {
     SortableHandle,
     type SortableHandleProps,

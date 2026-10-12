@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { cx } from '@zen/utils/cx';
 import { useSeen } from '@zen/utils/useSeen';
 import { ComponentProps, useId, useRef } from 'react';
@@ -8,6 +9,7 @@ import { ComponentProps, useId, useRef } from 'react';
  * its size from className (e.g. h-8 w-24) and draws itself in.
  */
 export default function Sparkline({ values, area = true, tone = 'default', className, ref, ...rest }: SparklineProps) {
+    const m = useMessages();
     const gradient = useId();
     const svg = useRef<SVGSVGElement>(null);
     const seen = useSeen(svg);
@@ -35,7 +37,7 @@ export default function Sparkline({ values, area = true, tone = 'default', class
             }}
             data-zen-unseen={seen ? undefined : ''}
             role="img"
-            aria-label={`From ${first} to ${last}`}
+            aria-label={m.fromTo(String(first), String(last))}
             viewBox="0 0 100 40"
             preserveAspectRatio="none"
             className={cx('zen__sparkline h-8 w-24 overflow-visible', className)}

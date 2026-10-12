@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { cx } from '@zen/utils/cx';
 import Dialog, { DialogClose, DialogFooter, type DialogProps } from '@zen/dialog';
 
@@ -8,12 +9,14 @@ export default function ConfirmDialog({
     title,
     description,
     confirmLabel,
-    cancelLabel = 'Cancel',
+    cancelLabel: cancelLabelProp,
     tone = 'default',
     onConfirm,
     className,
     ...rest
 }: ConfirmDialogProps) {
+    const m = useMessages();
+    const cancelLabel = cancelLabelProp ?? m.cancel;
     return (
         <Dialog
             {...rest}

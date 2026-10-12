@@ -1,3 +1,4 @@
+import { useLocale } from '@zen/locale-provider';
 import { cx } from '@zen/utils/cx';
 import { formatMoney, type Money } from '@zen/utils/money';
 import { reducedMotion } from '@zen/utils/motion';
@@ -93,15 +94,17 @@ function Digit({ digit, duration }: { digit: number; duration: number }) {
 export function AnimatedMoney({
     value,
     currency,
-    locale,
+    locale: localeProp,
     showDecimals = false,
     ...rest
 }: Omit<AnimatedNumberProps, 'format' | 'value'> & {
     value: Money;
     currency: string;
-    locale: string;
+    /** Defaults to the LocaleProvider's. */
+    locale?: string;
     showDecimals?: boolean;
 }) {
+    const locale = useLocale(localeProp);
     return (
         <AnimatedNumber value={value} format={(v) => formatMoney(v, currency, locale, { showDecimals })} {...rest} />
     );

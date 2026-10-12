@@ -1,3 +1,4 @@
+import { useLocale, useMessages } from '@zen/locale-provider';
 import ChevronLeft from '@zen/icons/chevron-left';
 import ChevronRight from '@zen/icons/chevron-right';
 import { useFieldProps } from '@zen/field';
@@ -29,20 +30,24 @@ export default function MonthPicker({
     value: valueProp,
     defaultValue = null,
     onValueChange,
-    locale,
+    locale: localeProp,
     min,
     max,
     id,
     className,
     disabled = false,
     size = 'default',
-    placeholder = 'Pick a month',
+    placeholder: placeholderProp,
     clearable = false,
-    clearLabel = 'Clear',
+    clearLabel: clearLabelProp,
     name,
     style,
     ...rest
 }: MonthPickerProps) {
+    const m = useMessages();
+    const placeholder = placeholderProp ?? m.pickMonth;
+    const clearLabel = clearLabelProp ?? m.clear;
+    const locale = useLocale(localeProp);
     const [value, setValue, reset] = useControllable(valueProp, defaultValue, onValueChange);
     const [year, setYear] = useState(() => Number((value ?? new Date().toISOString()).slice(0, 4)));
     const popup = useAnchoredPopup<HTMLDivElement>({
@@ -81,13 +86,13 @@ export default function MonthPicker({
             <div
                 {...popup.popupProps}
                 role="dialog"
-                aria-label="Choose month"
+                aria-label={m.chooseMonth}
                 className={cx('zen__popover', POPUP, 'w-64 p-3')}
             >
                 <div className="mb-2 flex items-center justify-between">
                     <button
                         type="button"
-                        aria-label="Previous year"
+                        aria-label={m.previousYear}
                         onClick={() => setYear((y) => y - 1)}
                         className={PICKER_NAV}
                     >
@@ -98,7 +103,7 @@ export default function MonthPicker({
                     </span>
                     <button
                         type="button"
-                        aria-label="Next year"
+                        aria-label={m.nextYear}
                         onClick={() => setYear((y) => y + 1)}
                         className={PICKER_NAV}
                     >
@@ -151,8 +156,8 @@ export interface MonthPickerProps extends Omit<ComponentProps<'button'>, 'value'
     /** The first month, when the picker keeps its own. */
     defaultValue?: Month | null;
     onValueChange?: (month: Month | null) => void;
-    /** Decides month names and format, e.g. "en-IN". */
-    locale: string;
+    /** Decides month names and format, e.g. "en-IN". Defaults to the LocaleProvider's. */
+    locale?: string;
     /** Earliest month that can be picked ("YYYY-MM"). */
     min?: Month;
     /** Latest month that can be picked. */

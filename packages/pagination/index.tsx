@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import ChevronLeft from '@zen/icons/chevron-left';
 import ChevronRight from '@zen/icons/chevron-right';
 import { buttonVariants } from '@zen/button';
@@ -18,8 +19,10 @@ export default function Pagination({
     renderLink = (props) => <a {...props} />,
     siblings = 1,
     className,
-    'aria-label': label = 'Pages',
+    'aria-label': labelProp,
 }: PaginationProps) {
+    const m = useMessages();
+    const label = labelProp ?? m.pages;
     if (count < 2) return null;
     const item = (to: number, content: ReactNode, props: { 'aria-label'?: string; current?: boolean }) => {
         const disabled = to < 1 || to > count;
@@ -48,7 +51,7 @@ export default function Pagination({
     return (
         <nav aria-label={label} className={cx('zen__pagination', className)}>
             <ul className="flex items-center gap-1">
-                <li>{item(page - 1, <ChevronLeft className="size-4" />, { 'aria-label': 'Previous page' })}</li>
+                <li>{item(page - 1, <ChevronLeft className="size-4" />, { 'aria-label': m.previousPage })}</li>
                 {pageRange(page, count, siblings).map((p, i) => (
                     <li key={p === 'gap' ? `gap${i}` : p}>
                         {p === 'gap' ? (
@@ -56,11 +59,11 @@ export default function Pagination({
                                 …
                             </span>
                         ) : (
-                            item(p, p, { 'aria-label': `Page ${p}`, current: p === page })
+                            item(p, p, { 'aria-label': m.page(p), current: p === page })
                         )}
                     </li>
                 ))}
-                <li>{item(page + 1, <ChevronRight className="size-4" />, { 'aria-label': 'Next page' })}</li>
+                <li>{item(page + 1, <ChevronRight className="size-4" />, { 'aria-label': m.nextPage })}</li>
             </ul>
         </nav>
     );

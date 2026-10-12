@@ -1,3 +1,4 @@
+import { ENGLISH, type Messages } from './messages';
 import {
     addDays,
     addMonthsToDate,
@@ -22,20 +23,25 @@ export interface Repeat {
 }
 
 /** "Every 2 weeks on Mon, Thu", "Every month on day 5", "Every year on Sep 3" (from `start`). */
-export function describeRepeat(repeat: Repeat, locale: string, start?: DateString): string {
+/** In `messages`' words (English unless you pass a LocaleProvider's, e.g. from useMessages). */
+export function describeRepeat(
+    repeat: Repeat,
+    locale: string,
+    start?: DateString,
+    messages: Messages = ENGLISH,
+): string {
+    const m = messages;
     const { every, unit } = repeat;
-    const what = every === 1 ? `Every ${unit}` : `Every ${every} ${unit}s`;
+    const what = m.repeatEvery(every, m.repeatUnit(unit, every));
     if (unit === 'week' && repeat.weekdays?.length) {
         const names = weekdayNames(locale);
-        return `${what} on ${[...repeat.weekdays]
-            .sort((a, b) => a - b)
-            .map((d) => names[d])
-            .join(', ')}`;
+        const days = [...repeat.weekdays].sort((a, b) => a - b).map((d) => names[d]);
+        return m.repeatOn(what, new Intl.ListFormat(locale, { style: 'short', type: 'unit' }).format(days));
     }
     if (unit === 'month' && repeat.day !== undefined) {
-        return `${what} on ${repeat.day === -1 ? 'the last day' : `day ${repeat.day}`}`;
+        return m.repeatOn(what, repeat.day === -1 ? m.repeatLastDay : m.repeatDay(repeat.day));
     }
-    if (unit === 'year' && start) return `${what} on ${formatDate(start, locale, 'day')}`;
+    if (unit === 'year' && start) return m.repeatOn(what, formatDate(start, locale, 'day'));
     return what;
 }
 

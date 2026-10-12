@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import Badge from '@zen/badge';
 import Button from '@zen/button';
 import Collapse from '@zen/collapse';
@@ -151,7 +152,7 @@ export default function Combobox<T>(props: ComboboxProps<T>) {
  * placeholder, and opens the panel. Pass children to show the value your own way.
  */
 export function ComboboxTrigger({
-    placeholder = 'Select an Item',
+    placeholder: placeholderProp,
     disabled,
     size = 'default',
     className,
@@ -159,6 +160,8 @@ export function ComboboxTrigger({
     children,
     ...rest
 }: ComboboxTriggerProps) {
+    const m = useMessages();
+    const placeholder = placeholderProp ?? m.selectPlaceholder;
     const box = useCombobox();
     const { popup } = box;
     // Inside a Field: its id, label (a div can't be a <label>'s target), hint and error.
@@ -231,6 +234,7 @@ export function ComboboxTrigger({
 /** The default value display: the chosen item's text, or removable chips when `multiple`. */
 function ComboboxValue({ placeholder }: { placeholder: string }) {
     const box = useCombobox();
+    const m = useMessages();
     const byKey = new Map([...box.selectedItems, ...box.items].map((item) => [box.keyOf(item), item]));
     // Chosen items with text to show (an item without text, e.g. an empty "nothing chosen" item, shows the placeholder).
     const chosen = box.chosen.flatMap((key) => {
@@ -251,7 +255,7 @@ function ComboboxValue({ placeholder }: { placeholder: string }) {
                 <Badge key={chip?.key ?? index} className="flex h-6 min-w-min gap-2 pr-1" variant="secondary">
                     {text}
                     <Button
-                        aria-label={`Remove ${text}`}
+                        aria-label={m.remove(text)}
                         onClick={(e) => {
                             // Removing a chip doesn't open the list.
                             e.stopPropagation();
@@ -285,11 +289,9 @@ export function ComboboxPopup({ className, children }: { className?: string; chi
 }
 
 /** The search box: focused when the panel opens; ↑↓ move through the matches and Enter chooses. */
-export function ComboboxSearch({
-    placeholder = 'Search',
-    'aria-label': ariaLabel = 'Search options',
-}: ComboboxSearchProps) {
+export function ComboboxSearch({ placeholder, 'aria-label': ariaLabel }: ComboboxSearchProps) {
     const box = useCombobox();
+    const m = useMessages();
     const input = useRef<HTMLInputElement>(null);
     useEffect(() => {
         if (box.popup.open) input.current?.focus();
@@ -325,8 +327,8 @@ export function ComboboxSearch({
             </InputGroupAddon>
             <InputGroupInput
                 ref={input}
-                placeholder={placeholder}
-                aria-label={ariaLabel}
+                placeholder={placeholder ?? m.search}
+                aria-label={ariaLabel ?? m.searchOptions}
                 aria-controls={`${box.popup.id}-list`}
                 aria-activedescendant={box.active !== null ? box.optionId(box.active) : undefined}
                 value={box.query}
@@ -415,18 +417,20 @@ export function ComboboxItem<T>({ item, className, children }: ComboboxItemProps
 }
 
 /** Shown when the search matches nothing. */
-export function ComboboxEmpty({ children = 'No results found' }: { children?: ReactNode }) {
+export function ComboboxEmpty({ children }: { children?: ReactNode }) {
     const box = useCombobox();
+    const m = useMessages();
     if (!box.query || box.matches.length) return null;
-    return <li className="text-muted-foreground cursor-not-allowed px-3 py-2 text-sm">{children}</li>;
+    return <li className="text-muted-foreground cursor-not-allowed px-3 py-2 text-sm">{children ?? m.noResults}</li>;
 }
 
 /**
  * Offered when the search matches nothing: adds what was typed (Enter works
  * too). `children` renders the row from the text (default "Add …").
  */
-export function ComboboxCreate({ onCreate, children = (text) => `Add ${text}` }: ComboboxCreateProps) {
+export function ComboboxCreate({ onCreate, children }: ComboboxCreateProps) {
     const box = useCombobox();
+    const m = useMessages();
     const { create } = box;
     useEffect(() => {
         create.current = onCreate;
@@ -445,7 +449,7 @@ export function ComboboxCreate({ onCreate, children = (text) => `Add ${text}` }:
                 box.setQuery('');
             }}
         >
-            {children(box.query)}
+            {(children ?? m.add)(box.query)}
         </li>
     );
 }

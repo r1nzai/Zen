@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import ArrowLeft from '@zen/icons/arrow-left';
 import { cx } from '@zen/utils/cx';
 import { useControllable } from '@zen/utils/useControllable';
@@ -17,11 +18,14 @@ export default function Keypad({
     onValueChange: onValueChangeProp,
     decimals = 2,
     maxLength = 12,
-    deleteLabel = 'Delete',
-    'aria-label': label = 'Keypad',
+    deleteLabel: deleteLabelProp,
+    'aria-label': labelProp,
     className,
     ...rest
 }: KeypadProps) {
+    const m = useMessages();
+    const deleteLabel = deleteLabelProp ?? m.delete;
+    const label = labelProp ?? m.keypad;
     const [value, onValueChange] = useControllable(valueProp, defaultValue, onValueChangeProp);
     const press = (key: (typeof KEYS)[number]) => {
         if (key === 'back') return onValueChange(value.slice(0, -1));

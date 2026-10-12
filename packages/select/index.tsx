@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { useFieldProps } from '@zen/field';
 import { cx } from '@zen/utils/cx';
 import { FormValue } from '@zen/utils/form-value';
@@ -46,7 +47,7 @@ export default function Select<V extends string>({
     value: valueProp,
     defaultValue = null,
     onValueChange,
-    placeholder = 'Select…',
+    placeholder: placeholderProp,
     disabled = false,
     size = 'default',
     name,
@@ -58,6 +59,8 @@ export default function Select<V extends string>({
     onKeyDown,
     ...rest
 }: SelectProps<V>) {
+    const m = useMessages();
+    const placeholder = placeholderProp ?? m.selectPlaceholder;
     const [value, setValue, reset] = useControllable<V | null, V>(valueProp, defaultValue, onValueChange);
     const listRef = useRef<HTMLDivElement>(null);
     const generatedId = useId();

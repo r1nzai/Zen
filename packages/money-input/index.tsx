@@ -1,3 +1,4 @@
+import { useLocale, useMessages } from '@zen/locale-provider';
 import InputGroup, { InputGroupAddon, InputGroupInput } from '@zen/input-group';
 import { type FieldSize } from '@zen/utils/styles';
 import Menu, { MenuContent, MenuItem, MenuSeparator, MenuTrigger } from '@zen/menu';
@@ -121,11 +122,12 @@ export default function MoneyInput({
  */
 export function MoneyCurrencyMenu({ money, className }: { money: MoneyInputState; className?: string }) {
     const c = money.conversion;
+    const m = useMessages();
     if (!c) return null;
     return (
         <Menu>
             <MenuTrigger
-                aria-label={`Currency: ${c.currency}. Change to enter another currency`}
+                aria-label={m.changeCurrency(c.currency)}
                 className={cx(
                     'group/currency hover:bg-tint/[0.07] -ml-1 flex shrink-0 items-center gap-0.5 rounded-md px-1 py-0.5 text-sm outline-hidden focus-ring',
                     c.foreign ? 'text-primary' : 'text-muted-foreground',
@@ -135,15 +137,13 @@ export function MoneyCurrencyMenu({ money, className }: { money: MoneyInputState
                 {c.foreign ? c.currency : money.symbol}
                 <FieldChevron className="text-inherit duration-150 group-data-popup-open/currency:rotate-180" />
             </MenuTrigger>
-            <MenuContent align="start" offset={8} aria-label="Currency" className="max-h-72 w-60 overflow-y-auto">
+            <MenuContent align="start" offset={8} aria-label={m.currency} className="max-h-72 w-60 overflow-y-auto">
                 <MenuItem onSelect={() => c.pick(c.home)} className="gap-2 py-1.5">
                     <span className="w-9 font-medium">{c.home}</span>
-                    <span className="text-muted-foreground">Your currency</span>
+                    <span className="text-muted-foreground">{m.yourCurrency}</span>
                 </MenuItem>
                 <MenuSeparator />
-                <div className="text-muted-foreground px-3 pt-1 pb-1.5 text-xs">
-                    Enter in another currency, converted at today’s rate
-                </div>
+                <div className="text-muted-foreground px-3 pt-1 pb-1.5 text-xs">{m.otherCurrencies}</div>
                 {c.choices.map((code) => (
                     <MenuItem key={code} onSelect={() => c.pick(code)} className="gap-2 py-1.5">
                         <span className="w-9 font-medium">{code}</span>
@@ -161,6 +161,7 @@ export function MoneyCurrencyMenu({ money, className }: { money: MoneyInputState
  */
 export function MoneyConversionHint({ money, className }: { money: MoneyInputState; className?: string }) {
     const c = money.conversion;
+    const m = useMessages();
     if (!c || (!c.foreign && !c.converted)) return null;
     const { home, locale } = c;
     const row = cx('text-muted-foreground flex items-center gap-1.5 text-xs', className);
@@ -169,7 +170,7 @@ export function MoneyConversionHint({ money, className }: { money: MoneyInputSta
         return (
             <p id={money.hintId} role="status" className={row}>
                 <InfoIcon className="text-primary shrink-0" />
-                Converted from {formatMoney(from.amount, from.currency, locale)} at {roundRate(from.rate)}
+                {m.convertedFrom(formatMoney(from.amount, from.currency, locale), roundRate(from.rate))}
             </p>
         );
     }
@@ -177,12 +178,11 @@ export function MoneyConversionHint({ money, className }: { money: MoneyInputSta
         <p id={money.hintId} role="status" className={row}>
             {c.status === 'idle' || c.status === 'loading' ? (
                 <>
-                    <Spinner className="size-3" /> Getting today’s rate…
+                    <Spinner className="size-3" /> {m.gettingRate}
                 </>
             ) : c.rate === null ? (
                 <>
-                    <AlertIcon className="text-destructive shrink-0" /> Couldn’t get exchange rates. Enter the amount in{' '}
-                    {home}.
+                    <AlertIcon className="text-destructive shrink-0" /> {m.ratesUnavailable(home)}
                 </>
             ) : (
                 <>
@@ -193,8 +193,8 @@ export function MoneyConversionHint({ money, className }: { money: MoneyInputSta
                                 ≈ {formatMoney(c.preview, home, locale)} ·{' '}
                             </span>
                         )}
-                        1 {c.currency} = {formatMoney(Math.round(c.rate * 10 ** minorDigits(home)), home, locale)} (
-                        {c.source ? `${c.source}, ` : ''}
+                        {m.rateOf(c.currency, formatMoney(Math.round(c.rate * 10 ** minorDigits(home)), home, locale))}{' '}
+                        ({c.source ? `${c.source}, ` : ''}
                         {shortDate(c.date!, locale)})
                     </span>
                 </>
@@ -213,13 +213,15 @@ export function useMoneyInput({
     defaultValue = null,
     onValueChange,
     currency,
-    locale,
+    locale: localeProp,
     allowNegative = false,
     allowEmpty = false,
     live = false,
     onCancel,
     convert,
 }: MoneyInputOptions) {
+    const locale = useLocale(localeProp);
+    const m = useMessages();
     const [value, onChange, reset] = useControllable(valueProp, defaultValue, onValueChange);
     const initial = convert?.initial ?? null;
     // The currency being typed in: `currency`, or a foreign one converted into it.
@@ -256,14 +258,14 @@ export function useMoneyInput({
     const rate = foreign ? rateFor(inputCurrency) : null;
 
     const example = (cur: string) =>
-        `Not an amount. Try ${formatAmount(3274000, cur, locale)} or ${locale.endsWith('-IN') ? '1.5L' : '10k'}.`;
+        m.notAnAmount(formatAmount(3274000, cur, locale), locale.endsWith('-IN') ? '1.5L' : '10k');
 
     /** Validates the text in `cur`; returns the amount, `null` for empty, or undefined (and shows why) if invalid. */
     function read(t: string, cur: string): Money | null | undefined {
         const trimmed = t.trim();
         if (trimmed === '') {
             if (allowEmpty) return null;
-            setError('Enter an amount.');
+            setError(m.enterAmount);
             return undefined;
         }
         let parsed: Money;
@@ -274,7 +276,7 @@ export function useMoneyInput({
             return undefined;
         }
         if (!allowNegative && parsed < 0) {
-            setError("Amount can't be negative.");
+            setError(m.noNegative);
             return undefined;
         }
         setError(null);
@@ -319,9 +321,7 @@ export function useMoneyInput({
         if (parsed === undefined) return false;
         if (parsed !== null && foreign) {
             if (rate === null) {
-                setError(
-                    rates.status === 'error' ? "Couldn't get today's exchange rate." : "Still getting today's rate…",
-                );
+                setError(rates.status === 'error' ? m.rateFailed : m.rateLoading);
                 return false;
             }
             const home = convertMinor(parsed, rate, inputCurrency, currency);
@@ -516,8 +516,8 @@ export interface MoneyInputOptions {
     onValueChange?: (value: Money | null) => void;
     /** ISO 4217 code, e.g. "INR", "USD". */
     currency: string;
-    /** Decides digit grouping and the symbol, e.g. "en-IN" (1,52,000) or "en-US" (152,000). */
-    locale: string;
+    /** Decides digit grouping and the symbol, e.g. "en-IN" (1,52,000) or "en-US" (152,000). Defaults to the LocaleProvider's. */
+    locale?: string;
     allowNegative?: boolean;
     allowEmpty?: boolean;
     /**

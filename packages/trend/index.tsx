@@ -1,3 +1,4 @@
+import { useLocale } from '@zen/locale-provider';
 import ArrowTrendingDownMicro from '@zen/icons/micro/arrow-trending-down';
 import ArrowTrendingUpMicro from '@zen/icons/micro/arrow-trending-up';
 import { cx } from '@zen/utils/cx';
@@ -12,15 +13,21 @@ import { ComponentProps } from 'react';
 export default function Trend({
     value,
     good = 'up',
-    locale,
-    format = (v) =>
-        new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 1, signDisplay: 'exceptZero' }).format(
-            v,
-        ),
+    locale: localeProp,
+    format: formatProp,
     className,
     children,
     ...rest
 }: TrendProps) {
+    const locale = useLocale(localeProp);
+    const format =
+        formatProp ??
+        ((v: number) =>
+            new Intl.NumberFormat(locale, {
+                style: 'percent',
+                maximumFractionDigits: 1,
+                signDisplay: 'exceptZero',
+            }).format(v));
     const direction = value > 0 ? 'up' : value < 0 ? 'down' : 'flat';
     const Arrow = direction === 'up' ? ArrowTrendingUpMicro : direction === 'down' ? ArrowTrendingDownMicro : null;
     return (
@@ -49,7 +56,7 @@ export interface TrendProps extends ComponentProps<'span'> {
     value: number;
     /** Which way is good news (default `up`); spending would be `down`. */
     good?: 'up' | 'down';
-    /** For the default percent format. */
+    /** For the default percent format. Defaults to the LocaleProvider's. */
     locale?: string;
     /** How the change reads, e.g. as money instead of a percent. */
     format?: (value: number) => string;

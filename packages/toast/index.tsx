@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import XMarkMicro from '@zen/icons/micro/x-mark';
 import { cx } from '@zen/utils/cx';
 import { useGraphicsMode } from '@zen/utils/graphics';
@@ -72,6 +73,7 @@ export interface ToastProviderProps {
  * Swipe a toast right to dismiss it.
  */
 export default function ToastProvider({ children, offset, viewportClassName }: ToastProviderProps) {
+    const m = useMessages();
     useGraphicsMode();
     const [toasts, setToasts] = useState<ToastItem[]>([]);
     const nextId = useRef(0);
@@ -191,7 +193,7 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
                         ref={setViewport}
                         popover="manual"
                         tabIndex={-1}
-                        aria-label="Notifications (F8)"
+                        aria-label={m.notifications}
                         data-expanded={expanded || undefined}
                         onMouseEnter={() => setHovered(true)}
                         onMouseLeave={() => setHovered(false)}
@@ -326,6 +328,7 @@ function Toast({
     clocks: Map<number, Clock>;
     entered: Set<number>;
 }) {
+    const m = useMessages();
     const tone = TONE[toast.tone] ?? TONE.default;
     const Icon = tone.icon;
     const ref = useRef<HTMLDivElement>(null);
@@ -469,7 +472,7 @@ function Toast({
                     </div>
                     <button
                         type="button"
-                        aria-label="Dismiss"
+                        aria-label={m.dismiss}
                         onClick={() => onDismiss(toast.id)}
                         className="text-muted-foreground hover:bg-tint/[0.07] hover:text-foreground focus-ring absolute top-2.5 right-2.5 grid size-7 cursor-pointer place-items-center rounded-lg outline-hidden transition-colors"
                     >

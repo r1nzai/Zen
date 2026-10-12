@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import Checkbox from '@zen/checkbox';
 import XMark from '@zen/icons/micro/x-mark';
 import { cx } from '@zen/utils/cx';
@@ -67,10 +68,12 @@ export function TableSelectHead({
     checked,
     indeterminate,
     onSelect,
-    label = 'Select all',
+    label: labelProp,
     className,
     ...rest
 }: TableSelectHeadProps) {
+    const m = useMessages();
+    const label = labelProp ?? m.selectAll;
     return (
         <th className={cx('w-10 py-2.5 pr-0 pl-3', className)} {...rest}>
             <Checkbox
@@ -92,16 +95,19 @@ export function TableSelectHead({
 export function SelectionBar({
     count,
     onClear,
-    label = (n) => `${n} selected`,
-    clearLabel = 'Clear selection',
+    label: labelProp,
+    clearLabel: clearLabelProp,
     className,
     children,
 }: SelectionBarProps) {
+    const m = useMessages();
+    const label = labelProp ?? m.selectedCount;
+    const clearLabel = clearLabelProp ?? m.clearSelection;
     if (count === 0) return null;
     return (
         <div
             role="toolbar"
-            aria-label="Selection"
+            aria-label={m.selection}
             className={cx(
                 'zen__selection-bar glass glass-blur glow-edge fixed inset-x-0 bottom-6 z-40 mx-auto flex w-fit max-w-[calc(100vw-2rem)] items-center gap-2 rounded-2xl py-2 pr-2 pl-4 shadow-[0_12px_40px_-12px_oklch(0_0_0/0.6)]',
                 className,

@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { useSeen } from '@zen/utils/useSeen';
 import { cx } from '@zen/utils/cx';
 
@@ -82,6 +83,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
     children,
     ...rest
 }: ChartProps<T, X>) {
+    const m = useMessages();
     const id = useId().replace(/[^\w-]/g, '');
     const wrap = useRef<HTMLDivElement>(null);
     const width = useWidth(wrap);
@@ -393,7 +395,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                 data-zen-unseen={seen ? undefined : ''}
                 tabIndex={0}
                 role="group"
-                aria-label={`${label}: use the arrow keys to read values`}
+                aria-label={m.readChart(label)}
                 onPointerMove={onPointerMove}
                 onPointerLeave={() => {
                     setActive(null);
@@ -488,10 +490,11 @@ function value(row: Row, key: string) {
 }
 
 function Legend({ series }: { series: Series[] }) {
+    const m = useMessages();
     // After the series, a faded key for each name given to faded bars (once, however many series share it).
     const faded = series.filter((s, i) => s.dimLabel && series.findIndex((o) => o.dimLabel === s.dimLabel) === i);
     return (
-        <ul className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs" aria-label="Legend">
+        <ul className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs" aria-label={m.legend}>
             {series.map((s) => (
                 <li key={s.dataKey} className="flex items-center gap-1.5">
                     <Key color={s.color} dashed={s.dashed} kind={s.kind} />

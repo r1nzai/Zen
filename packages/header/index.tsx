@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { cx } from '@zen/utils/cx';
 import { useGraphicsMode } from '@zen/utils/graphics';
 import { ComponentProps } from 'react';
@@ -11,7 +12,9 @@ import { ComponentProps } from 'react';
  * focused, that moves focus to the page's <main> past the bar's links (WCAG
  * 2.4.1). Change its text with `skipLabel`, or pass null to leave it out.
  */
-export default function Header({ skipLabel = 'Skip to content', className, children, ...rest }: HeaderProps) {
+export default function Header({ skipLabel: skipLabelProp, className, children, ...rest }: HeaderProps) {
+    const m = useMessages();
+    const skipLabel = skipLabelProp === undefined ? m.skipToContent : skipLabelProp;
     useGraphicsMode();
     return (
         <header

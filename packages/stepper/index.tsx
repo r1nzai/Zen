@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import Check from '@zen/icons/micro/check';
 import { cx } from '@zen/utils/cx';
 import { Children, ComponentProps, isValidElement, ReactNode } from 'react';
@@ -7,13 +8,9 @@ import { Children, ComponentProps, isValidElement, ReactNode } from 'react';
  * before `value` (from 0) are done, the one at it is current. The line between
  * them fills in as you go.
  */
-export default function Stepper({
-    value,
-    className,
-    children,
-    'aria-label': label = 'Progress',
-    ...rest
-}: StepperProps) {
+export default function Stepper({ value, className, children, 'aria-label': labelProp, ...rest }: StepperProps) {
+    const m = useMessages();
+    const label = labelProp ?? m.progress;
     const steps = Children.toArray(children).filter(isValidElement);
     return (
         <ol aria-label={label} className={cx('zen__stepper flex w-full items-start', className)} {...rest}>

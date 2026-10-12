@@ -1,3 +1,4 @@
+import { useLocale, useMessages } from '@zen/locale-provider';
 import ChevronLeft from '@zen/icons/chevron-left';
 import ChevronRight from '@zen/icons/chevron-right';
 import { cx } from '@zen/utils/cx';
@@ -27,11 +28,11 @@ import { ComponentProps, KeyboardEvent, useEffect, useId, useRef, useState } fro
  */
 export default function Calendar(props: CalendarProps) {
     const {
-        locale,
+        locale: localeProp,
         min,
         max,
         isDisabled,
-        weekStartsOn = weekStart(locale),
+        weekStartsOn: weekStartsOnProp,
         months = 1,
         defaultMonth,
         className,
@@ -42,6 +43,9 @@ export default function Calendar(props: CalendarProps) {
         onValueChange,
         ...rest
     } = props;
+    const locale = useLocale(localeProp);
+    const m = useMessages();
+    const weekStartsOn = weekStartsOnProp ?? weekStart(locale);
     const [value, set] = useControllable<DateString | DateRange | null>(
         valueProp,
         defaultValue,
@@ -126,7 +130,7 @@ export default function Calendar(props: CalendarProps) {
         <div className="mb-2 flex items-center justify-between gap-2">
             <button
                 type="button"
-                aria-label={picking === 'days' ? 'Previous month' : 'Previous year'}
+                aria-label={picking === 'days' ? m.previousMonth : m.previousYear}
                 onClick={() => (picking === 'days' ? step(-1) : setYear((y) => y - 1))}
                 className={PICKER_NAV}
             >
@@ -137,9 +141,7 @@ export default function Calendar(props: CalendarProps) {
                 id={titleId}
                 aria-live="polite"
                 aria-label={
-                    picking === 'days'
-                        ? `${formatMonth(view, locale, 'long')}, choose month and year`
-                        : `${year}, back to days`
+                    picking === 'days' ? m.chooseMonthAndYear(formatMonth(view, locale, 'long')) : m.backToDays(year)
                 }
                 onClick={() => {
                     setYear(Number(view.slice(0, 4)));
@@ -155,7 +157,7 @@ export default function Calendar(props: CalendarProps) {
             </button>
             <button
                 type="button"
-                aria-label={picking === 'days' ? 'Next month' : 'Next year'}
+                aria-label={picking === 'days' ? m.nextMonth : m.nextYear}
                 onClick={() => (picking === 'days' ? step(1) : setYear((y) => y + 1))}
                 className={PICKER_NAV}
             >
@@ -316,8 +318,8 @@ const DAY =
 
 /** Other props (aria-*, data-*, an id) go on the calendar's outer element. */
 interface CalendarBaseProps extends Omit<ComponentProps<'div'>, 'defaultValue' | 'onKeyDown' | 'children'> {
-    /** Decides month and weekday names, and the first day of the week, e.g. "en-IN". */
-    locale: string;
+    /** Decides month and weekday names, and the first day of the week, e.g. "en-IN". Defaults to the LocaleProvider's. */
+    locale?: string;
     /** Earliest date that can be picked ("YYYY-MM-DD"). */
     min?: DateString;
     /** Latest date that can be picked. */

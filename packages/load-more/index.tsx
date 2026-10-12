@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import Button from '@zen/button';
 import Spinner from '@zen/spinner';
 import { cx } from '@zen/utils/cx';
@@ -15,12 +16,15 @@ export default function LoadMore({
     hasMore,
     loading = false,
     auto = true,
-    label = 'Load more',
-    loadingLabel = 'Loading more…',
+    label: labelProp,
+    loadingLabel: loadingLabelProp,
     className,
     ref: refProp,
     ...rest
 }: LoadMoreProps) {
+    const m = useMessages();
+    const label = labelProp ?? m.loadMore;
+    const loadingLabel = loadingLabelProp ?? m.loadingMore;
     const ref = useRef<HTMLDivElement>(null);
     const merged = useMergedRefs(ref, refProp);
     const load = useRef(onLoadMore);

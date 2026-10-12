@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import { THUMB } from '@zen/slider';
 import { cx } from '@zen/utils/cx';
 import { useFormReset } from '@zen/utils/form-value';
@@ -18,7 +19,7 @@ export default function RangeSlider({
     onValueChange,
     onValueCommit,
     label,
-    thumbLabels = ['Minimum', 'Maximum'],
+    thumbLabels: thumbLabelsProp,
     valueText,
     name,
     disabled,
@@ -26,6 +27,8 @@ export default function RangeSlider({
     style,
     ...rest
 }: RangeSliderProps) {
+    const m = useMessages();
+    const thumbLabels = thumbLabelsProp ?? [m.minimum, m.maximum];
     const [[low, high], setValue, reset] = useControllable<readonly [number, number], [number, number]>(
         valueProp,
         defaultValue ?? [min, max],

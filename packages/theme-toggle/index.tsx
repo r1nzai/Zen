@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import MoonMicro from '@zen/icons/micro/moon';
 import SunMicro from '@zen/icons/micro/sun';
 import { cx } from '@zen/utils/cx';
@@ -56,11 +57,12 @@ export default function ThemeToggle({
     const shown = useSyncExternalStore(subscribe, current, () => 'dark' as const);
     const theme = value ?? shown;
     const next: Appearance = theme === 'dark' ? 'light' : 'dark';
+    const m = useMessages();
 
     return (
         <button
             type="button"
-            aria-label={`Switch to ${next} theme`}
+            aria-label={next === 'dark' ? m.switchToDark : m.switchToLight}
             {...rest}
             onPointerEnter={prepareThemeWave}
             onFocus={prepareThemeWave}

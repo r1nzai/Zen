@@ -1,15 +1,13 @@
+import { useMessages } from '@zen/locale-provider';
 import ChevronRight from '@zen/icons/micro/chevron-right';
 import { cx } from '@zen/utils/cx';
 import { Slot } from '@zen/utils/slot';
 import { Children, ComponentProps, Fragment, isValidElement } from 'react';
 
 /** Where a page sits: its parents as links, then the page itself. Give the last crumb `current`. */
-export default function Breadcrumbs({
-    className,
-    children,
-    'aria-label': label = 'Breadcrumb',
-    ...rest
-}: ComponentProps<'nav'>) {
+export default function Breadcrumbs({ className, children, 'aria-label': labelProp, ...rest }: ComponentProps<'nav'>) {
+    const m = useMessages();
+    const label = labelProp ?? m.breadcrumb;
     const crumbs = Children.toArray(children).filter(isValidElement);
     return (
         <nav aria-label={label} className={cx('zen__breadcrumbs', className)} {...rest}>
