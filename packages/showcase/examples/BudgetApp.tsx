@@ -46,6 +46,9 @@ import {
     MenuContent,
     MenuContextTrigger,
     MenuItem,
+    MenuSub,
+    MenuSubContent,
+    MenuSubTrigger,
     MenuTrigger,
     Meter,
     type Money,
@@ -399,9 +402,21 @@ function Budget({ nav }: { nav: boolean }) {
                                 </MenuTrigger>
                                 <MenuContent>
                                     <MenuItem onSelect={() => setImporting(true)}>Import statement</MenuItem>
-                                    <MenuItem onSelect={() => toast('Export started', { tone: 'default' })}>
-                                        Export CSV
-                                    </MenuItem>
+                                    <MenuSub>
+                                        <MenuSubTrigger>Export</MenuSubTrigger>
+                                        <MenuSubContent>
+                                            {['CSV', 'PDF'].map((format) => (
+                                                <MenuItem
+                                                    key={format}
+                                                    onSelect={() =>
+                                                        toast(`${format} export started`, { tone: 'default' })
+                                                    }
+                                                >
+                                                    {format}
+                                                </MenuItem>
+                                            ))}
+                                        </MenuSubContent>
+                                    </MenuSub>
                                     <MenuItem tone="negative" onSelect={() => setResetting(true)}>
                                         Reset month
                                     </MenuItem>

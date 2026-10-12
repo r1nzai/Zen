@@ -40,13 +40,16 @@ The look is set in [Geist](https://vercel.com/font); load it however you like.
 ## Usage
 
 ```tsx
-import { Backdrop, Button, Card } from '@rinzai/zen';
+import { Backdrop, Button, Card, CardHeader, CardTitle } from '@rinzai/zen';
 
 export default function App() {
     return (
         <>
             <Backdrop />
-            <Card title="Budget">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Budget</CardTitle>
+                </CardHeader>
                 <Button>Save changes</Button>
             </Card>
         </>
@@ -56,14 +59,31 @@ export default function App() {
 
 ## What's inside
 
-- **Surfaces:** Card, Inset, Alert, Stat, Dialog (and sheets from an edge), ConfirmDialog, Popover, Tooltip, Toast (a stacked deck), Disclosure, Backdrop (aurora, contours or dots, and a pointer light)
-- **Inputs:** Button, Input, TextArea, InputGroup, MoneyInput (with currency conversion), Select, Combobox, Calendar, DatePicker, DateRangePicker, MonthPicker, ColorPicker, Checkbox, RadioGroup, RadioCards, Segmented, Slider, Toggle, Chip, Field
-- **Data:** Chart (areas, lines, bars) and DonutChart in plain SVG, composable Table with sticky edges and sorting, tree rows, editable cells, virtual rows, Meter, ProgressRing, AnimatedNumber, Badge, StatusPill (a live save status), Skeleton, Spinner, Canvas (items placed freely, with snapping)
-- **Navigation:** Header, Pills, Tabs, TabBar, SideNav, TableOfContents, Menu
+- **Surfaces:** Card, Inset, Alert, Stat, Dialog (and sheets from an edge), ConfirmDialog, Popover, Tooltip, HoverCard, Toast (a stacked deck), Disclosure, Accordion, Separator, Resizable panels, Carousel, Backdrop (aurora, contours or dots, and a pointer light)
+- **Inputs:** Button, ButtonGroup, Toggle, ToggleGroup, Toolbar, Input, TextArea, InputGroup, NumberField, TimeField, MoneyInput (with currency conversion), Select, Combobox, Calendar, DatePicker, DateRangePicker, MonthPicker, ColorPicker, Checkbox, RadioGroup, RadioCards, Segmented, Slider, Chip, Field
+- **Data:** Chart (areas, lines, bars) and DonutChart in plain SVG, composable Table with sticky edges, sorting and rows reordered by drag and drop, tree rows, editable cells, virtual rows, SortableList and SortableTree, Meter, ProgressRing, AnimatedNumber, Badge, StatusPill (a live save status), Skeleton, Spinner, Canvas (items placed freely, with snapping)
+- **Navigation:** Header, NavigationMenu, Pills, Tabs, TabBar, SideNav, TableOfContents, Menu (with submenus, checkbox and radio items, and context menus), Menubar
 - **Theming:** dark and light, OKLCH tokens, and a theme generator (presets or any hue) that keeps contrast readable
+- **Languages:** LocaleProvider for the locale and every word, and right-to-left layout
 - **Hooks and utilities:** `themeWave` (the theme spreads from the switch like a drop falling into water: ripples, glints and a rainbow edge, drawn on the GPU; `prepareThemeWave` readies it when the pointer reaches your own switch), `useAnchoredPopup`, `useVirtualList`, `useTree`, `useSort`, `useCopyToClipboard`, money, currency, month and date helpers, `hexToOklch` and `oklchToHex`, `cx` (Tailwind-aware class merging), `cva`
 
-Every component takes `className`, and a class you pass always overrides the component's default.
+Every component takes `className`, and a class you pass always overrides the component's default. Other props (`id`, `aria-*`, `data-*`, handlers) and `ref` reach its element, and parts that render a link or button take `asChild` to use your own (a router's Link, say).
+
+## Values and forms
+
+Controls report changes with `onValueChange` (`onCheckedChange` for Checkbox and Toggle). Pass `value` to control one, or `defaultValue` to let it keep its own. Give a control a `name` and it's submitted with its form, the custom ones (Combobox, the date pickers, MoneyInput, ColorPicker, TagInput…) included, and goes back to its first value when the form is reset.
+
+## Languages and right to left
+
+```tsx
+import { LocaleProvider } from '@rinzai/zen';
+
+<LocaleProvider locale="fr-FR" messages={{ clear: 'Effacer', noResults: 'Aucun résultat' }}>
+    <App />
+</LocaleProvider>;
+```
+
+The locale formats dates, numbers and money, and sets the week's first day. `messages` replaces any of the words Zen shows or announces (`ENGLISH` lists them all); the rest stay English. With `dir="rtl"` on the page or any element above, layout, arrow keys and chevrons mirror.
 
 ## Theming
 
