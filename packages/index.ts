@@ -399,6 +399,7 @@ export { default as TimeField, type TimeFieldProps, type TimeString } from './ti
 export {
     default as Carousel,
     CarouselContent,
+    CarouselControls,
     CarouselDots,
     CarouselItem,
     CarouselNext,

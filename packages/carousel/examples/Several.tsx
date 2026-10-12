@@ -1,4 +1,4 @@
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@rinzai/zen';
+import { Carousel, CarouselContent, CarouselControls, CarouselItem, CarouselNext, CarouselPrevious } from '@rinzai/zen';
 
 const CATEGORIES = [
     { name: 'Groceries', spent: '$412', chart: 6 },
@@ -11,7 +11,7 @@ const CATEGORIES = [
 
 /**
  * Several slides in view: size the items (here a half, then a third on wider
- * screens). It snaps to each, and the buttons go when there's no further to go.
+ * screens). It snaps to each; the buttons sit together at the end, each gone when there's no further to go.
  */
 export default function Several() {
     return (
@@ -32,8 +32,10 @@ export default function Several() {
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious className="start-1 sm:-start-12" />
-            <CarouselNext className="end-1 sm:-end-12" />
+            <CarouselControls className="justify-end">
+                <CarouselPrevious />
+                <CarouselNext />
+            </CarouselControls>
         </Carousel>
     );
 }

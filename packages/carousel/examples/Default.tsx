@@ -2,6 +2,7 @@ import {
     Card,
     Carousel,
     CarouselContent,
+    CarouselControls,
     CarouselDots,
     CarouselItem,
     CarouselNext,
@@ -18,14 +19,14 @@ const GOALS = [
 
 const usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
-/** One slide at a time, with buttons over its edges and dots below. Swipe or scroll it too, or focus it and use the arrow keys. */
+/** One slide at a time, with buttons and dots below. Swipe or scroll it too, or focus it and use the arrow keys. */
 export default function Default() {
     return (
         <Carousel aria-label="Savings goals" className="w-full max-w-sm">
             <CarouselContent>
                 {GOALS.map((goal) => (
                     <CarouselItem key={goal.name}>
-                        <Card className="flex items-center gap-5 px-14">
+                        <Card className="flex items-center gap-5">
                             <ProgressRing value={goal.saved / goal.target} label={goal.name}>
                                 <span className="text-sm font-semibold tabular-nums">
                                     {Math.round((goal.saved / goal.target) * 100)}%
@@ -41,9 +42,11 @@ export default function Default() {
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-            <CarouselDots />
+            <CarouselControls>
+                <CarouselPrevious />
+                <CarouselDots />
+                <CarouselNext />
+            </CarouselControls>
         </Carousel>
     );
 }

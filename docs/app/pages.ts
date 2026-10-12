@@ -103,8 +103,16 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'carousel',
         title: 'Carousel',
         description:
-            'Slides in a row that snap as you swipe or scroll, with glass buttons, dots that light the current one, and the arrow keys. Native scrolling, so it follows the finger exactly.',
-        parts: ['Carousel', 'CarouselContent', 'CarouselItem', 'CarouselPrevious', 'CarouselNext', 'CarouselDots'],
+            'Slides in a row that snap as you swipe or scroll, with glass buttons and dots that light the current one beneath, and the arrow keys. Native scrolling, so it follows the finger exactly.',
+        parts: [
+            'Carousel',
+            'CarouselContent',
+            'CarouselItem',
+            'CarouselControls',
+            'CarouselPrevious',
+            'CarouselNext',
+            'CarouselDots',
+        ],
         examples: ['Default', 'Several'],
     },
     {

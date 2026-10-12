@@ -47,8 +47,8 @@ function startOf(item: Element, content: HTMLElement) {
 /**
  * Slides in a row that scrolls sideways and snaps to each one: swipe, scroll,
  * use the arrow keys once it has focus, or the CarouselPrevious and
- * CarouselNext buttons. Put a CarouselContent of CarouselItems inside, and the
- * buttons and CarouselDots if you want them. A slide is as wide as the
+ * CarouselNext buttons. Put a CarouselContent of CarouselItems inside, then a
+ * CarouselControls of the buttons and CarouselDots if you want them. A slide is as wide as the
  * carousel unless you size it (e.g. `basis-1/3` for three in view).
  */
 export default function Carousel({ className, children, ...rest }: CarouselProps) {
@@ -165,11 +165,12 @@ export function CarouselItem({ ref, className, ...rest }: ComponentProps<'div'>)
 }
 
 const ARROW =
-    'glass glass-blur text-foreground absolute top-1/2 z-10 grid size-9 -translate-y-1/2 cursor-pointer place-items-center rounded-full transition-opacity focus-ring hover:bg-tint/[0.08] aria-disabled:cursor-not-allowed aria-disabled:opacity-0 aria-disabled:focus-visible:opacity-40';
+    'glass glass-blur text-foreground grid size-9 shrink-0 cursor-pointer place-items-center rounded-full transition-opacity focus-ring hover:bg-tint/[0.08] aria-disabled:cursor-not-allowed aria-disabled:opacity-0 aria-disabled:focus-visible:opacity-40';
 
 /**
- * Scroll back one slide: a round glass button over the start edge, gone at the
- * first. Place it elsewhere with className.
+ * Scroll back one slide: a round glass button, gone at the first (keeping its
+ * place, so the controls don't shift). Put it in CarouselControls, under the
+ * slides, where it never covers them.
  */
 export function CarouselPrevious({ className, onClick, ...rest }: ComponentProps<'button'>) {
     const m = useMessages();
@@ -182,7 +183,7 @@ export function CarouselPrevious({ className, onClick, ...rest }: ComponentProps
             aria-label={m.previousSlide}
             {...rest}
             aria-disabled={off || undefined}
-            className={cx(ARROW, 'start-3', className)}
+            className={cx(ARROW, className)}
             onClick={(e) => {
                 onClick?.(e);
                 if (!off && !e.defaultPrevented) scrollTo(index - 1);
@@ -193,7 +194,7 @@ export function CarouselPrevious({ className, onClick, ...rest }: ComponentProps
     );
 }
 
-/** Scroll on one slide: a round glass button over the end edge, gone at the last. */
+/** Scroll on one slide: a round glass button, gone at the last. */
 export function CarouselNext({ className, onClick, ...rest }: ComponentProps<'button'>) {
     const m = useMessages();
     const { index, stops, scrollTo } = useCarousel('CarouselNext');
@@ -204,7 +205,7 @@ export function CarouselNext({ className, onClick, ...rest }: ComponentProps<'bu
             aria-label={m.nextSlide}
             {...rest}
             aria-disabled={off || undefined}
-            className={cx(ARROW, 'end-3', className)}
+            className={cx(ARROW, className)}
             onClick={(e) => {
                 onClick?.(e);
                 if (!off && !e.defaultPrevented) scrollTo(index + 1);
@@ -221,7 +222,7 @@ export function CarouselDots({ className, ...rest }: ComponentProps<'div'>) {
     const { index, stops, scrollTo } = useCarousel('CarouselDots');
     if (stops < 2) return null;
     return (
-        <div {...rest} className={cx('mt-3 flex justify-center gap-0.5', className)}>
+        <div {...rest} className={cx('flex justify-center gap-0.5', className)}>
             {Array.from({ length: stops }, (_, i) => (
                 <button
                     key={i}
@@ -245,6 +246,11 @@ export function CarouselDots({ className, ...rest }: ComponentProps<'div'>) {
             ))}
         </div>
     );
+}
+
+/** The row under the slides: CarouselPrevious at the start, CarouselNext at the end, CarouselDots between. */
+export function CarouselControls({ className, ...rest }: ComponentProps<'div'>) {
+    return <div {...rest} className={cx('mt-3 flex items-center justify-between gap-3', className)} />;
 }
 
 export type CarouselProps = ComponentProps<'section'>;
