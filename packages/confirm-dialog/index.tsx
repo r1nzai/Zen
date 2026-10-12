@@ -9,7 +9,7 @@ export default function ConfirmDialog({
     description,
     confirmLabel,
     cancelLabel = 'Cancel',
-    destructive = false,
+    tone = 'default',
     onConfirm,
 }: ConfirmDialogProps) {
     return (
@@ -25,7 +25,7 @@ export default function ConfirmDialog({
                 <DialogClose variant="outline" autoFocus>
                     {cancelLabel}
                 </DialogClose>
-                <DialogClose variant={destructive ? 'destructive' : 'default'} onClick={onConfirm}>
+                <DialogClose tone={tone} onClick={onConfirm}>
                     {confirmLabel}
                 </DialogClose>
             </DialogFooter>
@@ -40,6 +40,7 @@ export interface ConfirmDialogProps {
     description?: ReactNode;
     confirmLabel: string;
     cancelLabel?: string;
-    destructive?: boolean;
+    /** `negative` for a destructive action: the confirm button is red. */
+    tone?: 'default' | 'negative';
     onConfirm: () => void;
 }

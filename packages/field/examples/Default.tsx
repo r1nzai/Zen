@@ -27,7 +27,7 @@ export default function Default() {
                     placeholder="you@example.com"
                 />
             </Field>
-            {submitted && !invalid && <FormMessage tone="success">Check your inbox for the link.</FormMessage>}
+            {submitted && !invalid && <FormMessage tone="positive">Check your inbox for the link.</FormMessage>}
             <Button type="submit" className="self-start">
                 Send link
             </Button>

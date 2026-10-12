@@ -150,7 +150,7 @@ export default function Designer() {
                 <Button size="sm" variant="ghost" onClick={redo} disabled={!future.length}>
                     Redo
                 </Button>
-                <Button size="sm" variant="ghost" tone="destructive" onClick={remove} disabled={!selected.length}>
+                <Button size="sm" variant="ghost" tone="negative" onClick={remove} disabled={!selected.length}>
                     Delete
                 </Button>
             </div>

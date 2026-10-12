@@ -23,7 +23,7 @@ export default function Meter({
     const over = value > max;
     const ratio = max > 0 ? value / max : value > 0 ? 1 : 0;
     const pct = Math.min(100, Math.max(0, Math.round(ratio * 100)));
-    const resolved = tone !== 'auto' ? tone : over ? 'danger' : ratio >= warnAt ? 'warning' : 'default';
+    const resolved = tone !== 'auto' ? tone : over ? 'negative' : ratio >= warnAt ? 'warning' : 'default';
     return (
         <div
             {...rest}
@@ -44,7 +44,7 @@ export default function Meter({
                 <span
                     className={cx(
                         'col-start-2 text-right text-sm tabular-nums',
-                        resolved === 'danger' ? 'text-destructive' : 'text-muted-foreground',
+                        resolved === 'negative' ? 'text-destructive' : 'text-muted-foreground',
                     )}
                 >
                     {detail}
@@ -54,7 +54,7 @@ export default function Meter({
                 <div
                     className={cx(
                         'zen__meter-fill ease-out-soft h-full rounded-full transition-[width] duration-700',
-                        resolved === 'danger'
+                        resolved === 'negative'
                             ? 'bg-destructive shadow-[0_0_12px_oklch(var(--destructive)/calc(0.7*var(--glow-k)))]'
                             : resolved === 'warning'
                               ? 'bg-accent-foreground shadow-[0_0_12px_oklch(var(--accent-foreground)/calc(0.6*var(--glow-k)))]'
@@ -76,7 +76,7 @@ export default function Meter({
                 <span
                     className={cx(
                         'col-span-2 text-xs',
-                        resolved === 'danger' ? 'text-destructive' : 'text-muted-foreground',
+                        resolved === 'negative' ? 'text-destructive' : 'text-muted-foreground',
                     )}
                 >
                     {hint}
@@ -98,8 +98,8 @@ export interface MeterProps extends Omit<ComponentProps<'div'>, 'children'> {
     hint?: ReactNode;
     /** What screen readers say for the value, e.g. "₹8,200 of ₹10,000, ₹1,800 left". */
     valueText?: string;
-    /** `auto` picks warning past `warnAt` of max and danger past max. */
-    tone?: 'auto' | 'default' | 'warning' | 'danger';
+    /** `auto` picks warning past `warnAt` of max and negative past max. */
+    tone?: 'auto' | 'default' | 'warning' | 'negative';
     /** Fraction of max where `auto` turns to warning (default 0.85). */
     warnAt?: number;
     /** Milestones along the bar, in the same units as value: e.g. [2500, 5000, 7500] of 10000. */

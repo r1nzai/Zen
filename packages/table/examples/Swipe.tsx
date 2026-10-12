@@ -38,7 +38,7 @@ export default function Swipe() {
                                 key={e.id}
                                 actions={
                                     <TableSwipeAction
-                                        tone="destructive"
+                                        tone="negative"
                                         aria-label={`Delete ${e.label}`}
                                         onClick={() => setEntries((es) => es.filter((x) => x.id !== e.id))}
                                     >

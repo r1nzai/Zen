@@ -34,7 +34,7 @@ describe('Field', () => {
 
 describe('FormMessage', () => {
     it('uses an alert for errors and a status otherwise', () => {
-        const { rerender } = render(<FormMessage tone="error">Wrong password.</FormMessage>);
+        const { rerender } = render(<FormMessage tone="negative">Wrong password.</FormMessage>);
         expect(screen.getByRole('alert')).toHaveTextContent('Wrong password.');
         rerender(<FormMessage>Check your email.</FormMessage>);
         expect(screen.getByRole('status')).toHaveTextContent('Check your email.');

@@ -7,7 +7,7 @@ import { ComponentProps, useId, useRef } from 'react';
  * week), with no axes: for beside a figure in a Stat or a table row. It takes
  * its size from className (e.g. h-8 w-24) and draws itself in.
  */
-export default function Sparkline({ values, area = true, tone = 'primary', className, ref, ...rest }: SparklineProps) {
+export default function Sparkline({ values, area = true, tone = 'default', className, ref, ...rest }: SparklineProps) {
     const gradient = useId();
     const svg = useRef<SVGSVGElement>(null);
     const seen = useSeen(svg);
@@ -19,7 +19,7 @@ export default function Sparkline({ values, area = true, tone = 'primary', class
     const points = values.map((v, i) => [(i / (values.length - 1)) * 100, 38 - ((v - min) / span) * 36] as const);
     const line = points.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(2)},${y.toFixed(2)}`).join('');
     const color =
-        tone === 'primary'
+        tone === 'default'
             ? 'var(--color-primary)'
             : tone === 'negative'
               ? 'var(--color-destructive)'
@@ -72,5 +72,5 @@ export interface SparklineProps extends Omit<ComponentProps<'svg'>, 'values'> {
     /** A soft fill under the line. */
     area?: boolean;
     /** The accent (`primary`), red (`negative`), or grey (`muted`). */
-    tone?: 'primary' | 'negative' | 'muted';
+    tone?: 'default' | 'negative' | 'muted';
 }

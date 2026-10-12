@@ -5,7 +5,7 @@ export default function Tones() {
     const toast = useToast();
     return (
         <div className="flex flex-wrap gap-3">
-            <Button onClick={() => toast('Saved', { description: 'Your changes are stored.', tone: 'success' })}>
+            <Button onClick={() => toast('Saved', { description: 'Your changes are stored.', tone: 'positive' })}>
                 Success
             </Button>
             <Button
@@ -15,8 +15,8 @@ export default function Tones() {
                 With action
             </Button>
             <Button
-                variant="destructive"
-                onClick={() => toast("Couldn't save", { description: 'Check your connection.', tone: 'error' })}
+                tone="negative"
+                onClick={() => toast("Couldn't save", { description: 'Check your connection.', tone: 'negative' })}
             >
                 Error
             </Button>

@@ -60,35 +60,39 @@ export const buttonVariants = cva(
                 outline:
                     'glow-edge border border-tint/10 bg-tint/[0.03] text-foreground hover:border-tint/20 hover:bg-tint/[0.07]',
                 ghost: 'text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground',
-                destructive:
-                    'bg-destructive/90 text-destructive-foreground shadow-[0_0_0_1px_oklch(var(--destructive)/0.6),0_0_22px_-8px_oklch(var(--destructive)/calc(0.7*var(--glow-k)))] hover:bg-destructive',
                 // Inline in running text (no padding, sits on the line) and truncates in a tight cell.
                 link: 'inline-block h-auto! max-w-full truncate rounded-sm px-0! text-left align-bottom text-[length:inherit] text-primary underline-offset-4 hover:underline active:scale-100',
-                // Square ghost button for a lone icon (Sora's menu trigger).
-                // Keeps its hover look while the popup it opened is showing (e.g. a Menu's "⋯").
-                icon: 'text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground',
             },
+            // Heights match the fields' (Input, Select…) size for size, so they line up in a row.
             size: {
                 default: 'h-10 px-4',
                 sm: 'h-8 px-3 text-xs',
                 lg: 'h-11 px-6',
-                icon: 'size-9',
-                // A small square for a lone icon inside a row (e.g. "add item").
-                'icon-sm': 'size-6 rounded-md',
+                // Squares for a lone icon, the same heights.
+                icon: 'size-10',
+                'icon-sm': 'size-8',
+                'icon-lg': 'size-11',
+                // A small square inside a row (e.g. "add item").
+                'icon-xs': 'size-6 rounded-md',
             },
-            // Colours for the quiet variants (link, ghost, icon); the filled ones have their own.
-            tone: { default: '', muted: '', inherit: '', destructive: '' },
+            tone: { default: '', muted: '', inherit: '', negative: '' },
         },
         compoundVariants: [
+            // A destructive action: filled in red.
+            {
+                variant: 'default',
+                tone: 'negative',
+                class: 'bg-destructive/90 bg-none text-destructive-foreground shadow-[0_0_0_1px_oklch(var(--destructive)/0.6),0_0_22px_-8px_oklch(var(--destructive)/calc(0.7*var(--glow-k)))] hover:bg-destructive hover:shadow-[0_0_0_1px_oklch(var(--destructive)/0.6),0_0_22px_-8px_oklch(var(--destructive)/calc(0.7*var(--glow-k)))] focus-visible:ring-destructive/40',
+            },
             // A secondary action in words ("Use a password instead"): muted, so always underlined to read as a link.
             { variant: 'link', tone: 'muted', class: 'text-muted-foreground underline hover:text-foreground' },
             // In the surrounding text's colour, e.g. a name in a table that opens its editor.
             { variant: 'link', tone: 'inherit', class: 'text-current' },
-            { variant: 'link', tone: 'destructive', class: 'text-destructive' },
+            { variant: 'link', tone: 'negative', class: 'text-destructive' },
             // Muted until pointed at, then red: e.g. a row's remove button.
             {
-                variant: ['ghost', 'icon'],
-                tone: 'destructive',
+                variant: 'ghost',
+                tone: 'negative',
                 class: 'hover:bg-destructive/10 hover:text-destructive focus-visible:ring-destructive/40',
             },
         ],

@@ -89,7 +89,7 @@ export default function ThemeToggle({
                 )
             }
             className={cx(
-                'zen__theme-toggle text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground focus-visible:ring-ring/50 grid size-9 cursor-pointer place-items-center rounded-lg outline-hidden focus-visible:ring-2',
+                'zen__theme-toggle text-muted-foreground hover:bg-tint/[0.06] hover:text-foreground focus-visible:ring-ring/50 grid size-10 cursor-pointer place-items-center rounded-lg outline-hidden focus-visible:ring-2',
                 className,
             )}
         >

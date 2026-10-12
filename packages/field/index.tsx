@@ -105,13 +105,9 @@ export default function Field({ label, hint, error, htmlFor, children, className
 }
 
 /** A message for a form as a whole: an error or success in a tinted box, or a quiet note. An Alert, set for forms. */
-export function FormMessage({ tone = 'info', children, className }: FormMessageProps) {
+export function FormMessage({ tone = 'default', children, className }: FormMessageProps) {
     return (
-        <Alert
-            tone={tone === 'error' ? 'negative' : tone === 'success' ? 'positive' : 'default'}
-            plain={tone === 'info'}
-            className={cx('mt-0!', className)}
-        >
+        <Alert tone={tone} plain={tone === 'default'} className={cx('mt-0!', className)}>
             {children}
         </Alert>
     );
@@ -131,7 +127,7 @@ export interface FieldProps {
 }
 
 export interface FormMessageProps {
-    tone?: 'info' | 'success' | 'error';
+    tone?: 'default' | 'positive' | 'negative';
     children: ReactNode;
     className?: string;
 }

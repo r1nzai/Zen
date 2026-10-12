@@ -255,7 +255,7 @@ function ComboboxValue({ placeholder }: { placeholder: string }) {
                             e.stopPropagation();
                             if (chip) box.toggle(chip.key);
                         }}
-                        variant="icon"
+                        variant="ghost"
                         size="icon"
                         // Up 1px: capitals sit above their line box's centre, so this centres the × on them.
                         className="group relative -top-px size-4 rounded-sm p-0.5"

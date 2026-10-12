@@ -85,7 +85,7 @@ export function TableSwipeAction({ tone = 'default', className, ...rest }: Table
             type="button"
             className={cx(
                 'focus-visible:ring-ring/60 cursor-pointer px-4 text-sm font-medium whitespace-nowrap outline-hidden transition-colors focus-visible:ring-2 focus-visible:ring-inset',
-                tone === 'destructive'
+                tone === 'negative'
                     ? 'bg-destructive/90 text-destructive-foreground hover:bg-destructive'
                     : 'bg-tint/[0.09] hover:bg-tint/[0.14]',
                 className,
@@ -96,7 +96,7 @@ export function TableSwipeAction({ tone = 'default', className, ...rest }: Table
 }
 
 export interface TableSwipeActionProps extends ComponentProps<'button'> {
-    tone?: 'default' | 'destructive';
+    tone?: 'default' | 'negative';
 }
 
 export interface TableSwipeRowProps extends ComponentProps<'tr'> {

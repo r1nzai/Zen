@@ -300,13 +300,13 @@ const ITEM =
 
 /**
  * One choice in a Menu: closes the menu, then runs `onSelect`. An `icon` sits
- * before the label (muted, or red with the label when `destructive`). With
+ * before the label (muted, or red with the label when `tone` is negative). With
  * `asChild`, the item's role and styles go onto your own element instead, such
  * as a router's Link.
  */
 export function MenuItem({
     icon,
-    destructive,
+    tone = 'default',
     onSelect,
     asChild,
     className,
@@ -319,7 +319,7 @@ export function MenuItem({
         ...rest,
         role: 'menuitem',
         tabIndex: -1,
-        className: cx(ITEM, destructive && 'text-destructive', className),
+        className: cx(ITEM, tone === 'negative' && 'text-destructive', className),
         onClick: (e: MouseEvent<HTMLElement>) => {
             onClick?.(e as MouseEvent<HTMLButtonElement>);
             close();
@@ -330,7 +330,7 @@ export function MenuItem({
     return (
         <button type="button" {...props}>
             {icon && (
-                <span aria-hidden className={cx('flex shrink-0', !destructive && 'text-muted-foreground')}>
+                <span aria-hidden className={cx('flex shrink-0', tone !== 'negative' && 'text-muted-foreground')}>
                     {icon}
                 </span>
             )}
@@ -378,7 +378,8 @@ export interface MenuItemProps extends Omit<ComponentProps<'button'>, 'onSelect'
     /** Shown before the label; size it yourself (e.g. size-4). */
     icon?: ReactNode;
     /** Red, for actions that remove or leave something. */
-    destructive?: boolean;
+    /** `negative` for a destructive choice: red. */
+    tone?: 'default' | 'negative';
     /** Runs after the menu closes. */
     onSelect?: () => void;
     /** Put the item's role and styles on the single child element (a link) instead of a button. */

@@ -115,7 +115,7 @@ describe('Toast', () => {
     it('shows a status message with title and description', () => {
         render(
             <ToastProvider>
-                <Trigger title="Saved" options={{ description: 'All changes stored', tone: 'success' }} />
+                <Trigger title="Saved" options={{ description: 'All changes stored', tone: 'positive' }} />
             </ToastProvider>,
         );
         show('Saved');
@@ -128,7 +128,7 @@ describe('Toast', () => {
     it('uses an alert for errors', () => {
         render(
             <ToastProvider>
-                <Trigger title="Failed" options={{ tone: 'error' }} />
+                <Trigger title="Failed" options={{ tone: 'negative' }} />
             </ToastProvider>,
         );
         show('Failed');
@@ -138,7 +138,7 @@ describe('Toast', () => {
     it('is read out by a live region that exists before its text arrives', () => {
         render(
             <ToastProvider>
-                <Trigger title="Failed" options={{ tone: 'error', description: 'Try again' }} />
+                <Trigger title="Failed" options={{ tone: 'negative', description: 'Try again' }} />
             </ToastProvider>,
         );
         show('Failed');

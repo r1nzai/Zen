@@ -5,7 +5,7 @@ export default function Variants() {
         <div className="flex flex-wrap items-center gap-3">
             <Badge>New</Badge>
             <Badge variant="secondary">Draft</Badge>
-            <Badge variant="destructive">Overdue</Badge>
+            <Badge tone="negative">Overdue</Badge>
             <Badge variant="outline">Archived</Badge>
         </div>
     );

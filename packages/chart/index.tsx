@@ -236,7 +236,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                 })}
 
                 {refs.map((r, i) => {
-                    const tone = r.tone === 'destructive' ? 'stroke-destructive/45' : 'stroke-muted-foreground/60';
+                    const tone = r.tone === 'negative' ? 'stroke-destructive/45' : 'stroke-muted-foreground/60';
                     if (r.y !== undefined)
                         return (
                             <line
@@ -629,7 +629,7 @@ export interface ChartReferenceProps {
     /** Text beside a vertical line, e.g. "Today". */
     label?: string;
     /** Destructive for a line that warns (e.g. below zero). */
-    tone?: 'muted' | 'destructive';
+    tone?: 'muted' | 'negative';
     /** Vertical lines are dashed unless `dashed={false}`; horizontal ones solid unless `dashed`. */
     dashed?: boolean;
 }

@@ -17,7 +17,7 @@ import { createPortal } from 'react-dom';
 
 import { AlertIcon, CheckIcon, InfoIcon } from '@zen/utils/status-icons';
 
-export type ToastTone = 'info' | 'success' | 'error';
+export type ToastTone = 'default' | 'positive' | 'negative';
 
 export interface ToastOptions {
     description?: string;
@@ -140,7 +140,7 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
         }, EXIT_MS);
     }, []);
 
-    const add = useCallback((title: string, { description, tone = 'info', action, timeout }: ToastOptions = {}) => {
+    const add = useCallback((title: string, { description, tone = 'default', action, timeout }: ToastOptions = {}) => {
         const id = nextId.current++;
         const item: ToastItem = {
             id,
@@ -263,21 +263,21 @@ export function useToast() {
 }
 
 const TONE = {
-    success: {
+    positive: {
         icon: CheckIcon,
         ring: 'border-primary/30',
         badge: 'bg-primary/15 text-primary',
         bar: 'bg-primary',
         glow: 'shadow-[0_18px_50px_-18px_oklch(var(--glow)/calc(0.55*var(--glow-k)))]',
     },
-    error: {
+    negative: {
         icon: AlertIcon,
         ring: 'border-destructive/40',
         badge: 'bg-destructive/10 text-destructive',
         bar: 'bg-destructive',
         glow: 'shadow-[0_18px_50px_-18px_oklch(var(--destructive)/calc(0.55*var(--glow-k)))]',
     },
-    info: {
+    default: {
         icon: InfoIcon,
         ring: 'border-tint/10',
         badge: 'bg-tint/[0.08] text-foreground',
@@ -326,7 +326,7 @@ function Toast({
     clocks: Map<number, Clock>;
     entered: Set<number>;
 }) {
-    const tone = TONE[toast.tone] ?? TONE.info;
+    const tone = TONE[toast.tone] ?? TONE.default;
     const Icon = tone.icon;
     const ref = useRef<HTMLDivElement>(null);
     const body = useRef<HTMLDivElement>(null);
@@ -412,7 +412,7 @@ function Toast({
         <>
             <div
                 ref={ref}
-                role={toast.tone === 'error' ? 'alert' : 'status'}
+                role={toast.tone === 'negative' ? 'alert' : 'status'}
                 // Announced by the live region beside it instead (see above).
                 aria-live="off"
                 data-front={layout.front || undefined}
@@ -493,7 +493,7 @@ function Toast({
                     />
                 )}
             </div>
-            <span className="sr-only" aria-live={toast.tone === 'error' ? 'assertive' : 'polite'} aria-atomic="true">
+            <span className="sr-only" aria-live={toast.tone === 'negative' ? 'assertive' : 'polite'} aria-atomic="true">
                 {announced && [toast.title, toast.description].filter(Boolean).join('. ')}
             </span>
         </>

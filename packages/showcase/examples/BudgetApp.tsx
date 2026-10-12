@@ -247,7 +247,7 @@ const INITIAL: Entry[] = [
 ];
 
 /** The "⋯" button that opens a row's or page's actions. */
-const MORE = buttonVariants({ variant: 'icon', size: 'icon' });
+const MORE = buttonVariants({ variant: 'ghost', size: 'icon' });
 
 const CURRENCY = 'USD';
 const LOCALE = 'en-US';
@@ -309,7 +309,7 @@ function Budget({ nav }: { nav: boolean }) {
         setLoading(true);
         setTimeout(() => {
             setLoading(false);
-            toast('Up to date', { description: 'Totals refreshed.', tone: 'success' });
+            toast('Up to date', { description: 'Totals refreshed.', tone: 'positive' });
         }, 1400);
     };
 
@@ -343,7 +343,7 @@ function Budget({ nav }: { nav: boolean }) {
             label: 'Export CSV',
             group: 'Actions',
             keywords: ['download'],
-            onSelect: () => toast('Export started', { tone: 'info' }),
+            onSelect: () => toast('Export started', { tone: 'default' }),
         },
         { label: 'Reset month', group: 'Actions', keywords: ['clear'], onSelect: () => setResetting(true) },
     ];
@@ -399,10 +399,10 @@ function Budget({ nav }: { nav: boolean }) {
                                 </MenuTrigger>
                                 <MenuContent>
                                     <MenuItem onSelect={() => setImporting(true)}>Import statement</MenuItem>
-                                    <MenuItem onSelect={() => toast('Export started', { tone: 'info' })}>
+                                    <MenuItem onSelect={() => toast('Export started', { tone: 'default' })}>
                                         Export CSV
                                     </MenuItem>
-                                    <MenuItem destructive onSelect={() => setResetting(true)}>
+                                    <MenuItem tone="negative" onSelect={() => setResetting(true)}>
                                         Reset month
                                     </MenuItem>
                                 </MenuContent>
@@ -421,7 +421,7 @@ function Budget({ nav }: { nav: boolean }) {
                                 'up',
                                 'default',
                                 trend(INCOME_BEFORE, income),
-                                'primary',
+                                'default',
                             ],
                             [
                                 'Spent',
@@ -442,7 +442,7 @@ function Budget({ nav }: { nav: boolean }) {
                                     INCOME_BEFORE.map((v, i) => v - SPENT_BEFORE[i]),
                                     income - spent,
                                 ),
-                                'primary',
+                                'default',
                             ],
                         ] as const
                     ).map(([label, value, change, good, tone, values, line]) => (
@@ -524,7 +524,7 @@ function Budget({ nav }: { nav: boolean }) {
                 onAdd={(entry) => {
                     add([entry]);
                     log('Entry added', `${entry.label}, ${money(entry.amount)}`);
-                    toast('Entry added', { description: `${entry.label}, ${money(entry.amount)}`, tone: 'success' });
+                    toast('Entry added', { description: `${entry.label}, ${money(entry.amount)}`, tone: 'positive' });
                 }}
             />
             <ImportDialog
@@ -533,7 +533,7 @@ function Budget({ nav }: { nav: boolean }) {
                 onImport={(rows, from) => {
                     add(rows);
                     log('Statement imported', `${rows.length} entries from ${from}`);
-                    toast('Statement imported', { description: `${rows.length} entries added.`, tone: 'success' });
+                    toast('Statement imported', { description: `${rows.length} entries added.`, tone: 'positive' });
                 }}
             />
             <CommandPalette
@@ -548,7 +548,7 @@ function Budget({ nav }: { nav: boolean }) {
                 title="Delete this entry?"
                 description={deleting ? `${deleting.label} (${money(deleting.amount)}) will be removed.` : undefined}
                 confirmLabel="Delete"
-                destructive
+                tone="negative"
                 onConfirm={() => deleting && remove(deleting)}
             />
             <ConfirmDialog
@@ -557,11 +557,11 @@ function Budget({ nav }: { nav: boolean }) {
                 title="Reset this month?"
                 description="Every entry goes back to the sample data."
                 confirmLabel="Reset"
-                destructive
+                tone="negative"
                 onConfirm={() => {
                     setEntries(INITIAL);
                     log('Month reset');
-                    toast('Month reset', { tone: 'info' });
+                    toast('Month reset', { tone: 'default' });
                 }}
             />
         </>
@@ -736,7 +736,7 @@ function EntryTable({
                                                 <Ellipsis />
                                             </MenuTrigger>
                                             <MenuContent aria-label={`${e.label} actions`}>
-                                                <MenuItem destructive onSelect={() => onDelete(e)}>
+                                                <MenuItem tone="negative" onSelect={() => onDelete(e)}>
                                                     Delete
                                                 </MenuItem>
                                             </MenuContent>
@@ -1282,7 +1282,7 @@ function AddEntryDialog({
                         start={`${form.month ?? '2026-09'}-01`}
                     />
                 )}
-                {submitted && !valid && <FormMessage tone="error">Fix the fields above to add it.</FormMessage>}
+                {submitted && !valid && <FormMessage tone="negative">Fix the fields above to add it.</FormMessage>}
                 <div className="flex justify-end gap-2">
                     <Button variant="outline" onClick={close}>
                         Cancel
@@ -1371,7 +1371,7 @@ function ImportDialog({
                         <span className="text-foreground font-medium">Drop a statement here</span>
                         <span className="text-xs">A CSV file, or click to choose one</span>
                     </FileDrop>
-                    {problem && <FormMessage tone="error">{problem}</FormMessage>}
+                    {problem && <FormMessage tone="negative">{problem}</FormMessage>}
                     <Button
                         variant="ghost"
                         size="sm"

@@ -33,9 +33,9 @@ export default function Context() {
             </ul>
             <MenuContent aria-label={`${entry.label} actions`}>
                 <MenuItem onSelect={() => toast(`Editing ${entry.label}`)}>Edit</MenuItem>
-                <MenuItem onSelect={() => toast(`Duplicated ${entry.label}`, { tone: 'success' })}>Duplicate</MenuItem>
+                <MenuItem onSelect={() => toast(`Duplicated ${entry.label}`, { tone: 'positive' })}>Duplicate</MenuItem>
                 <MenuSeparator />
-                <MenuItem destructive onSelect={() => toast(`Deleted ${entry.label}`, { tone: 'error' })}>
+                <MenuItem tone="negative" onSelect={() => toast(`Deleted ${entry.label}`, { tone: 'negative' })}>
                     Delete
                 </MenuItem>
             </MenuContent>

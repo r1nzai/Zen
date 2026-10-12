@@ -78,11 +78,15 @@ export default function Pickers() {
                     </Combobox>
                 </div>
                 <DialogFooter>
-                    <Button variant="ghost" className="mr-auto" onClick={() => toast('Draft saved', { tone: 'info' })}>
+                    <Button
+                        variant="ghost"
+                        className="mr-auto"
+                        onClick={() => toast('Draft saved', { tone: 'default' })}
+                    >
                         Save draft
                     </Button>
                     <DialogClose variant="outline">Cancel</DialogClose>
-                    <DialogClose onClick={() => toast('Budget added', { tone: 'success' })}>Add</DialogClose>
+                    <DialogClose onClick={() => toast('Budget added', { tone: 'positive' })}>Add</DialogClose>
                 </DialogFooter>
             </Dialog>
         </>

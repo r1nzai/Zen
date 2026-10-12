@@ -30,7 +30,7 @@ export default function Cashflow() {
             <ChartBar dataKey="income" label="Income" dim={(_, i) => i > 5} />
             <ChartBar dataKey="spending" label="Spending" dim={(_, i) => i > 5} />
             <ChartLine dataKey="net" label="Net" color="var(--chart-3)" />
-            <ChartReference y={0} tone="destructive" />
+            <ChartReference y={0} tone="negative" />
         </Chart>
     );
 }

@@ -20,7 +20,7 @@ export default function Goal() {
                 <Menu>
                     <MenuTrigger
                         aria-label="Goal actions"
-                        className={buttonVariants({ variant: 'icon', size: 'icon' })}
+                        className={buttonVariants({ variant: 'ghost', size: 'icon' })}
                     >
                         <Ellipsis />
                     </MenuTrigger>

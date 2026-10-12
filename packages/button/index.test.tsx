@@ -79,8 +79,8 @@ describe('Button', () => {
             expect(btn).toHaveClass('text-primary-foreground');
         });
 
-        it('variant="destructive" applies a destructive fill', () => {
-            render(<Button variant="destructive">Destructive</Button>);
+        it('tone="negative" applies a destructive fill', () => {
+            render(<Button tone="negative">Destructive</Button>);
             const btn = screen.getByRole('button');
             expect(btn).toHaveClass('bg-destructive/90');
             expect(btn).toHaveClass('text-destructive-foreground');
@@ -122,8 +122,8 @@ describe('Button', () => {
             expect(btn).not.toHaveClass('bg-primary');
         });
 
-        it('variant="icon" renders with only the base zen__button class (no variant colour)', () => {
-            render(<Button variant="icon">Icon</Button>);
+        it('variant="ghost" renders with only the base zen__button class (no variant colour)', () => {
+            render(<Button variant="ghost">Icon</Button>);
             const btn = screen.getByRole('button');
             expect(btn).toHaveClass('zen__button');
             expect(btn).not.toHaveClass('bg-primary');
@@ -153,6 +153,19 @@ describe('Button', () => {
             expect(btn).toHaveClass('h-11');
             expect(btn).toHaveClass('px-6');
         });
+
+        it('icon squares are as tall as the text sizes, so a row of them lines up', () => {
+            render(
+                <>
+                    <Button size="icon-sm" aria-label="Small" />
+                    <Button size="icon" aria-label="Default" />
+                    <Button size="icon-lg" aria-label="Large" />
+                </>,
+            );
+            expect(screen.getByRole('button', { name: 'Small' })).toHaveClass('size-8');
+            expect(screen.getByRole('button', { name: 'Default' })).toHaveClass('size-10');
+            expect(screen.getByRole('button', { name: 'Large' })).toHaveClass('size-11');
+        });
     });
 
     // ── className forwarding ─────────────────────────────────────────────────
@@ -166,7 +179,7 @@ describe('Button', () => {
 
     it('custom className does not remove variant classes', () => {
         render(
-            <Button variant="destructive" className="extra">
+            <Button tone="negative" className="extra">
                 Destructive + Extra
             </Button>,
         );
@@ -225,9 +238,9 @@ describe('Button', () => {
         expect(link).not.toHaveClass('text-primary');
     });
 
-    it('icon, destructive: turns red when pointed at', () => {
+    it('ghost, negative: turns red when pointed at', () => {
         render(
-            <Button variant="icon" size="icon-sm" tone="destructive" aria-label="Remove">
+            <Button variant="ghost" size="icon-xs" tone="negative" aria-label="Remove">
                 ×
             </Button>,
         );

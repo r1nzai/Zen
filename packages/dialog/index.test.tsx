@@ -119,7 +119,7 @@ describe('ConfirmDialog', () => {
                 onOpenChange={onOpenChange}
                 title="Delete goal?"
                 confirmLabel="Delete"
-                destructive
+                tone="negative"
                 onConfirm={onConfirm}
             />,
         );

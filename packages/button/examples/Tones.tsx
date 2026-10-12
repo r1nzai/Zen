@@ -12,10 +12,10 @@ export default function Tones() {
                 </Button>
             </p>
             <div className="flex items-center gap-3">
-                <Button variant="link" tone="destructive">
+                <Button variant="link" tone="negative">
                     Delete account
                 </Button>
-                <Button variant="ghost" size="icon" tone="destructive" aria-label="Remove">
+                <Button variant="ghost" size="icon" tone="negative" aria-label="Remove">
                     <XMark className="size-4" />
                 </Button>
             </div>

@@ -93,7 +93,7 @@ function MobileMenu() {
     }, [open]);
     return (
         <div className="md:hidden">
-            <Button variant="icon" size="icon" aria-label="Menu" onClick={() => setOpen(true)}>
+            <Button variant="ghost" size="icon" aria-label="Menu" onClick={() => setOpen(true)}>
                 <Bars className="size-5" />
             </Button>
             <Dialog open={open} onOpenChange={setOpen} side="left" title="Zen">

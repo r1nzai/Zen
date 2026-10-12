@@ -33,7 +33,7 @@ describe('Meter', () => {
     });
 
     it('takes a fixed tone', () => {
-        const { container } = render(<Meter value={10} tone="danger" />);
+        const { container } = render(<Meter value={10} tone="negative" />);
         expect(container.querySelector('[style]')).toHaveClass('bg-destructive');
     });
 

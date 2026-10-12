@@ -51,7 +51,7 @@ export default function Selectable() {
             <SelectionBar count={selection.selected.size} onClear={selection.clear}>
                 <Button
                     size="sm"
-                    variant="destructive"
+                    tone="negative"
                     onClick={() => setEntries((es) => es.filter((e) => !selection.selected.has(e.id)))}
                 >
                     Delete

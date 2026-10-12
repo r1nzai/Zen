@@ -7,7 +7,7 @@ export default function Variants() {
             <Button variant="secondary">Export</Button>
             <Button variant="outline">Cancel</Button>
             <Button variant="ghost">Skip</Button>
-            <Button variant="destructive">Delete</Button>
+            <Button tone="negative">Delete</Button>
             <Button variant="link">Learn more</Button>
         </div>
     );

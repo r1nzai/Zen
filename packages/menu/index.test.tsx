@@ -18,7 +18,7 @@ function Account({ onSettings = () => {}, onLogout = () => {} }: { onSettings?: 
                 </MenuItem>
                 <MenuItem>Lock now</MenuItem>
                 <MenuSeparator />
-                <MenuItem destructive icon={<Icon />} onSelect={onLogout}>
+                <MenuItem tone="negative" icon={<Icon />} onSelect={onLogout}>
                     Log out
                 </MenuItem>
             </MenuContent>

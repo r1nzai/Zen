@@ -5,7 +5,7 @@ export default function Confirm() {
     const [open, setOpen] = useState(false);
     return (
         <>
-            <Button variant="destructive" onClick={() => setOpen(true)}>
+            <Button tone="negative" onClick={() => setOpen(true)}>
                 Delete goal
             </Button>
             <ConfirmDialog
@@ -14,7 +14,7 @@ export default function Confirm() {
                 title="Delete this goal?"
                 description="Its progress history is removed too. This can't be undone."
                 confirmLabel="Delete"
-                destructive
+                tone="negative"
                 onConfirm={() => {}}
             />
         </>

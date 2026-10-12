@@ -29,11 +29,11 @@ export default function Account() {
                 <MenuItem icon={<Settings className="size-4" />} onSelect={() => toast('Settings')}>
                     Settings
                 </MenuItem>
-                <MenuItem icon={<Lock className="size-4" />} onSelect={() => toast('Locked', { tone: 'success' })}>
+                <MenuItem icon={<Lock className="size-4" />} onSelect={() => toast('Locked', { tone: 'positive' })}>
                     Lock now
                 </MenuItem>
                 <MenuSeparator />
-                <MenuItem destructive icon={<Logout className="size-4" />} onSelect={() => toast('Logged out')}>
+                <MenuItem tone="negative" icon={<Logout className="size-4" />} onSelect={() => toast('Logged out')}>
                     Log out
                 </MenuItem>
             </MenuContent>
