@@ -17,6 +17,14 @@ export interface ComponentDoc {
 
 export const COMPONENTS: ComponentDoc[] = [
     {
+        slug: 'accordion',
+        title: 'Accordion',
+        description:
+            'Sections under headings that open one at a time, or several: questions and answers, or groups of settings.',
+        parts: ['Accordion', 'AccordionItem', 'AccordionTrigger', 'AccordionContent'],
+        examples: ['Default', 'Multiple'],
+    },
+    {
         slug: 'alert',
         title: 'Alert',
         description:
@@ -81,6 +89,13 @@ export const COMPONENTS: ComponentDoc[] = [
         description: 'Glass panels for grouping content, and stats for single figures.',
         parts: ['Card', 'CardHeader', 'CardTitle', 'CardDescription', 'Stat', 'StatRow'],
         examples: ['Goal', 'Stats', 'Morph'],
+    },
+    {
+        slug: 'button-group',
+        title: 'Button Group',
+        description: 'Buttons joined into one, rounded only at the ends: a split button, or Previous, Today and Next.',
+        parts: ['ButtonGroup'],
+        examples: ['Default', 'Split'],
     },
     {
         slug: 'calendar',
@@ -398,6 +413,12 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'CustomOptions', 'Groups'],
     },
     {
+        slug: 'separator',
+        title: 'Separator',
+        description: 'A hairline between groups of content, across or upright.',
+        parts: ['Separator'],
+    },
+    {
         slug: 'side-nav',
         title: 'Side Nav',
         description: 'Vertical navigation in titled groups, for docs and settings sidebars. Works with any router.',
@@ -521,6 +542,21 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['ToastProvider'],
     },
     { slug: 'toggle', title: 'Toggle', description: 'An on/off switch.', parts: ['Toggle'] },
+    {
+        slug: 'toggle-group',
+        title: 'Toggle Group',
+        description:
+            'Buttons that stay pressed, in a row: any number of them, like filters, or at most one. One stop in the tab order; the arrow keys go through them.',
+        parts: ['ToggleGroup', 'ToggleGroupItem'],
+        examples: ['Default', 'Single'],
+    },
+    {
+        slug: 'toolbar',
+        title: 'Toolbar',
+        description:
+            'A row of controls for one thing, like a table’s: one stop for Tab, and the arrow keys through its buttons, toggles and fields.',
+        parts: ['Toolbar', 'ToolbarSeparator'],
+    },
     {
         slug: 'tooltip',
         title: 'Tooltip',

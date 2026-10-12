@@ -11,7 +11,8 @@ interface DisclosureContextValue {
 
 const DisclosureContext = createContext<DisclosureContextValue | null>(null);
 
-function useDisclosure(part: string) {
+/** The enclosing Disclosure's state, for building your own trigger or content. */
+export function useDisclosure(part: string) {
     const ctx = useContext(DisclosureContext);
     if (!ctx) throw new Error(`<${part}> must be inside <Disclosure>`);
     return ctx;
