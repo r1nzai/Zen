@@ -378,3 +378,4 @@ export {
     HoverCardTrigger,
     type HoverCardTriggerProps,
 } from './hover-card';
+export { default as NumberField, type NumberFieldProps } from './number-field';

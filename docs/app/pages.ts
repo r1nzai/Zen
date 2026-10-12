@@ -337,6 +337,14 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['Default', 'Range'],
     },
     {
+        slug: 'number-field',
+        title: 'Number Field',
+        description:
+            'A number to type or step with − and +, the arrow keys and Page Up and Down: shown the locale’s way, as a percentage or a unit, and kept within bounds.',
+        parts: ['NumberField'],
+        examples: ['Default', 'Formats'],
+    },
+    {
         slug: 'page-header',
         title: 'Page Header',
         description: 'Eyebrow, aurora title and lead paragraph for the top of a page.',

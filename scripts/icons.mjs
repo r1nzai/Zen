@@ -43,6 +43,7 @@ const ICONS = {
     'micro/information-circle': ['InformationCircleMicro', '16/solid/information-circle'],
     'micro/minus': ['MinusMicro', '16/solid/minus'],
     'micro/moon': ['MoonMicro', '16/solid/moon'],
+    'micro/plus': ['PlusMicro', '16/solid/plus'],
     'micro/sun': ['SunMicro', '16/solid/sun'],
     'micro/x-mark': ['XMarkMicro', '16/solid/x-mark'],
 };

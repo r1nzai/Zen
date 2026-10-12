@@ -16,6 +16,8 @@ export const ENGLISH = {
     expand: 'Expand',
     collapse: 'Collapse',
     minimum: 'Minimum',
+    increase: 'Increase',
+    decrease: 'Decrease',
     maximum: 'Maximum',
 
     // Select, Combobox, CommandPalette
