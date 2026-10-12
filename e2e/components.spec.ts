@@ -417,3 +417,50 @@ test('hover card: shows once the pointer rests on the link, and for keyboard foc
     await page.keyboard.press('Escape');
     await expect(card).toBeHidden();
 });
+
+test('menu: a submenu opens beside its item on hover and by keyboard, and stays open for its choices', async ({
+    page,
+}) => {
+    errors = await open(page, '/components/menu/');
+    const view = example(page, 'Options').getByRole('button', { name: 'View' });
+    // With room below for the submenu to open downwards.
+    await view.evaluate((el) => window.scrollBy(0, el.getBoundingClientRect().top - 120));
+    await view.click();
+    const item = (name: string) => page.getByRole('menuitem', { name });
+    // Checkbox items leave the menu open.
+    const notes = page.getByRole('menuitemcheckbox', { name: 'Notes' });
+    await notes.click();
+    await expect(notes).toHaveAttribute('aria-checked', 'true');
+    await item('Export').hover();
+    const sub = page.getByRole('menu', { name: 'Export' });
+    await expect(sub).toBeVisible();
+    await page.waitForTimeout(400);
+    // Beside the item, its first item level with it.
+    const [at, beside, first] = [
+        (await item('Export').boundingBox())!,
+        (await sub.boundingBox())!,
+        (await item('CSV').boundingBox())!,
+    ];
+    expect(beside.x).toBeGreaterThanOrEqual(at.x + at.width);
+    expect(beside.x).toBeLessThan(at.x + at.width + 16);
+    expect(Math.abs(first.y - at.y)).toBeLessThan(2);
+    // Across another item and into it, it stays.
+    await page.mouse.move(at.x + at.width - 4, at.y + at.height + 6);
+    await page.mouse.move(first.x + 10, first.y + first.height / 2, { steps: 4 });
+    await page.waitForTimeout(400);
+    await expect(sub).toBeVisible();
+    // Escape closes only the submenu, and focus goes back to its item.
+    await item('PDF').focus();
+    await page.keyboard.press('Escape');
+    await expect(sub).toBeHidden();
+    await expect(item('Export')).toBeFocused();
+    await expect(page.getByRole('menu', { name: 'View' })).toBeVisible();
+    await page.keyboard.press('ArrowRight');
+    await expect(item('CSV')).toBeFocused();
+    await page.keyboard.press('ArrowLeft');
+    await expect(item('Export')).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(item('CSV')).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('menu')).toHaveCount(0);
+});

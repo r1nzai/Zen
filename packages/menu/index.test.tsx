@@ -1,6 +1,19 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
-import Menu, { MenuContent, MenuContextTrigger, MenuHeader, MenuItem, MenuSeparator, MenuTrigger } from './index';
+import Menu, {
+    MenuCheckboxItem,
+    MenuContent,
+    MenuContextTrigger,
+    MenuHeader,
+    MenuItem,
+    MenuRadioGroup,
+    MenuRadioItem,
+    MenuSeparator,
+    MenuSub,
+    MenuSubContent,
+    MenuSubTrigger,
+    MenuTrigger,
+} from './index';
 
 const Icon = () => <svg data-testid="icon" className="size-4" />;
 
@@ -122,6 +135,156 @@ describe('Menu', () => {
     it('parts outside a Menu say so', () => {
         vi.spyOn(console, 'error').mockImplementation(() => {});
         expect(() => render(<MenuTrigger>Go</MenuTrigger>)).toThrow('<MenuTrigger> must be inside <Menu>');
+    });
+});
+
+describe('Menu choices', () => {
+    function View({ onWrap = () => {}, onSort = () => {} }) {
+        return (
+            <Menu>
+                <MenuTrigger>View</MenuTrigger>
+                <MenuContent>
+                    <MenuCheckboxItem defaultChecked onCheckedChange={onWrap}>
+                        Wrap lines
+                    </MenuCheckboxItem>
+                    <MenuRadioGroup aria-label="Sort by" defaultValue="date" onValueChange={onSort}>
+                        <MenuRadioItem value="date">Date</MenuRadioItem>
+                        <MenuRadioItem value="amount">Amount</MenuRadioItem>
+                    </MenuRadioGroup>
+                </MenuContent>
+            </Menu>
+        );
+    }
+
+    it('a checkbox item flips, and the menu stays open to set more', () => {
+        const onWrap = vi.fn();
+        render(<View onWrap={onWrap} />);
+        const menu = screen.getByRole('menu', { hidden: true });
+        const item = screen.getByRole('menuitemcheckbox', { name: 'Wrap lines', hidden: true });
+        expect(item).toHaveAttribute('aria-checked', 'true');
+        vi.mocked(HTMLElement.prototype.hidePopover).mockClear();
+        fireEvent.click(item);
+        expect(item).toHaveAttribute('aria-checked', 'false');
+        expect(onWrap).toHaveBeenCalledWith(false);
+        expect(menu.hidePopover).not.toHaveBeenCalled();
+    });
+
+    it('radio items in a group: one is chosen', () => {
+        const onSort = vi.fn();
+        render(<View onSort={onSort} />);
+        const item = (name: string) => screen.getByRole('menuitemradio', { name, hidden: true });
+        expect(screen.getByRole('group', { name: 'Sort by', hidden: true })).toContainElement(item('Date'));
+        expect(item('Date')).toHaveAttribute('aria-checked', 'true');
+        fireEvent.click(item('Amount'));
+        expect(onSort).toHaveBeenCalledWith('amount');
+        expect(item('Amount')).toHaveAttribute('aria-checked', 'true');
+        expect(item('Date')).toHaveAttribute('aria-checked', 'false');
+    });
+
+    it('arrow keys reach every kind of item', () => {
+        render(<View />);
+        const menu = screen.getByRole('menu', { hidden: true });
+        fireEvent.keyDown(menu, { key: 'End' });
+        expect(screen.getByRole('menuitemradio', { name: 'Amount', hidden: true })).toHaveFocus();
+        fireEvent.keyDown(menu, { key: 'Home' });
+        expect(screen.getByRole('menuitemcheckbox', { name: 'Wrap lines', hidden: true })).toHaveFocus();
+    });
+});
+
+describe('MenuSub', () => {
+    function Share({ onEmail = () => {} }) {
+        return (
+            <Menu>
+                <MenuTrigger>Actions</MenuTrigger>
+                <MenuContent>
+                    <MenuItem>Edit</MenuItem>
+                    <MenuSub>
+                        <MenuSubTrigger>Share</MenuSubTrigger>
+                        <MenuSubContent>
+                            <MenuItem onSelect={onEmail}>Email</MenuItem>
+                            <MenuItem>Copy link</MenuItem>
+                        </MenuSubContent>
+                    </MenuSub>
+                    <MenuItem>Delete</MenuItem>
+                </MenuContent>
+            </Menu>
+        );
+    }
+    const item = (name: string) => screen.getByRole('menuitem', { name, hidden: true });
+    const [root, sub] = [0, 1].map((i) => () => screen.getAllByRole('menu', { hidden: true })[i]);
+
+    it('is a menu named after its item, which says it opens one', () => {
+        render(<Share />);
+        const trigger = item('Share');
+        expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
+        expect(trigger).toHaveAttribute('aria-expanded', 'false');
+        expect(trigger).toHaveAttribute('aria-controls', sub().id);
+        expect(sub()).toHaveAttribute('aria-labelledby', trigger.id);
+        // Its own popover, opened from code: a click on it mustn't toggle it shut.
+        expect(trigger).not.toHaveAttribute('popovertarget');
+    });
+
+    it("the parent's arrow keys skip the submenu's items", () => {
+        render(<Share />);
+        fireEvent.keyDown(root(), { key: 'End' });
+        expect(item('Delete')).toHaveFocus();
+        fireEvent.keyDown(root(), { key: 'ArrowUp' });
+        expect(item('Share')).toHaveFocus();
+    });
+
+    it('the arrow towards it opens it at its first item; the arrow back returns', () => {
+        render(<Share />);
+        item('Share').focus();
+        fireEvent.keyDown(item('Share'), { key: 'ArrowRight' });
+        expect(item('Share')).toHaveAttribute('aria-expanded', 'true');
+        expect(item('Email')).toHaveFocus();
+        fireEvent.keyDown(item('Email'), { key: 'ArrowDown' });
+        expect(item('Copy link')).toHaveFocus();
+        fireEvent.keyDown(item('Copy link'), { key: 'ArrowLeft' });
+        expect(sub().hidePopover).toHaveBeenCalled();
+        expect(item('Share')).toHaveAttribute('aria-expanded', 'false');
+        expect(item('Share')).toHaveFocus();
+    });
+
+    it('opens on hover without taking focus, and closes once the pointer settles elsewhere in the menu', () => {
+        vi.useFakeTimers();
+        render(<Share />);
+        fireEvent.pointerEnter(item('Share'), { pointerType: 'mouse' });
+        expect(item('Share')).toHaveAttribute('aria-expanded', 'true');
+        expect(document.body).toHaveFocus();
+        fireEvent.pointerLeave(item('Share'), { pointerType: 'mouse', relatedTarget: item('Delete') });
+        act(() => {
+            vi.advanceTimersByTime(200);
+        });
+        expect(item('Share')).toHaveAttribute('aria-expanded', 'true');
+        act(() => {
+            vi.advanceTimersByTime(50);
+        });
+        expect(item('Share')).toHaveAttribute('aria-expanded', 'false');
+        vi.useRealTimers();
+    });
+
+    it('passing over another item on the way in keeps it open', () => {
+        vi.useFakeTimers();
+        render(<Share />);
+        fireEvent.pointerEnter(item('Share'), { pointerType: 'mouse' });
+        fireEvent.pointerLeave(item('Share'), { pointerType: 'mouse', relatedTarget: item('Delete') });
+        fireEvent.pointerEnter(sub(), { pointerType: 'mouse' });
+        act(() => {
+            vi.advanceTimersByTime(500);
+        });
+        expect(item('Share')).toHaveAttribute('aria-expanded', 'true');
+        vi.useRealTimers();
+    });
+
+    it('choosing in it closes the whole menu', () => {
+        const onEmail = vi.fn();
+        render(<Share onEmail={onEmail} />);
+        const menu = root();
+        vi.mocked(HTMLElement.prototype.hidePopover).mockClear();
+        fireEvent.click(item('Email'));
+        expect(vi.mocked(HTMLElement.prototype.hidePopover).mock.contexts).toContain(menu);
+        expect(onEmail).toHaveBeenCalled();
     });
 });
 

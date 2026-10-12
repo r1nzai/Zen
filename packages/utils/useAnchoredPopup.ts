@@ -78,20 +78,28 @@ export function anchorFor(id: string) {
 /**
  * The popup's position: below the trigger (above it if there's no room below),
  * lined up with its start or end edge, or centred on it; `width` makes it as
- * wide as the trigger, or at least as wide. For parts that take their own
- * `align`/`offset` (PopoverContent, MenuContent). The same choices are kept as
- * custom properties, for placing it where anchor positioning isn't supported.
+ * wide as the trigger, or at least as wide. `side: 'beside'` puts it after the
+ * trigger instead (before it if there's no room), its top level with the
+ * trigger's, as a submenu opens. For parts that take their own `align`/`offset`
+ * (PopoverContent, MenuContent). The same choices are kept as custom
+ * properties, for placing it where anchor positioning isn't supported.
  */
-export function anchoredStyle(id: string, { align = 'start', offset = 4, width }: AnchorOptions = {}): CSSProperties {
-    const area = {
-        start: 'block-end span-inline-end',
-        end: 'block-end span-inline-start',
-        center: 'block-end center',
-    }[align];
+export function anchoredStyle(
+    id: string,
+    { align = 'start', offset = 4, width, side = 'below' }: AnchorOptions = {},
+): CSSProperties {
+    const area =
+        side === 'beside'
+            ? 'inline-end span-block-end'
+            : {
+                  start: 'block-end span-inline-end',
+                  end: 'block-end span-inline-start',
+                  center: 'block-end center',
+              }[align];
     return {
         positionAnchor: `--${id}`,
         positionArea: area,
-        positionTryFallbacks: 'flip-block',
+        positionTryFallbacks: side === 'beside' ? 'flip-inline, flip-block, flip-block flip-inline' : 'flip-block',
         inset: 'auto',
         // As wide as its content, and at least as wide as the trigger.
         ...(width === 'at-least' && { width: 'max-content', minWidth: 'anchor-size(width)' }),
@@ -100,6 +108,7 @@ export function anchoredStyle(id: string, { align = 'start', offset = 4, width }
         '--zen-anchor-align': align,
         '--zen-anchor-offset': offset,
         '--zen-anchor-width': width ?? 'auto',
+        '--zen-anchor-side': side,
     } as CSSProperties;
 }
 
@@ -107,6 +116,7 @@ interface AnchorOptions {
     align?: 'start' | 'end' | 'center';
     offset?: number;
     width?: 'match' | 'at-least';
+    side?: 'below' | 'beside';
 }
 
 /*
@@ -164,6 +174,7 @@ function placeAgainstTrigger(popup: HTMLElement) {
     const align = popup.style.getPropertyValue('--zen-anchor-align').trim() || 'start';
     const offset = Number(popup.style.getPropertyValue('--zen-anchor-offset')) || 0;
     const width = popup.style.getPropertyValue('--zen-anchor-width').trim();
+    const beside = popup.style.getPropertyValue('--zen-anchor-side').trim() === 'beside';
     const t = trigger.getBoundingClientRect();
     const s = popup.style;
     // Where only part of anchor positioning exists, what there is would fight this placement.
@@ -175,12 +186,23 @@ function placeAgainstTrigger(popup: HTMLElement) {
     const p = { width: popup.offsetWidth, height: popup.offsetHeight };
     const vw = document.documentElement.clientWidth;
     const vh = document.documentElement.clientHeight;
-    const flip = t.bottom + offset + p.height > vh - EDGE && t.top - offset - p.height >= EDGE;
     const rtl = getComputedStyle(trigger).direction === 'rtl';
+    // By the edge nearest the trigger: the margin (theme.css) is the gap, and animates.
+    if (beside) {
+        const fitsRight = t.right + offset + p.width <= vw - EDGE;
+        const fitsLeft = t.left - offset - p.width >= EDGE;
+        const right = rtl ? fitsRight && !fitsLeft : fitsRight || !fitsLeft;
+        const up = t.top + p.height > vh - EDGE && t.bottom - p.height >= EDGE;
+        s.left = right ? `${t.right}px` : 'auto';
+        s.right = right ? 'auto' : `${vw - t.left}px`;
+        s.top = up ? 'auto' : `${Math.max(EDGE, Math.min(t.top, vh - p.height - EDGE))}px`;
+        s.bottom = up ? `${vh - t.bottom}px` : 'auto';
+        return;
+    }
+    const flip = t.bottom + offset + p.height > vh - EDGE && t.top - offset - p.height >= EDGE;
     const start = rtl ? t.right - p.width : t.left;
     const end = rtl ? t.left : t.right - p.width;
     const left = align === 'center' ? t.left + (t.width - p.width) / 2 : align === 'end' ? end : start;
-    // By the edge nearest the trigger: the margin (theme.css) is the gap, and animates.
     s.top = flip ? 'auto' : `${t.bottom}px`;
     s.bottom = flip ? `${vh - t.top}px` : 'auto';
     s.left = `${Math.max(EDGE, Math.min(left, vw - p.width - EDGE))}px`;

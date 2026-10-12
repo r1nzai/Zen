@@ -1033,11 +1033,19 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     transition:
         opacity 150ms,
         margin-block 180ms var(--ease-out-soft),
+        margin-inline 180ms var(--ease-out-soft),
         overlay 180ms allow-discrete,
         display 180ms allow-discrete;
 }
 .zen__popover:not(:popover-open) {
     margin-block: calc((var(--zen-anchor-offset, 4) - 6) * 1px);
+}
+/* One beside its trigger (a submenu) slides out sideways. */
+.zen__popover[data-zen-beside] {
+    margin-inline: calc(var(--zen-anchor-offset, 4) * 1px);
+}
+.zen__popover[data-zen-beside]:not(:popover-open) {
+    margin-inline: calc((var(--zen-anchor-offset, 4) - 6) * 1px);
 }
 .zen__dialog {
     /*
@@ -1118,6 +1126,9 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     .zen__popover:popover-open {
         opacity: 0;
         margin-block: calc((var(--zen-anchor-offset, 4) - 6) * 1px);
+    }
+    .zen__popover[data-zen-beside]:popover-open {
+        margin-inline: calc((var(--zen-anchor-offset, 4) - 6) * 1px);
     }
     .zen__dialog[open] {
         opacity: 0;

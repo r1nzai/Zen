@@ -1,6 +1,8 @@
 import 'react';
 export {
     default as Menu,
+    MenuCheckboxItem,
+    type MenuCheckboxItemProps,
     MenuContent,
     type MenuContentProps,
     MenuContextTrigger,
@@ -9,7 +11,16 @@ export {
     MenuItem,
     type MenuItemProps,
     type MenuProps,
+    MenuRadioGroup,
+    type MenuRadioGroupProps,
+    MenuRadioItem,
+    type MenuRadioItemProps,
     MenuSeparator,
+    MenuSub,
+    MenuSubContent,
+    type MenuSubContentProps,
+    MenuSubTrigger,
+    type MenuSubTriggerProps,
     MenuTrigger,
     type MenuTriggerProps,
 } from './menu';
