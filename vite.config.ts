@@ -283,8 +283,9 @@ export default defineConfig({
                 preserveModules: true,
                 preserveModulesRoot: 'packages',
                 entryFileNames: '[name].js',
-                // Components use hooks and browser APIs; mark the modules as client modules for RSC frameworks
-                banner: "'use client';",
+                // Modules that use React (components, hooks, context) are client modules for RSC
+                // frameworks; the rest (money, dates, cx, colours) and the entry stay callable on the server.
+                banner: (chunk) => (chunk.imports.some((i) => /^react(-dom)?($|\/)/.test(i)) ? "'use client';" : ''),
                 globals: {
                     react: 'React',
                 },

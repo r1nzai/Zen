@@ -1,6 +1,7 @@
 import { useModal } from '@zen/dialog';
 import { cx } from '@zen/utils/cx';
-import { KeyboardEvent, ReactNode, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useMergedRefs } from '@zen/utils/refs';
+import { ComponentProps, KeyboardEvent, ReactNode, useEffect, useId, useMemo, useRef, useState } from 'react';
 
 /**
  * Search everything and act on it (pages, commands, records): a field over a
@@ -16,8 +17,11 @@ export default function CommandPalette({
     empty = 'No results',
     label = 'Commands',
     className,
+    ref: refProp,
+    ...rest
 }: CommandPaletteProps) {
     const ref = useRef<HTMLDialogElement>(null);
+    const merged = useMergedRefs(ref, refProp);
     const input = useRef<HTMLInputElement>(null);
     const list = useRef<HTMLDivElement>(null);
     const id = useId();
@@ -78,7 +82,8 @@ export default function CommandPalette({
 
     return (
         <dialog
-            ref={ref}
+            {...rest}
+            ref={merged}
             aria-label={label}
             className={cx(
                 'zen__dialog zen__command-palette glass glass-blur glow-edge text-card-foreground bg-card/90! overflow-hidden p-0',
@@ -194,7 +199,8 @@ export interface CommandItem {
     onSelect: () => void;
 }
 
-export interface CommandPaletteProps {
+/** Other props (data-*, an id) go on the <dialog>. */
+export interface CommandPaletteProps extends Omit<ComponentProps<'dialog'>, 'open' | 'children'> {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     items: CommandItem[];

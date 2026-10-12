@@ -1,7 +1,8 @@
 import Button from '@zen/button';
 import Spinner from '@zen/spinner';
 import { cx } from '@zen/utils/cx';
-import { useEffect, useRef } from 'react';
+import { useMergedRefs } from '@zen/utils/refs';
+import { ComponentProps, useEffect, useRef } from 'react';
 
 /**
  * The end of a long list that has more: a "Load more" button, which also
@@ -17,8 +18,11 @@ export default function LoadMore({
     label = 'Load more',
     loadingLabel = 'Loading more…',
     className,
+    ref: refProp,
+    ...rest
 }: LoadMoreProps) {
     const ref = useRef<HTMLDivElement>(null);
+    const merged = useMergedRefs(ref, refProp);
     const load = useRef(onLoadMore);
     useEffect(() => {
         load.current = onLoadMore;
@@ -39,7 +43,7 @@ export default function LoadMore({
 
     if (!hasMore) return null;
     return (
-        <div ref={ref} className={cx('zen__load-more flex justify-center py-3', className)}>
+        <div {...rest} ref={merged} className={cx('zen__load-more flex justify-center py-3', className)}>
             <Button variant="ghost" size="sm" aria-busy={loading} disabled={loading} onClick={onLoadMore}>
                 {loading ? (
                     <>
@@ -54,7 +58,8 @@ export default function LoadMore({
     );
 }
 
-export interface LoadMoreProps {
+/** Other props (data-*, an id) go on the row around the button. */
+export interface LoadMoreProps extends Omit<ComponentProps<'div'>, 'children'> {
     onLoadMore: () => void;
     hasMore: boolean;
     /** While true, it shows a spinner and won't ask for more. */

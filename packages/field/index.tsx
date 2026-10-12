@@ -1,7 +1,16 @@
-import Alert from '@zen/alert';
+import Alert, { type AlertProps } from '@zen/alert';
 import { cx } from '@zen/utils/cx';
 import { AlertIcon } from '@zen/utils/status-icons';
-import { cloneElement, createContext, isValidElement, ReactElement, ReactNode, useContext, useId } from 'react';
+import {
+    cloneElement,
+    ComponentProps,
+    createContext,
+    isValidElement,
+    ReactElement,
+    ReactNode,
+    useContext,
+    useId,
+} from 'react';
 
 /** What a Field tells the control inside it. */
 export interface FieldControl {
@@ -53,7 +62,7 @@ export function useFieldProps(props: { id?: string; 'aria-describedby'?: string;
  * markup (e.g. an amount beside a unit select), give it an id and pass the
  * same id as `htmlFor`: Zen's controls with that id pick them up themselves.
  */
-export default function Field({ label, hint, error, htmlFor, children, className }: FieldProps) {
+export default function Field({ label, hint, error, htmlFor, children, className, ...rest }: FieldProps) {
     const baseId = useId();
     // Linked through htmlFor: the child is a wrapper, not the control.
     const child = !htmlFor && isValidElement(children) ? (children as ReactElement<Record<string, unknown>>) : null;
@@ -70,7 +79,7 @@ export default function Field({ label, hint, error, htmlFor, children, className
 
     return (
         <FieldContext.Provider value={control}>
-            <div className={cx('zen__field flex flex-col gap-2', className)}>
+            <div {...rest} className={cx('zen__field flex flex-col gap-2', className)}>
                 <label id={labelId} htmlFor={controlId} className="text-sm leading-none font-medium">
                     {label}
                 </label>
@@ -105,15 +114,16 @@ export default function Field({ label, hint, error, htmlFor, children, className
 }
 
 /** A message for a form as a whole: an error or success in a tinted box, or a quiet note. An Alert, set for forms. */
-export function FormMessage({ tone = 'default', children, className }: FormMessageProps) {
+export function FormMessage({ tone = 'default', children, className, ...rest }: FormMessageProps) {
     return (
-        <Alert tone={tone} plain={tone === 'default'} className={cx('mt-0!', className)}>
+        <Alert {...rest} tone={tone} plain={tone === 'default'} className={cx('mt-0!', className)}>
             {children}
         </Alert>
     );
 }
 
-export interface FieldProps {
+/** Other props (data-*, an id) go on the field's outer element. */
+export interface FieldProps extends Omit<ComponentProps<'div'>, 'children'> {
     label: ReactNode;
     /** Help text under the control. */
     hint?: ReactNode;
@@ -126,8 +136,6 @@ export interface FieldProps {
     className?: string;
 }
 
-export interface FormMessageProps {
+export interface FormMessageProps extends Omit<AlertProps, 'tone' | 'plain'> {
     tone?: 'default' | 'positive' | 'negative';
-    children: ReactNode;
-    className?: string;
 }

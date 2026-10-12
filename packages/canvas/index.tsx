@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { useMergedRefs } from '@zen/utils/refs';
 import {
     ComponentProps,
     createContext,
@@ -96,9 +97,11 @@ export function Canvas<T extends CanvasItemRect>({
     style,
     children,
     onPointerDown,
+    ref,
     ...rest
 }: CanvasProps<T>) {
     const outer = useRef<HTMLDivElement>(null);
+    const outerRef = useMergedRefs(outer, ref);
     const focusing = useRef(false);
     const [fitScale, setFitScale] = useState<number | null>(null);
     const [guides, setGuides] = useState<CanvasGuide[]>([]);
@@ -340,9 +343,9 @@ export function Canvas<T extends CanvasItemRect>({
     return (
         <CanvasContext.Provider value={{ item: (id) => byId.get(id), selected, grab, key, focus, hintId }}>
             <div
-                ref={outer}
                 role="group"
                 {...rest}
+                ref={outerRef}
                 onPointerDown={(e) => {
                     onPointerDown?.(e);
                     if (!e.defaultPrevented) sweep(e);

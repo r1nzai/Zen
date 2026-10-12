@@ -1,5 +1,7 @@
 import { cx } from '@zen/utils/cx';
-import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useMergedRefs } from '@zen/utils/refs';
+import { useControllable } from '@zen/utils/useControllable';
+import { ComponentProps, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
@@ -19,14 +21,13 @@ export default function EditableCell({
     onEditingChange,
     title,
     className,
+    ref,
+    onClick,
+    ...rest
 }: EditableCellProps) {
-    const [editingState, setEditingState] = useState(false);
-    const editing = editingProp ?? editingState;
-    const setEditing = (next: boolean) => {
-        if (editingProp === undefined) setEditingState(next);
-        onEditingChange?.(next);
-    };
+    const [editing, setEditing] = useControllable(editingProp, false, onEditingChange);
     const button = useRef<HTMLButtonElement>(null);
+    const merged = useMergedRefs(button, ref);
     const [before, setBefore] = useState<string | null>(null);
     useIsoLayoutEffect(() => {
         const node = button.current;
@@ -43,11 +44,13 @@ export default function EditableCell({
     if (editing) return <>{editor(() => setEditing(false))}</>;
     return (
         <button
-            ref={button}
             type="button"
             title={title}
             aria-label={label ? `${label}. Edit` : undefined}
+            {...rest}
+            ref={merged}
             onClick={(e) => {
+                onClick?.(e);
                 setBefore(e.currentTarget.textContent);
                 setEditing(true);
             }}
@@ -61,7 +64,8 @@ export default function EditableCell({
     );
 }
 
-export interface EditableCellProps {
+/** Other props (data-*, aria-*) go on the button. */
+export interface EditableCellProps extends Omit<ComponentProps<'button'>, 'children'> {
     /** What the cell shows when not editing. */
     children: ReactNode;
     /** The editor to show while editing; call `close` when it's done. */
@@ -73,6 +77,4 @@ export interface EditableCellProps {
     /** Control the editing state yourself (with onEditingChange). */
     editing?: boolean;
     onEditingChange?: (editing: boolean) => void;
-    title?: string;
-    className?: string;
 }

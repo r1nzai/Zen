@@ -1,6 +1,7 @@
 import { cx } from '@zen/utils/cx';
 import { applyGraphicsMode } from '@zen/utils/graphics';
-import { CSSProperties, useEffect, useRef } from 'react';
+import { useMergedRefs } from '@zen/utils/refs';
+import { ComponentProps, CSSProperties, useEffect, useRef } from 'react';
 
 /**
  * Fixed page background: slow aurora glows over a faint pattern (topographic
@@ -8,14 +9,15 @@ import { CSSProperties, useEffect, useRef } from 'react';
  * lights `.glow-edge` and `.glow-border` borders (cards, outline buttons,
  * dialogs, fields) near the pointer. Render once, behind everything.
  */
-export default function Backdrop({ pattern, topoSrc, className, style }: BackdropProps) {
+export default function Backdrop({ pattern, topoSrc, className, style, ref: refProp, ...rest }: BackdropProps) {
     const kind = pattern ?? (topoSrc ? 'contours' : 'dots');
 
-    const ref = useRef<HTMLDivElement>(null);
+    const own = useRef<HTMLDivElement>(null);
+    const ref = useMergedRefs(own, refProp);
 
     useEffect(() => {
         const root = document.documentElement;
-        const backdrop = ref.current;
+        const backdrop = own.current;
         let frame = 0;
         let x = -9999;
         let y = -9999;
@@ -121,7 +123,7 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
     // The aurora steps 6 times a second, but a running custom-property animation
     // restyles every frame: hold it paused and step its clock instead.
     useEffect(() => {
-        const aurora = ref.current?.querySelector('.zen-aurora');
+        const aurora = own.current?.querySelector('.zen-aurora');
         if (!aurora?.getAnimations) return;
         let last = performance.now();
         const tick = () => {
@@ -148,7 +150,7 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
     // layer repaints, i.e. on every pointer move; at 1440p that took ~20ms of GPU.
     // Same pixels: the image is fitted the way the CSS mask fits it (centre, cover).
     useEffect(() => {
-        const el = ref.current;
+        const el = own.current;
         if (!topoSrc || !el || typeof document === 'undefined') return;
         let bitmapUrl = '';
         let cancelled = false;
@@ -201,6 +203,7 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
 
     return (
         <div
+            {...rest}
             ref={ref}
             className={cx('zen-backdrop', className)}
             data-pattern={kind}
@@ -229,12 +232,12 @@ export default function Backdrop({ pattern, topoSrc, className, style }: Backdro
     );
 }
 
-export interface BackdropProps {
+/** Other props (data-*, an id) go on the backdrop layer. */
+export interface BackdropProps extends Omit<ComponentProps<'div'>, 'children'> {
     /** Background pattern. Defaults to contours when `topoSrc` is given, dots otherwise. */
     pattern?: 'contours' | 'dots';
     /** URL of a contour-line image (strokes on transparent), used as a mask. */
     topoSrc?: string;
     /** Classes for the backdrop layer (e.g. a view-transition-name). */
     className?: string;
-    style?: CSSProperties;
 }

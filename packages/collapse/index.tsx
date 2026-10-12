@@ -1,7 +1,8 @@
 import Badge, { BadgeProps } from '@zen/badge';
 import Popover, { PopoverContent, PopoverTrigger } from '@zen/popover';
 import { cx } from '@zen/utils/cx';
-import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useMergedRefs } from '@zen/utils/refs';
+import { ComponentProps, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 /**
  * A row showing as many items as fit on one line, and the rest behind a "+N"
@@ -18,8 +19,11 @@ export default function Collapse<TData>({
     badgeVariant = 'secondary',
     badgeClassName,
     className,
+    ref,
+    ...rest
 }: CollapseProps<TData>) {
     const rowRef = useRef<HTMLDivElement>(null);
+    const mergedRef = useMergedRefs(rowRef, ref);
     // How many items fit; null while measuring, when every item is rendered (also in server HTML).
     const [count, setCount] = useState<number | null>(null);
     const sizes = useRef({ items: [] as number[], more: 0, gap: 0 });
@@ -75,7 +79,8 @@ export default function Collapse<TData>({
 
     return (
         <div
-            ref={rowRef}
+            {...rest}
+            ref={mergedRef}
             // Else, in a table, hiding an item narrows its column, and it fits again and again.
             className={cx('zen__collapse flex min-w-0 items-center overflow-hidden [contain:inline-size]', className)}
         >
@@ -121,7 +126,8 @@ export default function Collapse<TData>({
     );
 }
 
-export interface CollapseProps<TData> {
+/** Other props (data-*, an id) go on the row. */
+export interface CollapseProps<TData> extends Omit<ComponentProps<'div'>, 'children'> {
     items: string[];
     /** Extra data per item, passed to `children` with it. */
     data?: TData[];

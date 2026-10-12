@@ -1,5 +1,6 @@
 import XMarkMicro from '@zen/icons/micro/x-mark';
 import { cx } from '@zen/utils/cx';
+import { useMergedRefs } from '@zen/utils/refs';
 import Button, { ButtonProps } from '@zen/button';
 import { useToastHost } from '@zen/toast';
 import { useGraphicsMode } from '@zen/utils/graphics';
@@ -39,8 +40,11 @@ export default function Dialog({
     className,
     role,
     closeLabel = 'Close',
+    ref: refProp,
+    ...rest
 }: DialogProps) {
     const ref = useRef<HTMLDialogElement>(null);
+    const merged = useMergedRefs(ref, refProp);
     const titleId = useId();
     const descriptionId = useId();
     useSheetSwipe(ref, dismissible && open ? side : undefined, () => onOpenChange?.(false));
@@ -48,7 +52,8 @@ export default function Dialog({
 
     return (
         <dialog
-            ref={ref}
+            {...rest}
+            ref={merged}
             role={role}
             aria-labelledby={titleId}
             aria-describedby={description ? descriptionId : undefined}
@@ -206,7 +211,8 @@ export function DialogClose({ onClick, ...rest }: ButtonProps) {
     );
 }
 
-export interface DialogProps {
+/** Other props (data-*, an id) go on the <dialog>. */
+export interface DialogProps extends Omit<ComponentProps<'dialog'>, 'open' | 'title'> {
     open: boolean;
     onOpenChange?: (open: boolean) => void;
     title: ReactNode;
@@ -219,8 +225,6 @@ export interface DialogProps {
     size?: 'md' | 'lg';
     /** Slide in from this edge as a sheet, instead of appearing in the middle. */
     side?: 'bottom' | 'left' | 'right';
-    className?: string;
-    role?: ComponentProps<'dialog'>['role'];
     /** The close button's accessible name. */
     closeLabel?: string;
 }

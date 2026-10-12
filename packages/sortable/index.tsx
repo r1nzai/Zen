@@ -1,4 +1,5 @@
 import { cx } from '@zen/utils/cx';
+import { useMergedRefs } from '@zen/utils/refs';
 import { reducedMotion } from '@zen/utils/motion';
 import {
     ComponentProps,
@@ -45,8 +46,9 @@ const move = <T,>(list: readonly T[], from: number, to: number) => {
  * keys move it, Space or Enter drops it and Escape puts it back; each step is
  * announced. `value` is the ids in order; render a SortableItem for each.
  */
-export function SortableList({ value, onValueChange, className, children, ...rest }: SortableListProps) {
+export function SortableList({ value, onValueChange, className, children, ref, ...rest }: SortableListProps) {
     const list = useRef<HTMLUListElement>(null);
+    const listRef = useMergedRefs(list, ref);
     const [lifted, setLifted] = useState<string | null>(null);
     const [said, say] = useState('');
     // Where each item was on screen before a change we made, to move them from there.
@@ -188,7 +190,7 @@ export function SortableList({ value, onValueChange, className, children, ...res
 
     return (
         <SortableContext.Provider value={{ grab, key, lifted }}>
-            <ul ref={list} className={cx('zen__sortable relative flex flex-col', className)} {...rest}>
+            <ul {...rest} ref={listRef} className={cx('zen__sortable relative flex flex-col', className)}>
                 {children}
             </ul>
             <span aria-live="assertive" className="sr-only">

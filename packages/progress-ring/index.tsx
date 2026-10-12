@@ -1,11 +1,19 @@
 import { cx } from '@zen/utils/cx';
-import { ReactNode, useState } from 'react';
+import { ComponentProps, ReactNode, useState } from 'react';
 
 /**
  * Circular progress, 0–1, with optional content in the middle. Reaching 1
  * while shown sends out a ring of glow, once.
  */
-export default function ProgressRing({ value, size = 84, stroke = 7, label, children, className }: ProgressRingProps) {
+export default function ProgressRing({
+    value,
+    size = 84,
+    stroke = 7,
+    label,
+    children,
+    className,
+    ...rest
+}: ProgressRingProps) {
     const r = (size - stroke) / 2;
     const c = 2 * Math.PI * r;
     const v = Math.min(Math.max(value, 0), 1);
@@ -17,6 +25,7 @@ export default function ProgressRing({ value, size = 84, stroke = 7, label, chil
     }
     return (
         <div
+            {...rest}
             role="progressbar"
             aria-label={label}
             aria-valuemin={0}
@@ -60,7 +69,8 @@ export default function ProgressRing({ value, size = 84, stroke = 7, label, chil
     );
 }
 
-export interface ProgressRingProps {
+/** Other props (data-*, an id) go on the progressbar. */
+export interface ProgressRingProps extends ComponentProps<'div'> {
     /** Progress from 0 to 1; values outside are clamped. */
     value: number;
     size?: number;

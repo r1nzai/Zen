@@ -1,6 +1,7 @@
 import { cx } from '@zen/utils/cx';
 import { type DateString, daysInMonth, dayOfWeek, formatDate, weekdayNames, weekStart } from '@zen/utils/date';
 import { formatMonth, type Month } from '@zen/utils/month';
+import { ComponentProps } from 'react';
 
 /**
  * A month as a grid of days, each shaded by its value (e.g. what was spent
@@ -17,6 +18,7 @@ export default function CalendarHeatmap({
     selected,
     label,
     className,
+    ...rest
 }: CalendarHeatmapProps) {
     const count = daysInMonth(month);
     const days = Array.from({ length: count }, (_, i) => `${month}-${String(i + 1).padStart(2, '0')}` as DateString);
@@ -32,6 +34,7 @@ export default function CalendarHeatmap({
     return (
         <table
             aria-label={label ?? formatMonth(month, locale, 'long')}
+            {...rest}
             className={cx('zen__calendar-heatmap w-full table-fixed border-separate border-spacing-1', className)}
         >
             <thead>
@@ -105,7 +108,8 @@ export default function CalendarHeatmap({
     );
 }
 
-export interface CalendarHeatmapProps {
+/** Other props (data-*, an id) go on the table. */
+export interface CalendarHeatmapProps extends Omit<ComponentProps<'table'>, 'children'> {
     month: Month;
     /** Each day's value, by date ("2026-09-03"); days missing have none. */
     values: Partial<Record<DateString, number>>;

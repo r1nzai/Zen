@@ -1,11 +1,11 @@
 import { cx } from '@zen/utils/cx';
-import { useState } from 'react';
+import { ComponentProps, useState } from 'react';
 
 /**
  * Round profile picture; without an image, the name's initial on the glowing
  * accent. Decorative (hidden from screen readers) unless you give it `alt`.
  */
-export default function Avatar({ src, name, alt, className }: AvatarProps) {
+export default function Avatar({ src, name, alt, className, ...rest }: AvatarProps) {
     const initial = (name.trim()[0] ?? '?').toUpperCase();
     const [broken, setBroken] = useState<string | null>(null);
     const photo = src && src !== broken ? src : null;
@@ -14,6 +14,7 @@ export default function Avatar({ src, name, alt, className }: AvatarProps) {
             role={alt ? 'img' : undefined}
             aria-label={alt}
             aria-hidden={alt ? undefined : true}
+            {...rest}
             className={cx(
                 'zen__avatar relative inline-grid shrink-0 place-items-center overflow-hidden rounded-full font-semibold select-none',
                 'size-9 text-sm',
@@ -65,7 +66,8 @@ export async function cropImageToSquare(file: Blob, size = 160, quality = 0.85):
     return webp.startsWith('data:image/webp') ? webp : canvas.toDataURL('image/jpeg', quality);
 }
 
-export interface AvatarProps {
+/** Other props (data-*, an id, a title) go on the avatar's outer element. */
+export interface AvatarProps extends Omit<ComponentProps<'span'>, 'children'> {
     /** Image URL (or data URL); without it, or if it fails to load, the initial is shown. */
     src?: string | null;
     /** Name or email, for the initial. */

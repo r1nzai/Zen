@@ -5,6 +5,7 @@ import { type ChartPalette, paletteColor } from './palette';
 import { ChartTooltipCard, Key, type Kind } from './tooltip';
 import {
     Children,
+    ComponentProps,
     ComponentType,
     CSSProperties,
     isValidElement,
@@ -79,6 +80,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
     palette = 'chart',
     className,
     children,
+    ...rest
 }: ChartProps<T, X>) {
     const id = useId().replace(/[^\w-]/g, '');
     const wrap = useRef<HTMLDivElement>(null);
@@ -384,7 +386,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
     const tipY = pointer?.y ?? MARGIN.top;
 
     return (
-        <figure aria-label={label} className={cx('zen__chart m-0 flex flex-col gap-3', className)}>
+        <figure aria-label={label} {...rest} className={cx('zen__chart m-0 flex flex-col gap-3', className)}>
             {showLegend && <Legend series={series} />}
             <div
                 ref={wrap}
@@ -634,7 +636,11 @@ export interface ChartReferenceProps {
     dashed?: boolean;
 }
 
-export interface ChartProps<T extends Row, X extends keyof T & string = keyof T & string> {
+/** Other props (data-*, an id) go on the <figure>. */
+export interface ChartProps<T extends Row, X extends keyof T & string = keyof T & string> extends Omit<
+    ComponentProps<'figure'>,
+    'children'
+> {
     /** One row per point on the x axis (e.g. a month). */
     data: readonly T[];
     /** The row field placed along the x axis. */
