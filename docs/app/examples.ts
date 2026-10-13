@@ -1,5 +1,7 @@
 import type { ComponentType } from 'react';
 
+import { docComment, heroiconOf, orderExamples, shown, titleFor } from './example-source';
+
 /** One example file from packages/<folder>/examples/<Name>.tsx: the component, and its source for the Code tab. */
 export interface Example {
     name: string;
@@ -16,35 +18,15 @@ const sources = import.meta.glob<string>('../../packages/*/examples/*.tsx', {
     import: 'default',
 });
 
-// Zen's own icons (Heroicons, not exported): each file names its source, e.g. "Heroicons 2.2.0, 24/outline/cog-6-tooth.svg".
+// Zen's own icons (Heroicons, not exported), by path: "icons/cog".
 const icons = import.meta.glob<string>('../../packages/icons/**/*.tsx', {
     eager: true,
     query: '?raw',
     import: 'default',
 });
 const heroicon = new Map(
-    Object.entries(icons).map(([path, code]) => [
-        path.match(/packages\/(icons\/.+)\.tsx$/)![1],
-        code.match(/Heroicons [\d.]+, \S+\/([\w-]+)\.svg/)?.[1],
-    ]),
+    Object.entries(icons).map(([path, code]) => [path.match(/packages\/(icons\/.+)\.tsx$/)![1], heroiconOf(code)]),
 );
-
-/**
- * The source as shown: examples draw Zen's internal icons, which aren't exported, so
- * their imports become a pointer to Heroicons, naming each one.
- */
-function shown(source: string) {
-    const used: string[] = [];
-    const rest = source.replace(/^import (\w+) from '@zen\/(icons\/[\w/-]+)';\n/gm, (_, name: string, path: string) => {
-        used.push(heroicon.get(path) ? `${name} (${heroicon.get(path)})` : name);
-        return '';
-    });
-    if (!used.length) return source;
-    const pointer = `// Icons from Heroicons (https://heroicons.com): ${used.join(', ')}.\n`;
-    // After the last import, where the icon imports stood.
-    const at = [...rest.matchAll(/^import [\s\S]*?;\n/gm)].reduce((_, m) => m.index + m[0].length, 0);
-    return rest.slice(0, at) + pointer + rest.slice(at);
-}
 
 const byFolder = new Map<string, Example[]>();
 for (const [path, mod] of Object.entries(modules)) {
@@ -56,26 +38,12 @@ for (const [path, mod] of Object.entries(modules)) {
         title: titleFor(name),
         description: docComment(source),
         Component: mod.default,
-        source: shown(source),
+        source: shown(source, (path) => heroicon.get(path)),
     });
     byFolder.set(folder, list);
 }
 
 /** Examples for a folder: those named in `order` first, the rest alphabetically. */
 export function examplesFor(folder: string, order: string[] = []): Example[] {
-    const rank = (e: Example) => (order.includes(e.name) ? order.indexOf(e.name) : order.length);
-    return [...(byFolder.get(folder) ?? [])].sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name));
-}
-
-/** "WithSpinner" → "With spinner" */
-function titleFor(name: string) {
-    const words = name.replace(/([a-z])([A-Z])/g, '$1 $2').split(' ');
-    return [words[0], ...words.slice(1).map((w) => w.toLowerCase())].join(' ');
-}
-
-/** The JSDoc right above `export default`, as the example's description. */
-function docComment(source: string) {
-    // The body can't contain `*/`, so an earlier comment (on a field, say) isn't swept in.
-    const match = source.match(/\/\*\*((?:(?!\*\/)[\s\S])*)\*\/\s*export default/);
-    return match?.[1].replace(/^\s*\* ?/gm, '').trim();
+    return orderExamples(byFolder.get(folder) ?? [], order);
 }

@@ -1,9 +1,13 @@
-import { copyFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin, lazyPlugins } from 'vite-plus';
 import dts from 'vite-plugin-dts';
+
+import { heroiconOf, orderExamples, shown } from './docs/app/example-source';
+import { componentMarkdown, indexMarkdown } from './docs/app/markdown';
+import { COMPONENTS } from './docs/app/pages';
 
 /**
  * Stylesheets beside zen.css in dist/:
@@ -29,6 +33,40 @@ function stylesheets(): Plugin {
 @import './theme.css';
 @source './**/*.js';
 `,
+            );
+        },
+    };
+}
+
+/**
+ * dist/docs: every docs page as markdown (description, import, each example's
+ * source), so an agent working in an app finds them in node_modules, matching
+ * the installed version. README.md lists them.
+ */
+function markdownDocs(): Plugin {
+    return {
+        name: 'zen-markdown-docs',
+        apply: 'build',
+        closeBundle() {
+            mkdirSync('dist/docs', { recursive: true });
+            const heroicon = (path: string) => heroiconOf(readFileSync(`packages/${path}.tsx`, 'utf8'));
+            for (const doc of COMPONENTS) {
+                const dir = `packages/${doc.folder ?? doc.slug}/examples`;
+                const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.tsx')) : [];
+                const examples = files.map((f) => ({
+                    name: f.slice(0, -'.tsx'.length),
+                    source: shown(readFileSync(`${dir}/${f}`, 'utf8'), heroicon),
+                }));
+                writeFileSync(
+                    `dist/docs/${doc.slug}.md`,
+                    componentMarkdown(doc, orderExamples(examples, doc.examples)),
+                );
+            }
+            writeFileSync(
+                'dist/docs/README.md',
+                indexMarkdown(COMPONENTS, (slug) => `./${slug}.md`, [
+                    'Breaking changes and additions by version are in ../../CHANGELOG.md.',
+                ]),
             );
         },
     };
@@ -233,6 +271,7 @@ export default defineConfig({
         react(),
         tailwindcss(),
         stylesheets(),
+        markdownDocs(),
         dts({
             insertTypesEntry: true,
             include: ['packages/'],

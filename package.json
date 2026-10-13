@@ -34,7 +34,8 @@
     "types": "./dist/index.d.ts",
     "module": "./dist/lib.js",
     "files": [
-        "dist"
+        "dist",
+        "CHANGELOG.md"
     ],
     "sideEffects": [
         "**/*.css"

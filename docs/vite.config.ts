@@ -13,7 +13,9 @@ export default defineConfig({
         // Props tables: attaches each component's props (types, defaults, JSDoc) as __docgenInfo.
         reactDocgenTypescript({
             tsconfigPath: fileURLToPath(new URL('../tsconfig.json', import.meta.url)),
-            include: ['../packages/*/index.tsx'],
+            // Every component file: some packages keep parts beside index.tsx (sortable/tree.tsx, chart/donut.tsx).
+            include: ['../packages/*/*.tsx'],
+            exclude: ['../packages/*/*.stories.tsx', '../packages/*/*.test.tsx'],
             shouldExtractLiteralValuesFromEnum: true,
             shouldRemoveUndefinedFromOptional: true,
             savePropValueAsString: true,

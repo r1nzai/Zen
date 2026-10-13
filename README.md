@@ -57,6 +57,16 @@ export default function App() {
 }
 ```
 
+## For AI agents
+
+Every docs page ships with the package as markdown, matching the installed version: `node_modules/@rinzai/zen/dist/docs` (README.md lists them), with the CHANGELOG at the package root. Point your agent there from your `AGENTS.md` or `CLAUDE.md`:
+
+```md
+UI components come from @rinzai/zen. Its docs, with every example's source, are in node_modules/@rinzai/zen/dist/docs; start at README.md there.
+```
+
+The site has them too: [llms.txt](https://zen.rinzai.dev/llms.txt), [llms-full.txt](https://zen.rinzai.dev/llms-full.txt) (everything in one file) and `/docs/<component>.md`.
+
 ## What's inside
 
 - **Surfaces:** Card, Inset, Alert, Stat, Dialog (and sheets from an edge), ConfirmDialog, Popover, Tooltip, HoverCard, Toast (a stacked deck), Disclosure, Accordion, Separator, Resizable panels, Carousel, Backdrop (aurora, contours or dots, and a pointer light)

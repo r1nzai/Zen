@@ -675,6 +675,8 @@ export const COMPONENTS: ComponentDoc[] = [
 // Trailing slashes throughout: pages are built as <path>/index.html, which Cloudflare serves at
 // <path>/ (and Storybook's relative asset paths need its slash too).
 export const componentPath = (slug: string) => `/components/${slug}/`;
+/** The same page as markdown, for agents (see markdown.ts). */
+export const markdownPath = (slug: string) => `/docs/${slug}.md`;
 
 /** Every URL on the site. */
 export const ROUTES = ['/', '/showcase/', ...COMPONENTS.map((c) => componentPath(c.slug))];

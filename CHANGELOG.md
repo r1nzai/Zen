@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Docs
+
+- The docs ship in the package as markdown, for AI agents: `node_modules/@rinzai/zen/dist/docs` has a page per component with every example's source, and the CHANGELOG is included. The site serves the same pages at `/docs/<component>.md`, with `/llms.txt` and `/llms-full.txt`.
+- Props tables cover parts kept outside a package's `index.tsx`, such as SortableTree, SortableItem, DonutChart and the table's selection and swipe parts.
+
 ## 0.14.0
 
 ### Added to existing components

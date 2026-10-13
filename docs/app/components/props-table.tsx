@@ -3,14 +3,14 @@ import type { ComponentType } from 'react';
 
 import { DocText } from './doc-text';
 
-interface DocgenProp {
+export interface DocgenProp {
     name: string;
     required: boolean;
     description: string;
     type: { name: string; raw?: string };
     defaultValue?: { value: string } | null;
 }
-interface DocgenInfo {
+export interface DocgenInfo {
     displayName: string;
     description: string;
     props: Record<string, DocgenProp>;
@@ -21,7 +21,7 @@ interface DocgenInfo {
  * prerender and the client each get types from their own docgen run, which can
  * list union members in different orders and break hydration.
  */
-function typeText(type: DocgenProp['type']) {
+export function typeText(type: DocgenProp['type']) {
     const text = type.raw ?? type.name;
     if (!text.includes(' | ') || /[()[\]{}<>]/.test(text)) return text;
     const last = (m: string) => Number(m === 'null' || m === 'undefined');
