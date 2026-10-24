@@ -1,10 +1,10 @@
 import preview from '../../.storybook/preview';
 import DefaultExample from './examples/Default';
-import TextArea from './index';
+import Textarea from './index';
 
 const meta = preview.meta({
     title: 'Components/Textarea',
-    component: TextArea,
+    component: Textarea,
 });
 
 export const Primary = meta.story({

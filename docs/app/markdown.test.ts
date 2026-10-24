@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test';
 
-import { componentMarkdown, indexMarkdown } from './markdown';
+import { componentMarkdown, guideFrom, indexMarkdown } from './markdown';
 import { COMPONENTS } from './pages';
 
 const doc = { slug: 'thing', title: 'Thing', description: 'Does a thing.', parts: ['Thing', 'ThingPart'] };
@@ -28,7 +28,14 @@ describe('markdown docs', () => {
     });
 
     it('links every page from the index', () => {
-        const md = indexMarkdown(COMPONENTS, (slug) => `./${slug}.md`);
+        const md = indexMarkdown(COMPONENTS, '## Installation', (slug) => `./${slug}.md`);
         for (const c of COMPONENTS) expect(md).toContain(`[${c.title}](./${c.slug}.md)`);
+    });
+
+    it('takes the guide from the README, without the sections about the repo', () => {
+        const guide = guideFrom(
+            '# Zen\n\nIntro.\n\n## Installation\n\npnpm add\n\n## Development\n\npnpm dev\n\n## Theming\n\nTokens.\n',
+        );
+        expect(guide).toBe('## Installation\n\npnpm add\n\n## Theming\n\nTokens.');
     });
 });

@@ -2,10 +2,37 @@
 
 ## Unreleased
 
+### New components
+
+- **PlayerBar**: what's playing, in a glass bar along the bottom of the screen, laid out as you like. On phones it sits on the TabBar beside it.
+- **SeekBar**: where playback is, filled to the time played and shaded on to what's loaded, between the time played and the length. Pass `playing` and it glides between the player's time updates, moved by the browser's compositor rather than per-frame renders. Dragging doesn't interrupt playback; letting go seeks; the arrow keys seek 5 seconds.
+- **Marquee**: one line of text cut off with an ellipsis that scrolls to show the rest: on hover or keyboard focus of itself or of its `data-zen-marquee-host` (a row, a tile), or always (`trigger="always"`, for what's playing). Only text that doesn't fit moves, at the same speed whatever its length, with fades at the edges. Stays an ellipsis for reduced motion; the accessible name is the text.
+- **useMediaPlayer**: drives your own `<audio>` or `<video>` (`const [ref, player] = useMediaPlayer()`, then `<audio ref={ref} />`) and keeps its state: playing, waiting, time, duration, buffered, volume. With `play`, `pause`, `toggle`, `seek`, `setVolume` and `setMuted`.
+- **useMediaSession**: puts what's playing on the lock screen and the OS media controls (title, artist, cover, position), and lets play, pause, seek, previous, next and the media keys control your player.
+- **formatDuration**: seconds as a clock reads them (3:07, 1:02:07).
+
+### Renamed
+
+- **TextArea** is now **Textarea** (and `TextAreaProps` is `TextareaProps`), like the element. The old names still work, marked deprecated, until the next breaking release.
+
+### Added to existing components
+
+- **TabBar**: its height is kept in `--zen-tab-bar-height` on its parent (0px while hidden), for a PlayerBar to sit on and the page to pad its end by. PlayerBar keeps `--zen-player-bar-height` the same way.
+- **Segmented**, **RadioCards**: `label` is optional. Without it, name the group with `aria-label` or `aria-labelledby`, as on RadioGroup.
+- **Slider**: `step="any"` for no snapping.
+
+### Fixes
+
+- **SegmentedItem**: an icon and its text sit side by side; they stacked.
+- **Popover, Menu, Select and every anchored popup**: with no room below the trigger, a centred popup wider than its trigger stayed below it, off screen (Chrome) or over the trigger (Firefox), instead of flipping above. It flips now, and a popup lined up with an edge also switches edges when there's no room beside it.
+- **Carousel**: where the slides don't fill the view evenly, Next stopped short of the end, the last slide cut off. The end is now the last stop, with its own dot.
+- **TabBarItem**, **MenuItem**: with `asChild`, `icon` was dropped; it now goes ahead of your link's content, also when that content is a render function (a NavLink's).
+
 ### Docs
 
 - The docs ship in the package as markdown, for AI agents: `node_modules/@rinzai/zen/dist/docs` has a page per component with every example's source, and the CHANGELOG is included. The site serves the same pages at `/docs/<component>.md`, with `/llms.txt` and `/llms-full.txt`.
 - Props tables cover parts kept outside a package's `index.tsx`, such as SortableTree, SortableItem, DonutChart and the table's selection and swipe parts.
+- The package's markdown pages have the props tables too, the same as the site's. Their README and `llms.txt` carry the README's guide: setup, the props every component takes, values and forms, languages, theming, overlays and browser support. The README now says Zen exports no icons.
 
 ## 0.14.0
 

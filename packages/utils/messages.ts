@@ -158,6 +158,10 @@ export const ENGLISH = {
     nextSlide: 'Next slide',
     resize: 'Resize',
     notifications: 'Notifications (F8)',
+
+    // SeekBar
+    seek: 'Seek',
+    timeOf: (time: string, total: string) => `${time} of ${total}`,
 };
 
 export type Messages = typeof ENGLISH;

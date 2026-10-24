@@ -10,9 +10,15 @@ type Props = Record<string, unknown>;
  * props: a component's styles and attributes go onto the caller's own element,
  * such as a router's Link. Classes are combined, styles merged (the child's
  * win), event handlers both run (the child's first), and refs both receive the
- * element; other props from the component win.
+ * element; other props from the component win. `before` goes ahead of the
+ * child's own content (e.g. a component's icon), also when that content is a
+ * render function such as a router NavLink's.
  */
-export function Slot({ children, ...props }: ComponentProps<'a'> & { children?: ReactNode }) {
+export function Slot({
+    before,
+    children,
+    ...props
+}: ComponentProps<'a'> & { before?: ReactNode; children?: ReactNode }) {
     if (!isValidElement(children)) return null;
     const child = children as ReactElement<Props>;
     const own = props as Props;
@@ -31,5 +37,22 @@ export function Slot({ children, ...props }: ComponentProps<'a'> & { children?: 
     merged.className = cx(own.className as string, theirs.className as string);
     if (own.style || theirs.style) merged.style = { ...(own.style as object), ...(theirs.style as object) };
     if (own.ref && theirs.ref) merged.ref = mergeRefs(own.ref as Ref<unknown>, theirs.ref as Ref<unknown>);
+    if (before != null) {
+        const content = theirs.children;
+        merged.children =
+            typeof content === 'function' ? (
+                (...args: unknown[]) => (
+                    <>
+                        {before}
+                        {content(...args)}
+                    </>
+                )
+            ) : (
+                <>
+                    {before}
+                    {content as ReactNode}
+                </>
+            );
+    }
     return cloneElement(child, merged);
 }

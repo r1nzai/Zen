@@ -1592,3 +1592,43 @@ html.reduce-motion .rise-list > * {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
 }
+
+/*
+ * Marquee: an ellipsis at rest. While it scrolls (data-moving, set with its
+ * animation) the text is one box to slide, cut off by fades at both edges; the
+ * start's fade grows in as the text leaves it.
+ */
+@property --zen-marquee-fade-start {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+}
+.zen__marquee {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.zen__marquee[data-moving] {
+    text-overflow: clip;
+    mask-image: linear-gradient(
+        to right,
+        transparent,
+        #000 var(--zen-marquee-fade-start),
+        #000 calc(100% - 1rem),
+        transparent
+    );
+}
+.zen__marquee[data-moving]:dir(rtl) {
+    mask-image: linear-gradient(
+        to left,
+        transparent,
+        #000 var(--zen-marquee-fade-start),
+        #000 calc(100% - 1rem),
+        transparent
+    );
+}
+.zen__marquee[data-moving] > .zen__marquee-content {
+    display: inline-block;
+}

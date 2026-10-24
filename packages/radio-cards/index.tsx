@@ -30,10 +30,12 @@ export default function RadioCards<V extends string>({
     const id = useId();
     return (
         <div className="zen__radio-cards flex flex-col gap-2">
-            <span id={id} className="text-sm font-medium">
-                {label}
-            </span>
-            <div role="radiogroup" aria-labelledby={id} className={className} {...rest}>
+            {label && (
+                <span id={id} className="text-sm font-medium">
+                    {label}
+                </span>
+            )}
+            <div role="radiogroup" aria-labelledby={label ? id : undefined} className={className} {...rest}>
                 <RadioCardsContext.Provider
                     value={{ name: name ?? id, value, select: setValue as (value: string) => void }}
                 >
@@ -58,7 +60,7 @@ export function RadioCard({ value, disabled, className, style, children }: Radio
             className={cx(
                 'zen__radio-card border-tint/10 relative flex items-center gap-3 rounded-xl border p-2.5 text-start text-sm transition-[border-color,box-shadow] duration-200',
                 'hover:has-enabled:border-tint/20 has-checked:border-primary/60 has-checked:shadow-[0_0_0_3px_oklch(var(--primary)/0.15)]',
-                'has- has-focus-ring has-disabled:opacity-60',
+                'has-focus-ring has-disabled:opacity-60',
                 className,
             )}
         >
@@ -78,7 +80,8 @@ export function RadioCard({ value, disabled, className, style, children }: Radio
 
 /** Other props (aria-*, data-*, an id) go on the cards' container, the radiogroup. */
 export interface RadioCardsProps<V extends string> extends Omit<ComponentProps<'div'>, 'defaultValue' | 'children'> {
-    label: string;
+    /** Shown above the cards, naming the group. Without it, give the group an aria-label or aria-labelledby. */
+    label?: string;
     /** The chosen card, when you keep it. */
     value?: V;
     /** The first chosen card, when the group keeps its own. */

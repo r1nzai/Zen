@@ -91,6 +91,22 @@ describe('Carousel', () => {
         expect(screen.getAllByRole('button', { name: /^Slide/ })).toHaveLength(2);
     });
 
+    it("reaches the end when the slides don't fill the view evenly", async () => {
+        render(<Goals />);
+        const content = screen.getByTestId('content');
+        // A slide and a third in view: past the second slide's start, there's a third of one left to scroll.
+        layOut(content, 400);
+        await scrollTo(content, 300);
+        const next = screen.getByRole('button', { name: 'Next slide' });
+        expect(next).not.toHaveAttribute('aria-disabled');
+        fireEvent.click(next);
+        expect(scroll).toHaveBeenCalledWith(expect.objectContaining({ left: 500 }));
+        await scrollTo(content, 500);
+        expect(next).toHaveAttribute('aria-disabled', 'true');
+        expect(screen.getAllByRole('button', { name: /^Slide/ })).toHaveLength(3);
+        expect(screen.getByRole('button', { name: 'Slide 3' })).toHaveAttribute('aria-current', 'true');
+    });
+
     it('parts outside a Carousel say so', () => {
         vi.spyOn(console, 'error').mockImplementation(() => {});
         expect(() => render(<CarouselNext />)).toThrow('<CarouselNext> must be inside <Carousel>');

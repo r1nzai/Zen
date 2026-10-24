@@ -1,35 +1,8 @@
 import { Badge, Table, TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@rinzai/zen';
 import type { ComponentType } from 'react';
 
+import { type DocgenInfo, sortedProps, typeText } from '../markdown';
 import { DocText } from './doc-text';
-
-export interface DocgenProp {
-    name: string;
-    required: boolean;
-    description: string;
-    type: { name: string; raw?: string };
-    defaultValue?: { value: string } | null;
-}
-export interface DocgenInfo {
-    displayName: string;
-    description: string;
-    props: Record<string, DocgenProp>;
-}
-
-/**
- * A prop's type as text. Flat unions are sorted (null and undefined last): the
- * prerender and the client each get types from their own docgen run, which can
- * list union members in different orders and break hydration.
- */
-export function typeText(type: DocgenProp['type']) {
-    const text = type.raw ?? type.name;
-    if (!text.includes(' | ') || /[()[\]{}<>]/.test(text)) return text;
-    const last = (m: string) => Number(m === 'null' || m === 'undefined');
-    return text
-        .split(' | ')
-        .sort((a, b) => last(a) - last(b) || a.localeCompare(b))
-        .join(' | ');
-}
 
 /** Props of one component, from its TypeScript types and JSDoc (attached at build time as __docgenInfo). */
 export function PropsTable({
@@ -40,9 +13,7 @@ export function PropsTable({
     component: ComponentType & { __docgenInfo?: DocgenInfo };
 }) {
     const info = component.__docgenInfo;
-    const props = Object.values(info?.props ?? {}).sort(
-        (a, b) => Number(b.required) - Number(a.required) || a.name.localeCompare(b.name),
-    );
+    const props = sortedProps(info);
     return (
         <section className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">

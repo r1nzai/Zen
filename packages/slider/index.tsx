@@ -94,7 +94,8 @@ export interface SliderProps extends Omit<
     defaultValue?: number;
     min?: number;
     max?: number;
-    step?: number;
+    /** `'any'` for no snapping; the arrow keys then move by the browser's own amount. */
+    step?: number | 'any';
     /** While dragging (every step). */
     onValueChange?: (value: number) => void;
     /** Once the user lets go: the moment to save. */

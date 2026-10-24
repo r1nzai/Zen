@@ -332,6 +332,14 @@ export const COMPONENTS: ComponentDoc[] = [
         parts: ['LoadMore'],
     },
     {
+        slug: 'marquee',
+        title: 'Marquee',
+        description:
+            "One line of text cut off with an ellipsis, that scrolls to show the rest on hover or focus (of itself or of its row), or all the time. Only text that doesn't fit moves.",
+        parts: ['Marquee'],
+        examples: ['Default', 'Always'],
+    },
+    {
         slug: 'menu',
         title: 'Menu',
         description:
@@ -435,6 +443,15 @@ export const COMPONENTS: ComponentDoc[] = [
         examples: ['ProfileCard', 'FeedbackForm', 'Settings', 'Controlled'],
     },
     {
+        slug: 'player-bar',
+        title: 'Player Bar',
+        description:
+            "What's playing, along the bottom of the screen, sitting on a TabBar on phones. useMediaPlayer drives your own <audio> or <video>; useMediaSession puts it on the lock screen and the media keys.",
+        parts: ['PlayerBar'],
+        imports: ['PlayerBar', 'useMediaPlayer', 'useMediaSession'],
+        examples: ['Default', 'OnTabBar'],
+    },
+    {
         slug: 'progress-ring',
         title: 'Progress Ring',
         description: 'Circular progress with room for a label in the middle.',
@@ -466,6 +483,14 @@ export const COMPONENTS: ComponentDoc[] = [
         title: 'Repeat Picker',
         description: 'How often something recurs, like a bill, said in words, with the next dates it falls on.',
         parts: ['RepeatPicker'],
+    },
+    {
+        slug: 'seek-bar',
+        title: 'Seek Bar',
+        description:
+            'Where playback is in a track, and the way to move it: played and loaded on one track, between the time played and the length.',
+        parts: ['SeekBar'],
+        imports: ['SeekBar', 'formatDuration'],
     },
     {
         slug: 'segmented',
@@ -593,7 +618,7 @@ export const COMPONENTS: ComponentDoc[] = [
             'A field of short values (tags, emails): Enter or a comma adds one, Backspace takes the last back.',
         parts: ['TagInput'],
     },
-    { slug: 'textarea', title: 'Textarea', description: 'Multi-line text, styled like Input.', parts: ['TextArea'] },
+    { slug: 'textarea', title: 'Textarea', description: 'Multi-line text, styled like Input.', parts: ['Textarea'] },
     {
         slug: 'theme-toggle',
         title: 'Theme Toggle',
@@ -679,4 +704,4 @@ export const componentPath = (slug: string) => `/components/${slug}/`;
 export const markdownPath = (slug: string) => `/docs/${slug}.md`;
 
 /** Every URL on the site. */
-export const ROUTES = ['/', '/showcase/', ...COMPONENTS.map((c) => componentPath(c.slug))];
+export const ROUTES = ['/', '/showcase/', '/showcase/music/', ...COMPONENTS.map((c) => componentPath(c.slug))];

@@ -41,6 +41,22 @@ describe('Segmented', () => {
         expect(screen.getByRole('radio', { name: 'Off' })).not.toBeChecked();
     });
 
+    it('can be named without a visible label', () => {
+        render(
+            <>
+                <Segmented aria-label="Glow" defaultValue="soft">
+                    {ITEMS}
+                </Segmented>
+                <h2 id="size">Size</h2>
+                <Segmented aria-labelledby="size" defaultValue="soft">
+                    {ITEMS}
+                </Segmented>
+            </>,
+        );
+        expect(screen.getByRole('radiogroup', { name: 'Glow' })).toBeInTheDocument();
+        expect(screen.getByRole('radiogroup', { name: 'Size' })).toBeInTheDocument();
+    });
+
     it('reports the picked value', () => {
         const onChange = vi.fn();
         render(

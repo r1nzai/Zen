@@ -25,7 +25,7 @@ describe('TabBar', () => {
         const Link = ({ to, ...props }: ComponentProps<'a'> & { to: string }) => <a href={to} {...props} />;
         render(
             <TabBar hideFrom={false}>
-                <TabBarItem asChild active>
+                <TabBarItem asChild active icon={<svg data-testid="icon" />}>
                     <Link to="/planner">Planner</Link>
                 </TabBarItem>
             </TabBar>,
@@ -33,5 +33,6 @@ describe('TabBar', () => {
         expect(screen.getByRole('navigation')).not.toHaveClass('md:hidden');
         expect(screen.getByRole('link', { name: 'Planner' })).toHaveAttribute('href', '/planner');
         expect(screen.getByRole('link', { name: 'Planner' })).toHaveAttribute('aria-current', 'page');
+        expect(screen.getByRole('link', { name: 'Planner' }).firstChild).toBe(screen.getByTestId('icon'));
     });
 });

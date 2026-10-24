@@ -1,5 +1,5 @@
-import { TextArea } from '@rinzai/zen';
+import { Textarea } from '@rinzai/zen';
 
 export default function Default() {
-    return <TextArea placeholder="Add a note…" className="w-80" />;
+    return <Textarea placeholder="Add a note…" className="w-80" />;
 }

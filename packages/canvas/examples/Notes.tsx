@@ -1,4 +1,4 @@
-import { Button, Canvas, CanvasItem, type CanvasItemRect, TextArea } from '@rinzai/zen';
+import { Button, Canvas, CanvasItem, type CanvasItemRect, Textarea } from '@rinzai/zen';
 import { useRef, useState } from 'react';
 
 interface Note extends CanvasItemRect {
@@ -55,7 +55,7 @@ export default function Notes() {
                                 ×
                             </button>
                         </div>
-                        <TextArea
+                        <Textarea
                             aria-label={`Note ${i + 1}`}
                             value={note.text}
                             onChange={(e) => edit(note.id, { text: e.target.value })}

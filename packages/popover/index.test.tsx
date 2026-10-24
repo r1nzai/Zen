@@ -107,7 +107,8 @@ describe('Popover', () => {
                 <PopoverContent>content</PopoverContent>
             </Popover>,
         );
-        expect(panel().style.getPropertyValue('position-area')).toBe('block-end center');
+        expect(panel().style.getPropertyValue('position-area')).toBe('block-end span-all');
+        expect(panel().style.getPropertyValue('justify-self')).toBe('anchor-center');
         rerender(
             <Popover>
                 <PopoverTrigger>Open</PopoverTrigger>

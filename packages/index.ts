@@ -110,6 +110,7 @@ export { default as Alert, type AlertProps } from './alert';
 export { default as Inset, type InsetProps } from './inset';
 export { default as Input, type InputProps } from './input';
 export { default as InputGroup, InputGroupAddon, InputGroupInput, type InputGroupProps } from './input-group';
+export { default as Marquee, type MarqueeProps } from './marquee';
 export { default as Meter, type MeterProps } from './meter';
 export { default as MonthPicker, type MonthPickerProps } from './month-picker';
 export { default as Checkbox, type CheckboxProps } from './checkbox';
@@ -157,6 +158,7 @@ export {
 } from './money-input';
 export { RadioCard, type RadioCardProps, default as RadioCards, type RadioCardsProps } from './radio-cards';
 export { Pill, PillIndicator, type PillProps, default as Pills, type PillsProps } from './pills';
+export { default as PlayerBar, type PlayerBarProps } from './player-bar';
 export { default as PageHeader, type PageHeaderProps } from './page-header';
 export {
     default as Popover,
@@ -168,6 +170,7 @@ export {
     type PopoverTriggerProps,
 } from './popover';
 export { default as ProgressRing, type ProgressRingProps } from './progress-ring';
+export { default as SeekBar, type SeekBarProps } from './seek-bar';
 export { default as Segmented, SegmentedItem, type SegmentedItemProps, type SegmentedProps } from './segmented';
 export {
     default as Select,
@@ -236,7 +239,7 @@ export {
     useTree,
     type UseTreeOptions,
 } from './tree';
-export { default as TextArea, type TextAreaProps } from './textarea';
+export { TextArea, default as Textarea, type TextAreaProps, type TextareaProps } from './textarea';
 export {
     default as ToastProvider,
     type ToastOptions,
@@ -280,6 +283,9 @@ export { reducedMotion } from './utils/motion';
 export { useHydrated } from './utils/useHydrated';
 export { hexToOklch, type Oklch, oklchToHex } from './utils/color';
 export { type CopyToClipboardOptions, useCopyToClipboard } from './utils/useCopyToClipboard';
+export { formatDuration } from './utils/duration';
+export { type MediaPlayer, type MediaState, useMediaPlayer } from './utils/useMediaPlayer';
+export { type MediaSessionOptions, type MediaSessionPlayer, useMediaSession } from './utils/useMediaSession';
 export {
     addMonths,
     currentMonth,

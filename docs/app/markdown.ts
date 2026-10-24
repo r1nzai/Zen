@@ -12,21 +12,77 @@ export interface MarkdownExample {
     source: string;
 }
 
-/** One part's props, from its types: the site has them; the package has its .d.ts files instead. */
+/** One part's props, from its types. */
 export interface MarkdownPart {
     name: string;
     description?: string;
     props: { name: string; type: string; required: boolean; defaultValue?: string; description?: string }[];
 }
 
-const SETUP = `Install with \`pnpm add @rinzai/zen\` (React 19 is the only peer dependency). In a Tailwind CSS v4 app, add Zen's theme after Tailwind:
+export interface DocgenProp {
+    name: string;
+    required: boolean;
+    description: string;
+    type: { name: string; raw?: string };
+    defaultValue?: { value: string } | null;
+}
+export interface DocgenInfo {
+    displayName: string;
+    description: string;
+    props: Record<string, DocgenProp>;
+}
 
-\`\`\`css
-@import 'tailwindcss';
-@import '@rinzai/zen/tailwind.css';
-\`\`\`
+/**
+ * A prop's type as text. Flat unions are sorted (null and undefined last): the
+ * prerender and the client each get types from their own docgen run, which can
+ * list union members in different orders and break hydration.
+ */
+export function typeText(type: DocgenProp['type']) {
+    const text = type.raw ?? type.name;
+    if (!text.includes(' | ') || /[()[\]{}<>]/.test(text)) return text;
+    const last = (m: string) => Number(m === 'null' || m === 'undefined');
+    return text
+        .split(' | ')
+        .sort((a, b) => last(a) - last(b) || a.localeCompare(b))
+        .join(' | ');
+}
 
-Without Tailwind, import the complete stylesheet once: \`import '@rinzai/zen/css';\`. Everything is imported from \`@rinzai/zen\`.`;
+/** Required props first, then by name. */
+export const sortedProps = (info: DocgenInfo | undefined) =>
+    Object.values(info?.props ?? {}).sort(
+        (a, b) => Number(b.required) - Number(a.required) || a.name.localeCompare(b.name),
+    );
+
+/** Each part's props table, from its docgen info. */
+export function apiFor(parts: string[], infoOf: (name: string) => DocgenInfo | undefined): MarkdownPart[] {
+    return parts.map((name) => {
+        const info = infoOf(name);
+        return {
+            name,
+            description: info?.description,
+            props: sortedProps(info).map((p) => ({
+                name: p.name,
+                type: typeText(p.type),
+                required: p.required,
+                defaultValue: p.defaultValue?.value,
+                description: p.description,
+            })),
+        };
+    });
+}
+
+/** README sections that are about the repo or the site rather than using Zen. */
+const NOT_GUIDE = new Set(['For AI agents', "What's inside", 'Development', 'License']);
+
+/** How to set up and use Zen, from the README: its sections, minus those about the repo and the site. */
+export function guideFrom(readme: string) {
+    return readme
+        .split(/^(?=## )/m)
+        .slice(1)
+        .filter((section) => !NOT_GUIDE.has(section.slice(3, section.indexOf('\n')).trim()))
+        .map((section) => section.trim())
+        .join('\n\n');
+}
 
 const cell = (text: string) => text.replace(/\|/g, '\\|').replace(/\s*\n\s*/g, ' ');
 
@@ -70,13 +126,18 @@ export function componentMarkdown(doc: ComponentDoc, examples: MarkdownExample[]
     return out.join('\n\n') + '\n';
 }
 
-/** The index: what Zen is, how to set it up, and a line per component linking to its page (`link`). */
-export function indexMarkdown(components: ComponentDoc[], link: (slug: string) => string, more: string[] = []) {
+/** The index: what Zen is, how to set it up and use it (`guide`), and a line per component linking to its page (`link`). */
+export function indexMarkdown(
+    components: ComponentDoc[],
+    guide: string,
+    link: (slug: string) => string,
+    more: string[] = [],
+) {
     return (
         [
             '# Zen',
             `> ${pkg.description}`,
-            SETUP,
+            guide,
             ...more,
             '## Components',
             [...components]

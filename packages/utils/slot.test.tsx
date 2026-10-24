@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { createRef } from 'react';
+import { createRef, ReactNode } from 'react';
 
 import { Slot } from './slot';
 
@@ -16,6 +16,24 @@ describe('Slot', () => {
         expect(link).toHaveAttribute('href', '/x');
         expect(link).toHaveAttribute('title', 'from slot');
         expect(link).toHaveClass('mine', 'theirs');
+    });
+
+    it("puts `before` ahead of the child's content, also a render function's", () => {
+        const Link = ({ children }: { children: (state: { active: boolean }) => ReactNode }) => (
+            <a href="/x">{children({ active: true })}</a>
+        );
+        render(
+            <>
+                <Slot before={<i>icon</i>}>
+                    <a href="/a">A</a>
+                </Slot>
+                <Slot before={<i>icon</i>}>
+                    <Link>{({ active }) => (active ? 'B on' : 'B')}</Link>
+                </Slot>
+            </>,
+        );
+        expect(screen.getByRole('link', { name: /A/ }).innerHTML).toBe('<i>icon</i>A');
+        expect(screen.getByRole('link', { name: /B on/ }).innerHTML).toBe('<i>icon</i>B on');
     });
 
     it("runs both click handlers, the child's first", () => {

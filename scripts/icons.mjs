@@ -1,7 +1,7 @@
 // Writes packages/icons (used by Zen's components and docs, not exported) from Heroicons (a pinned dev dependency), so every icon is
 // Heroicons' own SVG, unchanged but for JSX attribute names. Run: node scripts/icons.mjs
 // Sets: 24/outline for icons drawn at 20px and up; 16/solid (Heroicons' "micro" set,
-// drawn for 16px) for the small glyphs inside components.
+// drawn for 16px) for the small glyphs inside components; 24/solid for a player's filled controls.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
@@ -14,7 +14,10 @@ const { version } = JSON.parse(readFileSync(join(heroicons, 'package.json'), 'ut
 // file (under packages/icons): [component, Heroicons source]
 const ICONS = {
     'arrow-left': ['ArrowLeft', '24/outline/arrow-left'],
+    'arrow-path': ['ArrowPath', '24/outline/arrow-path'],
     'arrow-right': ['ArrowRight', '24/outline/arrow-right'],
+    'arrows-right-left': ['ArrowsRightLeft', '24/outline/arrows-right-left'],
+    backward: ['Backward', '24/solid/backward'],
     bars: ['Bars', '24/outline/bars-3'],
     calendar: ['CalendarIcon', '24/outline/calendar'],
     'chart-bar': ['ChartBarIcon', '24/outline/chart-bar'],
@@ -24,11 +27,20 @@ const ICONS = {
     'chevron-up': ['ChevronUp', '24/outline/chevron-up'],
     ellipsis: ['Ellipsis', '16/solid/ellipsis-horizontal'],
     flag: ['Flag', '24/outline/flag'],
+    forward: ['Forward', '24/solid/forward'],
+    heart: ['Heart', '24/outline/heart'],
+    'heart-solid': ['HeartSolid', '24/solid/heart'],
     'list-bullet': ['ListBullet', '24/outline/list-bullet'],
     lock: ['Lock', '24/outline/lock-closed'],
     logout: ['Logout', '24/outline/arrow-right-start-on-rectangle'],
+    'musical-note': ['MusicalNote', '24/outline/musical-note'],
+    pause: ['Pause', '24/solid/pause'],
+    play: ['Play', '24/solid/play'],
+    'queue-list': ['QueueList', '24/outline/queue-list'],
     search: ['Search', '24/outline/magnifying-glass'],
     settings: ['Settings', '24/outline/cog-6-tooth'],
+    'speaker-wave': ['SpeakerWave', '24/outline/speaker-wave'],
+    'speaker-x-mark': ['SpeakerXMark', '24/outline/speaker-x-mark'],
     squares: ['Squares', '24/outline/squares-2x2'],
     table: ['TableIcon', '24/outline/table-cells'],
     'x-mark': ['XMark', '24/outline/x-mark'],

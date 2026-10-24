@@ -1,4 +1,4 @@
-import { Button, Input, Popover, PopoverClose, PopoverContent, PopoverTrigger, TextArea } from '@rinzai/zen';
+import { Button, Input, Popover, PopoverClose, PopoverContent, PopoverTrigger, Textarea } from '@rinzai/zen';
 
 export default function FeedbackForm() {
     return (
@@ -12,7 +12,7 @@ export default function FeedbackForm() {
                         Send feedback
                     </p>
                     <Input placeholder="Subject" />
-                    <TextArea placeholder="Describe your feedback…" className="resize-none" />
+                    <Textarea placeholder="Describe your feedback…" className="resize-none" />
                     <div className="flex justify-end gap-2">
                         <PopoverClose variant="outline" size="sm">
                             Cancel

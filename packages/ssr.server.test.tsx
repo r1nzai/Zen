@@ -32,6 +32,7 @@ import {
     InputGroup,
     InputGroupAddon,
     InputGroupInput,
+    Marquee,
     Meter,
     MoneyInput,
     MonthPicker,
@@ -72,7 +73,9 @@ import {
     TabList,
     TabPanel,
     Tabs,
-    TextArea,
+    Textarea,
+    PlayerBar,
+    SeekBar,
     ThemeScript,
     ThemeToggle,
     ToastProvider,
@@ -122,7 +125,9 @@ const components = {
             <TooltipContent>hint</TooltipContent>
         </Tooltip>
     ),
-    TextArea: <TextArea />,
+    Textarea: <Textarea />,
+    PlayerBar: <PlayerBar aria-label="Now playing">Song</PlayerBar>,
+    SeekBar: <SeekBar currentTime={42} duration={187} buffered={90} onSeek={() => {}} />,
     Toggle: <Toggle />,
     Menu: (
         <Menu>
@@ -201,6 +206,7 @@ const components = {
             <input />
         </Field>
     ),
+    Marquee: <Marquee>A long title</Marquee>,
     Meter: <Meter value={5} max={10} label="Meter" />,
     Slider: <Slider aria-label="x" value={5} onValueChange={() => {}} />,
     TabBar: (

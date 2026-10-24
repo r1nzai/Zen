@@ -70,14 +70,19 @@ The site has them too: [llms.txt](https://zen.rinzai.dev/llms.txt), [llms-full.t
 ## What's inside
 
 - **Surfaces:** Card, Inset, Alert, Stat, Dialog (and sheets from an edge), ConfirmDialog, Popover, Tooltip, HoverCard, Toast (a stacked deck), Disclosure, Accordion, Separator, Resizable panels, Carousel, Backdrop (aurora, contours or dots, and a pointer light)
-- **Inputs:** Button, ButtonGroup, Toggle, ToggleGroup, Toolbar, Input, TextArea, InputGroup, NumberField, TimeField, MoneyInput (with currency conversion), Select, Combobox, Calendar, DatePicker, DateRangePicker, MonthPicker, ColorPicker, Checkbox, RadioGroup, RadioCards, Segmented, Slider, Chip, Field
+- **Inputs:** Button, ButtonGroup, Toggle, ToggleGroup, Toolbar, Input, Textarea, InputGroup, NumberField, TimeField, MoneyInput (with currency conversion), Select, Combobox, Calendar, DatePicker, DateRangePicker, MonthPicker, ColorPicker, Checkbox, RadioGroup, RadioCards, Segmented, Slider, Chip, Field
 - **Data:** Chart (areas, lines, bars) and DonutChart in plain SVG, composable Table with sticky edges, sorting and rows reordered by drag and drop, tree rows, editable cells, virtual rows, SortableList and SortableTree, Meter, ProgressRing, AnimatedNumber, Badge, StatusPill (a live save status), Skeleton, Spinner, Canvas (items placed freely, with snapping)
 - **Navigation:** Header, NavigationMenu, Pills, Tabs, TabBar, SideNav, TableOfContents, Menu (with submenus, checkbox and radio items, and context menus), Menubar
+- **Media:** PlayerBar (sits on a TabBar), SeekBar, Marquee (cut-off titles that scroll to show the rest), `useMediaPlayer` for your own `<audio>` or `<video>`, `useMediaSession` for the lock screen and media keys, `formatDuration`
 - **Theming:** dark and light, OKLCH tokens, and a theme generator (presets or any hue) that keeps contrast readable
 - **Languages:** LocaleProvider for the locale and every word, and right-to-left layout
 - **Hooks and utilities:** `themeWave` (the theme spreads from the switch like a drop falling into water: ripples, glints and a rainbow edge, drawn on the GPU; `prepareThemeWave` readies it when the pointer reaches your own switch), `useAnchoredPopup`, `useVirtualList`, `useTree`, `useSort`, `useCopyToClipboard`, money, currency, month and date helpers, `hexToOklch` and `oklchToHex`, `cx` (Tailwind-aware class merging), `cva`
 
+## Props
+
 Every component takes `className`, and a class you pass always overrides the component's default. Other props (`id`, `aria-*`, `data-*`, handlers) and `ref` reach its element, and parts that render a link or button take `asChild` to use your own (a router's Link, say).
+
+Zen exports no icons. Use any icon set (the examples use [Heroicons](https://heroicons.com)) and pass icons in as elements, such as `icon={<HomeIcon />}`.
 
 ## Values and forms
 

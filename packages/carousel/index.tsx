@@ -64,10 +64,13 @@ export default function Carousel({ className, children, ...rest }: CarouselProps
         const max = content.scrollWidth - content.clientWidth;
         const first = items[0] ? startOf(items[0], content) : 0;
         const starts = items.map((item) => startOf(item, content) - first);
-        const stops = Math.max(1, starts.filter((at) => at <= max + 1).length);
+        // A stop at each slide that starts before the end, and the end itself: where the
+        // slides don't fill the view evenly, that's short of the next slide's start.
+        const stops = starts.filter((at) => at < max - 1).length + 1;
+        const stopAt = (i: number) => Math.min(starts[i], max);
         let index = 0;
-        starts.forEach((at, i) => {
-            if (i < stops && Math.abs(at - scrolled) < Math.abs(starts[index] - scrolled)) index = i;
+        starts.forEach((_, i) => {
+            if (i < stops && Math.abs(stopAt(i) - scrolled) < Math.abs(stopAt(index) - scrolled)) index = i;
         });
         // Scrolled to the end, the last stop is current even if it isn't at the start edge.
         if (max > 0 && scrolled >= max - 1) index = stops - 1;
@@ -107,7 +110,10 @@ export default function Carousel({ className, children, ...rest }: CarouselProps
         const item = content?.children[index];
         if (!content || !item) return;
         const first = content.children[0];
-        const at = startOf(item, content) - startOf(first, content);
+        const at = Math.min(
+            startOf(item, content) - startOf(first, content),
+            content.scrollWidth - content.clientWidth,
+        );
         const rtl = getComputedStyle(content).direction === 'rtl';
         content.scrollTo({ left: rtl ? -at : at, behavior: reducedMotion() ? 'instant' : 'smooth' });
     }, []);

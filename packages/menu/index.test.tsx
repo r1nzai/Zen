@@ -105,7 +105,7 @@ describe('Menu', () => {
             <Menu>
                 <MenuTrigger>Go</MenuTrigger>
                 <MenuContent>
-                    <MenuItem asChild onSelect={onSelect}>
+                    <MenuItem asChild onSelect={onSelect} icon={<svg data-testid="icon" />}>
                         <a href="#settings">Settings</a>
                     </MenuItem>
                 </MenuContent>
@@ -113,6 +113,7 @@ describe('Menu', () => {
         );
         const link = screen.getByRole('menuitem', { name: 'Settings', hidden: true });
         expect(link.tagName).toBe('A');
+        expect(link.firstChild).toContainElement(screen.getByTestId('icon'));
         fireEvent.click(link);
         expect(onSelect).toHaveBeenCalledTimes(1);
     });

@@ -3,7 +3,7 @@ import { cx } from '@zen/utils/cx';
 import { FIELD } from '@zen/utils/styles';
 import { ComponentProps } from 'react';
 
-export default function Textarea(props: TextAreaProps) {
+export default function Textarea(props: TextareaProps) {
     const { className, ...rest } = props;
     const field = useFieldProps(rest);
     return (
@@ -22,4 +22,9 @@ export default function Textarea(props: TextAreaProps) {
     );
 }
 
-export type TextAreaProps = ComponentProps<'textarea'>;
+export type TextareaProps = ComponentProps<'textarea'>;
+
+/** @deprecated Renamed Textarea, like the element. */
+export const TextArea = Textarea;
+/** @deprecated Renamed TextareaProps. */
+export type TextAreaProps = TextareaProps;

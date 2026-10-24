@@ -415,14 +415,20 @@ export function MenuItem({
             onSelect?.();
         },
     };
-    if (asChild) return <Slot {...(props as ComponentProps<'a'>)}>{children}</Slot>;
+    const iconSlot = icon && (
+        <span aria-hidden className={cx('flex shrink-0', tone !== 'negative' && 'text-muted-foreground')}>
+            {icon}
+        </span>
+    );
+    if (asChild)
+        return (
+            <Slot {...(props as ComponentProps<'a'>)} before={iconSlot}>
+                {children}
+            </Slot>
+        );
     return (
         <button type="button" {...props}>
-            {icon && (
-                <span aria-hidden className={cx('flex shrink-0', tone !== 'negative' && 'text-muted-foreground')}>
-                    {icon}
-                </span>
-            )}
+            {iconSlot}
             {children}
         </button>
     );

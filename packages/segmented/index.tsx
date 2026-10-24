@@ -25,6 +25,8 @@ export default function Segmented<V extends string>({
     defaultValue,
     onValueChange,
     name,
+    'aria-label': ariaLabel,
+    'aria-labelledby': ariaLabelledBy,
     className,
     children,
     ...rest
@@ -39,13 +41,16 @@ export default function Segmented<V extends string>({
 
     return (
         <div className={cx('zen__segmented flex flex-col gap-2', className)} {...rest}>
-            <span id={id} className="text-sm font-medium">
-                {label}
-            </span>
+            {label && (
+                <span id={id} className="text-sm font-medium">
+                    {label}
+                </span>
+            )}
             <div
                 ref={trackRef}
                 role="radiogroup"
-                aria-labelledby={id}
+                aria-label={ariaLabel}
+                aria-labelledby={label ? id : ariaLabelledBy}
                 className="glow-edge border-tint/10 bg-tint/[0.03] relative inline-flex w-fit flex-wrap gap-1 rounded-xl border p-1"
             >
                 {box && (
@@ -77,8 +82,8 @@ export function SegmentedItem({ value, disabled, className, children }: Segmente
     return (
         <label
             className={cx(
-                'text-muted-foreground relative cursor-pointer rounded-lg px-3 py-1.5 text-sm transition-colors duration-300',
-                'hover:text-foreground has-checked:text-foreground has- has-focus-ring',
+                'text-muted-foreground relative inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm transition-colors duration-300',
+                'hover:text-foreground has-checked:text-foreground has-focus-ring',
                 'has-disabled:hover:text-muted-foreground has-disabled:cursor-not-allowed has-disabled:opacity-50',
                 !group.measured &&
                     'has-checked:bg-primary/15 has-checked:shadow-[inset_0_0_0_1px_oklch(var(--primary)/0.4)]',
@@ -102,7 +107,8 @@ export function SegmentedItem({ value, disabled, className, children }: Segmente
 }
 
 export interface SegmentedProps<V extends string> extends Omit<ComponentProps<'div'>, 'defaultValue' | 'children'> {
-    label: string;
+    /** Shown above the options, naming the group. Without it, give the group an aria-label or aria-labelledby. */
+    label?: ReactNode;
     /** The chosen option, when you keep it. */
     value?: V;
     /** The first chosen option, when the control keeps its own. */

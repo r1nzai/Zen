@@ -88,18 +88,23 @@ export function anchoredStyle(
     id: string,
     { align = 'start', offset = 4, width, side = 'below' }: AnchorOptions = {},
 ): CSSProperties {
+    // A fallback is only taken where the popup fits its area, so the areas run to
+    // the viewport's edges: a `center` column is only as wide as the trigger, and
+    // a popup wider than that would fit nowhere and never flip.
     const area =
         side === 'beside'
             ? 'inline-end span-block-end'
             : {
                   start: 'block-end span-inline-end',
                   end: 'block-end span-inline-start',
-                  center: 'block-end center',
+                  center: 'block-end span-all',
               }[align];
     return {
         positionAnchor: `--${id}`,
         positionArea: area,
-        positionTryFallbacks: side === 'beside' ? 'flip-inline, flip-block, flip-block flip-inline' : 'flip-block',
+        ...(side !== 'beside' && align === 'center' && { justifySelf: 'anchor-center' }),
+        positionTryFallbacks:
+            side === 'beside' || align !== 'center' ? 'flip-inline, flip-block, flip-block flip-inline' : 'flip-block',
         inset: 'auto',
         // As wide as its content, and at least as wide as the trigger.
         ...(width === 'at-least' && { width: 'max-content', minWidth: 'anchor-size(width)' }),

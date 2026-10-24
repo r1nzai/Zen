@@ -2,11 +2,13 @@ import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFi
 
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { withCustomConfig } from 'react-docgen-typescript';
+import ts from 'typescript';
 import { defineConfig, type Plugin, lazyPlugins } from 'vite-plus';
 import dts from 'vite-plugin-dts';
 
 import { heroiconOf, orderExamples, shown } from './docs/app/example-source';
-import { componentMarkdown, indexMarkdown } from './docs/app/markdown';
+import { apiFor, componentMarkdown, type DocgenInfo, guideFrom, indexMarkdown } from './docs/app/markdown';
 import { COMPONENTS } from './docs/app/pages';
 
 /**
@@ -39,9 +41,43 @@ function stylesheets(): Plugin {
 }
 
 /**
+ * Each component's props (types, defaults, JSDoc), by its exported name, as the
+ * docs site's docgen plugin attaches them.
+ */
+function docgen() {
+    const files = readdirSync('packages', { withFileTypes: true })
+        .filter((d) => d.isDirectory())
+        .flatMap((d) =>
+            readdirSync(`packages/${d.name}`)
+                .filter((f) => f.endsWith('.tsx') && !/\.(stories|test)\.tsx$/.test(f))
+                .map((f) => `packages/${d.name}/${f}`),
+        );
+    const parser = withCustomConfig('tsconfig.json', {
+        shouldExtractLiteralValuesFromEnum: true,
+        shouldRemoveUndefinedFromOptional: true,
+        savePropValueAsString: true,
+        propFilter: (prop) => !prop.parent || !/node_modules/.test(prop.parent.fileName),
+        // A default export is named for its file otherwise; index.ts exports it under the function's name.
+        componentNameResolver: (exp) =>
+            exp.getName() === 'default'
+                ? ts.getNameOfDeclaration(exp.valueDeclaration ?? exp.declarations?.[0])?.getText()
+                : undefined,
+    });
+    const byName = new Map<string, DocgenInfo>();
+    // A part re-exported from its package's index.tsx is found twice; the entry with its props wins.
+    for (const info of parser.parse(files) as DocgenInfo[]) {
+        const seen = byName.get(info.displayName);
+        if (!seen || Object.keys(info.props).length > Object.keys(seen.props).length)
+            byName.set(info.displayName, info);
+    }
+    return byName;
+}
+
+/**
  * dist/docs: every docs page as markdown (description, import, each example's
- * source), so an agent working in an app finds them in node_modules, matching
- * the installed version. README.md lists them.
+ * source, props tables), so an agent working in an app finds them in
+ * node_modules, matching the installed version. README.md lists them, after
+ * how to set Zen up and use it.
  */
 function markdownDocs(): Plugin {
     return {
@@ -50,6 +86,7 @@ function markdownDocs(): Plugin {
         closeBundle() {
             mkdirSync('dist/docs', { recursive: true });
             const heroicon = (path: string) => heroiconOf(readFileSync(`packages/${path}.tsx`, 'utf8'));
+            const props = docgen();
             for (const doc of COMPONENTS) {
                 const dir = `packages/${doc.folder ?? doc.slug}/examples`;
                 const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.tsx')) : [];
@@ -59,12 +96,16 @@ function markdownDocs(): Plugin {
                 }));
                 writeFileSync(
                     `dist/docs/${doc.slug}.md`,
-                    componentMarkdown(doc, orderExamples(examples, doc.examples)),
+                    componentMarkdown(
+                        doc,
+                        orderExamples(examples, doc.examples),
+                        apiFor(doc.parts, (name) => props.get(name)),
+                    ),
                 );
             }
             writeFileSync(
                 'dist/docs/README.md',
-                indexMarkdown(COMPONENTS, (slug) => `./${slug}.md`, [
+                indexMarkdown(COMPONENTS, guideFrom(readFileSync('README.md', 'utf8')), (slug) => `./${slug}.md`, [
                     'Breaking changes and additions by version are in ../../CHANGELOG.md.',
                 ]),
             );

@@ -103,7 +103,7 @@ import {
     TabPanel,
     Tabs,
     TagInput,
-    TextArea,
+    Textarea,
     type ThemeSettings,
     ThemeToggle,
     Timeline,
@@ -1306,7 +1306,7 @@ function AddEntryDialog({
                     <TagInput value={form.tags} onValueChange={(t) => set('tags', t)} placeholder="Shared, Work…" />
                 </Field>
                 <Field label="Note" hint="Only you can see this.">
-                    <TextArea value={form.note} onChange={(e) => set('note', e.target.value)} placeholder="Optional" />
+                    <Textarea value={form.note} onChange={(e) => set('note', e.target.value)} placeholder="Optional" />
                 </Field>
                 <label className="flex items-center justify-between gap-4 text-sm">
                     Repeats

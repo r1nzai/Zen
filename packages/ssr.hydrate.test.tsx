@@ -15,7 +15,10 @@ import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-    TextArea,
+    Textarea,
+    Marquee,
+    PlayerBar,
+    SeekBar,
     Toggle,
     Tooltip,
     TooltipContent,
@@ -70,7 +73,10 @@ const components = {
             <TooltipContent>hint</TooltipContent>
         </Tooltip>
     ),
-    TextArea: <TextArea />,
+    Textarea: <Textarea />,
+    Marquee: <Marquee>A long title</Marquee>,
+    PlayerBar: <PlayerBar aria-label="Now playing">Song</PlayerBar>,
+    SeekBar: <SeekBar currentTime={42} duration={187} buffered={90} onSeek={() => {}} />,
     Toggle: <Toggle />,
 };
 
