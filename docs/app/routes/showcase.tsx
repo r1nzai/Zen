@@ -1,4 +1,5 @@
 import BudgetApp from '../../../packages/showcase/examples/BudgetApp';
+import { ShowcaseNav } from '../components/showcase-nav';
 import { seo } from '../seo';
 
 export const meta = () =>
@@ -10,5 +11,10 @@ export const meta = () =>
     });
 
 export default function Showcase() {
-    return <BudgetApp nav={false} />;
+    return (
+        <>
+            <ShowcaseNav />
+            <BudgetApp nav={false} />
+        </>
+    );
 }
