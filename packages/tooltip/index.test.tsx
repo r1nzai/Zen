@@ -25,6 +25,18 @@ describe('Tooltip', () => {
         expect(trigger().style.getPropertyValue('anchor-name')).toBe(`--${tip().id}`);
     });
 
+    it('can sit beside its trigger, centred on it', () => {
+        render(
+            <Tooltip>
+                <TooltipTrigger>Beta</TooltipTrigger>
+                <TooltipContent side="beside">Still in preview</TooltipContent>
+            </Tooltip>,
+        );
+        expect(tip()).toHaveAttribute('data-zen-beside');
+        expect(tip().style.getPropertyValue('position-area')).toBe('inline-end');
+        expect(tip().style.getPropertyValue('align-self')).toBe('anchor-center');
+    });
+
     it('shows on mouse hover and hides a moment after the pointer leaves', () => {
         vi.useFakeTimers();
         render(<Example />);

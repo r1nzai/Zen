@@ -668,8 +668,10 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'tooltip',
         title: 'Tooltip',
-        description: 'A short glass hint on hover or keyboard focus, describing its trigger to screen readers.',
+        description:
+            'A short glass hint on hover or keyboard focus, describing its trigger to screen readers; below its trigger or beside it.',
         parts: ['Tooltip', 'TooltipTrigger', 'TooltipContent'],
+        examples: ['Default', 'Beside'],
     },
     {
         slug: 'theming',

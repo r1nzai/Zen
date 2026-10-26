@@ -54,8 +54,13 @@ export function TooltipTrigger({
     );
 }
 
-/** The hint: glass, below the trigger (above it if there's no room), centred on it by default. */
+/**
+ * The hint: glass, below the trigger (above it if there's no room), centred on
+ * it by default. `side="beside"` puts it after the trigger instead (before it
+ * if there's no room), as for the icons of a collapsed sidebar.
+ */
 export function TooltipContent({
+    side = 'below',
     align = 'center',
     offset = 5,
     className,
@@ -77,7 +82,13 @@ export function TooltipContent({
             // Manual: it doesn't close other popovers, and the trigger decides when it shows.
             popover="manual"
             {...tip.contentProps({ onPointerEnter, onPointerLeave })}
-            style={{ ...anchoredStyle(tip.id, { align, offset, width: 'at-least' }), ...style }}
+            // Beside, the gap is across (theme.css), and it slides out sideways.
+            data-zen-beside={side === 'beside' ? '' : undefined}
+            style={{
+                ...anchoredStyle(tip.id, { side, align, offset, width: side === 'beside' ? undefined : 'at-least' }),
+                ...(side === 'beside' && { marginBlock: 0 }),
+                ...style,
+            }}
             className={cx('zen__popover fixed z-50 overflow-visible p-0', POPUP, className)}
         >
             {children}
@@ -91,7 +102,9 @@ export interface TooltipTriggerProps extends ComponentProps<'button'> {
 }
 
 export interface TooltipContentProps extends ComponentProps<'div'> {
-    /** Centred on the trigger (default), or lined up with its start or end edge. */
+    /** Below the trigger (default; above if there's no room), or beside it (after it; before if there's no room). */
+    side?: 'below' | 'beside';
+    /** Centred on the trigger (default), or lined up with its start or end edge (beside: its top or bottom). */
     align?: 'start' | 'end' | 'center';
     /** Gap from the trigger, in px. */
     offset?: number;

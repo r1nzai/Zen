@@ -80,7 +80,8 @@ export function anchorFor(id: string) {
  * lined up with its start or end edge, or centred on it; `width` makes it as
  * wide as the trigger, or at least as wide. `side: 'beside'` puts it after the
  * trigger instead (before it if there's no room), its top level with the
- * trigger's, as a submenu opens. For parts that take their own `align`/`offset`
+ * trigger's, as a submenu opens; `align` then lines up the tops (start), the
+ * middles (center, as a tooltip beside an icon) or the bottoms (end). For parts that take their own `align`/`offset`
  * (PopoverContent, MenuContent). The same choices are kept as custom
  * properties, for placing it where anchor positioning isn't supported.
  */
@@ -93,7 +94,7 @@ export function anchoredStyle(
     // a popup wider than that would fit nowhere and never flip.
     const area =
         side === 'beside'
-            ? 'inline-end span-block-end'
+            ? { start: 'inline-end span-block-end', end: 'inline-end span-block-start', center: 'inline-end' }[align]
             : {
                   start: 'block-end span-inline-end',
                   end: 'block-end span-inline-start',
@@ -102,9 +103,14 @@ export function anchoredStyle(
     return {
         positionAnchor: `--${id}`,
         positionArea: area,
-        ...(side !== 'beside' && align === 'center' && { justifySelf: 'anchor-center' }),
+        ...(align === 'center' &&
+            (side === 'beside' ? { alignSelf: 'anchor-center' } : { justifySelf: 'anchor-center' })),
         positionTryFallbacks:
-            side === 'beside' || align !== 'center' ? 'flip-inline, flip-block, flip-block flip-inline' : 'flip-block',
+            align !== 'center'
+                ? 'flip-inline, flip-block, flip-block flip-inline'
+                : side === 'beside'
+                  ? 'flip-inline'
+                  : 'flip-block',
         inset: 'auto',
         // As wide as its content, and at least as wide as the trigger.
         ...(width === 'at-least' && { width: 'max-content', minWidth: 'anchor-size(width)' }),
@@ -197,11 +203,13 @@ function placeAgainstTrigger(popup: HTMLElement) {
         const fitsRight = t.right + offset + p.width <= vw - EDGE;
         const fitsLeft = t.left - offset - p.width >= EDGE;
         const right = rtl ? fitsRight && !fitsLeft : fitsRight || !fitsLeft;
-        const up = t.top + p.height > vh - EDGE && t.bottom - p.height >= EDGE;
+        const up =
+            align === 'end' || (align === 'start' && t.top + p.height > vh - EDGE && t.bottom - p.height >= EDGE);
+        const top = align === 'center' ? t.top + (t.height - p.height) / 2 : up ? t.bottom - p.height : t.top;
         s.left = right ? `${t.right}px` : 'auto';
         s.right = right ? 'auto' : `${vw - t.left}px`;
-        s.top = up ? 'auto' : `${Math.max(EDGE, Math.min(t.top, vh - p.height - EDGE))}px`;
-        s.bottom = up ? `${vh - t.bottom}px` : 'auto';
+        s.top = `${Math.max(EDGE, Math.min(top, vh - p.height - EDGE))}px`;
+        s.bottom = 'auto';
         return;
     }
     const flip = t.bottom + offset + p.height > vh - EDGE && t.top - offset - p.height >= EDGE;

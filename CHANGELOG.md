@@ -8,6 +8,8 @@
 - **SortableList**: works with a virtualized list. Give it `itemHeight` and render only the rows in view (from `useVirtualList`), each at its place in `value`; a drag works from `value`, not the rows on screen, and rows that come into view as it scrolls the list take their places. `onLiftedChange` says which item is picked up (by its handle or from the keyboard), to keep its row rendered. An item moved with the keyboard is scrolled into view.
 - **useVirtualList**: `keep` renders a row even when it's out of view, such as the one being dragged, with the rows between.
 - **SeekBar**: `times="below"` puts the time played and the length under the ends of the bar, as on a phone's Now Playing screen.
+- **TooltipContent**: `side="beside"` puts the tooltip after its trigger (before it if there's no room) instead of below, centred on it, as for the icons of a collapsed sidebar, where a tooltip below would cover the next icon. `align` lines up its top or bottom with the trigger's instead.
+- **Anchored popups** (`anchoredStyle`): beside the trigger, `align` now chooses top (start, as before), middle (center) or bottom (end).
 
 ### Fixes
 
