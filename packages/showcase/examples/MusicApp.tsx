@@ -20,12 +20,22 @@ import {
     InputGroupInput,
     Marquee,
     type MediaPlayer,
+    Menu,
+    MenuContent,
+    MenuItem,
+    MenuSub,
+    MenuSubContent,
+    MenuSubTrigger,
+    MenuTrigger,
     PlayerBar,
     Popover,
     PopoverContent,
     PopoverTrigger,
     SeekBar,
     Slider,
+    SortableHandle,
+    SortableItem,
+    SortableList,
     TabBar,
     TabBarItem,
     Table,
@@ -38,10 +48,12 @@ import {
     ThemeToggle,
     useMediaPlayer,
     useMediaSession,
+    useToast,
 } from '@rinzai/zen';
 import ArrowPath from '@zen/icons/arrow-path';
 import ArrowsRightLeft from '@zen/icons/arrows-right-left';
 import Backward from '@zen/icons/backward';
+import Ellipsis from '@zen/icons/ellipsis';
 import Forward from '@zen/icons/forward';
 import Heart from '@zen/icons/heart';
 import HeartSolid from '@zen/icons/heart-solid';
@@ -353,6 +365,16 @@ function useQueue() {
         repeat,
         hasNext: at < queue.length - 1 || repeat === 'all',
         playList,
+        /** Puts the tracks after this one in a new order. */
+        reorder: (upNext: string[]) => setQueue([...queue.slice(0, at + 1), ...upNext]),
+        /** Moves a track (from wherever it is in the queue) to play after this one. */
+        playNext: (id: string) => {
+            if (id === queue[at]) return;
+            const rest = queue.filter((q) => q !== id);
+            const now = rest.indexOf(queue[at]);
+            setQueue([...rest.slice(0, now + 1), id, ...rest.slice(now + 1)]);
+            setAt(now);
+        },
         next: () => go(at + 1),
         previous: () => go(at - 1),
         toggleShuffle,
@@ -434,6 +456,7 @@ export default function MusicApp({ nav = true }: { nav?: boolean }) {
                     liked={liked}
                     onLike={like}
                     onPlay={(id, ids) => play(ids, id)}
+                    onPlayNext={queue.playNext}
                 />
             </div>
 
@@ -525,6 +548,7 @@ export default function MusicApp({ nav = true }: { nav?: boolean }) {
                     </div>
                     <SeekBar
                         className="w-full"
+                        times="below"
                         currentTime={player.currentTime}
                         playing={player.playing && !player.waiting}
                         playbackRate={player.playbackRate}
@@ -619,12 +643,14 @@ function Tracks({
     liked,
     onLike,
     onPlay,
+    onPlayNext,
 }: {
     current: Track;
     playing: boolean;
     liked: ReadonlySet<string>;
     onLike: (id: string) => void;
     onPlay: (id: string, ids: string[]) => void;
+    onPlayNext: (id: string) => void;
 }) {
     const [query, setQuery] = useState('');
     const q = query.trim().toLowerCase();
@@ -658,14 +684,17 @@ function Tracks({
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-12">#</TableHead>
+                                <TableHead className="w-12 max-sm:hidden">#</TableHead>
                                 <TableHead>Title</TableHead>
                                 <TableHead className="max-sm:hidden">Album</TableHead>
                                 <TableHead className="w-12">
                                     <span className="sr-only">Liked</span>
                                 </TableHead>
-                                <TableHead numeric className="w-20">
+                                <TableHead numeric className="w-20 max-sm:hidden">
                                     Length
+                                </TableHead>
+                                <TableHead className="w-12">
+                                    <span className="sr-only">More</span>
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -674,7 +703,7 @@ function Tracks({
                                 const isCurrent = t === current;
                                 return (
                                     <TableRow key={t.id} aria-current={isCurrent || undefined}>
-                                        <TableCell className="text-muted-foreground tabular-nums">
+                                        <TableCell className="text-muted-foreground tabular-nums max-sm:hidden">
                                             {isCurrent ? <MusicalNote className="text-primary size-4" /> : i + 1}
                                         </TableCell>
                                         <TableCell>
@@ -706,8 +735,16 @@ function Tracks({
                                                 onClick={() => onLike(t.id)}
                                             />
                                         </TableCell>
-                                        <TableCell numeric className="text-muted-foreground">
+                                        <TableCell numeric className="text-muted-foreground max-sm:hidden">
                                             {formatDuration(demoTrackSeconds(t.sound))}
+                                        </TableCell>
+                                        <TableCell>
+                                            <TrackMenu
+                                                track={t}
+                                                liked={liked.has(t.id)}
+                                                onLike={() => onLike(t.id)}
+                                                onPlayNext={() => onPlayNext(t.id)}
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 );
@@ -717,6 +754,60 @@ function Tracks({
                 </TableContainer>
             )}
         </section>
+    );
+}
+
+/** A track's menu: a bottom sheet on phones, as music apps show one, its mixes sliding in over it. */
+function TrackMenu({
+    track,
+    liked,
+    onLike,
+    onPlayNext,
+}: {
+    track: Track;
+    liked: boolean;
+    onLike: () => void;
+    onPlayNext: () => void;
+}) {
+    const toast = useToast();
+    return (
+        <Menu>
+            <MenuTrigger asChild>
+                <Button variant="ghost" size="icon-sm" aria-label={`More for ${track.title}`}>
+                    <Ellipsis className="size-4" />
+                </Button>
+            </MenuTrigger>
+            <MenuContent sheet>
+                <MenuItem
+                    icon={<QueueList className="size-4" />}
+                    onSelect={() => {
+                        onPlayNext();
+                        toast(`${track.title} plays next`);
+                    }}
+                >
+                    Play next
+                </MenuItem>
+                <MenuItem
+                    icon={liked ? <HeartSolid className="size-4" /> : <Heart className="size-4" />}
+                    onSelect={onLike}
+                >
+                    {liked ? 'Remove from liked' : 'Like'}
+                </MenuItem>
+                <MenuSub>
+                    <MenuSubTrigger icon={<MusicalNote className="size-4" />}>Add to mix</MenuSubTrigger>
+                    <MenuSubContent>
+                        {MIXES.map((mix) => (
+                            <MenuItem
+                                key={mix.title}
+                                onSelect={() => toast(`Added to ${mix.title}`, { tone: 'positive' })}
+                            >
+                                {mix.title}
+                            </MenuItem>
+                        ))}
+                    </MenuSubContent>
+                </MenuSub>
+            </MenuContent>
+        </Menu>
     );
 }
 
@@ -839,7 +930,15 @@ function UpNext({ queue }: { queue: Queue }) {
                             {queue.repeat === 'all' ? 'The list starts again.' : 'Nothing after this one.'}
                         </p>
                     ) : (
-                        queue.upNext.map((t) => <QueueRow key={t.id} track={t} />)
+                        <SortableList
+                            aria-label="Up next"
+                            value={queue.upNext.map((t) => t.id)}
+                            onValueChange={queue.reorder}
+                        >
+                            {queue.upNext.map((t) => (
+                                <QueueRow key={t.id} track={t} />
+                            ))}
+                        </SortableList>
                     )}
                 </div>
             </PopoverContent>
@@ -849,7 +948,8 @@ function UpNext({ queue }: { queue: Queue }) {
 
 function QueueRow({ track }: { track: Track }) {
     return (
-        <div className="flex items-center gap-3 rounded-lg px-2 py-1.5">
+        <SortableItem id={track.id} className="flex items-center gap-2 rounded-lg py-1.5 ps-0.5 pe-2">
+            <SortableHandle id={track.id} label={track.title} />
             <Cover colors={track.album.colors} className="size-9 rounded-md" />
             <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{track.title}</p>
@@ -858,7 +958,7 @@ function QueueRow({ track }: { track: Track }) {
             <span className="text-muted-foreground text-xs tabular-nums">
                 {formatDuration(demoTrackSeconds(track.sound))}
             </span>
-        </div>
+        </SortableItem>
     );
 }
 
