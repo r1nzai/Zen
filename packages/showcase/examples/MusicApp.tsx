@@ -46,6 +46,9 @@ import {
     TableHeader,
     TableRow,
     ThemeToggle,
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
     useMediaPlayer,
     useMediaSession,
     useToast,
@@ -443,7 +446,8 @@ export default function MusicApp({ nav = true }: { nav?: boolean }) {
                     </div>
                 </Header>
             )}
-            <div className="rise mx-auto flex max-w-6xl flex-col gap-10 p-6 pb-[calc(var(--zen-tab-bar-height,0px)+var(--zen-player-bar-height,0px)+2.5rem)] md:p-10 md:pb-[calc(var(--zen-player-bar-height,0px)+2.5rem)]">
+            <Rail />
+            <div className="rise mx-auto flex max-w-6xl flex-col gap-10 p-6 pb-[calc(var(--zen-tab-bar-height,0px)+var(--zen-player-bar-height,0px)+2.5rem)] md:p-10 md:ps-24 md:pb-[calc(var(--zen-player-bar-height,0px)+2.5rem)]">
                 <Featured
                     album={AURORA}
                     playing={player.playing && track.album === AURORA}
@@ -560,6 +564,32 @@ export default function MusicApp({ nav = true }: { nav?: boolean }) {
                 </div>
             </Dialog>
         </div>
+    );
+}
+
+/** From `md` up, the TabBar's places in a rail at the side, each named in a tooltip beside its icon. */
+function Rail() {
+    return (
+        <nav
+            aria-label="Library"
+            className="glass glass-blur fixed start-4 top-1/2 z-30 flex -translate-y-1/2 flex-col gap-1 rounded-2xl p-1.5 max-md:hidden"
+        >
+            {TABS.map(({ label, icon }, i) => (
+                <Tooltip key={label}>
+                    <TooltipTrigger
+                        aria-label={label}
+                        aria-describedby={undefined}
+                        aria-current={i === 0 ? 'page' : undefined}
+                        className="text-muted-foreground hover:text-foreground hover:bg-tint/[0.07] focus-ring aria-[current]:text-primary aria-[current]:bg-primary/10 grid size-10 cursor-pointer place-items-center rounded-xl transition-colors *:size-5"
+                    >
+                        {icon}
+                    </TooltipTrigger>
+                    <TooltipContent side="beside" offset={10}>
+                        <p className="px-2.5 py-1.5 text-sm">{label}</p>
+                    </TooltipContent>
+                </Tooltip>
+            ))}
+        </nav>
     );
 }
 
