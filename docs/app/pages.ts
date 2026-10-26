@@ -343,7 +343,7 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'menu',
         title: 'Menu',
         description:
-            'A button that opens a menu, or a context menu from a right-click or long press, with your own trigger, a header, icons, groups, destructive items, checkbox and radio items, submenus, and a menubar of menus.',
+            'A button that opens a menu, or a context menu from a right-click or long press, with your own trigger, a header, icons, groups, destructive items, checkbox and radio items, submenus, a bottom sheet on phones, and a menubar of menus.',
         parts: [
             'Menu',
             'MenuTrigger',
@@ -360,7 +360,7 @@ export const COMPONENTS: ComponentDoc[] = [
             'MenuHeader',
             'Menubar',
         ],
-        examples: ['Account', 'Actions', 'Context', 'Options', 'Bar'],
+        examples: ['Account', 'Actions', 'Context', 'Options', 'Sheet', 'Bar'],
     },
     {
         slug: 'meter',
@@ -488,7 +488,7 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'seek-bar',
         title: 'Seek Bar',
         description:
-            'Where playback is in a track, and the way to move it: played and loaded on one track, between the time played and the length.',
+            'Where playback is in a track, and the way to move it: played and loaded on one track, the time played and the length beside it or under its ends.',
         parts: ['SeekBar'],
         imports: ['SeekBar', 'formatDuration'],
     },
@@ -538,10 +538,10 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'sortable',
         title: 'Sortable List',
         description:
-            'Put a list in order, or a tree of groups (a table’s rows, say), by dragging items by a grip or with the keyboard, each step announced: into other groups, open sub-items, or under another item.',
+            'Put a list in order, or a tree of groups (a table’s rows, say), by dragging items by a grip or with the keyboard, each step announced: into other groups, open sub-items, or under another item. Also a virtualized list of hundreds.',
         parts: ['SortableList', 'SortableTree', 'SortableItem', 'SortableHandle'],
         imports: ['SortableList', 'SortableTree', 'SortableItem', 'SortableHandle', 'flattenTree'],
-        examples: ['Default', 'Groups'],
+        examples: ['Default', 'Groups', 'Virtual'],
     },
     {
         slug: 'sparkline',

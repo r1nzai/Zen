@@ -1157,6 +1157,109 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
     }
 }
 /*
+ * A menu as a bottom sheet on phones (MenuContent's `sheet`): across the
+ * bottom of the screen over a scrim, sliding up and following a finger
+ * swiping it back down. A submenu slides in over it from the side, and the
+ * menu moves aside; it slides back out the same way, or goes down with the
+ * menu. Anchoring is set inline, hence !important. --zen-sheet tells the
+ * scripts it's a sheet now (no opening submenus on hover).
+ */
+@media (width < theme(--breakpoint-md)) {
+    .zen__popover[data-zen-sheet] {
+        --zen-sheet: 1;
+        position: fixed;
+        position-area: none !important;
+        position-try-fallbacks: none !important;
+        position-visibility: always;
+        /* Edge to edge, over a scrollbar's gutter too. */
+        inset: auto auto 0 0 !important;
+        justify-self: auto !important;
+        width: 100vw !important;
+        min-width: 0 !important;
+        max-height: 85dvh;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        margin: 0 !important;
+        padding: 0.5rem 0.5rem calc(0.75rem + env(safe-area-inset-bottom));
+        border-width: 1px 0 0;
+        border-radius: 1rem 1rem 0 0;
+        background-color: oklch(var(--card) / 0.9);
+        pointer-events: auto;
+        translate: var(--zen-swipe, 0 0);
+        will-change: translate;
+        transition:
+            translate 320ms var(--ease-out-soft),
+            opacity 200ms,
+            overlay 320ms allow-discrete,
+            display 320ms allow-discrete;
+    }
+    .zen__popover[data-zen-sheet]:not(:popover-open) {
+        translate: 0 100%;
+    }
+    .zen__popover:popover-open .zen__popover[data-zen-sheet][data-zen-beside]:not(:popover-open) {
+        translate: 100% 0;
+    }
+    .zen__popover:popover-open .zen__popover[data-zen-sheet][data-zen-beside]:not(:popover-open):dir(rtl) {
+        translate: -100% 0;
+    }
+    /* Under an open submenu (in the top layer, so it's not moved with it). */
+    .zen__popover[data-zen-sheet]:popover-open:has(.zen__popover[data-zen-sheet]:popover-open) {
+        translate: -30% 0;
+        opacity: 0;
+        pointer-events: none;
+    }
+    .zen__popover[data-zen-sheet]:popover-open:has(.zen__popover[data-zen-sheet]:popover-open):dir(rtl) {
+        translate: 30% 0;
+    }
+    .zen__popover[data-zen-sheet] [role^='menuitem'] {
+        min-height: 3rem;
+    }
+    .zen__popover[data-zen-sheet] .zen__sheet-only {
+        display: revert-layer;
+    }
+    .zen__popover[data-zen-sheet]::backdrop {
+        background: var(--backdrop-scrim, oklch(0 0 0 / 0.5));
+        opacity: calc(1 - var(--zen-swipe-progress, 0));
+        transition:
+            opacity 200ms,
+            overlay 320ms allow-discrete,
+            display 320ms allow-discrete;
+    }
+    .zen__popover[data-zen-sheet]:not(:popover-open)::backdrop {
+        opacity: 0;
+    }
+    /* The menu's scrim is behind a submenu already. */
+    .zen__popover[data-zen-sheet][data-zen-beside]::backdrop {
+        background: none;
+    }
+    .zen__popover[data-zen-sheet][data-swiping],
+    .zen__popover[data-zen-sheet][data-swiping]::backdrop {
+        transition: none;
+        user-select: none;
+    }
+    :root:has(.zen__popover[data-zen-sheet]:popover-open) {
+        overflow: hidden;
+    }
+    @starting-style {
+        .zen__popover[data-zen-sheet]:popover-open {
+            translate: 0 100%;
+        }
+        .zen__popover[data-zen-sheet][data-zen-beside]:popover-open {
+            translate: 100% 0;
+        }
+        .zen__popover[data-zen-sheet][data-zen-beside]:popover-open:dir(rtl) {
+            translate: -100% 0;
+        }
+        .zen__popover[data-zen-sheet]:popover-open::backdrop {
+            opacity: 0;
+        }
+    }
+}
+/* What only a sheet shows: its grip, a submenu's way back. */
+.zen__sheet-only {
+    display: none;
+}
+/*
  * The page behind a modal dialog doesn't scroll. Hiding the overflow removes
  * the scrollbar, so where the page had one (Dialog sets data-zen-scrollbar),
  * its space stays reserved and the page doesn't shift sideways.

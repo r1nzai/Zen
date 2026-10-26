@@ -165,9 +165,11 @@ export default function ToastProvider({ children, offset, viewportClassName }: T
     const front = staying.at(-1);
     const frontHeight = front ? heights[front.id] : undefined;
     const shown = staying.slice(-LIMIT);
-    const deckHeight = expanded
-        ? shown.reduce((sum, t) => sum + (heights[t.id] ?? 0), 0) + GAP * (shown.length - 1)
-        : (frontHeight ?? 0) + PEEK * (shown.length - 1);
+    const deckHeight = !shown.length
+        ? 0
+        : expanded
+          ? shown.reduce((sum, t) => sum + (heights[t.id] ?? 0), 0) + GAP * (shown.length - 1)
+          : (frontHeight ?? 0) + PEEK * (shown.length - 1);
     const layout = (t: ToastItem): Layout => {
         const newer = staying.filter((o) => o.id > t.id);
         const index = newer.length;

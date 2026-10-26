@@ -11,6 +11,12 @@ describe('SeekBar', () => {
         expect(screen.getByText('3:07')).toBeInTheDocument();
     });
 
+    it('can put the times under the bar, after it in the layout', () => {
+        const { container } = render(<SeekBar currentTime={42} duration={187} onSeek={() => {}} times="below" />);
+        expect(container.firstChild).toHaveAttribute('data-times', 'below');
+        expect(screen.getByRole('slider').closest('.group')).toHaveClass('order-first', 'basis-full');
+    });
+
     it('follows the thumb while dragging, and seeks once let go', () => {
         const onSeek = vi.fn();
         render(<SeekBar currentTime={42} duration={187} onSeek={onSeek} />);

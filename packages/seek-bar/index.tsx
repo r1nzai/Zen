@@ -21,6 +21,7 @@ export default function SeekBar({
     playing = false,
     playbackRate = 1,
     onSeek,
+    times = 'beside',
     onKeyDown,
     disabled,
     className,
@@ -79,14 +80,31 @@ export default function SeekBar({
     };
     const off = disabled || duration <= 0;
     const loaded = duration > 0 ? (Math.min(buffered, duration) / duration) * 100 : 0;
-    // Both times as wide as the length, so the track doesn't shift as they count.
-    const width = { width: `${formatDuration(duration).length}ch` };
+    const below = times === 'below';
+    // Beside it, both times are as wide as the length, so the track doesn't shift as they count.
+    const width = below ? undefined : { width: `${formatDuration(duration).length}ch` };
     return (
-        <div className={cx('zen__seek-bar flex items-center gap-3', className)}>
-            <span className="text-muted-foreground shrink-0 text-end text-xs tabular-nums" style={width}>
+        <div
+            data-times={times}
+            className={cx(
+                'zen__seek-bar flex items-center',
+                below ? 'flex-wrap justify-between gap-y-1' : 'gap-3',
+                className,
+            )}
+        >
+            <span
+                className={cx('text-muted-foreground shrink-0 text-xs tabular-nums', !below && 'text-end')}
+                style={width}
+            >
                 {formatDuration(time)}
             </span>
-            <div className={cx('group relative h-5 min-w-0 flex-1', off && 'opacity-50')}>
+            <div
+                className={cx(
+                    'group relative h-5 min-w-0 flex-1',
+                    below && 'order-first basis-full',
+                    off && 'opacity-50',
+                )}
+            >
                 {/* The native slider, unseen, takes the pointer, the keys and assistive tech; its thumb is the size of the one drawn, so they line up. */}
                 <Slider
                     aria-label={m.seek}
@@ -152,4 +170,6 @@ export interface SeekBarProps extends Omit<
     playbackRate?: number;
     /** When the user lets go, or steps with the keys: the time to play from. */
     onSeek: (time: number) => void;
+    /** Where the time played and the length go: either side of the bar (default), or under its ends, as on a phone's Now Playing screen. */
+    times?: 'beside' | 'below';
 }

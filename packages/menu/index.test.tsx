@@ -193,6 +193,63 @@ describe('Menu choices', () => {
     });
 });
 
+describe('MenuContent sheet', () => {
+    function Song() {
+        return (
+            <Menu>
+                <MenuTrigger>Song</MenuTrigger>
+                <MenuContent sheet>
+                    <MenuItem>Play next</MenuItem>
+                    <MenuSub>
+                        <MenuSubTrigger>Add to playlist</MenuSubTrigger>
+                        <MenuSubContent>
+                            <MenuItem>Focus</MenuItem>
+                        </MenuSubContent>
+                    </MenuSub>
+                </MenuContent>
+            </Menu>
+        );
+    }
+    const item = (name: string) => screen.getByRole('menuitem', { name, hidden: true });
+    const [root, sub] = [0, 1].map((i) => () => screen.getAllByRole('menu', { hidden: true })[i]);
+    // What theme.css sets on a sheet on a phone.
+    const asPhone = () => [root(), sub()].forEach((menu) => menu.style.setProperty('--zen-sheet', '1'));
+
+    it('marks the menu and its submenus as sheets', () => {
+        render(<Song />);
+        expect(root()).toHaveAttribute('data-zen-sheet');
+        expect(sub()).toHaveAttribute('data-zen-sheet');
+    });
+
+    it("isn't a sheet on a wider screen: the arrow keys skip the way back, and hover opens submenus", () => {
+        render(<Song />);
+        item('Add to playlist').focus();
+        fireEvent.keyDown(item('Add to playlist'), { key: 'ArrowRight' });
+        expect(item('Focus')).toHaveFocus();
+        fireEvent.keyDown(item('Focus'), { key: 'ArrowUp' });
+        expect(item('Focus')).toHaveFocus();
+        fireEvent.keyDown(item('Focus'), { key: 'ArrowLeft' });
+        fireEvent.pointerEnter(item('Add to playlist'), { pointerType: 'mouse' });
+        expect(item('Add to playlist')).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    it('as a sheet, a submenu opens only when chosen, and its first row goes back, named after its item', () => {
+        render(<Song />);
+        asPhone();
+        fireEvent.pointerEnter(item('Add to playlist'), { pointerType: 'mouse' });
+        expect(item('Add to playlist')).toHaveAttribute('aria-expanded', 'false');
+        fireEvent.click(item('Add to playlist'));
+        expect(item('Add to playlist')).toHaveAttribute('aria-expanded', 'true');
+        const back = item('Back');
+        expect(back).toHaveTextContent('Add to playlist');
+        fireEvent.keyDown(sub(), { key: 'Home' });
+        expect(back).toHaveFocus();
+        fireEvent.click(back);
+        expect(item('Add to playlist')).toHaveAttribute('aria-expanded', 'false');
+        expect(item('Add to playlist')).toHaveFocus();
+    });
+});
+
 describe('MenuSub', () => {
     function Share({ onEmail = () => {} }) {
         return (

@@ -1,3 +1,4 @@
+import { useMessages } from '@zen/locale-provider';
 import CheckMicro from '@zen/icons/micro/check';
 import ChevronRightMicro from '@zen/icons/micro/chevron-right';
 import { cx } from '@zen/utils/cx';
@@ -8,6 +9,7 @@ import { useGraphicsMode } from '@zen/utils/graphics';
 import { useMergedRefs } from '@zen/utils/refs';
 import { moveFocus, rovingItems, useRovingTabIndex } from '@zen/utils/roving';
 import { Slot } from '@zen/utils/slot';
+import { useSheetSwipe } from '@zen/utils/swipe';
 import { useControllable } from '@zen/utils/useControllable';
 import { anchoredStyle, anchorFor, useAnchoredPopup } from '@zen/utils/useAnchoredPopup';
 import {
@@ -34,6 +36,21 @@ const BAR_TRIGGER = '[data-zen-menubar-trigger]';
 
 /** Closes the menu; items call it when chosen. */
 const CloseContext = createContext<() => void>(() => {});
+
+/** Inside a MenuContent with `sheet`: its submenus are sheets too. */
+const SheetContext = createContext(false);
+
+/** Whether a menu is showing as a sheet right now (theme.css decides, by the screen's width). */
+const isSheet = (menu: Element | null | undefined) =>
+    !!menu?.hasAttribute('data-zen-sheet') && getComputedStyle(menu).getPropertyValue('--zen-sheet').trim() === '1';
+
+/** While a menu is open as a sheet, a finger swiping it down closes the whole menu. */
+function useMenuSheetSwipe(menu: RefObject<HTMLElement | null>, open: boolean) {
+    const close = useContext(CloseContext);
+    const [sheet, setSheet] = useState(false);
+    useIsoLayoutEffect(() => setSheet(open && isSheet(menu.current)), [open, menu]);
+    useSheetSwipe(menu, sheet ? 'bottom' : undefined, close);
+}
 
 interface MenuContextValue {
     popup: ReturnType<typeof useAnchoredPopup<HTMLDivElement>>;
@@ -196,9 +213,10 @@ export function MenuTrigger({ asChild, style, onKeyDown, onPointerEnter, childre
  * up with its end edge by default (its start edge in a Menubar). A context menu opens from the pointer
  * instead; name it with `aria-label`.
  */
-export function MenuContent({ align, offset, ref, className, style, children, ...rest }: MenuContentProps) {
+export function MenuContent({ align, offset, sheet, ref, className, style, children, ...rest }: MenuContentProps) {
     const { popup, triggerId, point } = useMenu('MenuContent');
     const refs = useMergedRefs(popup.popupRef, ref);
+    useMenuSheetSwipe(popup.popupRef, !!sheet && popup.open);
     const bar = useContext(MenubarContext);
     // Under its label in a menubar, as menus there do; under a button's end edge otherwise.
     align ??= point || bar ? 'start' : 'end';
@@ -229,6 +247,7 @@ export function MenuContent({ align, offset, ref, className, style, children, ..
             ref={refs}
             role="menu"
             tabIndex={-1}
+            data-zen-sheet={sheet || undefined}
             onKeyDown={(e) => {
                 rest.onKeyDown?.(e);
                 onKeyDown(e);
@@ -240,9 +259,15 @@ export function MenuContent({ align, offset, ref, className, style, children, ..
                 className,
             )}
         >
-            {children}
+            {sheet && <SheetGrip />}
+            <SheetContext.Provider value={!!sheet}>{children}</SheetContext.Provider>
         </div>
     );
+}
+
+/** Says a sheet came up from the bottom edge. */
+function SheetGrip() {
+    return <div aria-hidden className="zen__sheet-only bg-tint/20 mx-auto mt-0.5 mb-2 h-1 w-10 rounded-full" />;
 }
 
 /** How long a finger rests before a context menu opens, where the browser doesn't open one (iOS). */
@@ -354,10 +379,14 @@ export function MenuContextTrigger({
     );
 }
 
-/** Items of this menu, not of a submenu inside it. */
+/** Items of this menu, not of a submenu inside it (nor, unless it's a sheet now, a sheet's way back). */
 function itemsOf(menu: HTMLElement) {
+    const sheet = isSheet(menu);
     return Array.from(menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')).filter(
-        (item) => item.closest('[role="menu"]') === menu && !item.matches(':disabled, [aria-disabled="true"]'),
+        (item) =>
+            item.closest('[role="menu"]') === menu &&
+            !item.matches(':disabled, [aria-disabled="true"]') &&
+            (sheet || !item.classList.contains('zen__sheet-only')),
     );
 }
 
@@ -512,6 +541,8 @@ export function MenuRadioItem({ value, className, children, onClick, ...rest }: 
 
 interface SubContextValue {
     popup: ReturnType<typeof useAnchoredPopup<HTMLDivElement>>;
+    /** Its item's text, at the top of the submenu when it's a sheet. */
+    label: string;
     triggerRef: RefObject<HTMLButtonElement | null>;
     triggerId: string;
     /** Opens it; from the keyboard, its first item takes focus. */
@@ -564,10 +595,12 @@ export function MenuSub({ onOpenChange, children }: MenuProps) {
             onOpenChange?.(open);
         },
     });
+    const [label, setLabel] = useState('');
     const stay = () => clearTimeout(timer.current);
     useEffect(() => stay, []);
     const value: SubContextValue = {
         popup,
+        label,
         triggerRef,
         triggerId,
         show: (first) => {
@@ -577,6 +610,7 @@ export function MenuSub({ onOpenChange, children }: MenuProps) {
                 return;
             }
             focusFirst.current = first;
+            setLabel(triggerRef.current?.textContent?.trim() ?? '');
             popup.setOpen(true);
         },
         hideSoon: () => {
@@ -633,13 +667,15 @@ export function MenuSubTrigger({
                 e.preventDefault();
                 sub.show(true);
             }}
+            // In a sheet it opens over the menu, so only when chosen.
             onPointerEnter={(e) => {
                 onPointerEnter?.(e);
-                if (e.pointerType !== 'touch') sub.show(false);
+                if (e.pointerType !== 'touch' && !isSheet(e.currentTarget.closest('[role="menu"]'))) sub.show(false);
             }}
             onPointerLeave={(e) => {
                 onPointerLeave?.(e);
-                if (leavingForMenu(e, e.currentTarget.closest('[role="menu"]'))) sub.hideSoon();
+                const menu = e.currentTarget.closest('[role="menu"]');
+                if (leavingForMenu(e, menu) && !isSheet(menu)) sub.hideSoon();
             }}
         >
             {icon && (
@@ -668,6 +704,13 @@ export function MenuSubContent({
     const sub = useSub('MenuSubContent');
     const refs = useMergedRefs(sub.popup.popupRef, ref);
     const keys = useMenuKeys();
+    const sheet = useContext(SheetContext);
+    const m = useMessages();
+    useMenuSheetSwipe(sub.popup.popupRef, sheet && sub.popup.open);
+    const back = () => {
+        sub.popup.setOpen(false);
+        sub.triggerRef.current?.focus();
+    };
     return (
         <div
             aria-labelledby={sub.triggerId}
@@ -677,6 +720,7 @@ export function MenuSubContent({
             role="menu"
             tabIndex={-1}
             data-zen-beside=""
+            data-zen-sheet={sheet || undefined}
             onKeyDown={(e) => {
                 onKeyDown?.(e);
                 if (e.defaultPrevented) return;
@@ -687,8 +731,7 @@ export function MenuSubContent({
                 ) {
                     e.preventDefault();
                     e.stopPropagation();
-                    sub.popup.setOpen(false);
-                    sub.triggerRef.current?.focus();
+                    back();
                 }
             }}
             onPointerEnter={(e) => {
@@ -698,7 +741,11 @@ export function MenuSubContent({
             onPointerLeave={(e) => {
                 onPointerLeave?.(e);
                 const parent = sub.triggerRef.current?.closest('[role="menu"]') ?? null;
-                if (leavingForMenu(e, parent) && !sub.triggerRef.current?.contains(e.relatedTarget as Node))
+                if (
+                    leavingForMenu(e, parent) &&
+                    !sub.triggerRef.current?.contains(e.relatedTarget as Node) &&
+                    !isSheet(e.currentTarget)
+                )
                     sub.hideSoon();
             }}
             // Level with its item: back up by the menu's padding.
@@ -708,6 +755,24 @@ export function MenuSubContent({
                 className,
             )}
         >
+            {sheet && (
+                <>
+                    <SheetGrip />
+                    {/* A finger's way back to the menu it's over (the keyboard's is the arrow back, or Escape). */}
+                    <button
+                        type="button"
+                        role="menuitem"
+                        tabIndex={-1}
+                        aria-label={m.back}
+                        onClick={back}
+                        className={cx(ITEM, 'zen__sheet-only text-muted-foreground font-medium')}
+                    >
+                        <ChevronRightMicro aria-hidden className="size-4 shrink-0 -scale-x-100 rtl:scale-x-100" />
+                        {sub.label}
+                    </button>
+                    <MenuSeparator className="zen__sheet-only" />
+                </>
+            )}
             {children}
         </div>
     );
@@ -782,6 +847,12 @@ export interface MenuContentProps extends ComponentProps<'div'> {
     align?: 'start' | 'end' | 'center';
     /** Gap between the button and the menu, in px. */
     offset?: number;
+    /**
+     * On phones (below `md`), a bottom sheet instead, as music apps show a
+     * song's menu: across the bottom of the screen over a scrim, swiped down to
+     * close; its submenus slide in over it, with a way back at the top.
+     */
+    sheet?: boolean;
 }
 
 export interface MenuItemProps extends Omit<ComponentProps<'button'>, 'onSelect'> {

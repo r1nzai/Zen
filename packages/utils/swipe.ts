@@ -136,6 +136,43 @@ export function useSwipe(
     }, [ref, logical, inlineSign]);
 }
 
+/** A swipe this far along (share of the sheet), or a flick, closes a sheet. */
+const SWIPE_SHARE = 0.3;
+
+/**
+ * A sheet follows a finger swiping it back to its edge, and closes when let go
+ * far enough along or flicked; otherwise it springs back. It's moved by the
+ * --zen-swipe custom property (a translate), and --zen-swipe-progress (0 to 1)
+ * says how far, for its scrim.
+ */
+export function useSheetSwipe(
+    ref: RefObject<HTMLElement | null>,
+    side: 'bottom' | 'left' | 'right' | undefined,
+    close: () => void,
+) {
+    const axis = side === 'bottom' ? 'y' : 'x';
+    const sign = side === 'left' ? -1 : 1;
+    const size = () => (axis === 'y' ? ref.current!.offsetHeight : ref.current!.offsetWidth);
+    const reset = () => {
+        ref.current?.style.removeProperty('--zen-swipe');
+        ref.current?.style.removeProperty('--zen-swipe-progress');
+    };
+    useEffect(reset, [ref, side]);
+    useSwipe(ref, side ? { axis, sign } : undefined, {
+        move: (d) => {
+            const moved = d > 0 ? d : d / 6;
+            ref.current!.style.setProperty('--zen-swipe', axis === 'y' ? `0 ${moved}px` : `${moved * sign}px 0`);
+            ref.current!.style.setProperty('--zen-swipe-progress', String(Math.max(0, Math.min(1, d / size()))));
+        },
+        release: (d, speed) => {
+            if (d > size() * SWIPE_SHARE || (d > 0 && speed > FLICK_SPEED)) close();
+            else reset();
+        },
+        cancel: reset,
+        threshold: () => size() * SWIPE_SHARE,
+    });
+}
+
 /** A text field, or something that takes touch gestures in this axis itself (by its touch-action). */
 function startsElsewhere(target: Element, root: HTMLElement, axis: 'x' | 'y'): boolean {
     if (target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"])')) return true;

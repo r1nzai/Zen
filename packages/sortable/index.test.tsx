@@ -128,4 +128,47 @@ describe('SortableList asChild', () => {
         expect(screen.getByText('Rent, 2 of 2.').closest('table')).toBeNull();
         expect(errors).not.toHaveBeenCalled();
     });
+
+    it('drags in a virtualized list (itemHeight), placing rows that mount mid-drag', () => {
+        const ids = Array.from({ length: 100 }, (_, i) => `i${i}`);
+        const onLiftedChange = vi.fn();
+        const onValueChange = vi.fn();
+        // Rows 40px apart, placed by their place in the list.
+        const Row = ({ i }: { i: number }) => (
+            <SortableItem
+                id={ids[i]}
+                ref={(li) => {
+                    if (li)
+                        vi.spyOn(li, 'getBoundingClientRect').mockReturnValue({
+                            top: i * 40,
+                            bottom: i * 40 + 40,
+                            height: 40,
+                        } as DOMRect);
+                }}
+            >
+                <SortableHandle id={ids[i]} label={`Song ${i}`} />
+            </SortableItem>
+        );
+        const Windowed = ({ rows }: { rows: number[] }) => (
+            <SortableList value={ids} onValueChange={onValueChange} itemHeight={40} onLiftedChange={onLiftedChange}>
+                {rows.map((i) => (
+                    <Row key={i} i={i} />
+                ))}
+            </SortableList>
+        );
+        const { rerender } = render(<Windowed rows={[50, 51, 52]} />);
+        fireEvent.pointerDown(handle('Song 50'), { button: 0, pointerId: 1, clientY: 2020 });
+        expect(onLiftedChange).toHaveBeenLastCalledWith('i50');
+        fireEvent.pointerMove(window, { pointerId: 1, clientY: 2020 + 130 });
+        // Rows the list hasn't rendered yet still count: 130px down is three places on.
+        rerender(<Windowed rows={[50, 51, 52, 53, 54]} />);
+        const items = screen.getAllByRole('listitem');
+        expect(items[0].style.translate).toBe('0 130px');
+        expect(items[1].style.translate).toBe('0 -40px');
+        expect(items[3].style.translate).toBe('0 -40px');
+        expect(items[4].style.translate).toBe('');
+        fireEvent.pointerUp(window, { pointerId: 1 });
+        expect(onLiftedChange).toHaveBeenLastCalledWith(null);
+        expect(onValueChange.mock.calls[0][0].slice(50, 55)).toEqual(['i51', 'i52', 'i53', 'i50', 'i54']);
+    });
 });

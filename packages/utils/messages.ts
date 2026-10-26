@@ -8,6 +8,7 @@ export const ENGLISH = {
     clear: 'Clear',
     cancel: 'Cancel',
     close: 'Close',
+    back: 'Back',
     dismiss: 'Dismiss',
     delete: 'Delete',
     remove: (item: string) => `Remove ${item}`,

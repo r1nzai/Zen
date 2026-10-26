@@ -12,7 +12,7 @@ export interface VirtualItem {
  * rows in view (plus `overscan` either side) are rendered. Position each item
  * absolutely at `start` inside a container `totalSize` px tall.
  */
-export function useVirtualList({ count, itemHeight, scrollRef, overscan = 6 }: VirtualListOptions) {
+export function useVirtualList({ count, itemHeight, scrollRef, overscan = 6, keep }: VirtualListOptions) {
     // Until the list can be measured (hidden, or rendering on the server), assume ten rows.
     const rangeFor = (scrollTop: number, viewHeight: number) => {
         const height = viewHeight || itemHeight * 10;
@@ -43,8 +43,9 @@ export function useVirtualList({ count, itemHeight, scrollRef, overscan = 6 }: V
         // `count`: a shorter list (e.g. after filtering) clamps the scroll position.
     }, [scrollRef, count, itemHeight, overscan]);
 
-    const first = Math.min(range.first, count);
-    const last = Math.min(range.last, count);
+    const kept = keep !== undefined && keep >= 0 && keep < count;
+    const first = Math.min(kept ? Math.min(range.first, keep) : range.first, count);
+    const last = Math.min(kept ? Math.max(range.last, keep + 1) : range.last, count);
     const items: VirtualItem[] = [];
     for (let index = first; index < last; index++) {
         items.push({ index, start: index * itemHeight, size: itemHeight });
@@ -68,4 +69,9 @@ export interface VirtualListOptions {
     scrollRef: RefObject<HTMLElement | null>;
     /** Extra rows rendered above and below the visible ones, so fast scrolling doesn't show gaps. */
     overscan?: number;
+    /**
+     * A row to render even out of view, e.g. one being dragged (SortableList's
+     * `onLiftedChange`); the rows between come too, so they stay one run.
+     */
+    keep?: number;
 }

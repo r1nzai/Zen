@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Added to existing components
+
+- **MenuContent**: `sheet` makes the menu a bottom sheet on phones (below `md`), as music apps show a song's menu: across the bottom of the screen over a scrim, with a grip, swiped down or tapped outside to close. Its submenus slide in over it, with a row at the top that goes back (the arrow back and Escape still do), and open only when chosen, not on hover. Wider screens keep the popover.
+- **SortableList**: works with a virtualized list. Give it `itemHeight` and render only the rows in view (from `useVirtualList`), each at its place in `value`; a drag works from `value`, not the rows on screen, and rows that come into view as it scrolls the list take their places. `onLiftedChange` says which item is picked up (by its handle or from the keyboard), to keep its row rendered. An item moved with the keyboard is scrolled into view.
+- **useVirtualList**: `keep` renders a row even when it's out of view, such as the one being dragged, with the rows between.
+- **SeekBar**: `times="below"` puts the time played and the length under the ends of the bar, as on a phone's Now Playing screen.
+
+### Fixes
+
+- **ToastProvider**: once its toasts were gone, the empty toast area kept its last height (the height it was given went negative, which browsers ignore) and caught clicks meant for what was under it, such as a player bar's controls. It now shrinks to nothing.
+
 ## 0.15.0
 
 ### New components

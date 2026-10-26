@@ -174,6 +174,21 @@ describe('Toast', () => {
         expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
 
+    it('takes no room once its toasts are gone, so it catches no clicks', () => {
+        const offsetHeight = vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(60);
+        render(
+            <ToastProvider>
+                <Trigger title="Hi" options={{ timeout: 1000 }} />
+            </ToastProvider>,
+        );
+        show('Hi');
+        const viewport = screen.getByLabelText(/Notifications/);
+        expect(viewport.style.height).toBe('60px');
+        act(() => vi.advanceTimersByTime(1000 + 300));
+        expect(viewport.style.height).toBe('0px');
+        offsetHeight.mockRestore();
+    });
+
     it('waits while hovered', () => {
         render(
             <ToastProvider>

@@ -5,7 +5,7 @@ import { useMergedRefs } from '@zen/utils/refs';
 import Button, { ButtonProps } from '@zen/button';
 import { useToastHost } from '@zen/toast';
 import { useGraphicsMode } from '@zen/utils/graphics';
-import { FLICK_SPEED, useSwipe } from '@zen/utils/swipe';
+import { useSheetSwipe } from '@zen/utils/swipe';
 import {
     ComponentProps,
     createContext,
@@ -159,37 +159,6 @@ export function useModal(
     }, [ref, open, initialFocus]);
     // While open, toasts render in here: outside a modal dialog they'd be inert.
     useToastHost(ref, open);
-}
-
-/** A swipe this far along (share of the sheet), or a flick, closes a sheet. */
-const SWIPE_SHARE = 0.3;
-
-/**
- * A sheet follows a finger swiping it back to its edge, and closes when let go
- * far enough along or flicked; otherwise it springs back.
- */
-function useSheetSwipe(ref: RefObject<HTMLDialogElement | null>, side: DialogProps['side'], close: () => void) {
-    const axis = side === 'bottom' ? 'y' : 'x';
-    const sign = side === 'left' ? -1 : 1;
-    const size = () => (axis === 'y' ? ref.current!.offsetHeight : ref.current!.offsetWidth);
-    const reset = () => {
-        ref.current?.style.removeProperty('--zen-swipe');
-        ref.current?.style.removeProperty('--zen-swipe-progress');
-    };
-    useEffect(reset, [ref, side]);
-    useSwipe(ref, side ? { axis, sign } : undefined, {
-        move: (d) => {
-            const moved = d > 0 ? d : d / 6;
-            ref.current!.style.setProperty('--zen-swipe', axis === 'y' ? `0 ${moved}px` : `${moved * sign}px 0`);
-            ref.current!.style.setProperty('--zen-swipe-progress', String(Math.max(0, Math.min(1, d / size()))));
-        },
-        release: (d, speed) => {
-            if (d > size() * SWIPE_SHARE || (d > 0 && speed > FLICK_SPEED)) close();
-            else reset();
-        },
-        cancel: reset,
-        threshold: () => size() * SWIPE_SHARE,
-    });
 }
 
 /** The row of actions at the end of a dialog, right-aligned. */

@@ -28,7 +28,17 @@ const move = <T,>(list: readonly T[], from: number, to: number) => {
  * With `asChild` (and `asChild` on the items), your own elements instead: a
  * TableBody of TableRows, say, one per group, each sorted on its own.
  */
-export function SortableList({ value, onValueChange, asChild, className, children, ref, ...rest }: SortableListProps) {
+export function SortableList({
+    value,
+    onValueChange,
+    itemHeight,
+    onLiftedChange,
+    asChild,
+    className,
+    children,
+    ref,
+    ...rest
+}: SortableListProps) {
     const list = useRef<HTMLUListElement>(null);
     const listRef = useMergedRefs(list, ref);
     const [lifted, setLifted] = useState<string | null>(null);
@@ -37,6 +47,8 @@ export function SortableList({ value, onValueChange, asChild, className, childre
     // Where each item was on screen before a change we made, to move them from there.
     const flip = useRef<Map<string, number> | null>(null);
     const before = useRef<readonly string[] | null>(null);
+    // While dragging: places the items again, as rows come and go in a virtualized list.
+    const dragging = useRef<(() => void) | null>(null);
 
     const items = () => [...(list.current?.querySelectorAll<HTMLElement>(':scope > [data-sortable-id]') ?? [])];
     const reorder = (next: string[]) => {
@@ -48,48 +60,73 @@ export function SortableList({ value, onValueChange, asChild, className, childre
         const was = flip.current;
         flip.current = null;
         if (was) settle(items(), was);
+        // A keyboard move can take it past the edge of the view.
+        if (lifted)
+            items()
+                .find((el) => el.dataset.sortableId === lifted)
+                ?.scrollIntoView?.({ block: 'nearest' });
     }, [value]);
+    // Rows a virtualized list rendered just now take their places in the drag.
+    useIsoLayoutEffect(() => dragging.current?.());
 
     const grab = (e: PointerEvent<HTMLElement>, id: string) => {
         if (e.button !== 0 || lifted) return;
         const els = items();
-        const from = els.findIndex((el) => el.dataset.sortableId === id);
-        const dragged = els[from];
-        if (!dragged) return;
+        const from = value.indexOf(id);
+        const draggedEl = els.find((el) => el.dataset.sortableId === id);
+        if (from < 0 || !draggedEl) return;
         e.preventDefault();
-        const handle = e.currentTarget;
-        handle.setPointerCapture?.(e.pointerId);
+        e.currentTarget.setPointerCapture?.(e.pointerId);
         const scroller = scrollerOf(list.current!);
         const startScroll = scroller.scrollTop;
         const startY = e.clientY;
-        const rects = els.map((el) => el.getBoundingClientRect());
-        // The room the dragged item takes: its height and the gap after it.
-        const gap = rects.length > 1 ? rects[1].top - rects[0].bottom : 0;
-        const room = rects[from].height + gap;
-        const centres = rects.map((r) => r.top + r.height / 2);
+        const places = new Map(value.map((v, i) => [v, i]));
+        // The room the dragged item takes: its height and the gap after it. A virtualized
+        // list renders only some of the items, so its rows are placed by their place in `value`.
+        let room: number;
+        let targetFor: (dy: number) => number;
+        if (itemHeight) {
+            room = itemHeight;
+            targetFor = (dy) => Math.max(0, Math.min(from + Math.trunc(dy / room), value.length - 1));
+        } else {
+            const rects = els.map((el) => el.getBoundingClientRect());
+            const gap = rects.length > 1 ? rects[1].top - rects[0].bottom : 0;
+            room = rects[from].height + gap;
+            const centres = rects.map((r) => r.top + r.height / 2);
+            targetFor = (dy) => {
+                const centre = centres[from] + dy;
+                let to = from;
+                while (to < els.length - 1 && centre > centres[to + 1]) to++;
+                while (to > 0 && centre < centres[to - 1]) to--;
+                return to;
+            };
+        }
         let target = from;
         let y = e.clientY;
 
-        dragged.dataset.dragging = '';
         list.current!.dataset.sorting = '';
+        onLiftedChange?.(id);
         const place = () => {
             const dy = y - startY + scroller.scrollTop - startScroll;
-            shift(dragged, dy);
-            const centre = centres[from] + dy;
             const was = target;
-            target = from;
-            while (target < els.length - 1 && centre > centres[target + 1]) target++;
-            while (target > 0 && centre < centres[target - 1]) target--;
+            target = targetFor(dy);
             // A light tap as it takes a new place, where phones can vibrate.
             if (target !== was) navigator.vibrate?.(5);
-            els.forEach((el, i) => {
-                if (i === from) return;
-                const by = from < i && i <= target ? -room : target <= i && i < from ? room : 0;
-                shift(el, by);
-            });
+            for (const el of items()) {
+                const i = places.get(el.dataset.sortableId!);
+                if (i === undefined) continue;
+                if (i === from) {
+                    el.dataset.dragging = '';
+                    shift(el, dy);
+                    continue;
+                }
+                shift(el, from < i && i <= target ? -room : target <= i && i < from ? room : 0);
+            }
         };
+        dragging.current = place;
         // Near the scroller's edge, scroll it, and keep placing as the content moves under the pointer.
         const edge = edgeScroll(scroller, place);
+        // On the window: in a virtualized list the handle can be unmounted mid-drag.
         const onMove = (m: globalThis.PointerEvent) => {
             if (m.pointerId !== e.pointerId) return;
             y = m.clientY;
@@ -98,19 +135,22 @@ export function SortableList({ value, onValueChange, asChild, className, childre
         };
         const onEnd = (u: globalThis.PointerEvent) => {
             if (u.pointerId !== e.pointerId) return;
-            handle.removeEventListener('pointermove', onMove);
-            handle.removeEventListener('pointerup', onEnd);
-            handle.removeEventListener('pointercancel', onEnd);
+            removeEventListener('pointermove', onMove);
+            removeEventListener('pointerup', onEnd);
+            removeEventListener('pointercancel', onEnd);
             edge.stop();
-            delete dragged.dataset.dragging;
+            dragging.current = null;
+            const now = items();
+            for (const el of now) delete el.dataset.dragging;
             delete list.current?.dataset.sorting;
+            onLiftedChange?.(null);
             if (u.type === 'pointerup' && target !== from) reorder(move(value, from, target));
             // Nothing changes, so the layout effect won't run: settle back here.
-            else settle(els, topsOf(els));
+            else settle(now, topsOf(now));
         };
-        handle.addEventListener('pointermove', onMove);
-        handle.addEventListener('pointerup', onEnd);
-        handle.addEventListener('pointercancel', onEnd);
+        addEventListener('pointermove', onMove);
+        addEventListener('pointerup', onEnd);
+        addEventListener('pointercancel', onEnd);
     };
 
     const key = (e: KeyboardEvent<HTMLElement>, id: string, label: string) => {
@@ -121,10 +161,12 @@ export function SortableList({ value, onValueChange, asChild, className, childre
             if (lifted === id) {
                 setLifted(null);
                 before.current = null;
+                onLiftedChange?.(null);
                 say(m.dropped(label, of));
             } else if (!lifted) {
                 setLifted(id);
                 before.current = value;
+                onLiftedChange?.(id);
                 say(m.pickedUp(label, of));
             }
         } else if (lifted === id && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
@@ -138,6 +180,7 @@ export function SortableList({ value, onValueChange, asChild, className, childre
             const back = before.current ?? value;
             setLifted(null);
             before.current = null;
+            onLiftedChange?.(null);
             if (back !== value) reorder([...back]);
             say(m.putBack(label, m.place(back.indexOf(id) + 1, back.length)));
         }
@@ -164,6 +207,18 @@ export interface SortableListProps extends ComponentProps<'ul'> {
     /** The items' ids, in order. */
     value: readonly string[];
     onValueChange: (value: string[]) => void;
+    /**
+     * For a virtualized list (useVirtualList), its rows' height, gap included:
+     * render just the items in view, each placed at its place in `value` times
+     * this, and the drag works from `value` instead of the rows on screen.
+     */
+    itemHeight?: number;
+    /**
+     * When an item is picked up (by its handle, or from the keyboard), and when it's
+     * put down (null). A virtualized list keeps that row rendered meanwhile
+     * (useVirtualList's `keep`), so it stays under the pointer as the list scrolls.
+     */
+    onLiftedChange?: (id: string | null) => void;
     /** Put the list's props on your own element (the single child, e.g. a TableBody) instead of a ul. */
     asChild?: boolean;
 }

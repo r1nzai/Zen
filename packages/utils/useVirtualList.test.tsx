@@ -3,9 +3,17 @@ import { useRef } from 'react';
 
 import { useVirtualList } from './useVirtualList';
 
-function List({ count, onRender }: { count: number; onRender: (r: ReturnType<typeof useVirtualList>) => void }) {
+function List({
+    count,
+    keep,
+    onRender,
+}: {
+    count: number;
+    keep?: number;
+    onRender: (r: ReturnType<typeof useVirtualList>) => void;
+}) {
     const ref = useRef<HTMLDivElement>(null);
-    const rows = useVirtualList({ count, itemHeight: 20, scrollRef: ref, overscan: 2 });
+    const rows = useVirtualList({ count, itemHeight: 20, scrollRef: ref, overscan: 2, keep });
     onRender(rows);
     return (
         <div ref={ref} data-testid="scroller">
@@ -55,5 +63,17 @@ describe('useVirtualList', () => {
         act(() => scroller.dispatchEvent(new Event('scroll')));
         expect(rows.paddingTop).toBe(48 * 20);
         expect(rows.paddingBottom).toBe(rows.totalSize - 57 * 20);
+    });
+
+    it('keeps a row rendered out of view, and the rows between', () => {
+        let rows!: ReturnType<typeof useVirtualList>;
+        const { getByTestId, rerender } = render(<List count={1000} keep={3} onRender={(r) => (rows = r)} />);
+        const scroller = getByTestId('scroller');
+        size(scroller, 100, 1000);
+        act(() => scroller.dispatchEvent(new Event('scroll')));
+        expect(rows.items.map((r) => r.index)).toEqual([...Array(57).keys()].slice(3));
+        expect(rows.paddingTop).toBe(60);
+        rerender(<List count={1000} onRender={(r) => (rows = r)} />);
+        expect(rows.items[0].index).toBe(48);
     });
 });
