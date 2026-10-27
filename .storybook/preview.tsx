@@ -8,6 +8,7 @@ import addonThemes, { withThemeByClassName } from '@storybook/addon-themes';
 import { definePreview } from '@storybook/react-vite';
 import Backdrop from '../packages/backdrop';
 import TOPO from '../packages/backdrop/examples/topo.svg';
+import ToastProvider from '../packages/toast';
 
 import { ZenDocsPage } from './docs-page';
 import { dark } from './theme';
@@ -48,11 +49,12 @@ export default definePreview({
     },
     decorators: [
         // Sora's backdrop behind every story; `parameters.backdrop: false` for stories that draw their own.
+        // Inside a ToastProvider, as an app is (the docs app wraps every page in one).
         (Story, { viewMode, parameters }) => (
-            <>
+            <ToastProvider>
                 {viewMode === 'story' && parameters.backdrop !== false && <Backdrop topoSrc={TOPO} />}
                 <Story />
-            </>
+            </ToastProvider>
         ),
         withThemeByClassName({
             themes: {
