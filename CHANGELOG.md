@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added to existing components
+
+- **Slider**, **RangeSlider**: `size="sm"`, a thin track and a small thumb for a compact control such as a player's volume. Same colours, glow and focus ring; the slider stays 20px tall, so it's as easy to grab.
+
 ## 0.16.0
 
 ### Added to existing components

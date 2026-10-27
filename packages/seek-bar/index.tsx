@@ -156,7 +156,7 @@ export default function SeekBar({
 
 export interface SeekBarProps extends Omit<
     SliderProps,
-    'value' | 'defaultValue' | 'min' | 'max' | 'step' | 'onValueChange' | 'onValueCommit' | 'trackBackground'
+    'value' | 'defaultValue' | 'min' | 'max' | 'step' | 'onValueChange' | 'onValueCommit' | 'trackBackground' | 'size'
 > {
     /** Seconds played. */
     currentTime: number;

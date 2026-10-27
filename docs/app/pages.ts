@@ -530,9 +530,9 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'slider',
         title: 'Slider',
-        description: 'A native range input with a glowing thumb and any track you like.',
+        description: 'A native range input with a glowing thumb and any track you like, at full size or small.',
         parts: ['Slider'],
-        examples: ['Default', 'Hue'],
+        examples: ['Default', 'Small', 'Hue'],
     },
     {
         slug: 'sortable',

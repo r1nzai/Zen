@@ -36,4 +36,11 @@ describe('Slider', () => {
         expect(slider.style.getPropertyValue('--zen-track')).toBe('red');
         expect(slider.style.getPropertyValue('--zen-thumb')).toBe('blue');
     });
+
+    it('is small with size="sm", the same height to grab', () => {
+        render(<Slider aria-label="Volume" size="sm" defaultValue={50} />);
+        const slider = screen.getByRole('slider');
+        expect(slider).toHaveClass('h-5', '[&::-webkit-slider-thumb]:size-3', '[&::-moz-range-track]:h-1');
+        expect(slider).not.toHaveClass('[&::-webkit-slider-thumb]:size-5');
+    });
 });

@@ -1004,6 +1004,7 @@ function Volume({ player }: { player: MediaPlayer }) {
                 {player.muted ? <SpeakerXMark className="size-4" /> : <SpeakerWave className="size-4" />}
             </Button>
             <Slider
+                size="sm"
                 aria-label="Volume"
                 className="w-24"
                 value={player.muted ? 0 : Math.round(player.volume * 100)}

@@ -20,6 +20,7 @@ export default function Slider({
     trackBackground,
     thumbColor,
     valueText,
+    size = 'md',
     className,
     style,
     onChange,
@@ -67,9 +68,10 @@ export default function Slider({
             className={cx(
                 'zen__slider h-5 w-full cursor-pointer [--zen-end:right] rtl:[--zen-end:left] appearance-none bg-transparent outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
                 // Track
-                '[&::-webkit-slider-runnable-track]:h-2.5 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:[background:var(--zen-track)]',
-                '[&::-moz-range-track]:h-2.5 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:[background:var(--zen-track)]',
+                '[&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:[background:var(--zen-track)]',
+                '[&::-moz-range-track]:rounded-full [&::-moz-range-track]:[background:var(--zen-track)]',
                 THUMB,
+                SLIDER_SIZES[size],
                 className,
             )}
             {...rest}
@@ -79,14 +81,29 @@ export default function Slider({
 
 /** The glowing thumb, with its focus ring: Slider's and RangeSlider's. */
 export const THUMB =
-    '[&::-webkit-slider-thumb]:-mt-[5px] [&::-webkit-slider-thumb]:size-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-[0_0_0_1px_oklch(0_0_0/0.3),0_0_16px_oklch(var(--glow)/calc(0.8*var(--glow-k)))] [&::-webkit-slider-thumb]:[background:var(--zen-thumb)] ' +
-    '[&::-moz-range-thumb]:size-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-[0_0_0_1px_oklch(0_0_0/0.3),0_0_16px_oklch(var(--glow)/calc(0.8*var(--glow-k)))] [&::-moz-range-thumb]:[background:var(--zen-thumb)] ' +
+    '[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-[0_0_0_1px_oklch(0_0_0/0.3),0_0_16px_oklch(var(--glow)/calc(0.8*var(--glow-k)))] [&::-webkit-slider-thumb]:[background:var(--zen-thumb)] ' +
+    '[&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-[0_0_0_1px_oklch(0_0_0/0.3),0_0_16px_oklch(var(--glow)/calc(0.8*var(--glow-k)))] [&::-moz-range-thumb]:[background:var(--zen-thumb)] ' +
     'focus-visible:[&::-webkit-slider-thumb]:ring-ring/40 focus-visible:[&::-webkit-slider-thumb]:ring-4 ' +
     'focus-visible:[&::-moz-range-thumb]:ring-ring/40 focus-visible:[&::-moz-range-thumb]:ring-4';
 
+/**
+ * Track and thumb sizes; the input stays 20px tall at both, as the area to grab.
+ * WebKit puts the thumb's top on the track's, so it's pulled up by half their difference.
+ */
+export const SLIDER_SIZES = {
+    md:
+        '[&::-webkit-slider-runnable-track]:h-2.5 [&::-moz-range-track]:h-2.5 ' +
+        '[&::-webkit-slider-thumb]:-mt-[5px] [&::-webkit-slider-thumb]:size-5 [&::-moz-range-thumb]:size-5 ' +
+        '[&::-webkit-slider-thumb]:border-2 [&::-moz-range-thumb]:border-2',
+    sm:
+        '[&::-webkit-slider-runnable-track]:h-1 [&::-moz-range-track]:h-1 ' +
+        '[&::-webkit-slider-thumb]:-mt-1 [&::-webkit-slider-thumb]:size-3 [&::-moz-range-thumb]:size-3 ' +
+        '[&::-webkit-slider-thumb]:border-[1.5px] [&::-moz-range-thumb]:border-[1.5px]',
+};
+
 export interface SliderProps extends Omit<
     ComponentProps<'input'>,
-    'type' | 'value' | 'min' | 'max' | 'step' | 'defaultValue'
+    'type' | 'value' | 'min' | 'max' | 'step' | 'defaultValue' | 'size'
 > {
     /** The value, when you keep it. */
     value?: number;
@@ -106,4 +123,6 @@ export interface SliderProps extends Omit<
     thumbColor?: string;
     /** Spoken value, e.g. (v) => `Hue ${v} degrees`. */
     valueText?: (value: number) => string;
+    /** `'sm'`: a thin track and a small thumb, for a compact control such as a volume slider. */
+    size?: 'md' | 'sm';
 }

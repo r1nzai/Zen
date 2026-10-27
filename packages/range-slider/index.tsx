@@ -1,5 +1,5 @@
 import { useMessages } from '@zen/locale-provider';
-import { THUMB } from '@zen/slider';
+import { SLIDER_SIZES, THUMB } from '@zen/slider';
 import { cx } from '@zen/utils/cx';
 import { useFormReset } from '@zen/utils/form-value';
 import { useControllable } from '@zen/utils/useControllable';
@@ -21,6 +21,7 @@ export default function RangeSlider({
     label,
     thumbLabels: thumbLabelsProp,
     valueText,
+    size = 'md',
     name,
     disabled,
     className,
@@ -51,7 +52,10 @@ export default function RangeSlider({
         >
             <div
                 aria-hidden
-                className="absolute inset-x-0 top-1/2 h-2.5 -translate-y-1/2 rounded-full [--zen-end:right] rtl:[--zen-end:left]"
+                className={cx(
+                    'absolute inset-x-0 top-1/2 -translate-y-1/2 rounded-full [--zen-end:right] rtl:[--zen-end:left]',
+                    size === 'sm' ? 'h-1' : 'h-2.5',
+                )}
                 style={{
                     background: `linear-gradient(to var(--zen-end), oklch(var(--muted)) ${at(low)}%, oklch(var(--primary)) ${at(low)}% ${at(high)}%, oklch(var(--muted)) ${at(high)}%)`,
                 }}
@@ -79,9 +83,10 @@ export default function RangeSlider({
                     style={{ zIndex: i === 0 && low > (min + max) / 2 ? 2 : 1 }}
                     className={cx(
                         'pointer-events-none absolute inset-0 h-5 w-full cursor-pointer appearance-none bg-transparent outline-hidden disabled:cursor-not-allowed',
-                        '[&::-webkit-slider-runnable-track]:h-2.5 [&::-moz-range-track]:h-2.5 [&::-moz-range-track]:bg-transparent',
+                        '[&::-moz-range-track]:bg-transparent',
                         '[&::-webkit-slider-thumb]:pointer-events-auto [&::-moz-range-thumb]:pointer-events-auto',
                         THUMB,
+                        SLIDER_SIZES[size],
                     )}
                 />
             ))}
@@ -110,6 +115,8 @@ export interface RangeSliderProps extends Omit<ComponentProps<'div'>, 'defaultVa
     thumbLabels?: readonly [string, string];
     /** Spoken value of a thumb, e.g. (v) => `$${v}`. */
     valueText?: (value: number) => string;
+    /** `'sm'`: a thin track and small thumbs, as on Slider. */
+    size?: 'md' | 'sm';
     disabled?: boolean;
     className?: string;
 }
