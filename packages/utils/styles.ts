@@ -3,7 +3,7 @@ import { cx } from './cx';
 /** Shared field look: faint glass, a hairline in the glow colour (white would grey it out) lit by the pointer, violet glow on focus. */
 export const FIELD =
     'glow-border h-10 rounded-lg border [--glow-border-color:oklch(var(--glow)/0.22)] bg-tint/[0.035] px-3 text-sm text-foreground ' +
-    'shadow-[inset_0_1px_0_hsl(0_0%_100%/0.04)] transition-[border-color,background-color,box-shadow,--glow-border-color] duration-200 ' +
+    'shadow-[inset_0_1px_0_hsl(0_0%_100%/0.04)] transition-[border-color,background-color,box-shadow,--glow-border-color,--zen-glow-on] duration-[200ms,200ms,200ms,200ms,400ms] ' +
     'placeholder:text-[color:oklch(var(--muted-foreground)/var(--zen-placeholder))] hover:[--glow-border-color:oklch(var(--glow)/0.4)] ' +
     'focus-visible:border-glow/60 focus-visible:[--glow-border-color:transparent] focus-visible:bg-tint/[0.05] focus-visible:shadow-glow-focus focus-visible:outline-hidden ' +
     'disabled:cursor-not-allowed disabled:opacity-50';
@@ -59,7 +59,7 @@ export const PILL =
  */
 export const FIELD_WITHIN =
     'glow-border flex w-full items-center gap-1.5 h-10 rounded-lg border [--glow-border-color:oklch(var(--glow)/0.22)] bg-tint/[0.035] px-3 text-sm text-foreground ' +
-    'shadow-[inset_0_1px_0_hsl(0_0%_100%/0.04)] transition-[border-color,background-color,box-shadow,--glow-border-color] duration-200 ' +
+    'shadow-[inset_0_1px_0_hsl(0_0%_100%/0.04)] transition-[border-color,background-color,box-shadow,--glow-border-color,--zen-glow-on] duration-[200ms,200ms,200ms,200ms,400ms] ' +
     'placeholder:text-[color:oklch(var(--muted-foreground)/var(--zen-placeholder))] hover:[--glow-border-color:oklch(var(--glow)/0.4)] ' +
     'focus-within:border-glow/60 focus-within:[--glow-border-color:transparent] focus-within:bg-tint/[0.05] focus-within:shadow-glow-focus focus-within:outline-hidden ' +
     'disabled:cursor-not-allowed disabled:opacity-50';

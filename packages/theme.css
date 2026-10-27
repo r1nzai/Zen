@@ -171,6 +171,7 @@
             linear-gradient(#000 0 0);
         pointer-events: none;
         z-index: 1;
+        transition: opacity 400ms;
     }
     @supports (width: attr(x type(<length>))) {
         &::before {
@@ -190,6 +191,11 @@
  * plain border. In the components layer, so a border colour utility (focus,
  * an error state) still wins, drawn over it all.
  */
+@property --zen-glow-on {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 1;
+}
 @property --glow-border-color {
     syntax: '<color>';
     inherits: false;
@@ -211,8 +217,8 @@
             background-image:
                 radial-gradient(
                     360px circle at var(--gx, -999px) var(--gy, -999px),
-                    oklch(var(--glow) / calc(0.7 * var(--glow-strength))),
-                    oklch(var(--glow-2) / calc(0.2 * var(--glow-strength))) 40%,
+                    oklch(var(--glow) / calc(0.7 * var(--glow-strength) * var(--zen-glow-on))),
+                    oklch(var(--glow-2) / calc(0.2 * var(--glow-strength) * var(--zen-glow-on))) 40%,
                     transparent 65%
                 ),
                 linear-gradient(var(--glow-border-color) 0 0), none;
@@ -220,6 +226,14 @@
             background-clip: border-area, border-area, border-box;
         }
     }
+}
+
+/* Pointer gone (Backdrop marks <html>): the edge lights fade out where they are, and back in where it returns. */
+:root[data-zen-pointer='out'] .glow-edge:not([data-zen-glow='ambient'], [data-zen-glow='ambient'] *)::before {
+    opacity: 0;
+}
+:root[data-zen-pointer='out'] .glow-border:not([data-zen-glow='ambient'], [data-zen-glow='ambient'] *) {
+    --zen-glow-on: 0;
 }
 
 /*
@@ -695,7 +709,7 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
 .zen-topo--lit {
     opacity: calc(0.6 * var(--topo-strength) * var(--glow-strength));
     background: none;
-    transition: opacity 200ms;
+    transition: opacity 400ms;
 }
 /*
  * The light is a box the size of its gradient that Backdrop moves to the
@@ -750,7 +764,7 @@ html.zen-theme-closing::view-transition-old(zen-theme-area) {
 .zen-dots--lit {
     opacity: min(1, calc(100 * var(--topo-strength) * var(--glow-strength)));
     background-image: none;
-    transition: opacity 200ms;
+    transition: opacity 400ms;
 }
 /* The dots' pointer light: a box moved to the pointer, like the contour light. */
 .zen-dots--lit > .zen-light {

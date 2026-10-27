@@ -141,6 +141,7 @@ body {
     --primary: 0.72 0.13 200; /* teal instead of violet */
     --glow: 0.7 0.13 200;
     --glow-strength: 1; /* 0 turns every glow off */
+    --glow-trail: 90ms; /* the pointer light trails the pointer */
 }`}
                     />
                 </section>

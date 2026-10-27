@@ -1,5 +1,6 @@
 import { cx } from '@zen/utils/cx';
 import { applyGraphicsMode } from '@zen/utils/graphics';
+import { reducedMotion } from '@zen/utils/motion';
 import { useMergedRefs } from '@zen/utils/refs';
 import { ComponentProps, CSSProperties, useEffect, useRef } from 'react';
 
@@ -19,8 +20,19 @@ export default function Backdrop({ pattern, topoSrc, className, style, ref: refP
         const root = document.documentElement;
         const backdrop = own.current;
         let frame = 0;
+        // The light trails the pointer (x/y chase tx/ty) by --glow-trail, so it moves like one
+        // physical light across every surface rather than a cursor highlight: no overshoot,
+        // settled in about three times the trail. Instant with reduced motion.
+        const trail = () => {
+            const value = getComputedStyle(root).getPropertyValue('--glow-trail').trim();
+            const ms = parseFloat(value) * (value.endsWith('ms') ? 1 : value.endsWith('s') ? 1000 : 1);
+            return Number.isFinite(ms) && ms > 0 && !reducedMotion() ? ms : 0;
+        };
         let x = -9999;
         let y = -9999;
+        let tx = -9999;
+        let ty = -9999;
+        let last = 0;
         // Moves the backdrop's pointer light (the .zen-light box) and publishes the pointer,
         // for every .glow-edge/.glow-border element, in that element's own coordinates
         // (--gx/--gy). Per-element values stay exact inside transformed, masked
@@ -49,8 +61,19 @@ export default function Backdrop({ pattern, topoSrc, className, style, ref: refP
             set(el, xName, gx);
             set(el, yName, gy);
         };
-        const apply = () => {
+        const apply = (now: number) => {
             frame = 0;
+            // A frame's worth at most: after the light has been still, it starts easing, not jumping.
+            const dt = Math.min(now - last, 1000 / 60);
+            last = now;
+            const ms = trail();
+            const k = ms ? 1 - Math.exp(-dt / ms) : 1;
+            x += (tx - x) * k;
+            y += (ty - y) * k;
+            if (Math.abs(tx - x) < 0.5 && Math.abs(ty - y) < 0.5) {
+                x = tx;
+                y = ty;
+            } else schedule();
             const els = Array.from(document.querySelectorAll<HTMLElement>('.glow-edge, .glow-border'));
             const rects = els.map((el) => el.getBoundingClientRect());
             const box = backdrop?.getBoundingClientRect();
@@ -60,8 +83,9 @@ export default function Backdrop({ pattern, topoSrc, className, style, ref: refP
             // the backdrop's own box, which is the viewport unless an ancestor contains
             // it (a transformed frame, as in the docs examples). Pointer gone: the light
             // fades out where it is (CSS, data-pointer).
+            const state = out ? 'out' : 'in';
+            if (root.dataset.zenPointer !== state) root.dataset.zenPointer = state;
             if (backdrop && box) {
-                const state = out ? 'out' : 'in';
                 if (backdrop.dataset.pointer !== state) backdrop.dataset.pointer = state;
                 const light = backdrop.querySelector<HTMLElement>('.zen-light');
                 if (light && !out)
@@ -83,13 +107,18 @@ export default function Backdrop({ pattern, topoSrc, className, style, ref: refP
             if (!frame) frame = requestAnimationFrame(apply);
         };
         const onMove = (e: PointerEvent) => {
-            x = e.clientX;
-            y = e.clientY;
+            tx = e.clientX;
+            ty = e.clientY;
+            // Coming in: the light appears where the pointer is, not sliding in from off-screen.
+            if (out) {
+                x = tx;
+                y = ty;
+            }
             out = false;
             schedule();
         };
+        // Going out: the lights stay where they are and fade (CSS, data-zen-pointer).
         const onLeave = () => {
-            x = y = -9999;
             out = true;
             schedule();
         };
@@ -97,6 +126,7 @@ export default function Backdrop({ pattern, topoSrc, className, style, ref: refP
         // re-measure every card on each scroll frame, which makes phones stutter.
         // Without a GPU (lite graphics) the lights are off, so there's nothing to track either.
         if (window.matchMedia?.('(hover: none), (pointer: coarse)').matches || applyGraphicsMode() === 'lite') return;
+        root.dataset.zenPointer = 'out';
         window.addEventListener('pointermove', onMove, { passive: true });
         root.addEventListener('pointerleave', onLeave);
         // Content moves under a still pointer when scrolling. Re-aim the lights once
@@ -117,6 +147,7 @@ export default function Backdrop({ pattern, topoSrc, className, style, ref: refP
             clearTimeout(settle);
             window.removeEventListener('resize', schedule);
             cancelAnimationFrame(frame);
+            delete root.dataset.zenPointer;
         };
     }, []);
 

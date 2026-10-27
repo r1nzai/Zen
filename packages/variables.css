@@ -37,6 +37,8 @@
     --glow: 0.7 0.13 295;
     --glow-2: 0.72 0.098 325; /* analogous, a little further round the wheel */
     --glow-strength: 0.55; /* 0 turns every glow off */
+    /* How far the pointer light trails the pointer, as one light for every glow Backdrop drives; 0ms (the default) follows exactly. */
+    --glow-trail: 0ms;
     /*
      * Component halos (a checked box, a primary button, a focused field) are
      * tuned at the default strength; their alphas are scaled by this, so the

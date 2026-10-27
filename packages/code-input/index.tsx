@@ -73,7 +73,7 @@ export default function CodeInput({
                         aria-hidden
                         className={cx(
                             'glow-border bg-tint/[0.035] relative grid h-12 w-10 place-items-center rounded-lg border font-mono text-lg tabular-nums [--glow-border-color:oklch(var(--glow)/0.22)]',
-                            'transition-[border-color,box-shadow,background-color] duration-200',
+                            'transition-[border-color,box-shadow,background-color,--zen-glow-on] duration-[200ms,200ms,200ms,400ms]',
                             active &&
                                 'border-glow/60 bg-tint/[0.05] shadow-glow-focus [--glow-border-color:transparent]',
                             field['aria-invalid'] && 'border-destructive/60',
