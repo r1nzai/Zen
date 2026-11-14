@@ -4,10 +4,13 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.android.kmp.library)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.maven.publish)
 }
 
-// What a build that includes this one (includeBuild) depends on: "dev.rinzai:zen".
+// "dev.rinzai:zen", released with the web package under its version.
 group = "dev.rinzai"
+version = providers.fileContents(rootProject.layout.projectDirectory.file("../web/package.json")).asText
+    .map { Regex("\"version\":\\s*\"([^\"]+)\"").find(it)?.groupValues?.get(1) ?: error("No version in web/package.json") }.get()
 
 kotlin {
     jvmToolchain(17)
@@ -69,6 +72,37 @@ dokka {
         sourceLink {
             localDirectory = file("src")
             remoteUrl("https://github.com/r1nzai/Zen/tree/master/kotlin/zen/src")
+        }
+    }
+}
+
+// Maven Central, with the credentials and signing key from ~/.gradle/gradle.properties:
+// mavenCentralUsername, mavenCentralPassword, signingInMemoryKey, signingInMemoryKeyPassword.
+mavenPublishing {
+    publishToMavenCentral()
+    signAllPublications()
+    pom {
+        name = "Zen"
+        description = "Compose Multiplatform components in dark glass, in lockstep with Zen for the web."
+        url = "https://zen.rinzai.dev/kotlin"
+        inceptionYear = "2026"
+        licenses {
+            license {
+                name = "MIT License"
+                url = "https://opensource.org/licenses/MIT"
+            }
+        }
+        developers {
+            developer {
+                id = "r1nzai"
+                name = "rinzai"
+                url = "https://github.com/r1nzai"
+            }
+        }
+        scm {
+            url = "https://github.com/r1nzai/Zen"
+            connection = "scm:git:https://github.com/r1nzai/Zen.git"
+            developerConnection = "scm:git:ssh://git@github.com/r1nzai/Zen.git"
         }
     }
 }
