@@ -30,6 +30,25 @@ if (typeof HTMLDialogElement !== 'undefined' && !HTMLDialogElement.prototype.sho
 // (utils/graphics.test.ts clears this to test detection itself.)
 if (typeof document !== 'undefined') document.documentElement.setAttribute('data-zen-graphics', 'full');
 
+// Nor Web Animations: nothing runs, every animation is already over (tests that watch
+// animations replace these with their own).
+if (typeof Element !== 'undefined' && !('animate' in Element.prototype)) {
+    Object.assign(Element.prototype, {
+        getAnimations: () => [],
+        animate: () =>
+            Object.assign(new EventTarget(), {
+                id: '',
+                onfinish: null,
+                oncancel: null,
+                finished: Promise.resolve(),
+                cancel() {},
+                finish() {},
+                pause() {},
+                play() {},
+            }),
+    });
+}
+
 // Nor ResizeObserver: a no-op, as jsdom lays nothing out to observe.
 if (typeof window !== 'undefined' && !window.ResizeObserver) {
     window.ResizeObserver = class {

@@ -627,16 +627,15 @@ test('menubar: arrows between menus, hover switches, Escape back to the label', 
     await label('Edit').hover();
     await expect(page.getByRole('menu', { name: 'Edit' })).toBeVisible();
     await expect(page.getByRole('menu', { name: 'File' })).toBeHidden();
-    // Under its label, lined up with its start.
-    const [at, menu] = [
-        (await label('Edit').boundingBox())!,
-        (await page.getByRole('menu', { name: 'Edit' }).boundingBox())!,
-    ];
+    // Under its label, lined up with its start, once it has grown in.
+    const edit = page.getByRole('menu', { name: 'Edit' });
+    await edit.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
+    const [at, menu] = [(await label('Edit').boundingBox())!, (await edit.boundingBox())!];
     expect(Math.abs(menu.x - at.x)).toBeLessThan(2);
     expect(menu.y).toBeGreaterThan(at.y + at.height);
 });
 
-test('navigation menu: hover opens a panel under its label, switching at once; Escape returns focus', async ({
+test('navigation menu: hover opens a panel under its label, which moves on to the next label; Escape returns focus', async ({
     page,
 }) => {
     errors = await open(page, '/components/navigation-menu/');
@@ -645,7 +644,10 @@ test('navigation menu: hover opens a panel under its label, switching at once; E
     const budgets = nav.getByRole('link', { name: /Budgets/ });
     await plan.hover();
     await expect(budgets).toBeVisible();
-    const [at, panel] = [(await plan.boundingBox())!, (await budgets.locator('xpath=..').boundingBox())!];
+    // Measured once it has grown in from its label.
+    const box = budgets.locator('xpath=..');
+    await box.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
+    const [at, panel] = [(await plan.boundingBox())!, (await box.boundingBox())!];
     expect(Math.abs(panel.x - at.x)).toBeLessThan(2);
     expect(panel.y).toBeGreaterThan(at.y + at.height);
     // Across to the panel (over the gap): it stays.

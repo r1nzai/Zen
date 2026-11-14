@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.18.0
+
+### Added to existing components
+
+- **Backdrop**: `--glow-trail`, how far its pointer light trails the pointer, set once for every surface it lights (`0ms` by default: it follows exactly). Given a trail, the light glides behind the pointer like one physical light, without overshooting. When the pointer leaves, the lit borders fade out where they are and come back where it returns (400ms).
+- **Motion tokens**: `--ease-spring`, `--ease-spring-pop` and `--ease-spring-stack` with their `--duration-spring*`: Zen's three springs as CSS easings, for timing your own transitions like Zen's.
+
+### Changed
+
+- **Popups** (Popover, Menu, Select, DatePicker, HoverCard and every other anchored popup) grow out of the edge facing their trigger as they open, on a spring that lands without bouncing, and shut quickly back toward it. A popup that changes size while open (a list filtering, a month with another week) eases to its new size instead of jumping. In a popover or picker the rows drop in one after another; menus and lists, opened all day, come in whole. Tooltips fade, their gap widening.
+- **NavigationMenu** has one panel: moving from label to label, it moves to the new label and eases to its size as the old links fade and drift back and the new ones slide in from the side it moves to. Focus stays where it was, rather than returning to the label you moved away from.
+- **Tabs**, **Pills**, **Segmented**: the indicator travels to the chosen item on a spring, its near edge first and its far edge catching up, so it stretches across.
+- **Chip**, **RadioCards**, **Segmented**, **TabBar** and **ToggleGroup** press in slightly while held (to 97%), as Button does.
+- **Sheets** (a Dialog sheet, a Menu with `sheet`): a swipe of 80px or a flick closes one, the same reach on any screen, and pulled past where it rests it stretches with resistance.
+
+### Fixes
+
+- **Tree** rows: closing a group shrinks every row under it, its children's too. Before, only its own rows moved, and deeper rows stayed full size until they vanished.
+- **Chart**: past the middle the tooltip changes sides at once, instead of sweeping across from the other side.
+- **Canvas**: a selection's handles sit on its border and are easier to grab, more so with a finger.
+- **Sparkline** shrinks in a narrow row instead of being cut off.
+- **Toast** keeps its tone's border and glow on the glass.
+- **Button** `variant="link"` takes the size of the text around it, as it was meant to (and as in Kotlin). Before, it was always 14px: a link in 16px text is now 16px. Give it `text-sm` to keep it small.
+
 ## 0.17.0
 
 ### Added to existing components

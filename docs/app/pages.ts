@@ -391,7 +391,7 @@ export const COMPONENTS: ComponentDoc[] = [
         slug: 'navigation-menu',
         title: 'Navigation Menu',
         description:
-            'A site’s navigation: links, and labels that open glass panels of links on hover or click, switching at once between them; works with any router.',
+            'A site’s navigation: links, and labels that open a glass panel of links on hover or click, one panel that moves from label to label; works with any router.',
         parts: [
             'NavigationMenu',
             'NavigationMenuItem',

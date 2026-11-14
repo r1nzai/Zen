@@ -9,7 +9,7 @@ import {
 /**
  * A site's top navigation: rest the pointer on Plan or Reports (or click, or
  * Tab to one and press Enter) for its panel; once one is open, moving to the
- * other switches at once.
+ * other moves the panel on to it at once.
  */
 export default function Default() {
     return (
