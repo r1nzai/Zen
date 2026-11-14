@@ -1,5 +1,5 @@
 {
-    "include": ["app", ".react-router/types/**/*", "*.ts", "../packages/vite-env.d.ts"],
+    "include": ["app", ".react-router/types/**/*", "*.ts", "../web/packages/vite-env.d.ts"],
     "compilerOptions": {
         "target": "ES2022",
         "lib": ["DOM", "DOM.Iterable", "ES2022"],
@@ -15,8 +15,8 @@
         "allowImportingTsExtensions": true,
         "rootDirs": [".", "./.react-router/types"],
         "paths": {
-            "@rinzai/zen": ["../packages/index.ts"],
-            "@zen/*": ["../packages/*"]
+            "@rinzai/zen": ["../web/packages/index.ts"],
+            "@zen/*": ["../web/packages/*"]
         }
     }
 }

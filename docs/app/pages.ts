@@ -1,18 +1,20 @@
 /**
  * Every docs page, as plain data (the build reads it to know what to prerender).
  * `parts` are the exports documented in the props tables; `examples` orders the
- * files in packages/<folder>/examples (unlisted ones follow alphabetically).
+ * files in web/packages/<folder>/examples (unlisted ones follow alphabetically).
  */
 export interface ComponentDoc {
     slug: string;
     title: string;
     description: string;
-    /** packages/<folder> holding the component and its examples (defaults to slug). */
+    /** web/packages/<folder> holding the component and its examples (defaults to slug). */
     folder?: string;
     parts: string[];
     /** What the import line shows, when it isn't `parts` (pages about functions rather than components). */
     imports?: string[];
     examples?: string[];
+    /** The Kotlin showcase package of its examples (defaults to the folder without dashes); false: web only. */
+    kotlinPackage?: string | false;
 }
 
 /** In the sidebar by title, whatever order they are written in. */
@@ -679,6 +681,7 @@ export const COMPONENTS: ComponentDoc[] = [
         description:
             'Your own colours from a few settings, readable in dark and light for any hue; and className overrides that always win.',
         folder: 'utils',
+        kotlinPackage: false as const,
         parts: [],
         imports: ['applyTheme', 'applyPreset', 'customize', 'PRESETS', 'DEFAULT_THEME', 'themeVars', 'cx'],
         examples: ['ThemeEditor', 'Stylesheet', 'Overrides'],
@@ -686,6 +689,7 @@ export const COMPONENTS: ComponentDoc[] = [
     {
         slug: 'tree',
         title: 'Tree Table',
+        kotlinPackage: 'treetable',
         description:
             'Rows that open into child rows, animated, built from useTree and the Table parts. With virtual rows and editable cells, enough for a budget planner.',
         parts: ['TreeRow', 'TreeCell', 'TreeLabel', 'TreeToggle'],
@@ -699,11 +703,34 @@ export const COMPONENTS: ComponentDoc[] = [
     },
 ].sort((a, b) => a.title.localeCompare(b.title));
 
+/** Which library a page documents: the React one, or the Compose Multiplatform one under /kotlin/. */
+export type Platform = 'web' | 'kotlin';
+
+export const platformOf = (pathname: string): Platform => (pathname.startsWith('/kotlin/') ? 'kotlin' : 'web');
+
+/** The pages documented for a platform. */
+export const componentsFor = (platform: Platform) =>
+    platform === 'web' ? COMPONENTS : COMPONENTS.filter((c) => c.kotlinPackage !== false);
+
 // Trailing slashes throughout: pages are built as <path>/index.html, which Cloudflare serves at
 // <path>/ (and Storybook's relative asset paths need its slash too).
-export const componentPath = (slug: string) => `/components/${slug}/`;
+export const homePath = (platform: Platform = 'web') => (platform === 'kotlin' ? '/kotlin/' : '/');
+export const componentPath = (slug: string, platform: Platform = 'web') =>
+    `${platform === 'kotlin' ? '/kotlin' : ''}/components/${slug}/`;
+/** A showcase app's page: "" for the budget app, "music" for the music app. */
+export const showcasePath = (app: '' | 'music' = '', platform: Platform = 'web') =>
+    `${platform === 'kotlin' ? '/kotlin' : ''}/showcase/${app ? `${app}/` : ''}`;
 /** The same page as markdown, for agents (see markdown.ts). */
 export const markdownPath = (slug: string) => `/docs/${slug}.md`;
 
 /** Every URL on the site. */
-export const ROUTES = ['/', '/showcase/', '/showcase/music/', ...COMPONENTS.map((c) => componentPath(c.slug))];
+export const ROUTES = [
+    '/',
+    '/showcase/',
+    '/showcase/music/',
+    ...COMPONENTS.map((c) => componentPath(c.slug)),
+    homePath('kotlin'),
+    showcasePath('', 'kotlin'),
+    showcasePath('music', 'kotlin'),
+    ...componentsFor('kotlin').map((c) => componentPath(c.slug, 'kotlin')),
+];

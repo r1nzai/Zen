@@ -2,7 +2,7 @@ import type { ComponentType } from 'react';
 
 import { docComment, heroiconOf, orderExamples, shown, titleFor } from './example-source';
 
-/** One example file from packages/<folder>/examples/<Name>.tsx: the component, and its source for the Code tab. */
+/** One example file from web/packages/<folder>/examples/<Name>.tsx: the component, and its source for the Code tab. */
 export interface Example {
     name: string;
     title: string;
@@ -11,15 +11,15 @@ export interface Example {
     source: string;
 }
 
-const modules = import.meta.glob<{ default: ComponentType }>('../../packages/*/examples/*.tsx', { eager: true });
-const sources = import.meta.glob<string>('../../packages/*/examples/*.tsx', {
+const modules = import.meta.glob<{ default: ComponentType }>('../../web/packages/*/examples/*.tsx', { eager: true });
+const sources = import.meta.glob<string>('../../web/packages/*/examples/*.tsx', {
     eager: true,
     query: '?raw',
     import: 'default',
 });
 
 // Zen's own icons (Heroicons, not exported), by path: "icons/cog".
-const icons = import.meta.glob<string>('../../packages/icons/**/*.tsx', {
+const icons = import.meta.glob<string>('../../web/packages/icons/**/*.tsx', {
     eager: true,
     query: '?raw',
     import: 'default',

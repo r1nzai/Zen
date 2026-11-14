@@ -1,0 +1,20 @@
+{
+    "$schema": "https://www.designtokens.org/schemas/2025.10/resolver.json",
+    "name": "Zen",
+    "version": "2025.10",
+    "description": "Zen's themes: dark glass by default, light on request.",
+    "sets": {
+        "zen": { "sources": [{ "$ref": "zen.tokens.json" }] }
+    },
+    "modifiers": {
+        "theme": {
+            "description": "Dark is the default; light overrides it.",
+            "contexts": {
+                "dark": [],
+                "light": [{ "$ref": "zen-light.tokens.json" }]
+            },
+            "default": "dark"
+        }
+    },
+    "resolutionOrder": [{ "$ref": "#/sets/zen" }, { "$ref": "#/modifiers/theme" }]
+}

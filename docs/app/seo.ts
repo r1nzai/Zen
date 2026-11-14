@@ -1,6 +1,6 @@
 import type { MetaDescriptor } from 'react-router';
 
-import { version } from '../../package.json';
+import { version } from '../../web/package.json';
 
 export const SITE = 'https://zen.rinzai.dev';
 export const SITE_NAME = 'Zen';

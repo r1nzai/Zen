@@ -27,6 +27,76 @@ importers:
 
   .:
     devDependencies:
+      cldr-core:
+        specifier: 48.0.0
+        version: 48.0.0
+      cldr-misc-full:
+        specifier: 48.0.0
+        version: 48.0.0(cldr-core@48.0.0)
+      cldr-numbers-full:
+        specifier: 48.0.0
+        version: 48.0.0(cldr-core@48.0.0)
+      cldr-units-full:
+        specifier: 48.0.0
+        version: 48.0.0(cldr-core@48.0.0)
+      heroicons:
+        specifier: 2.2.0
+        version: 2.2.0
+
+  docs:
+    dependencies:
+      isbot:
+        specifier: ^5
+        version: 5.2.2
+      react:
+        specifier: ^19.3.0
+        version: 19.3.0
+      react-dom:
+        specifier: ^19.3.0
+        version: 19.3.0(react@19.3.0)
+      react-router:
+        specifier: ^8.4.0
+        version: 8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      sugar-high:
+        specifier: ^2.5.0
+        version: 2.5.0
+    devDependencies:
+      '@joshwooding/vite-plugin-react-docgen-typescript':
+        specifier: ^0.7.0
+        version: 0.7.0(@voidzero-dev/vite-plus-core@1.0.0(@types/node@22.20.4)(esbuild@0.28.2)(jiti@2.7.0)(typescript@6.0.3))(typescript@6.0.3)
+      '@react-router/dev':
+        specifier: ^8.4.0
+        version: 8.4.0(@voidzero-dev/vite-plus-core@1.0.0(@types/node@22.20.4)(esbuild@0.28.2)(jiti@2.7.0)(typescript@6.0.3))(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@6.0.3)
+      '@react-router/node':
+        specifier: ^8.4.0
+        version: 8.4.0(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@6.0.3)
+      '@tailwindcss/vite':
+        specifier: ^4.3.3
+        version: 4.3.3(@voidzero-dev/vite-plus-core@1.0.0(@types/node@22.20.4)(esbuild@0.28.2)(jiti@2.7.0)(typescript@6.0.3))
+      '@types/node':
+        specifier: ^22.20.4
+        version: 22.20.4
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: ^19.3.0
+        version: 19.3.0(@types/react@19.3.0)
+      tailwindcss:
+        specifier: ^4.3.3
+        version: 4.3.3
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+      vite:
+        specifier: 'catalog:'
+        version: '@voidzero-dev/vite-plus-core@1.0.0(@types/node@22.20.4)(esbuild@0.28.2)(jiti@2.7.0)(typescript@6.0.3)'
+      vite-plus:
+        specifier: 'catalog:'
+        version: 1.0.0(@types/node@22.20.4)(@vitest/coverage-v8@5.0.1(@vitest/browser@5.0.1)(vitest@5.0.1))(@vitest/ui@5.0.1(vitest@5.0.1))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@30.1.1)(typescript@6.0.3)
+
+  web:
+    devDependencies:
       '@playwright/test':
         specifier: 1.63.0
         version: 1.63.0
@@ -84,9 +154,6 @@ importers:
       eslint-plugin-storybook:
         specifier: ^10.6.0
         version: 10.6.0(eslint@10.11.0(jiti@2.7.0))(typescript@6.0.3)
-      heroicons:
-        specifier: 2.2.0
-        version: 2.2.0
       jsdom:
         specifier: ^30.1.1
         version: 30.1.1
@@ -129,58 +196,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 5.0.1(@types/node@22.20.4)(@vitest/browser-preview@5.0.1)(@vitest/coverage-v8@5.0.1(@vitest/browser@5.0.1)(vitest@5.0.1))(@vitest/ui@5.0.1(vitest@5.0.1))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@22.20.4)(esbuild@0.28.2)(jiti@2.7.0)(typescript@6.0.3))(jsdom@30.1.1)
-
-  docs:
-    dependencies:
-      isbot:
-        specifier: ^5
-        version: 5.2.2
-      react:
-        specifier: ^19.3.0
-        version: 19.3.0
-      react-dom:
-        specifier: ^19.3.0
-        version: 19.3.0(react@19.3.0)
-      react-router:
-        specifier: ^8.4.0
-        version: 8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      sugar-high:
-        specifier: ^2.5.0
-        version: 2.5.0
-    devDependencies:
-      '@joshwooding/vite-plugin-react-docgen-typescript':
-        specifier: ^0.7.0
-        version: 0.7.0(@voidzero-dev/vite-plus-core@1.0.0(@types/node@22.20.4)(esbuild@0.28.2)(jiti@2.7.0)(typescript@6.0.3))(typescript@6.0.3)
-      '@react-router/dev':
-        specifier: ^8.4.0
-        version: 8.4.0(@voidzero-dev/vite-plus-core@1.0.0(@types/node@22.20.4)(esbuild@0.28.2)(jiti@2.7.0)(typescript@6.0.3))(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@6.0.3)
-      '@react-router/node':
-        specifier: ^8.4.0
-        version: 8.4.0(react-router@8.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(typescript@6.0.3)
-      '@tailwindcss/vite':
-        specifier: ^4.3.3
-        version: 4.3.3(@voidzero-dev/vite-plus-core@1.0.0(@types/node@22.20.4)(esbuild@0.28.2)(jiti@2.7.0)(typescript@6.0.3))
-      '@types/node':
-        specifier: ^22.20.4
-        version: 22.20.4
-      '@types/react':
-        specifier: ^19.3.0
-        version: 19.3.0
-      '@types/react-dom':
-        specifier: ^19.3.0
-        version: 19.3.0(@types/react@19.3.0)
-      tailwindcss:
-        specifier: ^4.3.3
-        version: 4.3.3
-      typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
-      vite:
-        specifier: 'catalog:'
-        version: '@voidzero-dev/vite-plus-core@1.0.0(@types/node@22.20.4)(esbuild@0.28.2)(jiti@2.7.0)(typescript@6.0.3)'
-      vite-plus:
-        specifier: 'catalog:'
-        version: 1.0.0(@types/node@22.20.4)(@vitest/coverage-v8@5.0.1(@vitest/browser@5.0.1)(vitest@5.0.1))(@vitest/ui@5.0.1(vitest@5.0.1))(esbuild@0.28.2)(jiti@2.7.0)(jsdom@30.1.1)(typescript@6.0.3)
 
 packages:
 
@@ -2109,6 +2124,24 @@ packages:
         optional: true
       '@chromatic-com/vitest':
         optional: true
+
+  cldr-core@48.0.0:
+    resolution: {integrity: sha512-iQnK68eOjEsHEOwCvi2CI7xbjcVlCdaSNTQrkwCgEMnyZUbHCgF0GPw2CXi0D2IGz+9Pj80cmcWzRFcF6zdrYQ==}
+
+  cldr-misc-full@48.0.0:
+    resolution: {integrity: sha512-Bg+iNOD4FyhNxqiEr3a8JbPEH25Ob/f2KwU3SbH3VpAND3DYFlDa/eXU588H5djP+YlyHj4y+joBrUUKBXq7VA==}
+    peerDependencies:
+      cldr-core: 48.0.0
+
+  cldr-numbers-full@48.0.0:
+    resolution: {integrity: sha512-bPTCfVDc0KRdRCRES155EZX1U0ZjUnc9AgiyKPH7K+mXWgCPLx7CzxvYY0IXGTF8W6ig+2hbG5V7oHMenA8iGQ==}
+    peerDependencies:
+      cldr-core: 48.0.0
+
+  cldr-units-full@48.0.0:
+    resolution: {integrity: sha512-EVHnOIXcn4BAM4HQdMlaNzP/mxjNSg/j83EVkiQEdXhtjaCZQDwP32E4DEVABpIYZPBu9pzg1WzlUBVgt+VvNg==}
+    peerDependencies:
+      cldr-core: 48.0.0
 
   compare-versions@6.1.1:
     resolution: {integrity: sha512-4hm4VPpIecmlg59CHXnRDnqGplJFrbLG4aFEl5vl6cK1u76ws3LLvX7ikFnTDl5vo39sjWD6AaDPYodJp/NNHg==}
@@ -4908,6 +4941,20 @@ snapshots:
   chromatic@18.9.5:
     dependencies:
       semver: 7.8.5
+
+  cldr-core@48.0.0: {}
+
+  cldr-misc-full@48.0.0(cldr-core@48.0.0):
+    dependencies:
+      cldr-core: 48.0.0
+
+  cldr-numbers-full@48.0.0(cldr-core@48.0.0):
+    dependencies:
+      cldr-core: 48.0.0
+
+  cldr-units-full@48.0.0(cldr-core@48.0.0):
+    dependencies:
+      cldr-core: 48.0.0
 
   compare-versions@6.1.1: {}
 

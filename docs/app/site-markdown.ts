@@ -1,6 +1,6 @@
 import * as Zen from '@rinzai/zen';
 
-import readme from '../../README.md?raw';
+import readme from '../../web/README.md?raw';
 import { examplesFor } from './examples';
 import { apiFor, componentMarkdown, type DocgenInfo, guideFrom, indexMarkdown } from './markdown';
 import { COMPONENTS, type ComponentDoc, markdownPath } from './pages';

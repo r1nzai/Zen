@@ -3,7 +3,7 @@
  * the package as dist/docs/<slug>.md, and served on the site as /docs/<slug>.md,
  * /llms.txt and /llms-full.txt.
  */
-import pkg from '../../package.json';
+import pkg from '../../web/package.json';
 import { titleFor } from './example-source';
 import type { ComponentDoc } from './pages';
 

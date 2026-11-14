@@ -30,6 +30,12 @@ docs/.react-router
 test-results
 playwright-report
 
+# Kotlin (Gradle)
+kotlin/.gradle
+kotlin/.kotlin
+kotlin/**/build
+kotlin/local.properties
+
 # Claude Code (local, per person)
 .claude/
 .vitest/

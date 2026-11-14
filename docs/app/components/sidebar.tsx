@@ -1,21 +1,25 @@
 import { SideNav, SideNavGroup, SideNavLink } from '@rinzai/zen';
-import { NavLink } from 'react-router';
+import { NavLink, useLocation } from 'react-router';
 
-import { COMPONENTS, componentPath } from '../pages';
+import { componentPath, componentsFor, homePath, type Platform, platformOf, showcasePath } from '../pages';
 
-const GROUPS = [
+const groups = (platform: Platform) => [
     {
         title: 'Get started',
         links: [
-            { to: '/', label: 'Introduction' },
-            { to: '/showcase/', label: 'Showcase' },
+            { to: homePath(platform), label: 'Introduction' },
+            { to: showcasePath('', platform), label: 'Showcase' },
         ],
     },
-    { title: 'Components', links: COMPONENTS.map((c) => ({ to: componentPath(c.slug), label: c.title })) },
+    {
+        title: 'Components',
+        links: componentsFor(platform).map((c) => ({ to: componentPath(c.slug, platform), label: c.title })),
+    },
 ];
 
 /** `storybook`: a link to it too, for where the header has no room for one. */
 export function Sidebar({ storybook = false }: { storybook?: boolean }) {
+    const GROUPS = groups(platformOf(useLocation().pathname));
     return (
         <SideNav aria-label="Docs">
             {GROUPS.map((group) => (

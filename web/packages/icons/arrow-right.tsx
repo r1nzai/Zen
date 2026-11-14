@@ -1,0 +1,21 @@
+// Heroicons 2.2.0, 24/outline/arrow-right.svg (MIT, Tailwind Labs: https://heroicons.com).
+// Generated from tokens/ by scripts/generate.mjs; don't edit.
+import IconProps from './icon.types';
+
+export default function ArrowRight(props: IconProps) {
+    return (
+        <svg
+            className="size-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+            data-slot="icon"
+            {...props}
+        >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+        </svg>
+    );
+}

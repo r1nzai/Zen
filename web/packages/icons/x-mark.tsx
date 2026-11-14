@@ -1,0 +1,21 @@
+// Heroicons 2.2.0, 24/outline/x-mark.svg (MIT, Tailwind Labs: https://heroicons.com).
+// Generated from tokens/ by scripts/generate.mjs; don't edit.
+import IconProps from './icon.types';
+
+export default function XMark(props: IconProps) {
+    return (
+        <svg
+            className="size-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+            data-slot="icon"
+            {...props}
+        >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+    );
+}

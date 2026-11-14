@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "react-router dev",
         "build": "react-router build",
-        "typecheck": "react-router typegen && tsc"
+        "typecheck": "react-router typegen && tsc",
+        "test": "vp test run"
     },
     "dependencies": {
         "isbot": "^5",

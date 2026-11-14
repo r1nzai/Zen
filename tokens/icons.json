@@ -1,0 +1,182 @@
+{
+    "$description": "The icons Zen draws, from Heroicons (MIT, Tailwind Labs: https://heroicons.com), by file name: the component each library names it, and its Heroicons source. Sets: 24/outline for icons drawn at 20px and up; 16/solid (the micro set, drawn for 16px) for the small glyphs inside components; 24/solid for a player's filled controls. micro/ ones are drawn by components themselves, not exported.",
+    "heroicons": "2.2.0",
+    "icons": {
+        "arrow-left": {
+            "name": "ArrowLeft",
+            "source": "24/outline/arrow-left"
+        },
+        "arrow-path": {
+            "name": "ArrowPath",
+            "source": "24/outline/arrow-path"
+        },
+        "arrow-right": {
+            "name": "ArrowRight",
+            "source": "24/outline/arrow-right"
+        },
+        "arrows-right-left": {
+            "name": "ArrowsRightLeft",
+            "source": "24/outline/arrows-right-left"
+        },
+        "backward": {
+            "name": "Backward",
+            "source": "24/solid/backward"
+        },
+        "bars": {
+            "name": "Bars",
+            "source": "24/outline/bars-3"
+        },
+        "calendar": {
+            "name": "CalendarIcon",
+            "source": "24/outline/calendar"
+        },
+        "chart-bar": {
+            "name": "ChartBarIcon",
+            "source": "24/outline/chart-bar"
+        },
+        "chevron-down": {
+            "name": "ChevronDown",
+            "source": "24/outline/chevron-down"
+        },
+        "chevron-left": {
+            "name": "ChevronLeft",
+            "source": "24/outline/chevron-left"
+        },
+        "chevron-right": {
+            "name": "ChevronRight",
+            "source": "24/outline/chevron-right"
+        },
+        "chevron-up": {
+            "name": "ChevronUp",
+            "source": "24/outline/chevron-up"
+        },
+        "ellipsis": {
+            "name": "Ellipsis",
+            "source": "16/solid/ellipsis-horizontal"
+        },
+        "flag": {
+            "name": "Flag",
+            "source": "24/outline/flag"
+        },
+        "forward": {
+            "name": "Forward",
+            "source": "24/solid/forward"
+        },
+        "heart": {
+            "name": "Heart",
+            "source": "24/outline/heart"
+        },
+        "heart-solid": {
+            "name": "HeartSolid",
+            "source": "24/solid/heart"
+        },
+        "list-bullet": {
+            "name": "ListBullet",
+            "source": "24/outline/list-bullet"
+        },
+        "lock": {
+            "name": "Lock",
+            "source": "24/outline/lock-closed"
+        },
+        "logout": {
+            "name": "Logout",
+            "source": "24/outline/arrow-right-start-on-rectangle"
+        },
+        "musical-note": {
+            "name": "MusicalNote",
+            "source": "24/outline/musical-note"
+        },
+        "pause": {
+            "name": "Pause",
+            "source": "24/solid/pause"
+        },
+        "play": {
+            "name": "Play",
+            "source": "24/solid/play"
+        },
+        "queue-list": {
+            "name": "QueueList",
+            "source": "24/outline/queue-list"
+        },
+        "search": {
+            "name": "Search",
+            "source": "24/outline/magnifying-glass"
+        },
+        "settings": {
+            "name": "Settings",
+            "source": "24/outline/cog-6-tooth"
+        },
+        "speaker-wave": {
+            "name": "SpeakerWave",
+            "source": "24/outline/speaker-wave"
+        },
+        "speaker-x-mark": {
+            "name": "SpeakerXMark",
+            "source": "24/outline/speaker-x-mark"
+        },
+        "squares": {
+            "name": "Squares",
+            "source": "24/outline/squares-2x2"
+        },
+        "table": {
+            "name": "TableIcon",
+            "source": "24/outline/table-cells"
+        },
+        "x-mark": {
+            "name": "XMark",
+            "source": "24/outline/x-mark"
+        },
+        "micro/arrow-trending-down": {
+            "name": "ArrowTrendingDownMicro",
+            "source": "16/solid/arrow-trending-down"
+        },
+        "micro/arrow-trending-up": {
+            "name": "ArrowTrendingUpMicro",
+            "source": "16/solid/arrow-trending-up"
+        },
+        "micro/calendar": {
+            "name": "CalendarMicro",
+            "source": "16/solid/calendar"
+        },
+        "micro/check": {
+            "name": "CheckMicro",
+            "source": "16/solid/check"
+        },
+        "micro/chevron-down": {
+            "name": "ChevronDownMicro",
+            "source": "16/solid/chevron-down"
+        },
+        "micro/chevron-right": {
+            "name": "ChevronRightMicro",
+            "source": "16/solid/chevron-right"
+        },
+        "micro/exclamation-triangle": {
+            "name": "ExclamationTriangleMicro",
+            "source": "16/solid/exclamation-triangle"
+        },
+        "micro/information-circle": {
+            "name": "InformationCircleMicro",
+            "source": "16/solid/information-circle"
+        },
+        "micro/minus": {
+            "name": "MinusMicro",
+            "source": "16/solid/minus"
+        },
+        "micro/moon": {
+            "name": "MoonMicro",
+            "source": "16/solid/moon"
+        },
+        "micro/plus": {
+            "name": "PlusMicro",
+            "source": "16/solid/plus"
+        },
+        "micro/sun": {
+            "name": "SunMicro",
+            "source": "16/solid/sun"
+        },
+        "micro/x-mark": {
+            "name": "XMarkMicro",
+            "source": "16/solid/x-mark"
+        }
+    }
+}

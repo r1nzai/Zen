@@ -1,0 +1,4184 @@
+# ICU 78.3, CLDR 48.0
+date	en	day	2026-09-03	Sep 3
+date	en	day	2026-01-01	Jan 1
+date	en	day	2027-01-01	Jan 1
+date	en	day	2024-02-29	Feb 29
+date	en	day	2025-03-20	Mar 20
+date	en	day	2025-03-21	Mar 21
+date	en	day	1999-12-31	Dec 31
+date	en	day	2031-07-14	Jul 14
+date	en	day	2010-10-10	Oct 10
+date	en	short	2026-09-03	9/3/26
+date	en	short	2026-01-01	1/1/26
+date	en	short	2027-01-01	1/1/27
+date	en	short	2024-02-29	2/29/24
+date	en	short	2025-03-20	3/20/25
+date	en	short	2025-03-21	3/21/25
+date	en	short	1999-12-31	12/31/99
+date	en	short	2031-07-14	7/14/31
+date	en	short	2010-10-10	10/10/10
+date	en	medium	2026-09-03	Sep 3, 2026
+date	en	medium	2026-01-01	Jan 1, 2026
+date	en	medium	2027-01-01	Jan 1, 2027
+date	en	medium	2024-02-29	Feb 29, 2024
+date	en	medium	2025-03-20	Mar 20, 2025
+date	en	medium	2025-03-21	Mar 21, 2025
+date	en	medium	1999-12-31	Dec 31, 1999
+date	en	medium	2031-07-14	Jul 14, 2031
+date	en	medium	2010-10-10	Oct 10, 2010
+date	en	long	2026-09-03	September 3, 2026
+date	en	long	2026-01-01	January 1, 2026
+date	en	long	2027-01-01	January 1, 2027
+date	en	long	2024-02-29	February 29, 2024
+date	en	long	2025-03-20	March 20, 2025
+date	en	long	2025-03-21	March 21, 2025
+date	en	long	1999-12-31	December 31, 1999
+date	en	long	2031-07-14	July 14, 2031
+date	en	long	2010-10-10	October 10, 2010
+date	en	full	2026-09-03	Thursday, September 3, 2026
+date	en	full	2026-01-01	Thursday, January 1, 2026
+date	en	full	2027-01-01	Friday, January 1, 2027
+date	en	full	2024-02-29	Thursday, February 29, 2024
+date	en	full	2025-03-20	Thursday, March 20, 2025
+date	en	full	2025-03-21	Friday, March 21, 2025
+date	en	full	1999-12-31	Friday, December 31, 1999
+date	en	full	2031-07-14	Monday, July 14, 2031
+date	en	full	2010-10-10	Sunday, October 10, 2010
+range	en	day	2026-09-03/2026-09-10	Sep 3 – 10
+range	en	day	2026-09-29/2026-11-02	Sep 29 – Nov 2
+range	en	day	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	en	day	2025-03-15/2025-03-25	Mar 15 – 25
+range	en	day	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	en	short	2026-09-03/2026-09-10	9/3/26 – 9/10/26
+range	en	short	2026-09-29/2026-11-02	9/29/26 – 11/2/26
+range	en	short	2026-12-28/2027-01-05	12/28/26 – 1/5/27
+range	en	short	2025-03-15/2025-03-25	3/15/25 – 3/25/25
+range	en	short	2010-10-10/2011-10-11	10/10/10 – 10/11/11
+range	en	medium	2026-09-03/2026-09-10	Sep 3 – 10, 2026
+range	en	medium	2026-09-29/2026-11-02	Sep 29 – Nov 2, 2026
+range	en	medium	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	en	medium	2025-03-15/2025-03-25	Mar 15 – 25, 2025
+range	en	medium	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	en	long	2026-09-03/2026-09-10	September 3 – 10, 2026
+range	en	long	2026-09-29/2026-11-02	September 29 – November 2, 2026
+range	en	long	2026-12-28/2027-01-05	December 28, 2026 – January 5, 2027
+range	en	long	2025-03-15/2025-03-25	March 15 – 25, 2025
+range	en	long	2010-10-10/2011-10-11	October 10, 2010 – October 11, 2011
+month	en	short	2026-09	Sep 2026
+month	en	short	2026-01	Jan 2026
+month	en	short	2027-01	Jan 2027
+month	en	short	2024-02	Feb 2024
+month	en	short	2025-03	Mar 2025
+month	en	short	2025-03	Mar 2025
+month	en	short	1999-12	Dec 1999
+month	en	short	2031-07	Jul 2031
+month	en	short	2010-10	Oct 2010
+month	en	long	2026-09	September 2026
+month	en	long	2026-01	January 2026
+month	en	long	2027-01	January 2027
+month	en	long	2024-02	February 2024
+month	en	long	2025-03	March 2025
+month	en	long	2025-03	March 2025
+month	en	long	1999-12	December 1999
+month	en	long	2031-07	July 2031
+month	en	long	2010-10	October 2010
+monthNames	en			Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec
+weekdays	en	narrow		S|M|T|W|T|F|S
+weekdays	en	short		Sun|Mon|Tue|Wed|Thu|Fri|Sat
+weekdays	en	long		Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday
+weekStart	en			0
+clock	en			{hour}:{minute} {dayPeriod}|true|AM|PM
+date	en-IN	day	2026-09-03	3 Sept
+date	en-IN	day	2026-01-01	1 Jan
+date	en-IN	day	2027-01-01	1 Jan
+date	en-IN	day	2024-02-29	29 Feb
+date	en-IN	day	2025-03-20	20 Mar
+date	en-IN	day	2025-03-21	21 Mar
+date	en-IN	day	1999-12-31	31 Dec
+date	en-IN	day	2031-07-14	14 Jul
+date	en-IN	day	2010-10-10	10 Oct
+date	en-IN	short	2026-09-03	03/09/26
+date	en-IN	short	2026-01-01	01/01/26
+date	en-IN	short	2027-01-01	01/01/27
+date	en-IN	short	2024-02-29	29/02/24
+date	en-IN	short	2025-03-20	20/03/25
+date	en-IN	short	2025-03-21	21/03/25
+date	en-IN	short	1999-12-31	31/12/99
+date	en-IN	short	2031-07-14	14/07/31
+date	en-IN	short	2010-10-10	10/10/10
+date	en-IN	medium	2026-09-03	3 Sept 2026
+date	en-IN	medium	2026-01-01	1 Jan 2026
+date	en-IN	medium	2027-01-01	1 Jan 2027
+date	en-IN	medium	2024-02-29	29 Feb 2024
+date	en-IN	medium	2025-03-20	20 Mar 2025
+date	en-IN	medium	2025-03-21	21 Mar 2025
+date	en-IN	medium	1999-12-31	31 Dec 1999
+date	en-IN	medium	2031-07-14	14 Jul 2031
+date	en-IN	medium	2010-10-10	10 Oct 2010
+date	en-IN	long	2026-09-03	3 September 2026
+date	en-IN	long	2026-01-01	1 January 2026
+date	en-IN	long	2027-01-01	1 January 2027
+date	en-IN	long	2024-02-29	29 February 2024
+date	en-IN	long	2025-03-20	20 March 2025
+date	en-IN	long	2025-03-21	21 March 2025
+date	en-IN	long	1999-12-31	31 December 1999
+date	en-IN	long	2031-07-14	14 July 2031
+date	en-IN	long	2010-10-10	10 October 2010
+date	en-IN	full	2026-09-03	Thursday, 3 September 2026
+date	en-IN	full	2026-01-01	Thursday, 1 January 2026
+date	en-IN	full	2027-01-01	Friday, 1 January 2027
+date	en-IN	full	2024-02-29	Thursday, 29 February 2024
+date	en-IN	full	2025-03-20	Thursday, 20 March 2025
+date	en-IN	full	2025-03-21	Friday, 21 March 2025
+date	en-IN	full	1999-12-31	Friday, 31 December 1999
+date	en-IN	full	2031-07-14	Monday, 14 July 2031
+date	en-IN	full	2010-10-10	Sunday, 10 October 2010
+range	en-IN	day	2026-09-03/2026-09-10	3–10 Sept
+range	en-IN	day	2026-09-29/2026-11-02	29 Sept – 2 Nov
+range	en-IN	day	2026-12-28/2027-01-05	28 Dec 2026 – 5 Jan 2027
+range	en-IN	day	2025-03-15/2025-03-25	15–25 Mar
+range	en-IN	day	2010-10-10/2011-10-11	10 Oct 2010 – 11 Oct 2011
+range	en-IN	short	2026-09-03/2026-09-10	03/09/26 – 10/09/26
+range	en-IN	short	2026-09-29/2026-11-02	29/09/26 – 02/11/26
+range	en-IN	short	2026-12-28/2027-01-05	28/12/26 – 05/01/27
+range	en-IN	short	2025-03-15/2025-03-25	15/03/25 – 25/03/25
+range	en-IN	short	2010-10-10/2011-10-11	10/10/10 – 11/10/11
+range	en-IN	medium	2026-09-03/2026-09-10	3–10 Sept 2026
+range	en-IN	medium	2026-09-29/2026-11-02	29 Sept – 2 Nov 2026
+range	en-IN	medium	2026-12-28/2027-01-05	28 Dec 2026 – 5 Jan 2027
+range	en-IN	medium	2025-03-15/2025-03-25	15–25 Mar 2025
+range	en-IN	medium	2010-10-10/2011-10-11	10 Oct 2010 – 11 Oct 2011
+range	en-IN	long	2026-09-03/2026-09-10	3–10 September 2026
+range	en-IN	long	2026-09-29/2026-11-02	29 September – 2 November 2026
+range	en-IN	long	2026-12-28/2027-01-05	28 December 2026 – 5 January 2027
+range	en-IN	long	2025-03-15/2025-03-25	15–25 March 2025
+range	en-IN	long	2010-10-10/2011-10-11	10 October 2010 – 11 October 2011
+month	en-IN	short	2026-09	Sept 2026
+month	en-IN	short	2026-01	Jan 2026
+month	en-IN	short	2027-01	Jan 2027
+month	en-IN	short	2024-02	Feb 2024
+month	en-IN	short	2025-03	Mar 2025
+month	en-IN	short	2025-03	Mar 2025
+month	en-IN	short	1999-12	Dec 1999
+month	en-IN	short	2031-07	Jul 2031
+month	en-IN	short	2010-10	Oct 2010
+month	en-IN	long	2026-09	September 2026
+month	en-IN	long	2026-01	January 2026
+month	en-IN	long	2027-01	January 2027
+month	en-IN	long	2024-02	February 2024
+month	en-IN	long	2025-03	March 2025
+month	en-IN	long	2025-03	March 2025
+month	en-IN	long	1999-12	December 1999
+month	en-IN	long	2031-07	July 2031
+month	en-IN	long	2010-10	October 2010
+monthNames	en-IN			Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept|Oct|Nov|Dec
+weekdays	en-IN	narrow		S|M|T|W|T|F|S
+weekdays	en-IN	short		Sun|Mon|Tue|Wed|Thu|Fri|Sat
+weekdays	en-IN	long		Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday
+weekStart	en-IN			0
+clock	en-IN			{hour}:{minute} {dayPeriod}|true|am|pm
+date	en-GB	day	2026-09-03	3 Sept
+date	en-GB	day	2026-01-01	1 Jan
+date	en-GB	day	2027-01-01	1 Jan
+date	en-GB	day	2024-02-29	29 Feb
+date	en-GB	day	2025-03-20	20 Mar
+date	en-GB	day	2025-03-21	21 Mar
+date	en-GB	day	1999-12-31	31 Dec
+date	en-GB	day	2031-07-14	14 Jul
+date	en-GB	day	2010-10-10	10 Oct
+date	en-GB	short	2026-09-03	03/09/2026
+date	en-GB	short	2026-01-01	01/01/2026
+date	en-GB	short	2027-01-01	01/01/2027
+date	en-GB	short	2024-02-29	29/02/2024
+date	en-GB	short	2025-03-20	20/03/2025
+date	en-GB	short	2025-03-21	21/03/2025
+date	en-GB	short	1999-12-31	31/12/1999
+date	en-GB	short	2031-07-14	14/07/2031
+date	en-GB	short	2010-10-10	10/10/2010
+date	en-GB	medium	2026-09-03	3 Sept 2026
+date	en-GB	medium	2026-01-01	1 Jan 2026
+date	en-GB	medium	2027-01-01	1 Jan 2027
+date	en-GB	medium	2024-02-29	29 Feb 2024
+date	en-GB	medium	2025-03-20	20 Mar 2025
+date	en-GB	medium	2025-03-21	21 Mar 2025
+date	en-GB	medium	1999-12-31	31 Dec 1999
+date	en-GB	medium	2031-07-14	14 Jul 2031
+date	en-GB	medium	2010-10-10	10 Oct 2010
+date	en-GB	long	2026-09-03	3 September 2026
+date	en-GB	long	2026-01-01	1 January 2026
+date	en-GB	long	2027-01-01	1 January 2027
+date	en-GB	long	2024-02-29	29 February 2024
+date	en-GB	long	2025-03-20	20 March 2025
+date	en-GB	long	2025-03-21	21 March 2025
+date	en-GB	long	1999-12-31	31 December 1999
+date	en-GB	long	2031-07-14	14 July 2031
+date	en-GB	long	2010-10-10	10 October 2010
+date	en-GB	full	2026-09-03	Thursday, 3 September 2026
+date	en-GB	full	2026-01-01	Thursday, 1 January 2026
+date	en-GB	full	2027-01-01	Friday, 1 January 2027
+date	en-GB	full	2024-02-29	Thursday, 29 February 2024
+date	en-GB	full	2025-03-20	Thursday, 20 March 2025
+date	en-GB	full	2025-03-21	Friday, 21 March 2025
+date	en-GB	full	1999-12-31	Friday, 31 December 1999
+date	en-GB	full	2031-07-14	Monday, 14 July 2031
+date	en-GB	full	2010-10-10	Sunday, 10 October 2010
+range	en-GB	day	2026-09-03/2026-09-10	3 – 10 Sept
+range	en-GB	day	2026-09-29/2026-11-02	29 Sept – 2 Nov
+range	en-GB	day	2026-12-28/2027-01-05	28 Dec 2026 – 5 Jan 2027
+range	en-GB	day	2025-03-15/2025-03-25	15 – 25 Mar
+range	en-GB	day	2010-10-10/2011-10-11	10 Oct 2010 – 11 Oct 2011
+range	en-GB	short	2026-09-03/2026-09-10	03/09/2026 – 10/09/2026
+range	en-GB	short	2026-09-29/2026-11-02	29/09/2026 – 02/11/2026
+range	en-GB	short	2026-12-28/2027-01-05	28/12/2026 – 05/01/2027
+range	en-GB	short	2025-03-15/2025-03-25	15/03/2025 – 25/03/2025
+range	en-GB	short	2010-10-10/2011-10-11	10/10/2010 – 11/10/2011
+range	en-GB	medium	2026-09-03/2026-09-10	3 – 10 Sept 2026
+range	en-GB	medium	2026-09-29/2026-11-02	29 Sept – 2 Nov 2026
+range	en-GB	medium	2026-12-28/2027-01-05	28 Dec 2026 – 5 Jan 2027
+range	en-GB	medium	2025-03-15/2025-03-25	15 – 25 Mar 2025
+range	en-GB	medium	2010-10-10/2011-10-11	10 Oct 2010 – 11 Oct 2011
+range	en-GB	long	2026-09-03/2026-09-10	3 – 10 September 2026
+range	en-GB	long	2026-09-29/2026-11-02	29 September – 2 November 2026
+range	en-GB	long	2026-12-28/2027-01-05	28 December 2026 – 5 January 2027
+range	en-GB	long	2025-03-15/2025-03-25	15 – 25 March 2025
+range	en-GB	long	2010-10-10/2011-10-11	10 October 2010 – 11 October 2011
+month	en-GB	short	2026-09	Sept 2026
+month	en-GB	short	2026-01	Jan 2026
+month	en-GB	short	2027-01	Jan 2027
+month	en-GB	short	2024-02	Feb 2024
+month	en-GB	short	2025-03	Mar 2025
+month	en-GB	short	2025-03	Mar 2025
+month	en-GB	short	1999-12	Dec 1999
+month	en-GB	short	2031-07	Jul 2031
+month	en-GB	short	2010-10	Oct 2010
+month	en-GB	long	2026-09	September 2026
+month	en-GB	long	2026-01	January 2026
+month	en-GB	long	2027-01	January 2027
+month	en-GB	long	2024-02	February 2024
+month	en-GB	long	2025-03	March 2025
+month	en-GB	long	2025-03	March 2025
+month	en-GB	long	1999-12	December 1999
+month	en-GB	long	2031-07	July 2031
+month	en-GB	long	2010-10	October 2010
+monthNames	en-GB			Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept|Oct|Nov|Dec
+weekdays	en-GB	narrow		S|M|T|W|T|F|S
+weekdays	en-GB	short		Sun|Mon|Tue|Wed|Thu|Fri|Sat
+weekdays	en-GB	long		Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday
+weekStart	en-GB			1
+clock	en-GB			{hour}:{minute}|false||
+date	fr	day	2026-09-03	3 sept.
+date	fr	day	2026-01-01	1 janv.
+date	fr	day	2027-01-01	1 janv.
+date	fr	day	2024-02-29	29 févr.
+date	fr	day	2025-03-20	20 mars
+date	fr	day	2025-03-21	21 mars
+date	fr	day	1999-12-31	31 déc.
+date	fr	day	2031-07-14	14 juil.
+date	fr	day	2010-10-10	10 oct.
+date	fr	short	2026-09-03	03/09/2026
+date	fr	short	2026-01-01	01/01/2026
+date	fr	short	2027-01-01	01/01/2027
+date	fr	short	2024-02-29	29/02/2024
+date	fr	short	2025-03-20	20/03/2025
+date	fr	short	2025-03-21	21/03/2025
+date	fr	short	1999-12-31	31/12/1999
+date	fr	short	2031-07-14	14/07/2031
+date	fr	short	2010-10-10	10/10/2010
+date	fr	medium	2026-09-03	3 sept. 2026
+date	fr	medium	2026-01-01	1 janv. 2026
+date	fr	medium	2027-01-01	1 janv. 2027
+date	fr	medium	2024-02-29	29 févr. 2024
+date	fr	medium	2025-03-20	20 mars 2025
+date	fr	medium	2025-03-21	21 mars 2025
+date	fr	medium	1999-12-31	31 déc. 1999
+date	fr	medium	2031-07-14	14 juil. 2031
+date	fr	medium	2010-10-10	10 oct. 2010
+date	fr	long	2026-09-03	3 septembre 2026
+date	fr	long	2026-01-01	1 janvier 2026
+date	fr	long	2027-01-01	1 janvier 2027
+date	fr	long	2024-02-29	29 février 2024
+date	fr	long	2025-03-20	20 mars 2025
+date	fr	long	2025-03-21	21 mars 2025
+date	fr	long	1999-12-31	31 décembre 1999
+date	fr	long	2031-07-14	14 juillet 2031
+date	fr	long	2010-10-10	10 octobre 2010
+date	fr	full	2026-09-03	jeudi 3 septembre 2026
+date	fr	full	2026-01-01	jeudi 1 janvier 2026
+date	fr	full	2027-01-01	vendredi 1 janvier 2027
+date	fr	full	2024-02-29	jeudi 29 février 2024
+date	fr	full	2025-03-20	jeudi 20 mars 2025
+date	fr	full	2025-03-21	vendredi 21 mars 2025
+date	fr	full	1999-12-31	vendredi 31 décembre 1999
+date	fr	full	2031-07-14	lundi 14 juillet 2031
+date	fr	full	2010-10-10	dimanche 10 octobre 2010
+range	fr	day	2026-09-03/2026-09-10	3–10 sept.
+range	fr	day	2026-09-29/2026-11-02	29 sept. – 2 nov.
+range	fr	day	2026-12-28/2027-01-05	28 déc. 2026 – 5 janv. 2027
+range	fr	day	2025-03-15/2025-03-25	15–25 mars
+range	fr	day	2010-10-10/2011-10-11	10 oct. 2010 – 11 oct. 2011
+range	fr	short	2026-09-03/2026-09-10	03/09/2026 – 10/09/2026
+range	fr	short	2026-09-29/2026-11-02	29/09/2026 – 02/11/2026
+range	fr	short	2026-12-28/2027-01-05	28/12/2026 – 05/01/2027
+range	fr	short	2025-03-15/2025-03-25	15/03/2025 – 25/03/2025
+range	fr	short	2010-10-10/2011-10-11	10/10/2010 – 11/10/2011
+range	fr	medium	2026-09-03/2026-09-10	3–10 sept. 2026
+range	fr	medium	2026-09-29/2026-11-02	29 sept. – 2 nov. 2026
+range	fr	medium	2026-12-28/2027-01-05	28 déc. 2026 – 5 janv. 2027
+range	fr	medium	2025-03-15/2025-03-25	15–25 mars 2025
+range	fr	medium	2010-10-10/2011-10-11	10 oct. 2010 – 11 oct. 2011
+range	fr	long	2026-09-03/2026-09-10	3–10 septembre 2026
+range	fr	long	2026-09-29/2026-11-02	29 septembre – 2 novembre 2026
+range	fr	long	2026-12-28/2027-01-05	28 décembre 2026 – 5 janvier 2027
+range	fr	long	2025-03-15/2025-03-25	15–25 mars 2025
+range	fr	long	2010-10-10/2011-10-11	10 octobre 2010 – 11 octobre 2011
+month	fr	short	2026-09	sept. 2026
+month	fr	short	2026-01	janv. 2026
+month	fr	short	2027-01	janv. 2027
+month	fr	short	2024-02	févr. 2024
+month	fr	short	2025-03	mars 2025
+month	fr	short	2025-03	mars 2025
+month	fr	short	1999-12	déc. 1999
+month	fr	short	2031-07	juil. 2031
+month	fr	short	2010-10	oct. 2010
+month	fr	long	2026-09	septembre 2026
+month	fr	long	2026-01	janvier 2026
+month	fr	long	2027-01	janvier 2027
+month	fr	long	2024-02	février 2024
+month	fr	long	2025-03	mars 2025
+month	fr	long	2025-03	mars 2025
+month	fr	long	1999-12	décembre 1999
+month	fr	long	2031-07	juillet 2031
+month	fr	long	2010-10	octobre 2010
+monthNames	fr			janv.|févr.|mars|avr.|mai|juin|juil.|août|sept.|oct.|nov.|déc.
+weekdays	fr	narrow		D|L|M|M|J|V|S
+weekdays	fr	short		dim.|lun.|mar.|mer.|jeu.|ven.|sam.
+weekdays	fr	long		dimanche|lundi|mardi|mercredi|jeudi|vendredi|samedi
+weekStart	fr			1
+clock	fr			{hour}:{minute}|false||
+date	fr-CA	day	2026-09-03	3 sept.
+date	fr-CA	day	2026-01-01	1 janv.
+date	fr-CA	day	2027-01-01	1 janv.
+date	fr-CA	day	2024-02-29	29 févr.
+date	fr-CA	day	2025-03-20	20 mars
+date	fr-CA	day	2025-03-21	21 mars
+date	fr-CA	day	1999-12-31	31 déc.
+date	fr-CA	day	2031-07-14	14 juill.
+date	fr-CA	day	2010-10-10	10 oct.
+date	fr-CA	short	2026-09-03	2026-09-03
+date	fr-CA	short	2026-01-01	2026-01-01
+date	fr-CA	short	2027-01-01	2027-01-01
+date	fr-CA	short	2024-02-29	2024-02-29
+date	fr-CA	short	2025-03-20	2025-03-20
+date	fr-CA	short	2025-03-21	2025-03-21
+date	fr-CA	short	1999-12-31	1999-12-31
+date	fr-CA	short	2031-07-14	2031-07-14
+date	fr-CA	short	2010-10-10	2010-10-10
+date	fr-CA	medium	2026-09-03	3 sept. 2026
+date	fr-CA	medium	2026-01-01	1 janv. 2026
+date	fr-CA	medium	2027-01-01	1 janv. 2027
+date	fr-CA	medium	2024-02-29	29 févr. 2024
+date	fr-CA	medium	2025-03-20	20 mars 2025
+date	fr-CA	medium	2025-03-21	21 mars 2025
+date	fr-CA	medium	1999-12-31	31 déc. 1999
+date	fr-CA	medium	2031-07-14	14 juill. 2031
+date	fr-CA	medium	2010-10-10	10 oct. 2010
+date	fr-CA	long	2026-09-03	3 septembre 2026
+date	fr-CA	long	2026-01-01	1 janvier 2026
+date	fr-CA	long	2027-01-01	1 janvier 2027
+date	fr-CA	long	2024-02-29	29 février 2024
+date	fr-CA	long	2025-03-20	20 mars 2025
+date	fr-CA	long	2025-03-21	21 mars 2025
+date	fr-CA	long	1999-12-31	31 décembre 1999
+date	fr-CA	long	2031-07-14	14 juillet 2031
+date	fr-CA	long	2010-10-10	10 octobre 2010
+date	fr-CA	full	2026-09-03	jeudi 3 septembre 2026
+date	fr-CA	full	2026-01-01	jeudi 1 janvier 2026
+date	fr-CA	full	2027-01-01	vendredi 1 janvier 2027
+date	fr-CA	full	2024-02-29	jeudi 29 février 2024
+date	fr-CA	full	2025-03-20	jeudi 20 mars 2025
+date	fr-CA	full	2025-03-21	vendredi 21 mars 2025
+date	fr-CA	full	1999-12-31	vendredi 31 décembre 1999
+date	fr-CA	full	2031-07-14	lundi 14 juillet 2031
+date	fr-CA	full	2010-10-10	dimanche 10 octobre 2010
+range	fr-CA	day	2026-09-03/2026-09-10	3 – 10 sept.
+range	fr-CA	day	2026-09-29/2026-11-02	29 sept. – 2 nov.
+range	fr-CA	day	2026-12-28/2027-01-05	28 déc. 2026 – 5 janv. 2027
+range	fr-CA	day	2025-03-15/2025-03-25	15 – 25 mars
+range	fr-CA	day	2010-10-10/2011-10-11	10 oct. 2010 – 11 oct. 2011
+range	fr-CA	short	2026-09-03/2026-09-10	2026-09-03 – 2026-09-10
+range	fr-CA	short	2026-09-29/2026-11-02	2026-09-29 – 2026-11-02
+range	fr-CA	short	2026-12-28/2027-01-05	2026-12-28 – 2027-01-05
+range	fr-CA	short	2025-03-15/2025-03-25	2025-03-15 – 2025-03-25
+range	fr-CA	short	2010-10-10/2011-10-11	2010-10-10 – 2011-10-11
+range	fr-CA	medium	2026-09-03/2026-09-10	3–10 sept. 2026
+range	fr-CA	medium	2026-09-29/2026-11-02	29 sept. – 2 nov. 2026
+range	fr-CA	medium	2026-12-28/2027-01-05	28 déc. 2026 – 5 janv. 2027
+range	fr-CA	medium	2025-03-15/2025-03-25	15–25 mars 2025
+range	fr-CA	medium	2010-10-10/2011-10-11	10 oct. 2010 – 11 oct. 2011
+range	fr-CA	long	2026-09-03/2026-09-10	3–10 septembre 2026
+range	fr-CA	long	2026-09-29/2026-11-02	29 septembre – 2 novembre 2026
+range	fr-CA	long	2026-12-28/2027-01-05	28 décembre 2026 – 5 janvier 2027
+range	fr-CA	long	2025-03-15/2025-03-25	15–25 mars 2025
+range	fr-CA	long	2010-10-10/2011-10-11	10 octobre 2010 – 11 octobre 2011
+month	fr-CA	short	2026-09	sept. 2026
+month	fr-CA	short	2026-01	janv. 2026
+month	fr-CA	short	2027-01	janv. 2027
+month	fr-CA	short	2024-02	févr. 2024
+month	fr-CA	short	2025-03	mars 2025
+month	fr-CA	short	2025-03	mars 2025
+month	fr-CA	short	1999-12	déc. 1999
+month	fr-CA	short	2031-07	juill. 2031
+month	fr-CA	short	2010-10	oct. 2010
+month	fr-CA	long	2026-09	septembre 2026
+month	fr-CA	long	2026-01	janvier 2026
+month	fr-CA	long	2027-01	janvier 2027
+month	fr-CA	long	2024-02	février 2024
+month	fr-CA	long	2025-03	mars 2025
+month	fr-CA	long	2025-03	mars 2025
+month	fr-CA	long	1999-12	décembre 1999
+month	fr-CA	long	2031-07	juillet 2031
+month	fr-CA	long	2010-10	octobre 2010
+monthNames	fr-CA			janv.|févr.|mars|avr.|mai|juin|juill.|août|sept.|oct.|nov.|déc.
+weekdays	fr-CA	narrow		D|L|M|M|J|V|S
+weekdays	fr-CA	short		dim.|lun.|mar.|mer.|jeu.|ven.|sam.
+weekdays	fr-CA	long		dimanche|lundi|mardi|mercredi|jeudi|vendredi|samedi
+weekStart	fr-CA			0
+clock	fr-CA			{hour} h {minute}|false||
+date	de	day	2026-09-03	3. Sept.
+date	de	day	2026-01-01	1. Jan.
+date	de	day	2027-01-01	1. Jan.
+date	de	day	2024-02-29	29. Feb.
+date	de	day	2025-03-20	20. März
+date	de	day	2025-03-21	21. März
+date	de	day	1999-12-31	31. Dez.
+date	de	day	2031-07-14	14. Juli
+date	de	day	2010-10-10	10. Okt.
+date	de	short	2026-09-03	03.09.26
+date	de	short	2026-01-01	01.01.26
+date	de	short	2027-01-01	01.01.27
+date	de	short	2024-02-29	29.02.24
+date	de	short	2025-03-20	20.03.25
+date	de	short	2025-03-21	21.03.25
+date	de	short	1999-12-31	31.12.99
+date	de	short	2031-07-14	14.07.31
+date	de	short	2010-10-10	10.10.10
+date	de	medium	2026-09-03	03.09.2026
+date	de	medium	2026-01-01	01.01.2026
+date	de	medium	2027-01-01	01.01.2027
+date	de	medium	2024-02-29	29.02.2024
+date	de	medium	2025-03-20	20.03.2025
+date	de	medium	2025-03-21	21.03.2025
+date	de	medium	1999-12-31	31.12.1999
+date	de	medium	2031-07-14	14.07.2031
+date	de	medium	2010-10-10	10.10.2010
+date	de	long	2026-09-03	3. September 2026
+date	de	long	2026-01-01	1. Januar 2026
+date	de	long	2027-01-01	1. Januar 2027
+date	de	long	2024-02-29	29. Februar 2024
+date	de	long	2025-03-20	20. März 2025
+date	de	long	2025-03-21	21. März 2025
+date	de	long	1999-12-31	31. Dezember 1999
+date	de	long	2031-07-14	14. Juli 2031
+date	de	long	2010-10-10	10. Oktober 2010
+date	de	full	2026-09-03	Donnerstag, 3. September 2026
+date	de	full	2026-01-01	Donnerstag, 1. Januar 2026
+date	de	full	2027-01-01	Freitag, 1. Januar 2027
+date	de	full	2024-02-29	Donnerstag, 29. Februar 2024
+date	de	full	2025-03-20	Donnerstag, 20. März 2025
+date	de	full	2025-03-21	Freitag, 21. März 2025
+date	de	full	1999-12-31	Freitag, 31. Dezember 1999
+date	de	full	2031-07-14	Montag, 14. Juli 2031
+date	de	full	2010-10-10	Sonntag, 10. Oktober 2010
+range	de	day	2026-09-03/2026-09-10	3.–10. Sept.
+range	de	day	2026-09-29/2026-11-02	29. Sept. – 2. Nov.
+range	de	day	2026-12-28/2027-01-05	28. Dez. 2026 – 5. Jan. 2027
+range	de	day	2025-03-15/2025-03-25	15.–25. März
+range	de	day	2010-10-10/2011-10-11	10. Okt. 2010 – 11. Okt. 2011
+range	de	short	2026-09-03/2026-09-10	03.–10.09.26
+range	de	short	2026-09-29/2026-11-02	29.09. – 02.11.26
+range	de	short	2026-12-28/2027-01-05	28.12.26 – 05.01.27
+range	de	short	2025-03-15/2025-03-25	15.–25.03.25
+range	de	short	2010-10-10/2011-10-11	10.10.10 – 11.10.11
+range	de	medium	2026-09-03/2026-09-10	03.–10.09.2026
+range	de	medium	2026-09-29/2026-11-02	29.09. – 02.11.2026
+range	de	medium	2026-12-28/2027-01-05	28.12.2026 – 05.01.2027
+range	de	medium	2025-03-15/2025-03-25	15.–25.03.2025
+range	de	medium	2010-10-10/2011-10-11	10.10.2010 – 11.10.2011
+range	de	long	2026-09-03/2026-09-10	3.–10. September 2026
+range	de	long	2026-09-29/2026-11-02	29. September – 2. November 2026
+range	de	long	2026-12-28/2027-01-05	28. Dezember 2026 – 5. Januar 2027
+range	de	long	2025-03-15/2025-03-25	15.–25. März 2025
+range	de	long	2010-10-10/2011-10-11	10. Oktober 2010 – 11. Oktober 2011
+month	de	short	2026-09	Sept. 2026
+month	de	short	2026-01	Jan. 2026
+month	de	short	2027-01	Jan. 2027
+month	de	short	2024-02	Feb. 2024
+month	de	short	2025-03	März 2025
+month	de	short	2025-03	März 2025
+month	de	short	1999-12	Dez. 1999
+month	de	short	2031-07	Juli 2031
+month	de	short	2010-10	Okt. 2010
+month	de	long	2026-09	September 2026
+month	de	long	2026-01	Januar 2026
+month	de	long	2027-01	Januar 2027
+month	de	long	2024-02	Februar 2024
+month	de	long	2025-03	März 2025
+month	de	long	2025-03	März 2025
+month	de	long	1999-12	Dezember 1999
+month	de	long	2031-07	Juli 2031
+month	de	long	2010-10	Oktober 2010
+monthNames	de			Jan|Feb|Mär|Apr|Mai|Jun|Jul|Aug|Sep|Okt|Nov|Dez
+weekdays	de	narrow		S|M|D|M|D|F|S
+weekdays	de	short		So|Mo|Di|Mi|Do|Fr|Sa
+weekdays	de	long		Sonntag|Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag
+weekStart	de			1
+clock	de			{hour}:{minute}|false||
+date	es	day	2026-09-03	3 sept
+date	es	day	2026-01-01	1 ene
+date	es	day	2027-01-01	1 ene
+date	es	day	2024-02-29	29 feb
+date	es	day	2025-03-20	20 mar
+date	es	day	2025-03-21	21 mar
+date	es	day	1999-12-31	31 dic
+date	es	day	2031-07-14	14 jul
+date	es	day	2010-10-10	10 oct
+date	es	short	2026-09-03	3/9/26
+date	es	short	2026-01-01	1/1/26
+date	es	short	2027-01-01	1/1/27
+date	es	short	2024-02-29	29/2/24
+date	es	short	2025-03-20	20/3/25
+date	es	short	2025-03-21	21/3/25
+date	es	short	1999-12-31	31/12/99
+date	es	short	2031-07-14	14/7/31
+date	es	short	2010-10-10	10/10/10
+date	es	medium	2026-09-03	3 sept 2026
+date	es	medium	2026-01-01	1 ene 2026
+date	es	medium	2027-01-01	1 ene 2027
+date	es	medium	2024-02-29	29 feb 2024
+date	es	medium	2025-03-20	20 mar 2025
+date	es	medium	2025-03-21	21 mar 2025
+date	es	medium	1999-12-31	31 dic 1999
+date	es	medium	2031-07-14	14 jul 2031
+date	es	medium	2010-10-10	10 oct 2010
+date	es	long	2026-09-03	3 de septiembre de 2026
+date	es	long	2026-01-01	1 de enero de 2026
+date	es	long	2027-01-01	1 de enero de 2027
+date	es	long	2024-02-29	29 de febrero de 2024
+date	es	long	2025-03-20	20 de marzo de 2025
+date	es	long	2025-03-21	21 de marzo de 2025
+date	es	long	1999-12-31	31 de diciembre de 1999
+date	es	long	2031-07-14	14 de julio de 2031
+date	es	long	2010-10-10	10 de octubre de 2010
+date	es	full	2026-09-03	jueves, 3 de septiembre de 2026
+date	es	full	2026-01-01	jueves, 1 de enero de 2026
+date	es	full	2027-01-01	viernes, 1 de enero de 2027
+date	es	full	2024-02-29	jueves, 29 de febrero de 2024
+date	es	full	2025-03-20	jueves, 20 de marzo de 2025
+date	es	full	2025-03-21	viernes, 21 de marzo de 2025
+date	es	full	1999-12-31	viernes, 31 de diciembre de 1999
+date	es	full	2031-07-14	lunes, 14 de julio de 2031
+date	es	full	2010-10-10	domingo, 10 de octubre de 2010
+range	es	day	2026-09-03/2026-09-10	3–10 sept
+range	es	day	2026-09-29/2026-11-02	29 sept – 2 nov
+range	es	day	2026-12-28/2027-01-05	28 dic 2026 – 5 ene 2027
+range	es	day	2025-03-15/2025-03-25	15–25 mar
+range	es	day	2010-10-10/2011-10-11	10 oct 2010 – 11 oct 2011
+range	es	short	2026-09-03/2026-09-10	3/9/26 – 10/9/26
+range	es	short	2026-09-29/2026-11-02	29/9/26 – 2/11/26
+range	es	short	2026-12-28/2027-01-05	28/12/26 – 5/1/27
+range	es	short	2025-03-15/2025-03-25	15/3/25 – 25/3/25
+range	es	short	2010-10-10/2011-10-11	10/10/10 – 11/10/11
+range	es	medium	2026-09-03/2026-09-10	3–10 sept 2026
+range	es	medium	2026-09-29/2026-11-02	29 sept – 2 nov 2026
+range	es	medium	2026-12-28/2027-01-05	28 dic 2026 – 5 ene 2027
+range	es	medium	2025-03-15/2025-03-25	15–25 mar 2025
+range	es	medium	2010-10-10/2011-10-11	10 oct 2010 – 11 oct 2011
+range	es	long	2026-09-03/2026-09-10	3–10 de septiembre de 2026
+range	es	long	2026-09-29/2026-11-02	29 de septiembre – 2 de noviembre de 2026
+range	es	long	2026-12-28/2027-01-05	28 de diciembre de 2026 – 5 de enero de 2027
+range	es	long	2025-03-15/2025-03-25	15–25 de marzo de 2025
+range	es	long	2010-10-10/2011-10-11	10 de octubre de 2010 – 11 de octubre de 2011
+month	es	short	2026-09	sept 2026
+month	es	short	2026-01	ene 2026
+month	es	short	2027-01	ene 2027
+month	es	short	2024-02	feb 2024
+month	es	short	2025-03	mar 2025
+month	es	short	2025-03	mar 2025
+month	es	short	1999-12	dic 1999
+month	es	short	2031-07	jul 2031
+month	es	short	2010-10	oct 2010
+month	es	long	2026-09	septiembre de 2026
+month	es	long	2026-01	enero de 2026
+month	es	long	2027-01	enero de 2027
+month	es	long	2024-02	febrero de 2024
+month	es	long	2025-03	marzo de 2025
+month	es	long	2025-03	marzo de 2025
+month	es	long	1999-12	diciembre de 1999
+month	es	long	2031-07	julio de 2031
+month	es	long	2010-10	octubre de 2010
+monthNames	es			ene|feb|mar|abr|may|jun|jul|ago|sept|oct|nov|dic
+weekdays	es	narrow		D|L|M|X|J|V|S
+weekdays	es	short		dom|lun|mar|mié|jue|vie|sáb
+weekdays	es	long		domingo|lunes|martes|miércoles|jueves|viernes|sábado
+weekStart	es			1
+clock	es			{hour}:{minute}|false||
+date	es-MX	day	2026-09-03	3 sep
+date	es-MX	day	2026-01-01	1 ene
+date	es-MX	day	2027-01-01	1 ene
+date	es-MX	day	2024-02-29	29 feb
+date	es-MX	day	2025-03-20	20 mar
+date	es-MX	day	2025-03-21	21 mar
+date	es-MX	day	1999-12-31	31 dic
+date	es-MX	day	2031-07-14	14 jul
+date	es-MX	day	2010-10-10	10 oct
+date	es-MX	short	2026-09-03	03/09/26
+date	es-MX	short	2026-01-01	01/01/26
+date	es-MX	short	2027-01-01	01/01/27
+date	es-MX	short	2024-02-29	29/02/24
+date	es-MX	short	2025-03-20	20/03/25
+date	es-MX	short	2025-03-21	21/03/25
+date	es-MX	short	1999-12-31	31/12/99
+date	es-MX	short	2031-07-14	14/07/31
+date	es-MX	short	2010-10-10	10/10/10
+date	es-MX	medium	2026-09-03	3 sep 2026
+date	es-MX	medium	2026-01-01	1 ene 2026
+date	es-MX	medium	2027-01-01	1 ene 2027
+date	es-MX	medium	2024-02-29	29 feb 2024
+date	es-MX	medium	2025-03-20	20 mar 2025
+date	es-MX	medium	2025-03-21	21 mar 2025
+date	es-MX	medium	1999-12-31	31 dic 1999
+date	es-MX	medium	2031-07-14	14 jul 2031
+date	es-MX	medium	2010-10-10	10 oct 2010
+date	es-MX	long	2026-09-03	3 de septiembre de 2026
+date	es-MX	long	2026-01-01	1 de enero de 2026
+date	es-MX	long	2027-01-01	1 de enero de 2027
+date	es-MX	long	2024-02-29	29 de febrero de 2024
+date	es-MX	long	2025-03-20	20 de marzo de 2025
+date	es-MX	long	2025-03-21	21 de marzo de 2025
+date	es-MX	long	1999-12-31	31 de diciembre de 1999
+date	es-MX	long	2031-07-14	14 de julio de 2031
+date	es-MX	long	2010-10-10	10 de octubre de 2010
+date	es-MX	full	2026-09-03	jueves, 3 de septiembre de 2026
+date	es-MX	full	2026-01-01	jueves, 1 de enero de 2026
+date	es-MX	full	2027-01-01	viernes, 1 de enero de 2027
+date	es-MX	full	2024-02-29	jueves, 29 de febrero de 2024
+date	es-MX	full	2025-03-20	jueves, 20 de marzo de 2025
+date	es-MX	full	2025-03-21	viernes, 21 de marzo de 2025
+date	es-MX	full	1999-12-31	viernes, 31 de diciembre de 1999
+date	es-MX	full	2031-07-14	lunes, 14 de julio de 2031
+date	es-MX	full	2010-10-10	domingo, 10 de octubre de 2010
+range	es-MX	day	2026-09-03/2026-09-10	3–10 de sep
+range	es-MX	day	2026-09-29/2026-11-02	29 de sep – 2 de nov
+range	es-MX	day	2026-12-28/2027-01-05	28 de dic de 2026 – 5 de ene de 2027
+range	es-MX	day	2025-03-15/2025-03-25	15–25 de mar
+range	es-MX	day	2010-10-10/2011-10-11	10 de oct de 2010 – 11 de oct de 2011
+range	es-MX	short	2026-09-03/2026-09-10	3/9/26 – 10/9/26
+range	es-MX	short	2026-09-29/2026-11-02	29/9/26 – 2/11/26
+range	es-MX	short	2026-12-28/2027-01-05	28/12/26 – 5/1/27
+range	es-MX	short	2025-03-15/2025-03-25	15/3/25 – 25/3/25
+range	es-MX	short	2010-10-10/2011-10-11	10/10/10 – 11/10/11
+range	es-MX	medium	2026-09-03/2026-09-10	3–10 de sep de 2026
+range	es-MX	medium	2026-09-29/2026-11-02	29 de sep – 2 de nov 2026
+range	es-MX	medium	2026-12-28/2027-01-05	28 de dic de 2026 – 5 de ene de 2027
+range	es-MX	medium	2025-03-15/2025-03-25	15–25 de mar de 2025
+range	es-MX	medium	2010-10-10/2011-10-11	10 de oct de 2010 – 11 de oct de 2011
+range	es-MX	long	2026-09-03/2026-09-10	3–10 de septiembre de 2026
+range	es-MX	long	2026-09-29/2026-11-02	29 de septiembre – 2 de noviembre de 2026
+range	es-MX	long	2026-12-28/2027-01-05	28 de diciembre de 2026 – 5 de enero de 2027
+range	es-MX	long	2025-03-15/2025-03-25	15–25 de marzo de 2025
+range	es-MX	long	2010-10-10/2011-10-11	10 de octubre de 2010 – 11 de octubre de 2011
+month	es-MX	short	2026-09	sep 2026
+month	es-MX	short	2026-01	ene 2026
+month	es-MX	short	2027-01	ene 2027
+month	es-MX	short	2024-02	feb 2024
+month	es-MX	short	2025-03	mar 2025
+month	es-MX	short	2025-03	mar 2025
+month	es-MX	short	1999-12	dic 1999
+month	es-MX	short	2031-07	jul 2031
+month	es-MX	short	2010-10	oct 2010
+month	es-MX	long	2026-09	septiembre de 2026
+month	es-MX	long	2026-01	enero de 2026
+month	es-MX	long	2027-01	enero de 2027
+month	es-MX	long	2024-02	febrero de 2024
+month	es-MX	long	2025-03	marzo de 2025
+month	es-MX	long	2025-03	marzo de 2025
+month	es-MX	long	1999-12	diciembre de 1999
+month	es-MX	long	2031-07	julio de 2031
+month	es-MX	long	2010-10	octubre de 2010
+monthNames	es-MX			ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic
+weekdays	es-MX	narrow		D|L|M|M|J|V|S
+weekdays	es-MX	short		dom|lun|mar|mié|jue|vie|sáb
+weekdays	es-MX	long		domingo|lunes|martes|miércoles|jueves|viernes|sábado
+weekStart	es-MX			0
+clock	es-MX			{hour}:{minute} {dayPeriod}|true|a.m.|p.m.
+date	pt	day	2026-09-03	3 de set.
+date	pt	day	2026-01-01	1 de jan.
+date	pt	day	2027-01-01	1 de jan.
+date	pt	day	2024-02-29	29 de fev.
+date	pt	day	2025-03-20	20 de mar.
+date	pt	day	2025-03-21	21 de mar.
+date	pt	day	1999-12-31	31 de dez.
+date	pt	day	2031-07-14	14 de jul.
+date	pt	day	2010-10-10	10 de out.
+date	pt	short	2026-09-03	03/09/2026
+date	pt	short	2026-01-01	01/01/2026
+date	pt	short	2027-01-01	01/01/2027
+date	pt	short	2024-02-29	29/02/2024
+date	pt	short	2025-03-20	20/03/2025
+date	pt	short	2025-03-21	21/03/2025
+date	pt	short	1999-12-31	31/12/1999
+date	pt	short	2031-07-14	14/07/2031
+date	pt	short	2010-10-10	10/10/2010
+date	pt	medium	2026-09-03	3 de set. de 2026
+date	pt	medium	2026-01-01	1 de jan. de 2026
+date	pt	medium	2027-01-01	1 de jan. de 2027
+date	pt	medium	2024-02-29	29 de fev. de 2024
+date	pt	medium	2025-03-20	20 de mar. de 2025
+date	pt	medium	2025-03-21	21 de mar. de 2025
+date	pt	medium	1999-12-31	31 de dez. de 1999
+date	pt	medium	2031-07-14	14 de jul. de 2031
+date	pt	medium	2010-10-10	10 de out. de 2010
+date	pt	long	2026-09-03	3 de setembro de 2026
+date	pt	long	2026-01-01	1 de janeiro de 2026
+date	pt	long	2027-01-01	1 de janeiro de 2027
+date	pt	long	2024-02-29	29 de fevereiro de 2024
+date	pt	long	2025-03-20	20 de março de 2025
+date	pt	long	2025-03-21	21 de março de 2025
+date	pt	long	1999-12-31	31 de dezembro de 1999
+date	pt	long	2031-07-14	14 de julho de 2031
+date	pt	long	2010-10-10	10 de outubro de 2010
+date	pt	full	2026-09-03	quinta-feira, 3 de setembro de 2026
+date	pt	full	2026-01-01	quinta-feira, 1 de janeiro de 2026
+date	pt	full	2027-01-01	sexta-feira, 1 de janeiro de 2027
+date	pt	full	2024-02-29	quinta-feira, 29 de fevereiro de 2024
+date	pt	full	2025-03-20	quinta-feira, 20 de março de 2025
+date	pt	full	2025-03-21	sexta-feira, 21 de março de 2025
+date	pt	full	1999-12-31	sexta-feira, 31 de dezembro de 1999
+date	pt	full	2031-07-14	segunda-feira, 14 de julho de 2031
+date	pt	full	2010-10-10	domingo, 10 de outubro de 2010
+range	pt	day	2026-09-03/2026-09-10	3 – 10 de set.
+range	pt	day	2026-09-29/2026-11-02	29 de set. – 2 de nov.
+range	pt	day	2026-12-28/2027-01-05	28 de dez. de 2026 – 5 de jan. de 2027
+range	pt	day	2025-03-15/2025-03-25	15 – 25 de mar.
+range	pt	day	2010-10-10/2011-10-11	10 de out. de 2010 – 11 de out. de 2011
+range	pt	short	2026-09-03/2026-09-10	03/09/2026 – 10/09/2026
+range	pt	short	2026-09-29/2026-11-02	29/09/2026 – 02/11/2026
+range	pt	short	2026-12-28/2027-01-05	28/12/2026 – 05/01/2027
+range	pt	short	2025-03-15/2025-03-25	15/03/2025 – 25/03/2025
+range	pt	short	2010-10-10/2011-10-11	10/10/2010 – 11/10/2011
+range	pt	medium	2026-09-03/2026-09-10	3 – 10 de set. de 2026
+range	pt	medium	2026-09-29/2026-11-02	29 de set. – 2 de nov. de 2026
+range	pt	medium	2026-12-28/2027-01-05	28 de dez. de 2026 – 5 de jan. de 2027
+range	pt	medium	2025-03-15/2025-03-25	15 – 25 de mar. de 2025
+range	pt	medium	2010-10-10/2011-10-11	10 de out. de 2010 – 11 de out. de 2011
+range	pt	long	2026-09-03/2026-09-10	3 – 10 de setembro de 2026
+range	pt	long	2026-09-29/2026-11-02	29 de setembro – 2 de novembro de 2026
+range	pt	long	2026-12-28/2027-01-05	28 de dezembro de 2026 – 5 de janeiro de 2027
+range	pt	long	2025-03-15/2025-03-25	15 – 25 de março de 2025
+range	pt	long	2010-10-10/2011-10-11	10 de outubro de 2010 – 11 de outubro de 2011
+month	pt	short	2026-09	set. de 2026
+month	pt	short	2026-01	jan. de 2026
+month	pt	short	2027-01	jan. de 2027
+month	pt	short	2024-02	fev. de 2024
+month	pt	short	2025-03	mar. de 2025
+month	pt	short	2025-03	mar. de 2025
+month	pt	short	1999-12	dez. de 1999
+month	pt	short	2031-07	jul. de 2031
+month	pt	short	2010-10	out. de 2010
+month	pt	long	2026-09	setembro de 2026
+month	pt	long	2026-01	janeiro de 2026
+month	pt	long	2027-01	janeiro de 2027
+month	pt	long	2024-02	fevereiro de 2024
+month	pt	long	2025-03	março de 2025
+month	pt	long	2025-03	março de 2025
+month	pt	long	1999-12	dezembro de 1999
+month	pt	long	2031-07	julho de 2031
+month	pt	long	2010-10	outubro de 2010
+monthNames	pt			jan.|fev.|mar.|abr.|mai.|jun.|jul.|ago.|set.|out.|nov.|dez.
+weekdays	pt	narrow		D|S|T|Q|Q|S|S
+weekdays	pt	short		dom.|seg.|ter.|qua.|qui.|sex.|sáb.
+weekdays	pt	long		domingo|segunda-feira|terça-feira|quarta-feira|quinta-feira|sexta-feira|sábado
+weekStart	pt			0
+clock	pt			{hour}:{minute}|false||
+date	pt-PT	day	2026-09-03	3/09
+date	pt-PT	day	2026-01-01	1/01
+date	pt-PT	day	2027-01-01	1/01
+date	pt-PT	day	2024-02-29	29/02
+date	pt-PT	day	2025-03-20	20/03
+date	pt-PT	day	2025-03-21	21/03
+date	pt-PT	day	1999-12-31	31/12
+date	pt-PT	day	2031-07-14	14/07
+date	pt-PT	day	2010-10-10	10/10
+date	pt-PT	short	2026-09-03	03/09/26
+date	pt-PT	short	2026-01-01	01/01/26
+date	pt-PT	short	2027-01-01	01/01/27
+date	pt-PT	short	2024-02-29	29/02/24
+date	pt-PT	short	2025-03-20	20/03/25
+date	pt-PT	short	2025-03-21	21/03/25
+date	pt-PT	short	1999-12-31	31/12/99
+date	pt-PT	short	2031-07-14	14/07/31
+date	pt-PT	short	2010-10-10	10/10/10
+date	pt-PT	medium	2026-09-03	03/09/2026
+date	pt-PT	medium	2026-01-01	01/01/2026
+date	pt-PT	medium	2027-01-01	01/01/2027
+date	pt-PT	medium	2024-02-29	29/02/2024
+date	pt-PT	medium	2025-03-20	20/03/2025
+date	pt-PT	medium	2025-03-21	21/03/2025
+date	pt-PT	medium	1999-12-31	31/12/1999
+date	pt-PT	medium	2031-07-14	14/07/2031
+date	pt-PT	medium	2010-10-10	10/10/2010
+date	pt-PT	long	2026-09-03	3 de setembro de 2026
+date	pt-PT	long	2026-01-01	1 de janeiro de 2026
+date	pt-PT	long	2027-01-01	1 de janeiro de 2027
+date	pt-PT	long	2024-02-29	29 de fevereiro de 2024
+date	pt-PT	long	2025-03-20	20 de março de 2025
+date	pt-PT	long	2025-03-21	21 de março de 2025
+date	pt-PT	long	1999-12-31	31 de dezembro de 1999
+date	pt-PT	long	2031-07-14	14 de julho de 2031
+date	pt-PT	long	2010-10-10	10 de outubro de 2010
+date	pt-PT	full	2026-09-03	quinta-feira, 3 de setembro de 2026
+date	pt-PT	full	2026-01-01	quinta-feira, 1 de janeiro de 2026
+date	pt-PT	full	2027-01-01	sexta-feira, 1 de janeiro de 2027
+date	pt-PT	full	2024-02-29	quinta-feira, 29 de fevereiro de 2024
+date	pt-PT	full	2025-03-20	quinta-feira, 20 de março de 2025
+date	pt-PT	full	2025-03-21	sexta-feira, 21 de março de 2025
+date	pt-PT	full	1999-12-31	sexta-feira, 31 de dezembro de 1999
+date	pt-PT	full	2031-07-14	segunda-feira, 14 de julho de 2031
+date	pt-PT	full	2010-10-10	domingo, 10 de outubro de 2010
+range	pt-PT	day	2026-09-03/2026-09-10	03/09 – 10/09
+range	pt-PT	day	2026-09-29/2026-11-02	29/09 – 02/11
+range	pt-PT	day	2026-12-28/2027-01-05	28/12/2026 – 05/01/2027
+range	pt-PT	day	2025-03-15/2025-03-25	15/03 – 25/03
+range	pt-PT	day	2010-10-10/2011-10-11	10/10/2010 – 11/10/2011
+range	pt-PT	short	2026-09-03/2026-09-10	03/09/26 – 10/09/26
+range	pt-PT	short	2026-09-29/2026-11-02	29/09/26 – 02/11/26
+range	pt-PT	short	2026-12-28/2027-01-05	28/12/26 – 05/01/27
+range	pt-PT	short	2025-03-15/2025-03-25	15/03/25 – 25/03/25
+range	pt-PT	short	2010-10-10/2011-10-11	10/10/10 – 11/10/11
+range	pt-PT	medium	2026-09-03/2026-09-10	03/09/2026 – 10/09/2026
+range	pt-PT	medium	2026-09-29/2026-11-02	29/09/2026 – 02/11/2026
+range	pt-PT	medium	2026-12-28/2027-01-05	28/12/2026 – 05/01/2027
+range	pt-PT	medium	2025-03-15/2025-03-25	15/03/2025 – 25/03/2025
+range	pt-PT	medium	2010-10-10/2011-10-11	10/10/2010 – 11/10/2011
+range	pt-PT	long	2026-09-03/2026-09-10	3–10 de setembro de 2026
+range	pt-PT	long	2026-09-29/2026-11-02	29 de setembro – 2 de novembro de 2026
+range	pt-PT	long	2026-12-28/2027-01-05	28 de dezembro de 2026 – 5 de janeiro de 2027
+range	pt-PT	long	2025-03-15/2025-03-25	15–25 de março de 2025
+range	pt-PT	long	2010-10-10/2011-10-11	10 de outubro de 2010 – 11 de outubro de 2011
+month	pt-PT	short	2026-09	09/2026
+month	pt-PT	short	2026-01	01/2026
+month	pt-PT	short	2027-01	01/2027
+month	pt-PT	short	2024-02	02/2024
+month	pt-PT	short	2025-03	03/2025
+month	pt-PT	short	2025-03	03/2025
+month	pt-PT	short	1999-12	12/1999
+month	pt-PT	short	2031-07	07/2031
+month	pt-PT	short	2010-10	10/2010
+month	pt-PT	long	2026-09	setembro de 2026
+month	pt-PT	long	2026-01	janeiro de 2026
+month	pt-PT	long	2027-01	janeiro de 2027
+month	pt-PT	long	2024-02	fevereiro de 2024
+month	pt-PT	long	2025-03	março de 2025
+month	pt-PT	long	2025-03	março de 2025
+month	pt-PT	long	1999-12	dezembro de 1999
+month	pt-PT	long	2031-07	julho de 2031
+month	pt-PT	long	2010-10	outubro de 2010
+monthNames	pt-PT			jan.|fev.|mar.|abr.|mai.|jun.|jul.|ago.|set.|out.|nov.|dez.
+weekdays	pt-PT	narrow		D|S|T|Q|Q|S|S
+weekdays	pt-PT	short		domingo|segunda|terça|quarta|quinta|sexta|sábado
+weekdays	pt-PT	long		domingo|segunda-feira|terça-feira|quarta-feira|quinta-feira|sexta-feira|sábado
+weekStart	pt-PT			0
+clock	pt-PT			{hour}:{minute}|false||
+date	it	day	2026-09-03	3 set
+date	it	day	2026-01-01	1 gen
+date	it	day	2027-01-01	1 gen
+date	it	day	2024-02-29	29 feb
+date	it	day	2025-03-20	20 mar
+date	it	day	2025-03-21	21 mar
+date	it	day	1999-12-31	31 dic
+date	it	day	2031-07-14	14 lug
+date	it	day	2010-10-10	10 ott
+date	it	short	2026-09-03	03/09/26
+date	it	short	2026-01-01	01/01/26
+date	it	short	2027-01-01	01/01/27
+date	it	short	2024-02-29	29/02/24
+date	it	short	2025-03-20	20/03/25
+date	it	short	2025-03-21	21/03/25
+date	it	short	1999-12-31	31/12/99
+date	it	short	2031-07-14	14/07/31
+date	it	short	2010-10-10	10/10/10
+date	it	medium	2026-09-03	3 set 2026
+date	it	medium	2026-01-01	1 gen 2026
+date	it	medium	2027-01-01	1 gen 2027
+date	it	medium	2024-02-29	29 feb 2024
+date	it	medium	2025-03-20	20 mar 2025
+date	it	medium	2025-03-21	21 mar 2025
+date	it	medium	1999-12-31	31 dic 1999
+date	it	medium	2031-07-14	14 lug 2031
+date	it	medium	2010-10-10	10 ott 2010
+date	it	long	2026-09-03	3 settembre 2026
+date	it	long	2026-01-01	1 gennaio 2026
+date	it	long	2027-01-01	1 gennaio 2027
+date	it	long	2024-02-29	29 febbraio 2024
+date	it	long	2025-03-20	20 marzo 2025
+date	it	long	2025-03-21	21 marzo 2025
+date	it	long	1999-12-31	31 dicembre 1999
+date	it	long	2031-07-14	14 luglio 2031
+date	it	long	2010-10-10	10 ottobre 2010
+date	it	full	2026-09-03	giovedì 3 settembre 2026
+date	it	full	2026-01-01	giovedì 1 gennaio 2026
+date	it	full	2027-01-01	venerdì 1 gennaio 2027
+date	it	full	2024-02-29	giovedì 29 febbraio 2024
+date	it	full	2025-03-20	giovedì 20 marzo 2025
+date	it	full	2025-03-21	venerdì 21 marzo 2025
+date	it	full	1999-12-31	venerdì 31 dicembre 1999
+date	it	full	2031-07-14	lunedì 14 luglio 2031
+date	it	full	2010-10-10	domenica 10 ottobre 2010
+range	it	day	2026-09-03/2026-09-10	03–10 set
+range	it	day	2026-09-29/2026-11-02	29 set – 02 nov
+range	it	day	2026-12-28/2027-01-05	28 dic 2026 – 05 gen 2027
+range	it	day	2025-03-15/2025-03-25	15–25 mar
+range	it	day	2010-10-10/2011-10-11	10 ott 2010 – 11 ott 2011
+range	it	short	2026-09-03/2026-09-10	03/09/26 – 10/09/26
+range	it	short	2026-09-29/2026-11-02	29/09/26 – 02/11/26
+range	it	short	2026-12-28/2027-01-05	28/12/26 – 05/01/27
+range	it	short	2025-03-15/2025-03-25	15/03/25 – 25/03/25
+range	it	short	2010-10-10/2011-10-11	10/10/10 – 11/10/11
+range	it	medium	2026-09-03/2026-09-10	03–10 set 2026
+range	it	medium	2026-09-29/2026-11-02	29 set – 02 nov 2026
+range	it	medium	2026-12-28/2027-01-05	28 dic 2026 – 05 gen 2027
+range	it	medium	2025-03-15/2025-03-25	15–25 mar 2025
+range	it	medium	2010-10-10/2011-10-11	10 ott 2010 – 11 ott 2011
+range	it	long	2026-09-03/2026-09-10	03–10 settembre 2026
+range	it	long	2026-09-29/2026-11-02	29 settembre – 02 novembre 2026
+range	it	long	2026-12-28/2027-01-05	28 dicembre 2026 – 05 gennaio 2027
+range	it	long	2025-03-15/2025-03-25	15–25 marzo 2025
+range	it	long	2010-10-10/2011-10-11	10 ottobre 2010 – 11 ottobre 2011
+month	it	short	2026-09	set 2026
+month	it	short	2026-01	gen 2026
+month	it	short	2027-01	gen 2027
+month	it	short	2024-02	feb 2024
+month	it	short	2025-03	mar 2025
+month	it	short	2025-03	mar 2025
+month	it	short	1999-12	dic 1999
+month	it	short	2031-07	lug 2031
+month	it	short	2010-10	ott 2010
+month	it	long	2026-09	settembre 2026
+month	it	long	2026-01	gennaio 2026
+month	it	long	2027-01	gennaio 2027
+month	it	long	2024-02	febbraio 2024
+month	it	long	2025-03	marzo 2025
+month	it	long	2025-03	marzo 2025
+month	it	long	1999-12	dicembre 1999
+month	it	long	2031-07	luglio 2031
+month	it	long	2010-10	ottobre 2010
+monthNames	it			gen|feb|mar|apr|mag|giu|lug|ago|set|ott|nov|dic
+weekdays	it	narrow		D|L|M|M|G|V|S
+weekdays	it	short		dom|lun|mar|mer|gio|ven|sab
+weekdays	it	long		domenica|lunedì|martedì|mercoledì|giovedì|venerdì|sabato
+weekStart	it			1
+clock	it			{hour}:{minute}|false||
+date	ru	day	2026-09-03	3 сент.
+date	ru	day	2026-01-01	1 янв.
+date	ru	day	2027-01-01	1 янв.
+date	ru	day	2024-02-29	29 февр.
+date	ru	day	2025-03-20	20 мар.
+date	ru	day	2025-03-21	21 мар.
+date	ru	day	1999-12-31	31 дек.
+date	ru	day	2031-07-14	14 июл.
+date	ru	day	2010-10-10	10 окт.
+date	ru	short	2026-09-03	03.09.2026
+date	ru	short	2026-01-01	01.01.2026
+date	ru	short	2027-01-01	01.01.2027
+date	ru	short	2024-02-29	29.02.2024
+date	ru	short	2025-03-20	20.03.2025
+date	ru	short	2025-03-21	21.03.2025
+date	ru	short	1999-12-31	31.12.1999
+date	ru	short	2031-07-14	14.07.2031
+date	ru	short	2010-10-10	10.10.2010
+date	ru	medium	2026-09-03	3 сент. 2026 г.
+date	ru	medium	2026-01-01	1 янв. 2026 г.
+date	ru	medium	2027-01-01	1 янв. 2027 г.
+date	ru	medium	2024-02-29	29 февр. 2024 г.
+date	ru	medium	2025-03-20	20 мар. 2025 г.
+date	ru	medium	2025-03-21	21 мар. 2025 г.
+date	ru	medium	1999-12-31	31 дек. 1999 г.
+date	ru	medium	2031-07-14	14 июл. 2031 г.
+date	ru	medium	2010-10-10	10 окт. 2010 г.
+date	ru	long	2026-09-03	3 сентября 2026 г.
+date	ru	long	2026-01-01	1 января 2026 г.
+date	ru	long	2027-01-01	1 января 2027 г.
+date	ru	long	2024-02-29	29 февраля 2024 г.
+date	ru	long	2025-03-20	20 марта 2025 г.
+date	ru	long	2025-03-21	21 марта 2025 г.
+date	ru	long	1999-12-31	31 декабря 1999 г.
+date	ru	long	2031-07-14	14 июля 2031 г.
+date	ru	long	2010-10-10	10 октября 2010 г.
+date	ru	full	2026-09-03	четверг, 3 сентября 2026 г.
+date	ru	full	2026-01-01	четверг, 1 января 2026 г.
+date	ru	full	2027-01-01	пятница, 1 января 2027 г.
+date	ru	full	2024-02-29	четверг, 29 февраля 2024 г.
+date	ru	full	2025-03-20	четверг, 20 марта 2025 г.
+date	ru	full	2025-03-21	пятница, 21 марта 2025 г.
+date	ru	full	1999-12-31	пятница, 31 декабря 1999 г.
+date	ru	full	2031-07-14	понедельник, 14 июля 2031 г.
+date	ru	full	2010-10-10	воскресенье, 10 октября 2010 г.
+range	ru	day	2026-09-03/2026-09-10	3–10 сент.
+range	ru	day	2026-09-29/2026-11-02	29 сент. – 2 нояб.
+range	ru	day	2026-12-28/2027-01-05	28 дек. 2026 г. – 5 янв. 2027 г.
+range	ru	day	2025-03-15/2025-03-25	15–25 мар.
+range	ru	day	2010-10-10/2011-10-11	10 окт. 2010 г. – 11 окт. 2011 г.
+range	ru	short	2026-09-03/2026-09-10	03.09.2026–10.09.2026
+range	ru	short	2026-09-29/2026-11-02	29.09.2026–02.11.2026
+range	ru	short	2026-12-28/2027-01-05	28.12.2026–05.01.2027
+range	ru	short	2025-03-15/2025-03-25	15.03.2025–25.03.2025
+range	ru	short	2010-10-10/2011-10-11	10.10.2010–11.10.2011
+range	ru	medium	2026-09-03/2026-09-10	3–10 сент. 2026 г.
+range	ru	medium	2026-09-29/2026-11-02	29 сент. – 2 нояб. 2026 г.
+range	ru	medium	2026-12-28/2027-01-05	28 дек. 2026 г. – 5 янв. 2027 г.
+range	ru	medium	2025-03-15/2025-03-25	15–25 мар. 2025 г.
+range	ru	medium	2010-10-10/2011-10-11	10 окт. 2010 г. – 11 окт. 2011 г.
+range	ru	long	2026-09-03/2026-09-10	3–10 сентября 2026 г.
+range	ru	long	2026-09-29/2026-11-02	29 сентября – 2 ноября 2026 г.
+range	ru	long	2026-12-28/2027-01-05	28 декабря 2026 г. – 5 января 2027 г.
+range	ru	long	2025-03-15/2025-03-25	15–25 марта 2025 г.
+range	ru	long	2010-10-10/2011-10-11	10 октября 2010 г. – 11 октября 2011 г.
+month	ru	short	2026-09	сент. 2026 г.
+month	ru	short	2026-01	янв. 2026 г.
+month	ru	short	2027-01	янв. 2027 г.
+month	ru	short	2024-02	февр. 2024 г.
+month	ru	short	2025-03	март 2025 г.
+month	ru	short	2025-03	март 2025 г.
+month	ru	short	1999-12	дек. 1999 г.
+month	ru	short	2031-07	июль 2031 г.
+month	ru	short	2010-10	окт. 2010 г.
+month	ru	long	2026-09	сентябрь 2026 г.
+month	ru	long	2026-01	январь 2026 г.
+month	ru	long	2027-01	январь 2027 г.
+month	ru	long	2024-02	февраль 2024 г.
+month	ru	long	2025-03	март 2025 г.
+month	ru	long	2025-03	март 2025 г.
+month	ru	long	1999-12	декабрь 1999 г.
+month	ru	long	2031-07	июль 2031 г.
+month	ru	long	2010-10	октябрь 2010 г.
+monthNames	ru			янв.|февр.|март|апр.|май|июнь|июль|авг.|сент.|окт.|нояб.|дек.
+weekdays	ru	narrow		В|П|В|С|Ч|П|С
+weekdays	ru	short		вс|пн|вт|ср|чт|пт|сб
+weekdays	ru	long		воскресенье|понедельник|вторник|среда|четверг|пятница|суббота
+weekStart	ru			1
+clock	ru			{hour}:{minute}|false||
+date	uk	day	2026-09-03	3 вер.
+date	uk	day	2026-01-01	1 січ.
+date	uk	day	2027-01-01	1 січ.
+date	uk	day	2024-02-29	29 лют.
+date	uk	day	2025-03-20	20 бер.
+date	uk	day	2025-03-21	21 бер.
+date	uk	day	1999-12-31	31 груд.
+date	uk	day	2031-07-14	14 лип.
+date	uk	day	2010-10-10	10 жовт.
+date	uk	short	2026-09-03	03.09.26
+date	uk	short	2026-01-01	01.01.26
+date	uk	short	2027-01-01	01.01.27
+date	uk	short	2024-02-29	29.02.24
+date	uk	short	2025-03-20	20.03.25
+date	uk	short	2025-03-21	21.03.25
+date	uk	short	1999-12-31	31.12.99
+date	uk	short	2031-07-14	14.07.31
+date	uk	short	2010-10-10	10.10.10
+date	uk	medium	2026-09-03	3 вер. 2026 р.
+date	uk	medium	2026-01-01	1 січ. 2026 р.
+date	uk	medium	2027-01-01	1 січ. 2027 р.
+date	uk	medium	2024-02-29	29 лют. 2024 р.
+date	uk	medium	2025-03-20	20 бер. 2025 р.
+date	uk	medium	2025-03-21	21 бер. 2025 р.
+date	uk	medium	1999-12-31	31 груд. 1999 р.
+date	uk	medium	2031-07-14	14 лип. 2031 р.
+date	uk	medium	2010-10-10	10 жовт. 2010 р.
+date	uk	long	2026-09-03	3 вересня 2026 р.
+date	uk	long	2026-01-01	1 січня 2026 р.
+date	uk	long	2027-01-01	1 січня 2027 р.
+date	uk	long	2024-02-29	29 лютого 2024 р.
+date	uk	long	2025-03-20	20 березня 2025 р.
+date	uk	long	2025-03-21	21 березня 2025 р.
+date	uk	long	1999-12-31	31 грудня 1999 р.
+date	uk	long	2031-07-14	14 липня 2031 р.
+date	uk	long	2010-10-10	10 жовтня 2010 р.
+date	uk	full	2026-09-03	четвер, 3 вересня 2026 р.
+date	uk	full	2026-01-01	четвер, 1 січня 2026 р.
+date	uk	full	2027-01-01	пʼятниця, 1 січня 2027 р.
+date	uk	full	2024-02-29	четвер, 29 лютого 2024 р.
+date	uk	full	2025-03-20	четвер, 20 березня 2025 р.
+date	uk	full	2025-03-21	пʼятниця, 21 березня 2025 р.
+date	uk	full	1999-12-31	пʼятниця, 31 грудня 1999 р.
+date	uk	full	2031-07-14	понеділок, 14 липня 2031 р.
+date	uk	full	2010-10-10	неділя, 10 жовтня 2010 р.
+range	uk	day	2026-09-03/2026-09-10	3–10 вер.
+range	uk	day	2026-09-29/2026-11-02	29 вер. – 2 лист.
+range	uk	day	2026-12-28/2027-01-05	28 груд. 2026 – 5 січ. 2027 рр.
+range	uk	day	2025-03-15/2025-03-25	15–25 бер.
+range	uk	day	2010-10-10/2011-10-11	10 жовт. 2010 – 11 жовт. 2011 рр.
+range	uk	short	2026-09-03/2026-09-10	03.09.26 – 10.09.26
+range	uk	short	2026-09-29/2026-11-02	29.09.26 – 02.11.26
+range	uk	short	2026-12-28/2027-01-05	28.12.26 – 05.01.27
+range	uk	short	2025-03-15/2025-03-25	15.03.25 – 25.03.25
+range	uk	short	2010-10-10/2011-10-11	10.10.10 – 11.10.11
+range	uk	medium	2026-09-03/2026-09-10	3–10 вер. 2026 р.
+range	uk	medium	2026-09-29/2026-11-02	29 вер. – 2 лист. 2026 р.
+range	uk	medium	2026-12-28/2027-01-05	28 груд. 2026 – 5 січ. 2027 рр.
+range	uk	medium	2025-03-15/2025-03-25	15–25 бер. 2025 р.
+range	uk	medium	2010-10-10/2011-10-11	10 жовт. 2010 – 11 жовт. 2011 рр.
+range	uk	long	2026-09-03/2026-09-10	3–10 вересня 2026 р.
+range	uk	long	2026-09-29/2026-11-02	29 вересня – 2 листопада 2026 р.
+range	uk	long	2026-12-28/2027-01-05	28 грудня 2026 – 5 січня 2027 рр.
+range	uk	long	2025-03-15/2025-03-25	15–25 березня 2025 р.
+range	uk	long	2010-10-10/2011-10-11	10 жовтня 2010 – 11 жовтня 2011 рр.
+month	uk	short	2026-09	вер. 2026 р.
+month	uk	short	2026-01	січ. 2026 р.
+month	uk	short	2027-01	січ. 2027 р.
+month	uk	short	2024-02	лют. 2024 р.
+month	uk	short	2025-03	бер. 2025 р.
+month	uk	short	2025-03	бер. 2025 р.
+month	uk	short	1999-12	груд. 1999 р.
+month	uk	short	2031-07	лип. 2031 р.
+month	uk	short	2010-10	жовт. 2010 р.
+month	uk	long	2026-09	вересень 2026 р.
+month	uk	long	2026-01	січень 2026 р.
+month	uk	long	2027-01	січень 2027 р.
+month	uk	long	2024-02	лютий 2024 р.
+month	uk	long	2025-03	березень 2025 р.
+month	uk	long	2025-03	березень 2025 р.
+month	uk	long	1999-12	грудень 1999 р.
+month	uk	long	2031-07	липень 2031 р.
+month	uk	long	2010-10	жовтень 2010 р.
+monthNames	uk			січ.|лют.|бер.|квіт.|трав.|черв.|лип.|серп.|вер.|жовт.|лист.|груд.
+weekdays	uk	narrow		Н|П|В|С|Ч|П|С
+weekdays	uk	short		нд|пн|вт|ср|чт|пт|сб
+weekdays	uk	long		неділя|понеділок|вівторок|середа|четвер|пʼятниця|субота
+weekStart	uk			1
+clock	uk			{hour}:{minute}|false||
+date	pl	day	2026-09-03	3 wrz
+date	pl	day	2026-01-01	1 sty
+date	pl	day	2027-01-01	1 sty
+date	pl	day	2024-02-29	29 lut
+date	pl	day	2025-03-20	20 mar
+date	pl	day	2025-03-21	21 mar
+date	pl	day	1999-12-31	31 gru
+date	pl	day	2031-07-14	14 lip
+date	pl	day	2010-10-10	10 paź
+date	pl	short	2026-09-03	3.09.2026
+date	pl	short	2026-01-01	1.01.2026
+date	pl	short	2027-01-01	1.01.2027
+date	pl	short	2024-02-29	29.02.2024
+date	pl	short	2025-03-20	20.03.2025
+date	pl	short	2025-03-21	21.03.2025
+date	pl	short	1999-12-31	31.12.1999
+date	pl	short	2031-07-14	14.07.2031
+date	pl	short	2010-10-10	10.10.2010
+date	pl	medium	2026-09-03	3 wrz 2026
+date	pl	medium	2026-01-01	1 sty 2026
+date	pl	medium	2027-01-01	1 sty 2027
+date	pl	medium	2024-02-29	29 lut 2024
+date	pl	medium	2025-03-20	20 mar 2025
+date	pl	medium	2025-03-21	21 mar 2025
+date	pl	medium	1999-12-31	31 gru 1999
+date	pl	medium	2031-07-14	14 lip 2031
+date	pl	medium	2010-10-10	10 paź 2010
+date	pl	long	2026-09-03	3 września 2026
+date	pl	long	2026-01-01	1 stycznia 2026
+date	pl	long	2027-01-01	1 stycznia 2027
+date	pl	long	2024-02-29	29 lutego 2024
+date	pl	long	2025-03-20	20 marca 2025
+date	pl	long	2025-03-21	21 marca 2025
+date	pl	long	1999-12-31	31 grudnia 1999
+date	pl	long	2031-07-14	14 lipca 2031
+date	pl	long	2010-10-10	10 października 2010
+date	pl	full	2026-09-03	czwartek, 3 września 2026
+date	pl	full	2026-01-01	czwartek, 1 stycznia 2026
+date	pl	full	2027-01-01	piątek, 1 stycznia 2027
+date	pl	full	2024-02-29	czwartek, 29 lutego 2024
+date	pl	full	2025-03-20	czwartek, 20 marca 2025
+date	pl	full	2025-03-21	piątek, 21 marca 2025
+date	pl	full	1999-12-31	piątek, 31 grudnia 1999
+date	pl	full	2031-07-14	poniedziałek, 14 lipca 2031
+date	pl	full	2010-10-10	niedziela, 10 października 2010
+range	pl	day	2026-09-03/2026-09-10	3–10 wrz
+range	pl	day	2026-09-29/2026-11-02	29 wrz–2 lis
+range	pl	day	2026-12-28/2027-01-05	28 gru 2026–5 sty 2027
+range	pl	day	2025-03-15/2025-03-25	15–25 mar
+range	pl	day	2010-10-10/2011-10-11	10 paź 2010–11 paź 2011
+range	pl	short	2026-09-03/2026-09-10	03–10.09.2026
+range	pl	short	2026-09-29/2026-11-02	29.09–02.11.2026
+range	pl	short	2026-12-28/2027-01-05	28.12.2026–05.01.2027
+range	pl	short	2025-03-15/2025-03-25	15–25.03.2025
+range	pl	short	2010-10-10/2011-10-11	10.10.2010–11.10.2011
+range	pl	medium	2026-09-03/2026-09-10	3–10 wrz 2026
+range	pl	medium	2026-09-29/2026-11-02	29 wrz–2 lis 2026
+range	pl	medium	2026-12-28/2027-01-05	28 gru 2026–5 sty 2027
+range	pl	medium	2025-03-15/2025-03-25	15–25 mar 2025
+range	pl	medium	2010-10-10/2011-10-11	10 paź 2010–11 paź 2011
+range	pl	long	2026-09-03/2026-09-10	3–10 września 2026
+range	pl	long	2026-09-29/2026-11-02	29 września – 2 listopada 2026
+range	pl	long	2026-12-28/2027-01-05	28 grudnia 2026 – 5 stycznia 2027
+range	pl	long	2025-03-15/2025-03-25	15–25 marca 2025
+range	pl	long	2010-10-10/2011-10-11	10 października 2010 – 11 października 2011
+month	pl	short	2026-09	wrz 2026
+month	pl	short	2026-01	sty 2026
+month	pl	short	2027-01	sty 2027
+month	pl	short	2024-02	lut 2024
+month	pl	short	2025-03	mar 2025
+month	pl	short	2025-03	mar 2025
+month	pl	short	1999-12	gru 1999
+month	pl	short	2031-07	lip 2031
+month	pl	short	2010-10	paź 2010
+month	pl	long	2026-09	wrzesień 2026
+month	pl	long	2026-01	styczeń 2026
+month	pl	long	2027-01	styczeń 2027
+month	pl	long	2024-02	luty 2024
+month	pl	long	2025-03	marzec 2025
+month	pl	long	2025-03	marzec 2025
+month	pl	long	1999-12	grudzień 1999
+month	pl	long	2031-07	lipiec 2031
+month	pl	long	2010-10	październik 2010
+monthNames	pl			sty|lut|mar|kwi|maj|cze|lip|sie|wrz|paź|lis|gru
+weekdays	pl	narrow		N|P|W|Ś|C|P|S
+weekdays	pl	short		niedz.|pon.|wt.|śr.|czw.|pt.|sob.
+weekdays	pl	long		niedziela|poniedziałek|wtorek|środa|czwartek|piątek|sobota
+weekStart	pl			1
+clock	pl			{hour}:{minute}|false||
+date	cs	day	2026-09-03	3. 9.
+date	cs	day	2026-01-01	1. 1.
+date	cs	day	2027-01-01	1. 1.
+date	cs	day	2024-02-29	29. 2.
+date	cs	day	2025-03-20	20. 3.
+date	cs	day	2025-03-21	21. 3.
+date	cs	day	1999-12-31	31. 12.
+date	cs	day	2031-07-14	14. 7.
+date	cs	day	2010-10-10	10. 10.
+date	cs	short	2026-09-03	03.09.26
+date	cs	short	2026-01-01	01.01.26
+date	cs	short	2027-01-01	01.01.27
+date	cs	short	2024-02-29	29.02.24
+date	cs	short	2025-03-20	20.03.25
+date	cs	short	2025-03-21	21.03.25
+date	cs	short	1999-12-31	31.12.99
+date	cs	short	2031-07-14	14.07.31
+date	cs	short	2010-10-10	10.10.10
+date	cs	medium	2026-09-03	3. 9. 2026
+date	cs	medium	2026-01-01	1. 1. 2026
+date	cs	medium	2027-01-01	1. 1. 2027
+date	cs	medium	2024-02-29	29. 2. 2024
+date	cs	medium	2025-03-20	20. 3. 2025
+date	cs	medium	2025-03-21	21. 3. 2025
+date	cs	medium	1999-12-31	31. 12. 1999
+date	cs	medium	2031-07-14	14. 7. 2031
+date	cs	medium	2010-10-10	10. 10. 2010
+date	cs	long	2026-09-03	3. září 2026
+date	cs	long	2026-01-01	1. ledna 2026
+date	cs	long	2027-01-01	1. ledna 2027
+date	cs	long	2024-02-29	29. února 2024
+date	cs	long	2025-03-20	20. března 2025
+date	cs	long	2025-03-21	21. března 2025
+date	cs	long	1999-12-31	31. prosince 1999
+date	cs	long	2031-07-14	14. července 2031
+date	cs	long	2010-10-10	10. října 2010
+date	cs	full	2026-09-03	čtvrtek 3. září 2026
+date	cs	full	2026-01-01	čtvrtek 1. ledna 2026
+date	cs	full	2027-01-01	pátek 1. ledna 2027
+date	cs	full	2024-02-29	čtvrtek 29. února 2024
+date	cs	full	2025-03-20	čtvrtek 20. března 2025
+date	cs	full	2025-03-21	pátek 21. března 2025
+date	cs	full	1999-12-31	pátek 31. prosince 1999
+date	cs	full	2031-07-14	pondělí 14. července 2031
+date	cs	full	2010-10-10	neděle 10. října 2010
+range	cs	day	2026-09-03/2026-09-10	3. 9. – 10. 9.
+range	cs	day	2026-09-29/2026-11-02	29. 9. – 2. 11.
+range	cs	day	2026-12-28/2027-01-05	28.12.2026 – 05.01.2027
+range	cs	day	2025-03-15/2025-03-25	15. 3. – 25. 3.
+range	cs	day	2010-10-10/2011-10-11	10.10.2010 – 11.10.2011
+range	cs	short	2026-09-03/2026-09-10	03.09.26 – 10.09.26
+range	cs	short	2026-09-29/2026-11-02	29.09.26 – 02.11.26
+range	cs	short	2026-12-28/2027-01-05	28.12.26 – 05.01.27
+range	cs	short	2025-03-15/2025-03-25	15.03.25 – 25.03.25
+range	cs	short	2010-10-10/2011-10-11	10.10.10 – 11.10.11
+range	cs	medium	2026-09-03/2026-09-10	03.09.2026 – 10.09.2026
+range	cs	medium	2026-09-29/2026-11-02	29.09.2026 – 02.11.2026
+range	cs	medium	2026-12-28/2027-01-05	28.12.2026 – 05.01.2027
+range	cs	medium	2025-03-15/2025-03-25	15.03.2025 – 25.03.2025
+range	cs	medium	2010-10-10/2011-10-11	10.10.2010 – 11.10.2011
+range	cs	long	2026-09-03/2026-09-10	3.–10. 9. 2026
+range	cs	long	2026-09-29/2026-11-02	29. 9. – 2. 11. 2026
+range	cs	long	2026-12-28/2027-01-05	28. 12. 2026 – 5. 1. 2027
+range	cs	long	2025-03-15/2025-03-25	15.–25. 3. 2025
+range	cs	long	2010-10-10/2011-10-11	10. 10. 2010 – 11. 10. 2011
+month	cs	short	2026-09	září 2026
+month	cs	short	2026-01	leden 2026
+month	cs	short	2027-01	leden 2027
+month	cs	short	2024-02	únor 2024
+month	cs	short	2025-03	březen 2025
+month	cs	short	2025-03	březen 2025
+month	cs	short	1999-12	prosinec 1999
+month	cs	short	2031-07	červenec 2031
+month	cs	short	2010-10	říjen 2010
+month	cs	long	2026-09	září 2026
+month	cs	long	2026-01	leden 2026
+month	cs	long	2027-01	leden 2027
+month	cs	long	2024-02	únor 2024
+month	cs	long	2025-03	březen 2025
+month	cs	long	2025-03	březen 2025
+month	cs	long	1999-12	prosinec 1999
+month	cs	long	2031-07	červenec 2031
+month	cs	long	2010-10	říjen 2010
+monthNames	cs			led|úno|bře|dub|kvě|čvn|čvc|srp|zář|říj|lis|pro
+weekdays	cs	narrow		N|P|Ú|S|Č|P|S
+weekdays	cs	short		ne|po|út|st|čt|pá|so
+weekdays	cs	long		neděle|pondělí|úterý|středa|čtvrtek|pátek|sobota
+weekStart	cs			1
+clock	cs			{hour}:{minute}|false||
+date	sl	day	2026-09-03	3. sep.
+date	sl	day	2026-01-01	1. jan.
+date	sl	day	2027-01-01	1. jan.
+date	sl	day	2024-02-29	29. feb.
+date	sl	day	2025-03-20	20. mar.
+date	sl	day	2025-03-21	21. mar.
+date	sl	day	1999-12-31	31. dec.
+date	sl	day	2031-07-14	14. jul.
+date	sl	day	2010-10-10	10. okt.
+date	sl	short	2026-09-03	3. 9. 2026
+date	sl	short	2026-01-01	1. 1. 2026
+date	sl	short	2027-01-01	1. 1. 2027
+date	sl	short	2024-02-29	29. 2. 2024
+date	sl	short	2025-03-20	20. 3. 2025
+date	sl	short	2025-03-21	21. 3. 2025
+date	sl	short	1999-12-31	31. 12. 1999
+date	sl	short	2031-07-14	14. 7. 2031
+date	sl	short	2010-10-10	10. 10. 2010
+date	sl	medium	2026-09-03	3. sep. 2026
+date	sl	medium	2026-01-01	1. jan. 2026
+date	sl	medium	2027-01-01	1. jan. 2027
+date	sl	medium	2024-02-29	29. feb. 2024
+date	sl	medium	2025-03-20	20. mar. 2025
+date	sl	medium	2025-03-21	21. mar. 2025
+date	sl	medium	1999-12-31	31. dec. 1999
+date	sl	medium	2031-07-14	14. jul. 2031
+date	sl	medium	2010-10-10	10. okt. 2010
+date	sl	long	2026-09-03	3. september 2026
+date	sl	long	2026-01-01	1. januar 2026
+date	sl	long	2027-01-01	1. januar 2027
+date	sl	long	2024-02-29	29. februar 2024
+date	sl	long	2025-03-20	20. marec 2025
+date	sl	long	2025-03-21	21. marec 2025
+date	sl	long	1999-12-31	31. december 1999
+date	sl	long	2031-07-14	14. julij 2031
+date	sl	long	2010-10-10	10. oktober 2010
+date	sl	full	2026-09-03	četrtek, 3. september 2026
+date	sl	full	2026-01-01	četrtek, 1. januar 2026
+date	sl	full	2027-01-01	petek, 1. januar 2027
+date	sl	full	2024-02-29	četrtek, 29. februar 2024
+date	sl	full	2025-03-20	četrtek, 20. marec 2025
+date	sl	full	2025-03-21	petek, 21. marec 2025
+date	sl	full	1999-12-31	petek, 31. december 1999
+date	sl	full	2031-07-14	ponedeljek, 14. julij 2031
+date	sl	full	2010-10-10	nedelja, 10. oktober 2010
+range	sl	day	2026-09-03/2026-09-10	3.–10. sep.
+range	sl	day	2026-09-29/2026-11-02	29. sep.–2. nov.
+range	sl	day	2026-12-28/2027-01-05	28. dec. 2026–5. jan. 2027
+range	sl	day	2025-03-15/2025-03-25	15.–25. mar.
+range	sl	day	2010-10-10/2011-10-11	10. okt. 2010–11. okt. 2011
+range	sl	short	2026-09-03/2026-09-10	3.–10. 9. 2026
+range	sl	short	2026-09-29/2026-11-02	29. 9.–2. 11. 2026
+range	sl	short	2026-12-28/2027-01-05	28. 12. 2026–5. 1. 2027
+range	sl	short	2025-03-15/2025-03-25	15.–25. 3. 2025
+range	sl	short	2010-10-10/2011-10-11	10. 10. 2010–11. 10. 2011
+range	sl	medium	2026-09-03/2026-09-10	3.–10. sep. 2026
+range	sl	medium	2026-09-29/2026-11-02	29. sep.–2. nov. 2026
+range	sl	medium	2026-12-28/2027-01-05	28. dec. 2026–5. jan. 2027
+range	sl	medium	2025-03-15/2025-03-25	15.–25. mar. 2025
+range	sl	medium	2010-10-10/2011-10-11	10. okt. 2010–11. okt. 2011
+range	sl	long	2026-09-03/2026-09-10	3.–10. september 2026
+range	sl	long	2026-09-29/2026-11-02	29. september–2. november 2026
+range	sl	long	2026-12-28/2027-01-05	28. december 2026–5. januar 2027
+range	sl	long	2025-03-15/2025-03-25	15.–25. marec 2025
+range	sl	long	2010-10-10/2011-10-11	10. oktober 2010–11. oktober 2011
+month	sl	short	2026-09	sep. 2026
+month	sl	short	2026-01	jan. 2026
+month	sl	short	2027-01	jan. 2027
+month	sl	short	2024-02	feb. 2024
+month	sl	short	2025-03	mar. 2025
+month	sl	short	2025-03	mar. 2025
+month	sl	short	1999-12	dec. 1999
+month	sl	short	2031-07	jul. 2031
+month	sl	short	2010-10	okt. 2010
+month	sl	long	2026-09	september 2026
+month	sl	long	2026-01	januar 2026
+month	sl	long	2027-01	januar 2027
+month	sl	long	2024-02	februar 2024
+month	sl	long	2025-03	marec 2025
+month	sl	long	2025-03	marec 2025
+month	sl	long	1999-12	december 1999
+month	sl	long	2031-07	julij 2031
+month	sl	long	2010-10	oktober 2010
+monthNames	sl			jan.|feb.|mar.|apr.|maj|jun.|jul.|avg.|sep.|okt.|nov.|dec.
+weekdays	sl	narrow		n|p|t|s|č|p|s
+weekdays	sl	short		ned.|pon.|tor.|sre.|čet.|pet.|sob.
+weekdays	sl	long		nedelja|ponedeljek|torek|sreda|četrtek|petek|sobota
+weekStart	sl			1
+clock	sl			{hour}:{minute}|false||
+date	lt	day	2026-09-03	09-03
+date	lt	day	2026-01-01	01-01
+date	lt	day	2027-01-01	01-01
+date	lt	day	2024-02-29	02-29
+date	lt	day	2025-03-20	03-20
+date	lt	day	2025-03-21	03-21
+date	lt	day	1999-12-31	12-31
+date	lt	day	2031-07-14	07-14
+date	lt	day	2010-10-10	10-10
+date	lt	short	2026-09-03	2026-09-03
+date	lt	short	2026-01-01	2026-01-01
+date	lt	short	2027-01-01	2027-01-01
+date	lt	short	2024-02-29	2024-02-29
+date	lt	short	2025-03-20	2025-03-20
+date	lt	short	2025-03-21	2025-03-21
+date	lt	short	1999-12-31	1999-12-31
+date	lt	short	2031-07-14	2031-07-14
+date	lt	short	2010-10-10	2010-10-10
+date	lt	medium	2026-09-03	2026-09-03
+date	lt	medium	2026-01-01	2026-01-01
+date	lt	medium	2027-01-01	2027-01-01
+date	lt	medium	2024-02-29	2024-02-29
+date	lt	medium	2025-03-20	2025-03-20
+date	lt	medium	2025-03-21	2025-03-21
+date	lt	medium	1999-12-31	1999-12-31
+date	lt	medium	2031-07-14	2031-07-14
+date	lt	medium	2010-10-10	2010-10-10
+date	lt	long	2026-09-03	2026 m. rugsėjo 3 d.
+date	lt	long	2026-01-01	2026 m. sausio 1 d.
+date	lt	long	2027-01-01	2027 m. sausio 1 d.
+date	lt	long	2024-02-29	2024 m. vasario 29 d.
+date	lt	long	2025-03-20	2025 m. kovo 20 d.
+date	lt	long	2025-03-21	2025 m. kovo 21 d.
+date	lt	long	1999-12-31	1999 m. gruodžio 31 d.
+date	lt	long	2031-07-14	2031 m. liepos 14 d.
+date	lt	long	2010-10-10	2010 m. spalio 10 d.
+date	lt	full	2026-09-03	2026 m. rugsėjo 3 d., ketvirtadienis
+date	lt	full	2026-01-01	2026 m. sausio 1 d., ketvirtadienis
+date	lt	full	2027-01-01	2027 m. sausio 1 d., penktadienis
+date	lt	full	2024-02-29	2024 m. vasario 29 d., ketvirtadienis
+date	lt	full	2025-03-20	2025 m. kovo 20 d., ketvirtadienis
+date	lt	full	2025-03-21	2025 m. kovo 21 d., penktadienis
+date	lt	full	1999-12-31	1999 m. gruodžio 31 d., penktadienis
+date	lt	full	2031-07-14	2031 m. liepos 14 d., pirmadienis
+date	lt	full	2010-10-10	2010 m. spalio 10 d., sekmadienis
+range	lt	day	2026-09-03/2026-09-10	09-03 – 09-10
+range	lt	day	2026-09-29/2026-11-02	09-29 – 11-02
+range	lt	day	2026-12-28/2027-01-05	2026-12-28 – 2027-01-05
+range	lt	day	2025-03-15/2025-03-25	03-15 – 03-25
+range	lt	day	2010-10-10/2011-10-11	2010-10-10 – 2011-10-11
+range	lt	short	2026-09-03/2026-09-10	2026-09-03 – 2026-09-10
+range	lt	short	2026-09-29/2026-11-02	2026-09-29 – 2026-11-02
+range	lt	short	2026-12-28/2027-01-05	2026-12-28 – 2027-01-05
+range	lt	short	2025-03-15/2025-03-25	2025-03-15 – 2025-03-25
+range	lt	short	2010-10-10/2011-10-11	2010-10-10 – 2011-10-11
+range	lt	medium	2026-09-03/2026-09-10	2026-09-03 – 2026-09-10
+range	lt	medium	2026-09-29/2026-11-02	2026-09-29 – 2026-11-02
+range	lt	medium	2026-12-28/2027-01-05	2026-12-28 – 2027-01-05
+range	lt	medium	2025-03-15/2025-03-25	2025-03-15 – 2025-03-25
+range	lt	medium	2010-10-10/2011-10-11	2010-10-10 – 2011-10-11
+range	lt	long	2026-09-03/2026-09-10	2026 rugsėjo 3–10
+range	lt	long	2026-09-29/2026-11-02	2026 rugsėjo 29 – lapkričio 2
+range	lt	long	2026-12-28/2027-01-05	2026 gruodžio 28 – 2027 sausio 5
+range	lt	long	2025-03-15/2025-03-25	2025 kovo 15–25
+range	lt	long	2010-10-10/2011-10-11	2010 spalio 10 – 2011 spalio 11
+month	lt	short	2026-09	2026-09
+month	lt	short	2026-01	2026-01
+month	lt	short	2027-01	2027-01
+month	lt	short	2024-02	2024-02
+month	lt	short	2025-03	2025-03
+month	lt	short	2025-03	2025-03
+month	lt	short	1999-12	1999-12
+month	lt	short	2031-07	2031-07
+month	lt	short	2010-10	2010-10
+month	lt	long	2026-09	2026 m. rugsėjis
+month	lt	long	2026-01	2026 m. sausis
+month	lt	long	2027-01	2027 m. sausis
+month	lt	long	2024-02	2024 m. vasaris
+month	lt	long	2025-03	2025 m. kovas
+month	lt	long	2025-03	2025 m. kovas
+month	lt	long	1999-12	1999 m. gruodis
+month	lt	long	2031-07	2031 m. liepa
+month	lt	long	2010-10	2010 m. spalis
+monthNames	lt			01|02|03|04|05|06|07|08|09|10|11|12
+weekdays	lt	narrow		S|P|A|T|K|P|Š
+weekdays	lt	short		sk|pr|an|tr|kt|pn|št
+weekdays	lt	long		sekmadienis|pirmadienis|antradienis|trečiadienis|ketvirtadienis|penktadienis|šeštadienis
+weekStart	lt			1
+clock	lt			{hour}:{minute}|false||
+date	lv	day	2026-09-03	3. sept.
+date	lv	day	2026-01-01	1. janv.
+date	lv	day	2027-01-01	1. janv.
+date	lv	day	2024-02-29	29. febr.
+date	lv	day	2025-03-20	20. marts
+date	lv	day	2025-03-21	21. marts
+date	lv	day	1999-12-31	31. dec.
+date	lv	day	2031-07-14	14. jūl.
+date	lv	day	2010-10-10	10. okt.
+date	lv	short	2026-09-03	03.09.26
+date	lv	short	2026-01-01	01.01.26
+date	lv	short	2027-01-01	01.01.27
+date	lv	short	2024-02-29	29.02.24
+date	lv	short	2025-03-20	20.03.25
+date	lv	short	2025-03-21	21.03.25
+date	lv	short	1999-12-31	31.12.99
+date	lv	short	2031-07-14	14.07.31
+date	lv	short	2010-10-10	10.10.10
+date	lv	medium	2026-09-03	2026. gada 3. sept.
+date	lv	medium	2026-01-01	2026. gada 1. janv.
+date	lv	medium	2027-01-01	2027. gada 1. janv.
+date	lv	medium	2024-02-29	2024. gada 29. febr.
+date	lv	medium	2025-03-20	2025. gada 20. marts
+date	lv	medium	2025-03-21	2025. gada 21. marts
+date	lv	medium	1999-12-31	1999. gada 31. dec.
+date	lv	medium	2031-07-14	2031. gada 14. jūl.
+date	lv	medium	2010-10-10	2010. gada 10. okt.
+date	lv	long	2026-09-03	2026. gada 3. septembris
+date	lv	long	2026-01-01	2026. gada 1. janvāris
+date	lv	long	2027-01-01	2027. gada 1. janvāris
+date	lv	long	2024-02-29	2024. gada 29. februāris
+date	lv	long	2025-03-20	2025. gada 20. marts
+date	lv	long	2025-03-21	2025. gada 21. marts
+date	lv	long	1999-12-31	1999. gada 31. decembris
+date	lv	long	2031-07-14	2031. gada 14. jūlijs
+date	lv	long	2010-10-10	2010. gada 10. oktobris
+date	lv	full	2026-09-03	ceturtdiena, 2026. gada 3. septembris
+date	lv	full	2026-01-01	ceturtdiena, 2026. gada 1. janvāris
+date	lv	full	2027-01-01	piektdiena, 2027. gada 1. janvāris
+date	lv	full	2024-02-29	ceturtdiena, 2024. gada 29. februāris
+date	lv	full	2025-03-20	ceturtdiena, 2025. gada 20. marts
+date	lv	full	2025-03-21	piektdiena, 2025. gada 21. marts
+date	lv	full	1999-12-31	piektdiena, 1999. gada 31. decembris
+date	lv	full	2031-07-14	pirmdiena, 2031. gada 14. jūlijs
+date	lv	full	2010-10-10	svētdiena, 2010. gada 10. oktobris
+range	lv	day	2026-09-03/2026-09-10	3.–10. sept.
+range	lv	day	2026-09-29/2026-11-02	29. sept. – 2. nov.
+range	lv	day	2026-12-28/2027-01-05	2026. gada 28. dec. – 2027. gada 5. janv.
+range	lv	day	2025-03-15/2025-03-25	15.–25. marts
+range	lv	day	2010-10-10/2011-10-11	2010. gada 10. okt. – 2011. gada 11. okt.
+range	lv	short	2026-09-03/2026-09-10	03.09.26.–10.09.26.
+range	lv	short	2026-09-29/2026-11-02	29.09.26.–02.11.26.
+range	lv	short	2026-12-28/2027-01-05	28.12.26.–05.01.27.
+range	lv	short	2025-03-15/2025-03-25	15.03.25.–25.03.25.
+range	lv	short	2010-10-10/2011-10-11	10.10.10.–11.10.11.
+range	lv	medium	2026-09-03/2026-09-10	2026. gada 3.–10. sept.
+range	lv	medium	2026-09-29/2026-11-02	2026. gada 29. sept. – 2. nov.
+range	lv	medium	2026-12-28/2027-01-05	2026. gada 28. dec. – 2027. gada 5. janv.
+range	lv	medium	2025-03-15/2025-03-25	2025. gada 15.–25. marts
+range	lv	medium	2010-10-10/2011-10-11	2010. gada 10. okt. – 2011. gada 11. okt.
+range	lv	long	2026-09-03/2026-09-10	2026. gada 3.–10. septembris
+range	lv	long	2026-09-29/2026-11-02	2026. gada 29. septembris – 2. novembris
+range	lv	long	2026-12-28/2027-01-05	2026. gada 28. decembris – 2027. gada 5. janvāris
+range	lv	long	2025-03-15/2025-03-25	2025. gada 15.–25. marts
+range	lv	long	2010-10-10/2011-10-11	2010. gada 10. oktobris – 2011. gada 11. oktobris
+month	lv	short	2026-09	2026. g. sept.
+month	lv	short	2026-01	2026. g. janv.
+month	lv	short	2027-01	2027. g. janv.
+month	lv	short	2024-02	2024. g. febr.
+month	lv	short	2025-03	2025. g. marts
+month	lv	short	2025-03	2025. g. marts
+month	lv	short	1999-12	1999. g. dec.
+month	lv	short	2031-07	2031. g. jūl.
+month	lv	short	2010-10	2010. g. okt.
+month	lv	long	2026-09	2026. g. septembris
+month	lv	long	2026-01	2026. g. janvāris
+month	lv	long	2027-01	2027. g. janvāris
+month	lv	long	2024-02	2024. g. februāris
+month	lv	long	2025-03	2025. g. marts
+month	lv	long	2025-03	2025. g. marts
+month	lv	long	1999-12	1999. g. decembris
+month	lv	long	2031-07	2031. g. jūlijs
+month	lv	long	2010-10	2010. g. oktobris
+monthNames	lv			janv.|febr.|marts|apr.|maijs|jūn.|jūl.|aug.|sept.|okt.|nov.|dec.
+weekdays	lv	narrow		S|P|O|T|C|P|S
+weekdays	lv	short		Svētd.|Pirmd.|Otrd.|Trešd.|Ceturtd.|Piektd.|Sestd.
+weekdays	lv	long		Svētdiena|Pirmdiena|Otrdiena|Trešdiena|Ceturtdiena|Piektdiena|Sestdiena
+weekStart	lv			1
+clock	lv			{hour}:{minute}|false||
+date	ga	day	2026-09-03	3 MFómh
+date	ga	day	2026-01-01	1 Ean
+date	ga	day	2027-01-01	1 Ean
+date	ga	day	2024-02-29	29 Feabh
+date	ga	day	2025-03-20	20 Márta
+date	ga	day	2025-03-21	21 Márta
+date	ga	day	1999-12-31	31 Noll
+date	ga	day	2031-07-14	14 Iúil
+date	ga	day	2010-10-10	10 DFómh
+date	ga	short	2026-09-03	3/9/26
+date	ga	short	2026-01-01	1/1/26
+date	ga	short	2027-01-01	1/1/27
+date	ga	short	2024-02-29	29/2/24
+date	ga	short	2025-03-20	20/3/25
+date	ga	short	2025-03-21	21/3/25
+date	ga	short	1999-12-31	31/12/99
+date	ga	short	2031-07-14	14/7/31
+date	ga	short	2010-10-10	10/10/10
+date	ga	medium	2026-09-03	3 MFómh 2026
+date	ga	medium	2026-01-01	1 Ean 2026
+date	ga	medium	2027-01-01	1 Ean 2027
+date	ga	medium	2024-02-29	29 Feabh 2024
+date	ga	medium	2025-03-20	20 Márta 2025
+date	ga	medium	2025-03-21	21 Márta 2025
+date	ga	medium	1999-12-31	31 Noll 1999
+date	ga	medium	2031-07-14	14 Iúil 2031
+date	ga	medium	2010-10-10	10 DFómh 2010
+date	ga	long	2026-09-03	3 Meán Fómhair 2026
+date	ga	long	2026-01-01	1 Eanáir 2026
+date	ga	long	2027-01-01	1 Eanáir 2027
+date	ga	long	2024-02-29	29 Feabhra 2024
+date	ga	long	2025-03-20	20 Márta 2025
+date	ga	long	2025-03-21	21 Márta 2025
+date	ga	long	1999-12-31	31 Nollaig 1999
+date	ga	long	2031-07-14	14 Iúil 2031
+date	ga	long	2010-10-10	10 Deireadh Fómhair 2010
+date	ga	full	2026-09-03	Déardaoin 3 Meán Fómhair 2026
+date	ga	full	2026-01-01	Déardaoin 1 Eanáir 2026
+date	ga	full	2027-01-01	Dé hAoine 1 Eanáir 2027
+date	ga	full	2024-02-29	Déardaoin 29 Feabhra 2024
+date	ga	full	2025-03-20	Déardaoin 20 Márta 2025
+date	ga	full	2025-03-21	Dé hAoine 21 Márta 2025
+date	ga	full	1999-12-31	Dé hAoine 31 Nollaig 1999
+date	ga	full	2031-07-14	Dé Luain 14 Iúil 2031
+date	ga	full	2010-10-10	Dé Domhnaigh 10 Deireadh Fómhair 2010
+range	ga	day	2026-09-03/2026-09-10	3 – 10 MFómh
+range	ga	day	2026-09-29/2026-11-02	29 MFómh – 2 Samh
+range	ga	day	2026-12-28/2027-01-05	28 Noll 2026 – 5 Ean 2027
+range	ga	day	2025-03-15/2025-03-25	15 – 25 Márta
+range	ga	day	2010-10-10/2011-10-11	10 DFómh 2010 – 11 DFómh 2011
+range	ga	short	2026-09-03/2026-09-10	03/09/26 – 10/09/26
+range	ga	short	2026-09-29/2026-11-02	29/09/26 – 02/11/26
+range	ga	short	2026-12-28/2027-01-05	28/12/26 – 05/01/27
+range	ga	short	2025-03-15/2025-03-25	15/03/25 – 25/03/25
+range	ga	short	2010-10-10/2011-10-11	10/10/10 – 11/10/11
+range	ga	medium	2026-09-03/2026-09-10	3 – 10 MFómh 2026
+range	ga	medium	2026-09-29/2026-11-02	29 MFómh – 2 Samh 2026
+range	ga	medium	2026-12-28/2027-01-05	28 Noll 2026 – 5 Ean 2027
+range	ga	medium	2025-03-15/2025-03-25	15 – 25 Márta 2025
+range	ga	medium	2010-10-10/2011-10-11	10 DFómh 2010 – 11 DFómh 2011
+range	ga	long	2026-09-03/2026-09-10	3 – 10 Meán Fómhair 2026
+range	ga	long	2026-09-29/2026-11-02	29 Meán Fómhair – 2 Samhain 2026
+range	ga	long	2026-12-28/2027-01-05	28 Nollaig 2026 – 5 Eanáir 2027
+range	ga	long	2025-03-15/2025-03-25	15 – 25 Márta 2025
+range	ga	long	2010-10-10/2011-10-11	10 Deireadh Fómhair 2010 – 11 Deireadh Fómhair 2011
+month	ga	short	2026-09	MFómh 2026
+month	ga	short	2026-01	Ean 2026
+month	ga	short	2027-01	Ean 2027
+month	ga	short	2024-02	Feabh 2024
+month	ga	short	2025-03	Márta 2025
+month	ga	short	2025-03	Márta 2025
+month	ga	short	1999-12	Noll 1999
+month	ga	short	2031-07	Iúil 2031
+month	ga	short	2010-10	DFómh 2010
+month	ga	long	2026-09	Meán Fómhair 2026
+month	ga	long	2026-01	Eanáir 2026
+month	ga	long	2027-01	Eanáir 2027
+month	ga	long	2024-02	Feabhra 2024
+month	ga	long	2025-03	Márta 2025
+month	ga	long	2025-03	Márta 2025
+month	ga	long	1999-12	Nollaig 1999
+month	ga	long	2031-07	Iúil 2031
+month	ga	long	2010-10	Deireadh Fómhair 2010
+monthNames	ga			Ean|Feabh|Márta|Aib|Beal|Meith|Iúil|Lún|MFómh|DFómh|Samh|Noll
+weekdays	ga	narrow		D|L|M|C|D|A|S
+weekdays	ga	short		Domh|Luan|Máirt|Céad|Déar|Aoine|Sath
+weekdays	ga	long		Dé Domhnaigh|Dé Luain|Dé Máirt|Dé Céadaoin|Déardaoin|Dé hAoine|Dé Sathairn
+weekStart	ga			1
+clock	ga			{hour}:{minute}|false||
+date	cy	day	2026-09-03	3 Medi
+date	cy	day	2026-01-01	1 Ion
+date	cy	day	2027-01-01	1 Ion
+date	cy	day	2024-02-29	29 Chwef
+date	cy	day	2025-03-20	20 Maw
+date	cy	day	2025-03-21	21 Maw
+date	cy	day	1999-12-31	31 Rhag
+date	cy	day	2031-07-14	14 Gorff
+date	cy	day	2010-10-10	10 Hyd
+date	cy	short	2026-09-03	03/09/26
+date	cy	short	2026-01-01	01/01/26
+date	cy	short	2027-01-01	01/01/27
+date	cy	short	2024-02-29	29/02/24
+date	cy	short	2025-03-20	20/03/25
+date	cy	short	2025-03-21	21/03/25
+date	cy	short	1999-12-31	31/12/99
+date	cy	short	2031-07-14	14/07/31
+date	cy	short	2010-10-10	10/10/10
+date	cy	medium	2026-09-03	3 Medi 2026
+date	cy	medium	2026-01-01	1 Ion 2026
+date	cy	medium	2027-01-01	1 Ion 2027
+date	cy	medium	2024-02-29	29 Chwef 2024
+date	cy	medium	2025-03-20	20 Maw 2025
+date	cy	medium	2025-03-21	21 Maw 2025
+date	cy	medium	1999-12-31	31 Rhag 1999
+date	cy	medium	2031-07-14	14 Gorff 2031
+date	cy	medium	2010-10-10	10 Hyd 2010
+date	cy	long	2026-09-03	3 Medi 2026
+date	cy	long	2026-01-01	1 Ionawr 2026
+date	cy	long	2027-01-01	1 Ionawr 2027
+date	cy	long	2024-02-29	29 Chwefror 2024
+date	cy	long	2025-03-20	20 Mawrth 2025
+date	cy	long	2025-03-21	21 Mawrth 2025
+date	cy	long	1999-12-31	31 Rhagfyr 1999
+date	cy	long	2031-07-14	14 Gorffennaf 2031
+date	cy	long	2010-10-10	10 Hydref 2010
+date	cy	full	2026-09-03	Dydd Iau, 3 Medi 2026
+date	cy	full	2026-01-01	Dydd Iau, 1 Ionawr 2026
+date	cy	full	2027-01-01	Dydd Gwener, 1 Ionawr 2027
+date	cy	full	2024-02-29	Dydd Iau, 29 Chwefror 2024
+date	cy	full	2025-03-20	Dydd Iau, 20 Mawrth 2025
+date	cy	full	2025-03-21	Dydd Gwener, 21 Mawrth 2025
+date	cy	full	1999-12-31	Dydd Gwener, 31 Rhagfyr 1999
+date	cy	full	2031-07-14	Dydd Llun, 14 Gorffennaf 2031
+date	cy	full	2010-10-10	Dydd Sul, 10 Hydref 2010
+range	cy	day	2026-09-03/2026-09-10	3 – 10 Medi
+range	cy	day	2026-09-29/2026-11-02	29 Medi – 2 Tach
+range	cy	day	2026-12-28/2027-01-05	28 Rhag, 2026 – 5 Ion 2027
+range	cy	day	2025-03-15/2025-03-25	15 – 25 Maw
+range	cy	day	2010-10-10/2011-10-11	10 Hyd, 2010 – 11 Hyd 2011
+range	cy	short	2026-09-03/2026-09-10	3/9/26 – 10/9/26
+range	cy	short	2026-09-29/2026-11-02	29/9/26 – 2/11/26
+range	cy	short	2026-12-28/2027-01-05	28/12/26 – 5/1/27
+range	cy	short	2025-03-15/2025-03-25	15/3/25 – 25/3/25
+range	cy	short	2010-10-10/2011-10-11	10/10/10 – 11/10/11
+range	cy	medium	2026-09-03/2026-09-10	3–10 Medi 2026
+range	cy	medium	2026-09-29/2026-11-02	29 Medi – 2 Tach 2026
+range	cy	medium	2026-12-28/2027-01-05	28 Rhag, 2026 – 5 Ion 2027
+range	cy	medium	2025-03-15/2025-03-25	15–25 Maw 2025
+range	cy	medium	2010-10-10/2011-10-11	10 Hyd, 2010 – 11 Hyd 2011
+range	cy	long	2026-09-03/2026-09-10	3–10 Medi 2026
+range	cy	long	2026-09-29/2026-11-02	29 Medi – 2 Tachwedd 2026
+range	cy	long	2026-12-28/2027-01-05	28 Rhagfyr, 2026 – 5 Ionawr 2027
+range	cy	long	2025-03-15/2025-03-25	15–25 Mawrth 2025
+range	cy	long	2010-10-10/2011-10-11	10 Hydref, 2010 – 11 Hydref 2011
+month	cy	short	2026-09	Medi 2026
+month	cy	short	2026-01	Ion 2026
+month	cy	short	2027-01	Ion 2027
+month	cy	short	2024-02	Chwef 2024
+month	cy	short	2025-03	Maw 2025
+month	cy	short	2025-03	Maw 2025
+month	cy	short	1999-12	Rhag 1999
+month	cy	short	2031-07	Gorff 2031
+month	cy	short	2010-10	Hyd 2010
+month	cy	long	2026-09	Medi 2026
+month	cy	long	2026-01	Ionawr 2026
+month	cy	long	2027-01	Ionawr 2027
+month	cy	long	2024-02	Chwefror 2024
+month	cy	long	2025-03	Mawrth 2025
+month	cy	long	2025-03	Mawrth 2025
+month	cy	long	1999-12	Rhagfyr 1999
+month	cy	long	2031-07	Gorffennaf 2031
+month	cy	long	2010-10	Hydref 2010
+monthNames	cy			Ion|Chw|Maw|Ebr|Mai|Meh|Gor|Awst|Medi|Hyd|Tach|Rhag
+weekdays	cy	narrow		S|Ll|M|M|I|G|S
+weekdays	cy	short		Sul|Llun|Maw|Mer|Iau|Gwe|Sad
+weekdays	cy	long		Dydd Sul|Dydd Llun|Dydd Mawrth|Dydd Mercher|Dydd Iau|Dydd Gwener|Dydd Sadwrn
+weekStart	cy			1
+clock	cy			{hour}:{minute}|false||
+date	ar	day	2026-09-03	3 سبتمبر
+date	ar	day	2026-01-01	1 يناير
+date	ar	day	2027-01-01	1 يناير
+date	ar	day	2024-02-29	29 فبراير
+date	ar	day	2025-03-20	20 مارس
+date	ar	day	2025-03-21	21 مارس
+date	ar	day	1999-12-31	31 ديسمبر
+date	ar	day	2031-07-14	14 يوليو
+date	ar	day	2010-10-10	10 أكتوبر
+date	ar	short	2026-09-03	3‏/9‏/2026
+date	ar	short	2026-01-01	1‏/1‏/2026
+date	ar	short	2027-01-01	1‏/1‏/2027
+date	ar	short	2024-02-29	29‏/2‏/2024
+date	ar	short	2025-03-20	20‏/3‏/2025
+date	ar	short	2025-03-21	21‏/3‏/2025
+date	ar	short	1999-12-31	31‏/12‏/1999
+date	ar	short	2031-07-14	14‏/7‏/2031
+date	ar	short	2010-10-10	10‏/10‏/2010
+date	ar	medium	2026-09-03	03‏/09‏/2026
+date	ar	medium	2026-01-01	01‏/01‏/2026
+date	ar	medium	2027-01-01	01‏/01‏/2027
+date	ar	medium	2024-02-29	29‏/02‏/2024
+date	ar	medium	2025-03-20	20‏/03‏/2025
+date	ar	medium	2025-03-21	21‏/03‏/2025
+date	ar	medium	1999-12-31	31‏/12‏/1999
+date	ar	medium	2031-07-14	14‏/07‏/2031
+date	ar	medium	2010-10-10	10‏/10‏/2010
+date	ar	long	2026-09-03	3 سبتمبر 2026
+date	ar	long	2026-01-01	1 يناير 2026
+date	ar	long	2027-01-01	1 يناير 2027
+date	ar	long	2024-02-29	29 فبراير 2024
+date	ar	long	2025-03-20	20 مارس 2025
+date	ar	long	2025-03-21	21 مارس 2025
+date	ar	long	1999-12-31	31 ديسمبر 1999
+date	ar	long	2031-07-14	14 يوليو 2031
+date	ar	long	2010-10-10	10 أكتوبر 2010
+date	ar	full	2026-09-03	الخميس، 3 سبتمبر 2026
+date	ar	full	2026-01-01	الخميس، 1 يناير 2026
+date	ar	full	2027-01-01	الجمعة، 1 يناير 2027
+date	ar	full	2024-02-29	الخميس، 29 فبراير 2024
+date	ar	full	2025-03-20	الخميس، 20 مارس 2025
+date	ar	full	2025-03-21	الجمعة، 21 مارس 2025
+date	ar	full	1999-12-31	الجمعة، 31 ديسمبر 1999
+date	ar	full	2031-07-14	الاثنين، 14 يوليو 2031
+date	ar	full	2010-10-10	الأحد، 10 أكتوبر 2010
+range	ar	day	2026-09-03/2026-09-10	3–10 سبتمبر
+range	ar	day	2026-09-29/2026-11-02	29 سبتمبر – 2 نوفمبر
+range	ar	day	2026-12-28/2027-01-05	28 ديسمبر 2026 – 5 يناير 2027
+range	ar	day	2025-03-15/2025-03-25	15–25 مارس
+range	ar	day	2010-10-10/2011-10-11	10 أكتوبر 2010 – 11 أكتوبر 2011
+range	ar	short	2026-09-03/2026-09-10	3‏/9‏/2026 – 10‏/9‏/2026
+range	ar	short	2026-09-29/2026-11-02	29‏/9‏/2026 – 2‏/11‏/2026
+range	ar	short	2026-12-28/2027-01-05	28‏/12‏/2026 – 5‏/1‏/2027
+range	ar	short	2025-03-15/2025-03-25	15‏/3‏/2025 – 25‏/3‏/2025
+range	ar	short	2010-10-10/2011-10-11	10‏/10‏/2010 – 11‏/10‏/2011
+range	ar	medium	2026-09-03/2026-09-10	3‏/9‏/2026 – 10‏/9‏/2026
+range	ar	medium	2026-09-29/2026-11-02	29‏/9‏/2026 – 2‏/11‏/2026
+range	ar	medium	2026-12-28/2027-01-05	28‏/12‏/2026 – 5‏/1‏/2027
+range	ar	medium	2025-03-15/2025-03-25	15‏/3‏/2025 – 25‏/3‏/2025
+range	ar	medium	2010-10-10/2011-10-11	10‏/10‏/2010 – 11‏/10‏/2011
+range	ar	long	2026-09-03/2026-09-10	3–10 سبتمبر 2026
+range	ar	long	2026-09-29/2026-11-02	29 سبتمبر – 2 نوفمبر 2026
+range	ar	long	2026-12-28/2027-01-05	28 ديسمبر 2026 – 5 يناير 2027
+range	ar	long	2025-03-15/2025-03-25	15–25 مارس 2025
+range	ar	long	2010-10-10/2011-10-11	10 أكتوبر 2010 – 11 أكتوبر 2011
+month	ar	short	2026-09	سبتمبر 2026
+month	ar	short	2026-01	يناير 2026
+month	ar	short	2027-01	يناير 2027
+month	ar	short	2024-02	فبراير 2024
+month	ar	short	2025-03	مارس 2025
+month	ar	short	2025-03	مارس 2025
+month	ar	short	1999-12	ديسمبر 1999
+month	ar	short	2031-07	يوليو 2031
+month	ar	short	2010-10	أكتوبر 2010
+month	ar	long	2026-09	سبتمبر 2026
+month	ar	long	2026-01	يناير 2026
+month	ar	long	2027-01	يناير 2027
+month	ar	long	2024-02	فبراير 2024
+month	ar	long	2025-03	مارس 2025
+month	ar	long	2025-03	مارس 2025
+month	ar	long	1999-12	ديسمبر 1999
+month	ar	long	2031-07	يوليو 2031
+month	ar	long	2010-10	أكتوبر 2010
+monthNames	ar			يناير|فبراير|مارس|أبريل|مايو|يونيو|يوليو|أغسطس|سبتمبر|أكتوبر|نوفمبر|ديسمبر
+weekdays	ar	narrow		ح|ن|ث|ر|خ|ج|س
+weekdays	ar	short		الأحد|الاثنين|الثلاثاء|الأربعاء|الخميس|الجمعة|السبت
+weekdays	ar	long		الأحد|الاثنين|الثلاثاء|الأربعاء|الخميس|الجمعة|السبت
+weekStart	ar			6
+clock	ar			{hour}:{minute} {dayPeriod}|true|ص|م
+date	he	day	2026-09-03	3 בספט׳
+date	he	day	2026-01-01	1 בינו׳
+date	he	day	2027-01-01	1 בינו׳
+date	he	day	2024-02-29	29 בפבר׳
+date	he	day	2025-03-20	20 במרץ
+date	he	day	2025-03-21	21 במרץ
+date	he	day	1999-12-31	31 בדצמ׳
+date	he	day	2031-07-14	14 ביולי
+date	he	day	2010-10-10	10 באוק׳
+date	he	short	2026-09-03	3.9.2026
+date	he	short	2026-01-01	1.1.2026
+date	he	short	2027-01-01	1.1.2027
+date	he	short	2024-02-29	29.2.2024
+date	he	short	2025-03-20	20.3.2025
+date	he	short	2025-03-21	21.3.2025
+date	he	short	1999-12-31	31.12.1999
+date	he	short	2031-07-14	14.7.2031
+date	he	short	2010-10-10	10.10.2010
+date	he	medium	2026-09-03	3 בספט׳ 2026
+date	he	medium	2026-01-01	1 בינו׳ 2026
+date	he	medium	2027-01-01	1 בינו׳ 2027
+date	he	medium	2024-02-29	29 בפבר׳ 2024
+date	he	medium	2025-03-20	20 במרץ 2025
+date	he	medium	2025-03-21	21 במרץ 2025
+date	he	medium	1999-12-31	31 בדצמ׳ 1999
+date	he	medium	2031-07-14	14 ביולי 2031
+date	he	medium	2010-10-10	10 באוק׳ 2010
+date	he	long	2026-09-03	3 בספטמבר 2026
+date	he	long	2026-01-01	1 בינואר 2026
+date	he	long	2027-01-01	1 בינואר 2027
+date	he	long	2024-02-29	29 בפברואר 2024
+date	he	long	2025-03-20	20 במרץ 2025
+date	he	long	2025-03-21	21 במרץ 2025
+date	he	long	1999-12-31	31 בדצמבר 1999
+date	he	long	2031-07-14	14 ביולי 2031
+date	he	long	2010-10-10	10 באוקטובר 2010
+date	he	full	2026-09-03	יום חמישי, 3 בספטמבר 2026
+date	he	full	2026-01-01	יום חמישי, 1 בינואר 2026
+date	he	full	2027-01-01	יום שישי, 1 בינואר 2027
+date	he	full	2024-02-29	יום חמישי, 29 בפברואר 2024
+date	he	full	2025-03-20	יום חמישי, 20 במרץ 2025
+date	he	full	2025-03-21	יום שישי, 21 במרץ 2025
+date	he	full	1999-12-31	יום שישי, 31 בדצמבר 1999
+date	he	full	2031-07-14	יום שני, 14 ביולי 2031
+date	he	full	2010-10-10	יום ראשון, 10 באוקטובר 2010
+range	he	day	2026-09-03/2026-09-10	3–10 בספט׳
+range	he	day	2026-09-29/2026-11-02	29 בספט׳–2 בנוב׳
+range	he	day	2026-12-28/2027-01-05	28 דצמ׳ 2026 – 5 ינו׳ 2027
+range	he	day	2025-03-15/2025-03-25	15–25 במרץ
+range	he	day	2010-10-10/2011-10-11	10 אוק׳ 2010 – 11 אוק׳ 2011
+range	he	short	2026-09-03/2026-09-10	03.9.2026 – 10.9.2026
+range	he	short	2026-09-29/2026-11-02	29.9.2026 – 2.11.2026
+range	he	short	2026-12-28/2027-01-05	28.12.2026 – 5.1.2027
+range	he	short	2025-03-15/2025-03-25	15.3.2025 – 25.3.2025
+range	he	short	2010-10-10/2011-10-11	10.10.2010 – 11.10.2011
+range	he	medium	2026-09-03/2026-09-10	3–10 בספט׳ 2026
+range	he	medium	2026-09-29/2026-11-02	29 ספט׳ – 2 נוב׳ 2026
+range	he	medium	2026-12-28/2027-01-05	28 דצמ׳ 2026 – 5 ינו׳ 2027
+range	he	medium	2025-03-15/2025-03-25	15–25 במרץ 2025
+range	he	medium	2010-10-10/2011-10-11	10 אוק׳ 2010 – 11 אוק׳ 2011
+range	he	long	2026-09-03/2026-09-10	3–10 בספטמבר 2026
+range	he	long	2026-09-29/2026-11-02	29 ספטמבר – 2 נובמבר 2026
+range	he	long	2026-12-28/2027-01-05	28 דצמבר 2026 – 5 ינואר 2027
+range	he	long	2025-03-15/2025-03-25	15–25 במרץ 2025
+range	he	long	2010-10-10/2011-10-11	10 אוקטובר 2010 – 11 אוקטובר 2011
+month	he	short	2026-09	ספט׳ 2026
+month	he	short	2026-01	ינו׳ 2026
+month	he	short	2027-01	ינו׳ 2027
+month	he	short	2024-02	פבר׳ 2024
+month	he	short	2025-03	מרץ 2025
+month	he	short	2025-03	מרץ 2025
+month	he	short	1999-12	דצמ׳ 1999
+month	he	short	2031-07	יולי 2031
+month	he	short	2010-10	אוק׳ 2010
+month	he	long	2026-09	ספטמבר 2026
+month	he	long	2026-01	ינואר 2026
+month	he	long	2027-01	ינואר 2027
+month	he	long	2024-02	פברואר 2024
+month	he	long	2025-03	מרץ 2025
+month	he	long	2025-03	מרץ 2025
+month	he	long	1999-12	דצמבר 1999
+month	he	long	2031-07	יולי 2031
+month	he	long	2010-10	אוקטובר 2010
+monthNames	he			ינו׳|פבר׳|מרץ|אפר׳|מאי|יוני|יולי|אוג׳|ספט׳|אוק׳|נוב׳|דצמ׳
+weekdays	he	narrow		א׳|ב׳|ג׳|ד׳|ה׳|ו׳|ש׳
+weekdays	he	short		יום א׳|יום ב׳|יום ג׳|יום ד׳|יום ה׳|יום ו׳|שבת
+weekdays	he	long		יום ראשון|יום שני|יום שלישי|יום רביעי|יום חמישי|יום שישי|יום שבת
+weekStart	he			0
+clock	he			{hour}:{minute}|false||
+date	hi	day	2026-09-03	3 सित॰
+date	hi	day	2026-01-01	1 जन॰
+date	hi	day	2027-01-01	1 जन॰
+date	hi	day	2024-02-29	29 फ़र॰
+date	hi	day	2025-03-20	20 मार्च
+date	hi	day	2025-03-21	21 मार्च
+date	hi	day	1999-12-31	31 दिस॰
+date	hi	day	2031-07-14	14 जुल॰
+date	hi	day	2010-10-10	10 अक्टू॰
+date	hi	short	2026-09-03	3/9/26
+date	hi	short	2026-01-01	1/1/26
+date	hi	short	2027-01-01	1/1/27
+date	hi	short	2024-02-29	29/2/24
+date	hi	short	2025-03-20	20/3/25
+date	hi	short	2025-03-21	21/3/25
+date	hi	short	1999-12-31	31/12/99
+date	hi	short	2031-07-14	14/7/31
+date	hi	short	2010-10-10	10/10/10
+date	hi	medium	2026-09-03	3 सित॰ 2026
+date	hi	medium	2026-01-01	1 जन॰ 2026
+date	hi	medium	2027-01-01	1 जन॰ 2027
+date	hi	medium	2024-02-29	29 फ़र॰ 2024
+date	hi	medium	2025-03-20	20 मार्च 2025
+date	hi	medium	2025-03-21	21 मार्च 2025
+date	hi	medium	1999-12-31	31 दिस॰ 1999
+date	hi	medium	2031-07-14	14 जुल॰ 2031
+date	hi	medium	2010-10-10	10 अक्टू॰ 2010
+date	hi	long	2026-09-03	3 सितंबर 2026
+date	hi	long	2026-01-01	1 जनवरी 2026
+date	hi	long	2027-01-01	1 जनवरी 2027
+date	hi	long	2024-02-29	29 फ़रवरी 2024
+date	hi	long	2025-03-20	20 मार्च 2025
+date	hi	long	2025-03-21	21 मार्च 2025
+date	hi	long	1999-12-31	31 दिसंबर 1999
+date	hi	long	2031-07-14	14 जुलाई 2031
+date	hi	long	2010-10-10	10 अक्टूबर 2010
+date	hi	full	2026-09-03	गुरुवार, 3 सितंबर 2026
+date	hi	full	2026-01-01	गुरुवार, 1 जनवरी 2026
+date	hi	full	2027-01-01	शुक्रवार, 1 जनवरी 2027
+date	hi	full	2024-02-29	गुरुवार, 29 फ़रवरी 2024
+date	hi	full	2025-03-20	गुरुवार, 20 मार्च 2025
+date	hi	full	2025-03-21	शुक्रवार, 21 मार्च 2025
+date	hi	full	1999-12-31	शुक्रवार, 31 दिसंबर 1999
+date	hi	full	2031-07-14	सोमवार, 14 जुलाई 2031
+date	hi	full	2010-10-10	रविवार, 10 अक्टूबर 2010
+range	hi	day	2026-09-03/2026-09-10	3 – 10 सित॰
+range	hi	day	2026-09-29/2026-11-02	29 सित॰ – 2 नव॰
+range	hi	day	2026-12-28/2027-01-05	28 दिस॰ 2026 – 5 जन॰ 2027
+range	hi	day	2025-03-15/2025-03-25	15 – 25 मार्च
+range	hi	day	2010-10-10/2011-10-11	10 अक्टू॰ 2010 – 11 अक्टू॰ 2011
+range	hi	short	2026-09-03/2026-09-10	3/9/26 – 10/9/26
+range	hi	short	2026-09-29/2026-11-02	29/9/26 – 2/11/26
+range	hi	short	2026-12-28/2027-01-05	28/12/26 – 5/1/27
+range	hi	short	2025-03-15/2025-03-25	15/3/25 – 25/3/25
+range	hi	short	2010-10-10/2011-10-11	10/10/10 – 11/10/11
+range	hi	medium	2026-09-03/2026-09-10	3–10 सित॰ 2026
+range	hi	medium	2026-09-29/2026-11-02	29 सित॰ – 2 नव॰ 2026
+range	hi	medium	2026-12-28/2027-01-05	28 दिस॰ 2026 – 5 जन॰ 2027
+range	hi	medium	2025-03-15/2025-03-25	15–25 मार्च 2025
+range	hi	medium	2010-10-10/2011-10-11	10 अक्टू॰ 2010 – 11 अक्टू॰ 2011
+range	hi	long	2026-09-03/2026-09-10	3–10 सितंबर 2026
+range	hi	long	2026-09-29/2026-11-02	29 सितंबर – 2 नवंबर 2026
+range	hi	long	2026-12-28/2027-01-05	28 दिसंबर 2026 – 5 जनवरी 2027
+range	hi	long	2025-03-15/2025-03-25	15–25 मार्च 2025
+range	hi	long	2010-10-10/2011-10-11	10 अक्टूबर 2010 – 11 अक्टूबर 2011
+month	hi	short	2026-09	सित॰ 2026
+month	hi	short	2026-01	जन॰ 2026
+month	hi	short	2027-01	जन॰ 2027
+month	hi	short	2024-02	फ़र॰ 2024
+month	hi	short	2025-03	मार्च 2025
+month	hi	short	2025-03	मार्च 2025
+month	hi	short	1999-12	दिस॰ 1999
+month	hi	short	2031-07	जुल॰ 2031
+month	hi	short	2010-10	अक्टू॰ 2010
+month	hi	long	2026-09	सितंबर 2026
+month	hi	long	2026-01	जनवरी 2026
+month	hi	long	2027-01	जनवरी 2027
+month	hi	long	2024-02	फ़रवरी 2024
+month	hi	long	2025-03	मार्च 2025
+month	hi	long	2025-03	मार्च 2025
+month	hi	long	1999-12	दिसंबर 1999
+month	hi	long	2031-07	जुलाई 2031
+month	hi	long	2010-10	अक्टूबर 2010
+monthNames	hi			जन॰|फ़र॰|मार्च|अप्रैल|मई|जून|जुल॰|अग॰|सित॰|अक्टू॰|नव॰|दिस॰
+weekdays	hi	narrow		र|सो|मं|बु|गु|शु|श
+weekdays	hi	short		रवि|सोम|मंगल|बुध|गुरु|शुक्र|शनि
+weekdays	hi	long		रविवार|सोमवार|मंगलवार|बुधवार|गुरुवार|शुक्रवार|शनिवार
+weekStart	hi			0
+clock	hi			{hour}:{minute} {dayPeriod}|true|am|pm
+date	bn	day	2026-09-03	৩ সেপ
+date	bn	day	2026-01-01	১ জানু
+date	bn	day	2027-01-01	১ জানু
+date	bn	day	2024-02-29	২৯ ফেব
+date	bn	day	2025-03-20	২০ মার্চ
+date	bn	day	2025-03-21	২১ মার্চ
+date	bn	day	1999-12-31	৩১ ডিসে
+date	bn	day	2031-07-14	১৪ জুল
+date	bn	day	2010-10-10	১০ অক্টো
+date	bn	short	2026-09-03	৩/৯/২৬
+date	bn	short	2026-01-01	১/১/২৬
+date	bn	short	2027-01-01	১/১/২৭
+date	bn	short	2024-02-29	২৯/২/২৪
+date	bn	short	2025-03-20	২০/৩/২৫
+date	bn	short	2025-03-21	২১/৩/২৫
+date	bn	short	1999-12-31	৩১/১২/৯৯
+date	bn	short	2031-07-14	১৪/৭/৩১
+date	bn	short	2010-10-10	১০/১০/১০
+date	bn	medium	2026-09-03	৩ সেপ, ২০২৬
+date	bn	medium	2026-01-01	১ জানু, ২০২৬
+date	bn	medium	2027-01-01	১ জানু, ২০২৭
+date	bn	medium	2024-02-29	২৯ ফেব, ২০২৪
+date	bn	medium	2025-03-20	২০ মার্চ, ২০২৫
+date	bn	medium	2025-03-21	২১ মার্চ, ২০২৫
+date	bn	medium	1999-12-31	৩১ ডিসে, ১৯৯৯
+date	bn	medium	2031-07-14	১৪ জুল, ২০৩১
+date	bn	medium	2010-10-10	১০ অক্টো, ২০১০
+date	bn	long	2026-09-03	৩ সেপ্টেম্বর, ২০২৬
+date	bn	long	2026-01-01	১ জানুয়ারি, ২০২৬
+date	bn	long	2027-01-01	১ জানুয়ারি, ২০২৭
+date	bn	long	2024-02-29	২৯ ফেব্রুয়ারি, ২০২৪
+date	bn	long	2025-03-20	২০ মার্চ, ২০২৫
+date	bn	long	2025-03-21	২১ মার্চ, ২০২৫
+date	bn	long	1999-12-31	৩১ ডিসেম্বর, ১৯৯৯
+date	bn	long	2031-07-14	১৪ জুলাই, ২০৩১
+date	bn	long	2010-10-10	১০ অক্টোবর, ২০১০
+date	bn	full	2026-09-03	বৃহস্পতিবার, ৩ সেপ্টেম্বর, ২০২৬
+date	bn	full	2026-01-01	বৃহস্পতিবার, ১ জানুয়ারি, ২০২৬
+date	bn	full	2027-01-01	শুক্রবার, ১ জানুয়ারি, ২০২৭
+date	bn	full	2024-02-29	বৃহস্পতিবার, ২৯ ফেব্রুয়ারি, ২০২৪
+date	bn	full	2025-03-20	বৃহস্পতিবার, ২০ মার্চ, ২০২৫
+date	bn	full	2025-03-21	শুক্রবার, ২১ মার্চ, ২০২৫
+date	bn	full	1999-12-31	শুক্রবার, ৩১ ডিসেম্বর, ১৯৯৯
+date	bn	full	2031-07-14	সোমবার, ১৪ জুলাই, ২০৩১
+date	bn	full	2010-10-10	রবিবার, ১০ অক্টোবর, ২০১০
+range	bn	day	2026-09-03/2026-09-10	৩–১০ সেপ
+range	bn	day	2026-09-29/2026-11-02	২৯ সেপ – ২ নভে
+range	bn	day	2026-12-28/2027-01-05	২৮ ডিসে, ২০২৬ – ৫ জানু, ২০২৭
+range	bn	day	2025-03-15/2025-03-25	১৫–২৫ মার্চ
+range	bn	day	2010-10-10/2011-10-11	১০ অক্টো, ২০১০ – ১১ অক্টো, ২০১১
+range	bn	short	2026-09-03/2026-09-10	৩/৯/২৬ – ১০/৯/২৬
+range	bn	short	2026-09-29/2026-11-02	২৯/৯/২৬ – ২/১১/২৬
+range	bn	short	2026-12-28/2027-01-05	২৮/১২/২৬ – ৫/১/২৭
+range	bn	short	2025-03-15/2025-03-25	১৫/৩/২৫ – ২৫/৩/২৫
+range	bn	short	2010-10-10/2011-10-11	১০/১০/১০ – ১১/১০/১১
+range	bn	medium	2026-09-03/2026-09-10	৩–১০ সেপ, ২০২৬
+range	bn	medium	2026-09-29/2026-11-02	২৯ সেপ – ২ নভে, ২০২৬
+range	bn	medium	2026-12-28/2027-01-05	২৮ ডিসে, ২০২৬ – ৫ জানু, ২০২৭
+range	bn	medium	2025-03-15/2025-03-25	১৫–২৫ মার্চ, ২০২৫
+range	bn	medium	2010-10-10/2011-10-11	১০ অক্টো, ২০১০ – ১১ অক্টো, ২০১১
+range	bn	long	2026-09-03/2026-09-10	৩–১০ সেপ্টেম্বর, ২০২৬
+range	bn	long	2026-09-29/2026-11-02	২৯ সেপ্টেম্বর – ২ নভেম্বর, ২০২৬
+range	bn	long	2026-12-28/2027-01-05	২৮ ডিসেম্বর, ২০২৬ – ৫ জানুয়ারি, ২০২৭
+range	bn	long	2025-03-15/2025-03-25	১৫–২৫ মার্চ, ২০২৫
+range	bn	long	2010-10-10/2011-10-11	১০ অক্টোবর, ২০১০ – ১১ অক্টোবর, ২০১১
+month	bn	short	2026-09	সেপ ২০২৬
+month	bn	short	2026-01	জানু ২০২৬
+month	bn	short	2027-01	জানু ২০২৭
+month	bn	short	2024-02	ফেব ২০২৪
+month	bn	short	2025-03	মার্চ ২০২৫
+month	bn	short	2025-03	মার্চ ২০২৫
+month	bn	short	1999-12	ডিসে ১৯৯৯
+month	bn	short	2031-07	জুল ২০৩১
+month	bn	short	2010-10	অক্টো ২০১০
+month	bn	long	2026-09	সেপ্টেম্বর ২০২৬
+month	bn	long	2026-01	জানুয়ারি ২০২৬
+month	bn	long	2027-01	জানুয়ারি ২০২৭
+month	bn	long	2024-02	ফেব্রুয়ারি ২০২৪
+month	bn	long	2025-03	মার্চ ২০২৫
+month	bn	long	2025-03	মার্চ ২০২৫
+month	bn	long	1999-12	ডিসেম্বর ১৯৯৯
+month	bn	long	2031-07	জুলাই ২০৩১
+month	bn	long	2010-10	অক্টোবর ২০১০
+monthNames	bn			জানু|ফেব|মার্চ|এপ্রিল|মে|জুন|জুলাই|আগস্ট|সেপ্ট|অক্টো|নভেম্বর|ডিসে
+weekdays	bn	narrow		র|সো|ম|বু|বৃ|শু|শ
+weekdays	bn	short		রবি|সোম|মঙ্গল|বুধ|বৃহস্পতি|শুক্র|শনি
+weekdays	bn	long		রবিবার|সোমবার|মঙ্গলবার|বুধবার|বৃহস্পতিবার|শুক্রবার|শনিবার
+weekStart	bn			0
+clock	bn			{hour}:{minute} {dayPeriod}|true|AM|PM
+date	ja	day	2026-09-03	9月3日
+date	ja	day	2026-01-01	1月1日
+date	ja	day	2027-01-01	1月1日
+date	ja	day	2024-02-29	2月29日
+date	ja	day	2025-03-20	3月20日
+date	ja	day	2025-03-21	3月21日
+date	ja	day	1999-12-31	12月31日
+date	ja	day	2031-07-14	7月14日
+date	ja	day	2010-10-10	10月10日
+date	ja	short	2026-09-03	2026/09/03
+date	ja	short	2026-01-01	2026/01/01
+date	ja	short	2027-01-01	2027/01/01
+date	ja	short	2024-02-29	2024/02/29
+date	ja	short	2025-03-20	2025/03/20
+date	ja	short	2025-03-21	2025/03/21
+date	ja	short	1999-12-31	1999/12/31
+date	ja	short	2031-07-14	2031/07/14
+date	ja	short	2010-10-10	2010/10/10
+date	ja	medium	2026-09-03	2026/09/03
+date	ja	medium	2026-01-01	2026/01/01
+date	ja	medium	2027-01-01	2027/01/01
+date	ja	medium	2024-02-29	2024/02/29
+date	ja	medium	2025-03-20	2025/03/20
+date	ja	medium	2025-03-21	2025/03/21
+date	ja	medium	1999-12-31	1999/12/31
+date	ja	medium	2031-07-14	2031/07/14
+date	ja	medium	2010-10-10	2010/10/10
+date	ja	long	2026-09-03	2026年9月3日
+date	ja	long	2026-01-01	2026年1月1日
+date	ja	long	2027-01-01	2027年1月1日
+date	ja	long	2024-02-29	2024年2月29日
+date	ja	long	2025-03-20	2025年3月20日
+date	ja	long	2025-03-21	2025年3月21日
+date	ja	long	1999-12-31	1999年12月31日
+date	ja	long	2031-07-14	2031年7月14日
+date	ja	long	2010-10-10	2010年10月10日
+date	ja	full	2026-09-03	2026年9月3日木曜日
+date	ja	full	2026-01-01	2026年1月1日木曜日
+date	ja	full	2027-01-01	2027年1月1日金曜日
+date	ja	full	2024-02-29	2024年2月29日木曜日
+date	ja	full	2025-03-20	2025年3月20日木曜日
+date	ja	full	2025-03-21	2025年3月21日金曜日
+date	ja	full	1999-12-31	1999年12月31日金曜日
+date	ja	full	2031-07-14	2031年7月14日月曜日
+date	ja	full	2010-10-10	2010年10月10日日曜日
+range	ja	day	2026-09-03/2026-09-10	09/03～09/10
+range	ja	day	2026-09-29/2026-11-02	09/29～11/02
+range	ja	day	2026-12-28/2027-01-05	2026/12/28～2027/01/05
+range	ja	day	2025-03-15/2025-03-25	03/15～03/25
+range	ja	day	2010-10-10/2011-10-11	2010/10/10～2011/10/11
+range	ja	short	2026-09-03/2026-09-10	2026/09/03～2026/09/10
+range	ja	short	2026-09-29/2026-11-02	2026/09/29～2026/11/02
+range	ja	short	2026-12-28/2027-01-05	2026/12/28～2027/01/05
+range	ja	short	2025-03-15/2025-03-25	2025/03/15～2025/03/25
+range	ja	short	2010-10-10/2011-10-11	2010/10/10～2011/10/11
+range	ja	medium	2026-09-03/2026-09-10	2026/09/03～2026/09/10
+range	ja	medium	2026-09-29/2026-11-02	2026/09/29～2026/11/02
+range	ja	medium	2026-12-28/2027-01-05	2026/12/28～2027/01/05
+range	ja	medium	2025-03-15/2025-03-25	2025/03/15～2025/03/25
+range	ja	medium	2010-10-10/2011-10-11	2010/10/10～2011/10/11
+range	ja	long	2026-09-03/2026-09-10	2026/09/03～2026/09/10
+range	ja	long	2026-09-29/2026-11-02	2026/09/29～2026/11/02
+range	ja	long	2026-12-28/2027-01-05	2026/12/28～2027/01/05
+range	ja	long	2025-03-15/2025-03-25	2025/03/15～2025/03/25
+range	ja	long	2010-10-10/2011-10-11	2010/10/10～2011/10/11
+month	ja	short	2026-09	2026年9月
+month	ja	short	2026-01	2026年1月
+month	ja	short	2027-01	2027年1月
+month	ja	short	2024-02	2024年2月
+month	ja	short	2025-03	2025年3月
+month	ja	short	2025-03	2025年3月
+month	ja	short	1999-12	1999年12月
+month	ja	short	2031-07	2031年7月
+month	ja	short	2010-10	2010年10月
+month	ja	long	2026-09	2026年9月
+month	ja	long	2026-01	2026年1月
+month	ja	long	2027-01	2027年1月
+month	ja	long	2024-02	2024年2月
+month	ja	long	2025-03	2025年3月
+month	ja	long	2025-03	2025年3月
+month	ja	long	1999-12	1999年12月
+month	ja	long	2031-07	2031年7月
+month	ja	long	2010-10	2010年10月
+monthNames	ja			1月|2月|3月|4月|5月|6月|7月|8月|9月|10月|11月|12月
+weekdays	ja	narrow		日|月|火|水|木|金|土
+weekdays	ja	short		日|月|火|水|木|金|土
+weekdays	ja	long		日曜日|月曜日|火曜日|水曜日|木曜日|金曜日|土曜日
+weekStart	ja			0
+clock	ja			{hour}:{minute}|false||
+date	zh	day	2026-09-03	9月3日
+date	zh	day	2026-01-01	1月1日
+date	zh	day	2027-01-01	1月1日
+date	zh	day	2024-02-29	2月29日
+date	zh	day	2025-03-20	3月20日
+date	zh	day	2025-03-21	3月21日
+date	zh	day	1999-12-31	12月31日
+date	zh	day	2031-07-14	7月14日
+date	zh	day	2010-10-10	10月10日
+date	zh	short	2026-09-03	2026/9/3
+date	zh	short	2026-01-01	2026/1/1
+date	zh	short	2027-01-01	2027/1/1
+date	zh	short	2024-02-29	2024/2/29
+date	zh	short	2025-03-20	2025/3/20
+date	zh	short	2025-03-21	2025/3/21
+date	zh	short	1999-12-31	1999/12/31
+date	zh	short	2031-07-14	2031/7/14
+date	zh	short	2010-10-10	2010/10/10
+date	zh	medium	2026-09-03	2026年9月3日
+date	zh	medium	2026-01-01	2026年1月1日
+date	zh	medium	2027-01-01	2027年1月1日
+date	zh	medium	2024-02-29	2024年2月29日
+date	zh	medium	2025-03-20	2025年3月20日
+date	zh	medium	2025-03-21	2025年3月21日
+date	zh	medium	1999-12-31	1999年12月31日
+date	zh	medium	2031-07-14	2031年7月14日
+date	zh	medium	2010-10-10	2010年10月10日
+date	zh	long	2026-09-03	2026年9月3日
+date	zh	long	2026-01-01	2026年1月1日
+date	zh	long	2027-01-01	2027年1月1日
+date	zh	long	2024-02-29	2024年2月29日
+date	zh	long	2025-03-20	2025年3月20日
+date	zh	long	2025-03-21	2025年3月21日
+date	zh	long	1999-12-31	1999年12月31日
+date	zh	long	2031-07-14	2031年7月14日
+date	zh	long	2010-10-10	2010年10月10日
+date	zh	full	2026-09-03	2026年9月3日星期四
+date	zh	full	2026-01-01	2026年1月1日星期四
+date	zh	full	2027-01-01	2027年1月1日星期五
+date	zh	full	2024-02-29	2024年2月29日星期四
+date	zh	full	2025-03-20	2025年3月20日星期四
+date	zh	full	2025-03-21	2025年3月21日星期五
+date	zh	full	1999-12-31	1999年12月31日星期五
+date	zh	full	2031-07-14	2031年7月14日星期一
+date	zh	full	2010-10-10	2010年10月10日星期日
+range	zh	day	2026-09-03/2026-09-10	9/3 – 9/10
+range	zh	day	2026-09-29/2026-11-02	9/29 – 11/2
+range	zh	day	2026-12-28/2027-01-05	2026/12/28 – 2027/1/5
+range	zh	day	2025-03-15/2025-03-25	3/15 – 3/25
+range	zh	day	2010-10-10/2011-10-11	2010/10/10 – 2011/10/11
+range	zh	short	2026-09-03/2026-09-10	2026/9/3 – 2026/9/10
+range	zh	short	2026-09-29/2026-11-02	2026/9/29 – 2026/11/2
+range	zh	short	2026-12-28/2027-01-05	2026/12/28 – 2027/1/5
+range	zh	short	2025-03-15/2025-03-25	2025/3/15 – 2025/3/25
+range	zh	short	2010-10-10/2011-10-11	2010/10/10 – 2011/10/11
+range	zh	medium	2026-09-03/2026-09-10	2026/9/3 – 2026/9/10
+range	zh	medium	2026-09-29/2026-11-02	2026/9/29 – 2026/11/2
+range	zh	medium	2026-12-28/2027-01-05	2026/12/28 – 2027/1/5
+range	zh	medium	2025-03-15/2025-03-25	2025/3/15 – 2025/3/25
+range	zh	medium	2010-10-10/2011-10-11	2010/10/10 – 2011/10/11
+range	zh	long	2026-09-03/2026-09-10	2026/9/3 – 2026/9/10
+range	zh	long	2026-09-29/2026-11-02	2026/9/29 – 2026/11/2
+range	zh	long	2026-12-28/2027-01-05	2026/12/28 – 2027/1/5
+range	zh	long	2025-03-15/2025-03-25	2025/3/15 – 2025/3/25
+range	zh	long	2010-10-10/2011-10-11	2010/10/10 – 2011/10/11
+month	zh	short	2026-09	2026年9月
+month	zh	short	2026-01	2026年1月
+month	zh	short	2027-01	2027年1月
+month	zh	short	2024-02	2024年2月
+month	zh	short	2025-03	2025年3月
+month	zh	short	2025-03	2025年3月
+month	zh	short	1999-12	1999年12月
+month	zh	short	2031-07	2031年7月
+month	zh	short	2010-10	2010年10月
+month	zh	long	2026-09	2026年9月
+month	zh	long	2026-01	2026年1月
+month	zh	long	2027-01	2027年1月
+month	zh	long	2024-02	2024年2月
+month	zh	long	2025-03	2025年3月
+month	zh	long	2025-03	2025年3月
+month	zh	long	1999-12	1999年12月
+month	zh	long	2031-07	2031年7月
+month	zh	long	2010-10	2010年10月
+monthNames	zh			1月|2月|3月|4月|5月|6月|7月|8月|9月|10月|11月|12月
+weekdays	zh	narrow		日|一|二|三|四|五|六
+weekdays	zh	short		周日|周一|周二|周三|周四|周五|周六
+weekdays	zh	long		星期日|星期一|星期二|星期三|星期四|星期五|星期六
+weekStart	zh			1
+clock	zh			{hour}:{minute}|false||
+date	zh-Hant-HK	day	2026-09-03	9月3日
+date	zh-Hant-HK	day	2026-01-01	1月1日
+date	zh-Hant-HK	day	2027-01-01	1月1日
+date	zh-Hant-HK	day	2024-02-29	2月29日
+date	zh-Hant-HK	day	2025-03-20	3月20日
+date	zh-Hant-HK	day	2025-03-21	3月21日
+date	zh-Hant-HK	day	1999-12-31	12月31日
+date	zh-Hant-HK	day	2031-07-14	7月14日
+date	zh-Hant-HK	day	2010-10-10	10月10日
+date	zh-Hant-HK	short	2026-09-03	3/9/2026
+date	zh-Hant-HK	short	2026-01-01	1/1/2026
+date	zh-Hant-HK	short	2027-01-01	1/1/2027
+date	zh-Hant-HK	short	2024-02-29	29/2/2024
+date	zh-Hant-HK	short	2025-03-20	20/3/2025
+date	zh-Hant-HK	short	2025-03-21	21/3/2025
+date	zh-Hant-HK	short	1999-12-31	31/12/1999
+date	zh-Hant-HK	short	2031-07-14	14/7/2031
+date	zh-Hant-HK	short	2010-10-10	10/10/2010
+date	zh-Hant-HK	medium	2026-09-03	2026年9月3日
+date	zh-Hant-HK	medium	2026-01-01	2026年1月1日
+date	zh-Hant-HK	medium	2027-01-01	2027年1月1日
+date	zh-Hant-HK	medium	2024-02-29	2024年2月29日
+date	zh-Hant-HK	medium	2025-03-20	2025年3月20日
+date	zh-Hant-HK	medium	2025-03-21	2025年3月21日
+date	zh-Hant-HK	medium	1999-12-31	1999年12月31日
+date	zh-Hant-HK	medium	2031-07-14	2031年7月14日
+date	zh-Hant-HK	medium	2010-10-10	2010年10月10日
+date	zh-Hant-HK	long	2026-09-03	2026年9月3日
+date	zh-Hant-HK	long	2026-01-01	2026年1月1日
+date	zh-Hant-HK	long	2027-01-01	2027年1月1日
+date	zh-Hant-HK	long	2024-02-29	2024年2月29日
+date	zh-Hant-HK	long	2025-03-20	2025年3月20日
+date	zh-Hant-HK	long	2025-03-21	2025年3月21日
+date	zh-Hant-HK	long	1999-12-31	1999年12月31日
+date	zh-Hant-HK	long	2031-07-14	2031年7月14日
+date	zh-Hant-HK	long	2010-10-10	2010年10月10日
+date	zh-Hant-HK	full	2026-09-03	2026年9月3日星期四
+date	zh-Hant-HK	full	2026-01-01	2026年1月1日星期四
+date	zh-Hant-HK	full	2027-01-01	2027年1月1日星期五
+date	zh-Hant-HK	full	2024-02-29	2024年2月29日星期四
+date	zh-Hant-HK	full	2025-03-20	2025年3月20日星期四
+date	zh-Hant-HK	full	2025-03-21	2025年3月21日星期五
+date	zh-Hant-HK	full	1999-12-31	1999年12月31日星期五
+date	zh-Hant-HK	full	2031-07-14	2031年7月14日星期一
+date	zh-Hant-HK	full	2010-10-10	2010年10月10日星期日
+range	zh-Hant-HK	day	2026-09-03/2026-09-10	3/9 至 10/9
+range	zh-Hant-HK	day	2026-09-29/2026-11-02	29/9 至 2/11
+range	zh-Hant-HK	day	2026-12-28/2027-01-05	28/12/2026 至 5/1/2027
+range	zh-Hant-HK	day	2025-03-15/2025-03-25	15/3 至 25/3
+range	zh-Hant-HK	day	2010-10-10/2011-10-11	10/10/2010 至 11/10/2011
+range	zh-Hant-HK	short	2026-09-03/2026-09-10	3/9/2026 至 10/9/2026
+range	zh-Hant-HK	short	2026-09-29/2026-11-02	29/9/2026 至 2/11/2026
+range	zh-Hant-HK	short	2026-12-28/2027-01-05	28/12/2026 至 5/1/2027
+range	zh-Hant-HK	short	2025-03-15/2025-03-25	15/3/2025 至 25/3/2025
+range	zh-Hant-HK	short	2010-10-10/2011-10-11	10/10/2010 至 11/10/2011
+range	zh-Hant-HK	medium	2026-09-03/2026-09-10	3/9/2026 至 10/9/2026
+range	zh-Hant-HK	medium	2026-09-29/2026-11-02	29/9/2026 至 2/11/2026
+range	zh-Hant-HK	medium	2026-12-28/2027-01-05	28/12/2026 至 5/1/2027
+range	zh-Hant-HK	medium	2025-03-15/2025-03-25	15/3/2025 至 25/3/2025
+range	zh-Hant-HK	medium	2010-10-10/2011-10-11	10/10/2010 至 11/10/2011
+range	zh-Hant-HK	long	2026-09-03/2026-09-10	3/9/2026 至 10/9/2026
+range	zh-Hant-HK	long	2026-09-29/2026-11-02	29/9/2026 至 2/11/2026
+range	zh-Hant-HK	long	2026-12-28/2027-01-05	28/12/2026 至 5/1/2027
+range	zh-Hant-HK	long	2025-03-15/2025-03-25	15/3/2025 至 25/3/2025
+range	zh-Hant-HK	long	2010-10-10/2011-10-11	10/10/2010 至 11/10/2011
+month	zh-Hant-HK	short	2026-09	2026年9月
+month	zh-Hant-HK	short	2026-01	2026年1月
+month	zh-Hant-HK	short	2027-01	2027年1月
+month	zh-Hant-HK	short	2024-02	2024年2月
+month	zh-Hant-HK	short	2025-03	2025年3月
+month	zh-Hant-HK	short	2025-03	2025年3月
+month	zh-Hant-HK	short	1999-12	1999年12月
+month	zh-Hant-HK	short	2031-07	2031年7月
+month	zh-Hant-HK	short	2010-10	2010年10月
+month	zh-Hant-HK	long	2026-09	2026年9月
+month	zh-Hant-HK	long	2026-01	2026年1月
+month	zh-Hant-HK	long	2027-01	2027年1月
+month	zh-Hant-HK	long	2024-02	2024年2月
+month	zh-Hant-HK	long	2025-03	2025年3月
+month	zh-Hant-HK	long	2025-03	2025年3月
+month	zh-Hant-HK	long	1999-12	1999年12月
+month	zh-Hant-HK	long	2031-07	2031年7月
+month	zh-Hant-HK	long	2010-10	2010年10月
+monthNames	zh-Hant-HK			1月|2月|3月|4月|5月|6月|7月|8月|9月|10月|11月|12月
+weekdays	zh-Hant-HK	narrow		日|一|二|三|四|五|六
+weekdays	zh-Hant-HK	short		週日|週一|週二|週三|週四|週五|週六
+weekdays	zh-Hant-HK	long		星期日|星期一|星期二|星期三|星期四|星期五|星期六
+weekStart	zh-Hant-HK			0
+clock	zh-Hant-HK			{dayPeriod}{hour}:{minute}|true|上午|下午
+date	ko	day	2026-09-03	9월 3일
+date	ko	day	2026-01-01	1월 1일
+date	ko	day	2027-01-01	1월 1일
+date	ko	day	2024-02-29	2월 29일
+date	ko	day	2025-03-20	3월 20일
+date	ko	day	2025-03-21	3월 21일
+date	ko	day	1999-12-31	12월 31일
+date	ko	day	2031-07-14	7월 14일
+date	ko	day	2010-10-10	10월 10일
+date	ko	short	2026-09-03	26. 9. 3.
+date	ko	short	2026-01-01	26. 1. 1.
+date	ko	short	2027-01-01	27. 1. 1.
+date	ko	short	2024-02-29	24. 2. 29.
+date	ko	short	2025-03-20	25. 3. 20.
+date	ko	short	2025-03-21	25. 3. 21.
+date	ko	short	1999-12-31	99. 12. 31.
+date	ko	short	2031-07-14	31. 7. 14.
+date	ko	short	2010-10-10	10. 10. 10.
+date	ko	medium	2026-09-03	2026. 9. 3.
+date	ko	medium	2026-01-01	2026. 1. 1.
+date	ko	medium	2027-01-01	2027. 1. 1.
+date	ko	medium	2024-02-29	2024. 2. 29.
+date	ko	medium	2025-03-20	2025. 3. 20.
+date	ko	medium	2025-03-21	2025. 3. 21.
+date	ko	medium	1999-12-31	1999. 12. 31.
+date	ko	medium	2031-07-14	2031. 7. 14.
+date	ko	medium	2010-10-10	2010. 10. 10.
+date	ko	long	2026-09-03	2026년 9월 3일
+date	ko	long	2026-01-01	2026년 1월 1일
+date	ko	long	2027-01-01	2027년 1월 1일
+date	ko	long	2024-02-29	2024년 2월 29일
+date	ko	long	2025-03-20	2025년 3월 20일
+date	ko	long	2025-03-21	2025년 3월 21일
+date	ko	long	1999-12-31	1999년 12월 31일
+date	ko	long	2031-07-14	2031년 7월 14일
+date	ko	long	2010-10-10	2010년 10월 10일
+date	ko	full	2026-09-03	2026년 9월 3일 목요일
+date	ko	full	2026-01-01	2026년 1월 1일 목요일
+date	ko	full	2027-01-01	2027년 1월 1일 금요일
+date	ko	full	2024-02-29	2024년 2월 29일 목요일
+date	ko	full	2025-03-20	2025년 3월 20일 목요일
+date	ko	full	2025-03-21	2025년 3월 21일 금요일
+date	ko	full	1999-12-31	1999년 12월 31일 금요일
+date	ko	full	2031-07-14	2031년 7월 14일 월요일
+date	ko	full	2010-10-10	2010년 10월 10일 일요일
+range	ko	day	2026-09-03/2026-09-10	9월 3일~10일
+range	ko	day	2026-09-29/2026-11-02	9월 29일~11월 2일
+range	ko	day	2026-12-28/2027-01-05	2026년 12월 28일~2027년 1월 5일
+range	ko	day	2025-03-15/2025-03-25	3월 15일~25일
+range	ko	day	2010-10-10/2011-10-11	2010년 10월 10일~2011년 10월 11일
+range	ko	short	2026-09-03/2026-09-10	26. 9. 3. ~ 26. 9. 10.
+range	ko	short	2026-09-29/2026-11-02	26. 9. 29. ~ 26. 11. 2.
+range	ko	short	2026-12-28/2027-01-05	26. 12. 28. ~ 27. 1. 5.
+range	ko	short	2025-03-15/2025-03-25	25. 3. 15. ~ 25. 3. 25.
+range	ko	short	2010-10-10/2011-10-11	10. 10. 10. ~ 11. 10. 11.
+range	ko	medium	2026-09-03/2026-09-10	2026. 9. 3. ~ 2026. 9. 10.
+range	ko	medium	2026-09-29/2026-11-02	2026. 9. 29. ~ 2026. 11. 2.
+range	ko	medium	2026-12-28/2027-01-05	2026. 12. 28. ~ 2027. 1. 5.
+range	ko	medium	2025-03-15/2025-03-25	2025. 3. 15. ~ 2025. 3. 25.
+range	ko	medium	2010-10-10/2011-10-11	2010. 10. 10. ~ 2011. 10. 11.
+range	ko	long	2026-09-03/2026-09-10	2026년 9월 3일~10일
+range	ko	long	2026-09-29/2026-11-02	2026년 9월 29일~11월 2일
+range	ko	long	2026-12-28/2027-01-05	2026년 12월 28일~2027년 1월 5일
+range	ko	long	2025-03-15/2025-03-25	2025년 3월 15일~25일
+range	ko	long	2010-10-10/2011-10-11	2010년 10월 10일~2011년 10월 11일
+month	ko	short	2026-09	2026년 9월
+month	ko	short	2026-01	2026년 1월
+month	ko	short	2027-01	2027년 1월
+month	ko	short	2024-02	2024년 2월
+month	ko	short	2025-03	2025년 3월
+month	ko	short	2025-03	2025년 3월
+month	ko	short	1999-12	1999년 12월
+month	ko	short	2031-07	2031년 7월
+month	ko	short	2010-10	2010년 10월
+month	ko	long	2026-09	2026년 9월
+month	ko	long	2026-01	2026년 1월
+month	ko	long	2027-01	2027년 1월
+month	ko	long	2024-02	2024년 2월
+month	ko	long	2025-03	2025년 3월
+month	ko	long	2025-03	2025년 3월
+month	ko	long	1999-12	1999년 12월
+month	ko	long	2031-07	2031년 7월
+month	ko	long	2010-10	2010년 10월
+monthNames	ko			1월|2월|3월|4월|5월|6월|7월|8월|9월|10월|11월|12월
+weekdays	ko	narrow		일|월|화|수|목|금|토
+weekdays	ko	short		일|월|화|수|목|금|토
+weekdays	ko	long		일요일|월요일|화요일|수요일|목요일|금요일|토요일
+weekStart	ko			0
+clock	ko			{dayPeriod} {hour}:{minute}|true|오전|오후
+date	tr	day	2026-09-03	3 Eyl
+date	tr	day	2026-01-01	1 Oca
+date	tr	day	2027-01-01	1 Oca
+date	tr	day	2024-02-29	29 Şub
+date	tr	day	2025-03-20	20 Mar
+date	tr	day	2025-03-21	21 Mar
+date	tr	day	1999-12-31	31 Ara
+date	tr	day	2031-07-14	14 Tem
+date	tr	day	2010-10-10	10 Eki
+date	tr	short	2026-09-03	3.09.2026
+date	tr	short	2026-01-01	1.01.2026
+date	tr	short	2027-01-01	1.01.2027
+date	tr	short	2024-02-29	29.02.2024
+date	tr	short	2025-03-20	20.03.2025
+date	tr	short	2025-03-21	21.03.2025
+date	tr	short	1999-12-31	31.12.1999
+date	tr	short	2031-07-14	14.07.2031
+date	tr	short	2010-10-10	10.10.2010
+date	tr	medium	2026-09-03	3 Eyl 2026
+date	tr	medium	2026-01-01	1 Oca 2026
+date	tr	medium	2027-01-01	1 Oca 2027
+date	tr	medium	2024-02-29	29 Şub 2024
+date	tr	medium	2025-03-20	20 Mar 2025
+date	tr	medium	2025-03-21	21 Mar 2025
+date	tr	medium	1999-12-31	31 Ara 1999
+date	tr	medium	2031-07-14	14 Tem 2031
+date	tr	medium	2010-10-10	10 Eki 2010
+date	tr	long	2026-09-03	3 Eylül 2026
+date	tr	long	2026-01-01	1 Ocak 2026
+date	tr	long	2027-01-01	1 Ocak 2027
+date	tr	long	2024-02-29	29 Şubat 2024
+date	tr	long	2025-03-20	20 Mart 2025
+date	tr	long	2025-03-21	21 Mart 2025
+date	tr	long	1999-12-31	31 Aralık 1999
+date	tr	long	2031-07-14	14 Temmuz 2031
+date	tr	long	2010-10-10	10 Ekim 2010
+date	tr	full	2026-09-03	3 Eylül 2026 Perşembe
+date	tr	full	2026-01-01	1 Ocak 2026 Perşembe
+date	tr	full	2027-01-01	1 Ocak 2027 Cuma
+date	tr	full	2024-02-29	29 Şubat 2024 Perşembe
+date	tr	full	2025-03-20	20 Mart 2025 Perşembe
+date	tr	full	2025-03-21	21 Mart 2025 Cuma
+date	tr	full	1999-12-31	31 Aralık 1999 Cuma
+date	tr	full	2031-07-14	14 Temmuz 2031 Pazartesi
+date	tr	full	2010-10-10	10 Ekim 2010 Pazar
+range	tr	day	2026-09-03/2026-09-10	3 – 10 Eyl
+range	tr	day	2026-09-29/2026-11-02	29 Eyl – 2 Kas
+range	tr	day	2026-12-28/2027-01-05	28 Ara 2026 – 5 Oca 2027
+range	tr	day	2025-03-15/2025-03-25	15 – 25 Mar
+range	tr	day	2010-10-10/2011-10-11	10 Eki 2010 – 11 Eki 2011
+range	tr	short	2026-09-03/2026-09-10	03.09.2026 – 10.09.2026
+range	tr	short	2026-09-29/2026-11-02	29.09.2026 – 02.11.2026
+range	tr	short	2026-12-28/2027-01-05	28.12.2026 – 05.01.2027
+range	tr	short	2025-03-15/2025-03-25	15.03.2025 – 25.03.2025
+range	tr	short	2010-10-10/2011-10-11	10.10.2010 – 11.10.2011
+range	tr	medium	2026-09-03/2026-09-10	3–10 Eyl 2026
+range	tr	medium	2026-09-29/2026-11-02	29 Eyl – 2 Kas 2026
+range	tr	medium	2026-12-28/2027-01-05	28 Ara 2026 – 5 Oca 2027
+range	tr	medium	2025-03-15/2025-03-25	15–25 Mar 2025
+range	tr	medium	2010-10-10/2011-10-11	10 Eki 2010 – 11 Eki 2011
+range	tr	long	2026-09-03/2026-09-10	3–10 Eylül 2026
+range	tr	long	2026-09-29/2026-11-02	29 Eylül – 2 Kasım 2026
+range	tr	long	2026-12-28/2027-01-05	28 Aralık 2026 – 5 Ocak 2027
+range	tr	long	2025-03-15/2025-03-25	15–25 Mart 2025
+range	tr	long	2010-10-10/2011-10-11	10 Ekim 2010 – 11 Ekim 2011
+month	tr	short	2026-09	Eyl 2026
+month	tr	short	2026-01	Oca 2026
+month	tr	short	2027-01	Oca 2027
+month	tr	short	2024-02	Şub 2024
+month	tr	short	2025-03	Mar 2025
+month	tr	short	2025-03	Mar 2025
+month	tr	short	1999-12	Ara 1999
+month	tr	short	2031-07	Tem 2031
+month	tr	short	2010-10	Eki 2010
+month	tr	long	2026-09	Eylül 2026
+month	tr	long	2026-01	Ocak 2026
+month	tr	long	2027-01	Ocak 2027
+month	tr	long	2024-02	Şubat 2024
+month	tr	long	2025-03	Mart 2025
+month	tr	long	2025-03	Mart 2025
+month	tr	long	1999-12	Aralık 1999
+month	tr	long	2031-07	Temmuz 2031
+month	tr	long	2010-10	Ekim 2010
+monthNames	tr			Oca|Şub|Mar|Nis|May|Haz|Tem|Ağu|Eyl|Eki|Kas|Ara
+weekdays	tr	narrow		P|P|S|Ç|P|C|C
+weekdays	tr	short		Paz|Pzt|Sal|Çar|Per|Cum|Cmt
+weekdays	tr	long		Pazar|Pazartesi|Salı|Çarşamba|Perşembe|Cuma|Cumartesi
+weekStart	tr			1
+clock	tr			{hour}:{minute}|false||
+date	sr-Latn	day	2026-09-03	3. sep
+date	sr-Latn	day	2026-01-01	1. jan
+date	sr-Latn	day	2027-01-01	1. jan
+date	sr-Latn	day	2024-02-29	29. feb
+date	sr-Latn	day	2025-03-20	20. mar
+date	sr-Latn	day	2025-03-21	21. mar
+date	sr-Latn	day	1999-12-31	31. dec
+date	sr-Latn	day	2031-07-14	14. jul
+date	sr-Latn	day	2010-10-10	10. okt
+date	sr-Latn	short	2026-09-03	3. 9. 2026.
+date	sr-Latn	short	2026-01-01	1. 1. 2026.
+date	sr-Latn	short	2027-01-01	1. 1. 2027.
+date	sr-Latn	short	2024-02-29	29. 2. 2024.
+date	sr-Latn	short	2025-03-20	20. 3. 2025.
+date	sr-Latn	short	2025-03-21	21. 3. 2025.
+date	sr-Latn	short	1999-12-31	31. 12. 1999.
+date	sr-Latn	short	2031-07-14	14. 7. 2031.
+date	sr-Latn	short	2010-10-10	10. 10. 2010.
+date	sr-Latn	medium	2026-09-03	3. 9. 2026.
+date	sr-Latn	medium	2026-01-01	1. 1. 2026.
+date	sr-Latn	medium	2027-01-01	1. 1. 2027.
+date	sr-Latn	medium	2024-02-29	29. 2. 2024.
+date	sr-Latn	medium	2025-03-20	20. 3. 2025.
+date	sr-Latn	medium	2025-03-21	21. 3. 2025.
+date	sr-Latn	medium	1999-12-31	31. 12. 1999.
+date	sr-Latn	medium	2031-07-14	14. 7. 2031.
+date	sr-Latn	medium	2010-10-10	10. 10. 2010.
+date	sr-Latn	long	2026-09-03	3. septembar 2026.
+date	sr-Latn	long	2026-01-01	1. januar 2026.
+date	sr-Latn	long	2027-01-01	1. januar 2027.
+date	sr-Latn	long	2024-02-29	29. februar 2024.
+date	sr-Latn	long	2025-03-20	20. mart 2025.
+date	sr-Latn	long	2025-03-21	21. mart 2025.
+date	sr-Latn	long	1999-12-31	31. decembar 1999.
+date	sr-Latn	long	2031-07-14	14. jul 2031.
+date	sr-Latn	long	2010-10-10	10. oktobar 2010.
+date	sr-Latn	full	2026-09-03	četvrtak, 3. septembar 2026.
+date	sr-Latn	full	2026-01-01	četvrtak, 1. januar 2026.
+date	sr-Latn	full	2027-01-01	petak, 1. januar 2027.
+date	sr-Latn	full	2024-02-29	četvrtak, 29. februar 2024.
+date	sr-Latn	full	2025-03-20	četvrtak, 20. mart 2025.
+date	sr-Latn	full	2025-03-21	petak, 21. mart 2025.
+date	sr-Latn	full	1999-12-31	petak, 31. decembar 1999.
+date	sr-Latn	full	2031-07-14	ponedeljak, 14. jul 2031.
+date	sr-Latn	full	2010-10-10	nedelja, 10. oktobar 2010.
+range	sr-Latn	day	2026-09-03/2026-09-10	03.–10. sep
+range	sr-Latn	day	2026-09-29/2026-11-02	29. sep – 02. nov
+range	sr-Latn	day	2026-12-28/2027-01-05	28. dec 2026. – 05. jan 2027.
+range	sr-Latn	day	2025-03-15/2025-03-25	15.–25. mar
+range	sr-Latn	day	2010-10-10/2011-10-11	10. okt 2010. – 11. okt 2011.
+range	sr-Latn	short	2026-09-03/2026-09-10	3. 9. 2026. – 10. 9. 2026.
+range	sr-Latn	short	2026-09-29/2026-11-02	29. 9. 2026. – 2. 11. 2026.
+range	sr-Latn	short	2026-12-28/2027-01-05	28. 12. 2026. – 5. 1. 2027.
+range	sr-Latn	short	2025-03-15/2025-03-25	15. 3. 2025. – 25. 3. 2025.
+range	sr-Latn	short	2010-10-10/2011-10-11	10. 10. 2010. – 11. 10. 2011.
+range	sr-Latn	medium	2026-09-03/2026-09-10	3. 9. 2026. – 10. 9. 2026.
+range	sr-Latn	medium	2026-09-29/2026-11-02	29. 9. 2026. – 2. 11. 2026.
+range	sr-Latn	medium	2026-12-28/2027-01-05	28. 12. 2026. – 5. 1. 2027.
+range	sr-Latn	medium	2025-03-15/2025-03-25	15. 3. 2025. – 25. 3. 2025.
+range	sr-Latn	medium	2010-10-10/2011-10-11	10. 10. 2010. – 11. 10. 2011.
+range	sr-Latn	long	2026-09-03/2026-09-10	03.–10. septembar 2026.
+range	sr-Latn	long	2026-09-29/2026-11-02	29. septembar – 02. novembar 2026.
+range	sr-Latn	long	2026-12-28/2027-01-05	28. decembar 2026. – 05. januar 2027.
+range	sr-Latn	long	2025-03-15/2025-03-25	15.–25. mart 2025.
+range	sr-Latn	long	2010-10-10/2011-10-11	10. oktobar 2010. – 11. oktobar 2011.
+month	sr-Latn	short	2026-09	sep 2026.
+month	sr-Latn	short	2026-01	jan 2026.
+month	sr-Latn	short	2027-01	jan 2027.
+month	sr-Latn	short	2024-02	feb 2024.
+month	sr-Latn	short	2025-03	mar 2025.
+month	sr-Latn	short	2025-03	mar 2025.
+month	sr-Latn	short	1999-12	dec 1999.
+month	sr-Latn	short	2031-07	jul 2031.
+month	sr-Latn	short	2010-10	okt 2010.
+month	sr-Latn	long	2026-09	septembar 2026.
+month	sr-Latn	long	2026-01	januar 2026.
+month	sr-Latn	long	2027-01	januar 2027.
+month	sr-Latn	long	2024-02	februar 2024.
+month	sr-Latn	long	2025-03	mart 2025.
+month	sr-Latn	long	2025-03	mart 2025.
+month	sr-Latn	long	1999-12	decembar 1999.
+month	sr-Latn	long	2031-07	jul 2031.
+month	sr-Latn	long	2010-10	oktobar 2010.
+monthNames	sr-Latn			jan|feb|mar|apr|maj|jun|jul|avg|sep|okt|nov|dec
+weekdays	sr-Latn	narrow		n|p|u|s|č|p|s
+weekdays	sr-Latn	short		ned|pon|uto|sre|čet|pet|sub
+weekdays	sr-Latn	long		nedelja|ponedeljak|utorak|sreda|četvrtak|petak|subota
+weekStart	sr-Latn			1
+clock	sr-Latn			{hour}:{minute}|false||
+date	is	day	2026-09-03	3. sep.
+date	is	day	2026-01-01	1. jan.
+date	is	day	2027-01-01	1. jan.
+date	is	day	2024-02-29	29. feb.
+date	is	day	2025-03-20	20. mar.
+date	is	day	2025-03-21	21. mar.
+date	is	day	1999-12-31	31. des.
+date	is	day	2031-07-14	14. júl.
+date	is	day	2010-10-10	10. okt.
+date	is	short	2026-09-03	3.9.2026
+date	is	short	2026-01-01	1.1.2026
+date	is	short	2027-01-01	1.1.2027
+date	is	short	2024-02-29	29.2.2024
+date	is	short	2025-03-20	20.3.2025
+date	is	short	2025-03-21	21.3.2025
+date	is	short	1999-12-31	31.12.1999
+date	is	short	2031-07-14	14.7.2031
+date	is	short	2010-10-10	10.10.2010
+date	is	medium	2026-09-03	3. sep. 2026
+date	is	medium	2026-01-01	1. jan. 2026
+date	is	medium	2027-01-01	1. jan. 2027
+date	is	medium	2024-02-29	29. feb. 2024
+date	is	medium	2025-03-20	20. mar. 2025
+date	is	medium	2025-03-21	21. mar. 2025
+date	is	medium	1999-12-31	31. des. 1999
+date	is	medium	2031-07-14	14. júl. 2031
+date	is	medium	2010-10-10	10. okt. 2010
+date	is	long	2026-09-03	3. september 2026
+date	is	long	2026-01-01	1. janúar 2026
+date	is	long	2027-01-01	1. janúar 2027
+date	is	long	2024-02-29	29. febrúar 2024
+date	is	long	2025-03-20	20. mars 2025
+date	is	long	2025-03-21	21. mars 2025
+date	is	long	1999-12-31	31. desember 1999
+date	is	long	2031-07-14	14. júlí 2031
+date	is	long	2010-10-10	10. október 2010
+date	is	full	2026-09-03	fimmtudagur, 3. september 2026
+date	is	full	2026-01-01	fimmtudagur, 1. janúar 2026
+date	is	full	2027-01-01	föstudagur, 1. janúar 2027
+date	is	full	2024-02-29	fimmtudagur, 29. febrúar 2024
+date	is	full	2025-03-20	fimmtudagur, 20. mars 2025
+date	is	full	2025-03-21	föstudagur, 21. mars 2025
+date	is	full	1999-12-31	föstudagur, 31. desember 1999
+date	is	full	2031-07-14	mánudagur, 14. júlí 2031
+date	is	full	2010-10-10	sunnudagur, 10. október 2010
+range	is	day	2026-09-03/2026-09-10	3.–10. sep.
+range	is	day	2026-09-29/2026-11-02	29. sep. – 2. nóv.
+range	is	day	2026-12-28/2027-01-05	28. des. 2026 – 5. jan. 2027
+range	is	day	2025-03-15/2025-03-25	15.–25. mar.
+range	is	day	2010-10-10/2011-10-11	10. okt. 2010 – 11. okt. 2011
+range	is	short	2026-09-03/2026-09-10	3.9.2026 – 10.9.2026
+range	is	short	2026-09-29/2026-11-02	29.9.2026 – 2.11.2026
+range	is	short	2026-12-28/2027-01-05	28.12.2026 – 5.1.2027
+range	is	short	2025-03-15/2025-03-25	15.3.2025 – 25.3.2025
+range	is	short	2010-10-10/2011-10-11	10.10.2010 – 11.10.2011
+range	is	medium	2026-09-03/2026-09-10	3.–10. sep. 2026
+range	is	medium	2026-09-29/2026-11-02	29. sep. – 2. nóv. 2026
+range	is	medium	2026-12-28/2027-01-05	28. des. 2026 – 5. jan. 2027
+range	is	medium	2025-03-15/2025-03-25	15.–25. mar. 2025
+range	is	medium	2010-10-10/2011-10-11	10. okt. 2010 – 11. okt. 2011
+range	is	long	2026-09-03/2026-09-10	3.–10. september 2026
+range	is	long	2026-09-29/2026-11-02	29. september – 2. nóvember 2026
+range	is	long	2026-12-28/2027-01-05	28. desember 2026 – 5. janúar 2027
+range	is	long	2025-03-15/2025-03-25	15.–25. mars 2025
+range	is	long	2010-10-10/2011-10-11	10. október 2010 – 11. október 2011
+month	is	short	2026-09	sep. 2026
+month	is	short	2026-01	jan. 2026
+month	is	short	2027-01	jan. 2027
+month	is	short	2024-02	feb. 2024
+month	is	short	2025-03	mar. 2025
+month	is	short	2025-03	mar. 2025
+month	is	short	1999-12	des. 1999
+month	is	short	2031-07	júl. 2031
+month	is	short	2010-10	okt. 2010
+month	is	long	2026-09	september 2026
+month	is	long	2026-01	janúar 2026
+month	is	long	2027-01	janúar 2027
+month	is	long	2024-02	febrúar 2024
+month	is	long	2025-03	mars 2025
+month	is	long	2025-03	mars 2025
+month	is	long	1999-12	desember 1999
+month	is	long	2031-07	júlí 2031
+month	is	long	2010-10	október 2010
+monthNames	is			jan.|feb.|mar.|apr.|maí|jún.|júl.|ágú.|sep.|okt.|nóv.|des.
+weekdays	is	narrow		S|M|Þ|M|F|F|L
+weekdays	is	short		sun.|mán.|þri.|mið.|fim.|fös.|lau.
+weekdays	is	long		sunnudagur|mánudagur|þriðjudagur|miðvikudagur|fimmtudagur|föstudagur|laugardagur
+weekStart	is			0
+clock	is			{hour}:{minute}|false||
+date	mt	day	2026-09-03	Set 3
+date	mt	day	2026-01-01	Jan 1
+date	mt	day	2027-01-01	Jan 1
+date	mt	day	2024-02-29	Fra 29
+date	mt	day	2025-03-20	Mar 20
+date	mt	day	2025-03-21	Mar 21
+date	mt	day	1999-12-31	Diċ 31
+date	mt	day	2031-07-14	Lul 14
+date	mt	day	2010-10-10	Ott 10
+date	mt	short	2026-09-03	03/09/2026
+date	mt	short	2026-01-01	01/01/2026
+date	mt	short	2027-01-01	01/01/2027
+date	mt	short	2024-02-29	29/02/2024
+date	mt	short	2025-03-20	20/03/2025
+date	mt	short	2025-03-21	21/03/2025
+date	mt	short	1999-12-31	31/12/1999
+date	mt	short	2031-07-14	14/07/2031
+date	mt	short	2010-10-10	10/10/2010
+date	mt	medium	2026-09-03	03 Set 2026
+date	mt	medium	2026-01-01	01 Jan 2026
+date	mt	medium	2027-01-01	01 Jan 2027
+date	mt	medium	2024-02-29	29 Fra 2024
+date	mt	medium	2025-03-20	20 Mar 2025
+date	mt	medium	2025-03-21	21 Mar 2025
+date	mt	medium	1999-12-31	31 Diċ 1999
+date	mt	medium	2031-07-14	14 Lul 2031
+date	mt	medium	2010-10-10	10 Ott 2010
+date	mt	long	2026-09-03	3 ta’ Settembru 2026
+date	mt	long	2026-01-01	1 ta’ Jannar 2026
+date	mt	long	2027-01-01	1 ta’ Jannar 2027
+date	mt	long	2024-02-29	29 ta’ Frar 2024
+date	mt	long	2025-03-20	20 ta’ Marzu 2025
+date	mt	long	2025-03-21	21 ta’ Marzu 2025
+date	mt	long	1999-12-31	31 ta’ Diċembru 1999
+date	mt	long	2031-07-14	14 ta’ Lulju 2031
+date	mt	long	2010-10-10	10 ta’ Ottubru 2010
+date	mt	full	2026-09-03	Il-Ħamis, 3 ta’ Settembru 2026
+date	mt	full	2026-01-01	Il-Ħamis, 1 ta’ Jannar 2026
+date	mt	full	2027-01-01	Il-Ġimgħa, 1 ta’ Jannar 2027
+date	mt	full	2024-02-29	Il-Ħamis, 29 ta’ Frar 2024
+date	mt	full	2025-03-20	Il-Ħamis, 20 ta’ Marzu 2025
+date	mt	full	2025-03-21	Il-Ġimgħa, 21 ta’ Marzu 2025
+date	mt	full	1999-12-31	Il-Ġimgħa, 31 ta’ Diċembru 1999
+date	mt	full	2031-07-14	It-Tnejn, 14 ta’ Lulju 2031
+date	mt	full	2010-10-10	Il-Ħadd, 10 ta’ Ottubru 2010
+range	mt	day	2026-09-03/2026-09-10	3 – 10 Set
+range	mt	day	2026-09-29/2026-11-02	29 ta’ Set – 2 ta’ Nov
+range	mt	day	2026-12-28/2027-01-05	28 Diċ, 2026 – 5 Jan, 2027
+range	mt	day	2025-03-15/2025-03-25	15 – 25 Mar
+range	mt	day	2010-10-10/2011-10-11	10 Ott, 2010 – 11 Ott, 2011
+range	mt	short	2026-09-03/2026-09-10	03/09/2026 – 10/09/2026
+range	mt	short	2026-09-29/2026-11-02	29/09/2026 – 02/11/2026
+range	mt	short	2026-12-28/2027-01-05	28/12/2026 – 05/01/2027
+range	mt	short	2025-03-15/2025-03-25	15/03/2025 – 25/03/2025
+range	mt	short	2010-10-10/2011-10-11	10/10/2010 – 11/10/2011
+range	mt	medium	2026-09-03/2026-09-10	3 – 10 Set 2026
+range	mt	medium	2026-09-29/2026-11-02	2026 Set 29 – Nov 2
+range	mt	medium	2026-12-28/2027-01-05	28 Diċ, 2026 – 5 Jan, 2027
+range	mt	medium	2025-03-15/2025-03-25	15 – 25 Mar 2025
+range	mt	medium	2010-10-10/2011-10-11	10 Ott, 2010 – 11 Ott, 2011
+range	mt	long	2026-09-03/2026-09-10	3 – 10 Settembru 2026
+range	mt	long	2026-09-29/2026-11-02	2026 Settembru 29 – Novembru 2
+range	mt	long	2026-12-28/2027-01-05	28 Diċembru, 2026 – 5 Jannar, 2027
+range	mt	long	2025-03-15/2025-03-25	15 – 25 Marzu 2025
+range	mt	long	2010-10-10/2011-10-11	10 Ottubru, 2010 – 11 Ottubru, 2011
+month	mt	short	2026-09	Set 2026
+month	mt	short	2026-01	Jan 2026
+month	mt	short	2027-01	Jan 2027
+month	mt	short	2024-02	Fra 2024
+month	mt	short	2025-03	Mar 2025
+month	mt	short	2025-03	Mar 2025
+month	mt	short	1999-12	Diċ 1999
+month	mt	short	2031-07	Lul 2031
+month	mt	short	2010-10	Ott 2010
+month	mt	long	2026-09	Settembru 2026
+month	mt	long	2026-01	Jannar 2026
+month	mt	long	2027-01	Jannar 2027
+month	mt	long	2024-02	Frar 2024
+month	mt	long	2025-03	Marzu 2025
+month	mt	long	2025-03	Marzu 2025
+month	mt	long	1999-12	Diċembru 1999
+month	mt	long	2031-07	Lulju 2031
+month	mt	long	2010-10	Ottubru 2010
+monthNames	mt			Jan|Fra|Mar|Apr|Mej|Ġun|Lul|Aww|Set|Ott|Nov|Diċ
+weekdays	mt	narrow		Ħd|Tn|Tl|Er|Ħm|Ġm|Sb
+weekdays	mt	short		Ħad|Tne|Tli|Erb|Ħam|Ġim|Sib
+weekdays	mt	long		Il-Ħadd|It-Tnejn|It-Tlieta|L-Erbgħa|Il-Ħamis|Il-Ġimgħa|Is-Sibt
+weekStart	mt			0
+clock	mt			{hour}:{minute}|false||
+date	en-US	day	2026-09-03	Sep 3
+date	en-US	day	2026-01-01	Jan 1
+date	en-US	day	2027-01-01	Jan 1
+date	en-US	day	2024-02-29	Feb 29
+date	en-US	day	2025-03-20	Mar 20
+date	en-US	day	2025-03-21	Mar 21
+date	en-US	day	1999-12-31	Dec 31
+date	en-US	day	2031-07-14	Jul 14
+date	en-US	day	2010-10-10	Oct 10
+date	en-US	short	2026-09-03	9/3/26
+date	en-US	short	2026-01-01	1/1/26
+date	en-US	short	2027-01-01	1/1/27
+date	en-US	short	2024-02-29	2/29/24
+date	en-US	short	2025-03-20	3/20/25
+date	en-US	short	2025-03-21	3/21/25
+date	en-US	short	1999-12-31	12/31/99
+date	en-US	short	2031-07-14	7/14/31
+date	en-US	short	2010-10-10	10/10/10
+date	en-US	medium	2026-09-03	Sep 3, 2026
+date	en-US	medium	2026-01-01	Jan 1, 2026
+date	en-US	medium	2027-01-01	Jan 1, 2027
+date	en-US	medium	2024-02-29	Feb 29, 2024
+date	en-US	medium	2025-03-20	Mar 20, 2025
+date	en-US	medium	2025-03-21	Mar 21, 2025
+date	en-US	medium	1999-12-31	Dec 31, 1999
+date	en-US	medium	2031-07-14	Jul 14, 2031
+date	en-US	medium	2010-10-10	Oct 10, 2010
+date	en-US	long	2026-09-03	September 3, 2026
+date	en-US	long	2026-01-01	January 1, 2026
+date	en-US	long	2027-01-01	January 1, 2027
+date	en-US	long	2024-02-29	February 29, 2024
+date	en-US	long	2025-03-20	March 20, 2025
+date	en-US	long	2025-03-21	March 21, 2025
+date	en-US	long	1999-12-31	December 31, 1999
+date	en-US	long	2031-07-14	July 14, 2031
+date	en-US	long	2010-10-10	October 10, 2010
+date	en-US	full	2026-09-03	Thursday, September 3, 2026
+date	en-US	full	2026-01-01	Thursday, January 1, 2026
+date	en-US	full	2027-01-01	Friday, January 1, 2027
+date	en-US	full	2024-02-29	Thursday, February 29, 2024
+date	en-US	full	2025-03-20	Thursday, March 20, 2025
+date	en-US	full	2025-03-21	Friday, March 21, 2025
+date	en-US	full	1999-12-31	Friday, December 31, 1999
+date	en-US	full	2031-07-14	Monday, July 14, 2031
+date	en-US	full	2010-10-10	Sunday, October 10, 2010
+range	en-US	day	2026-09-03/2026-09-10	Sep 3 – 10
+range	en-US	day	2026-09-29/2026-11-02	Sep 29 – Nov 2
+range	en-US	day	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	en-US	day	2025-03-15/2025-03-25	Mar 15 – 25
+range	en-US	day	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	en-US	short	2026-09-03/2026-09-10	9/3/26 – 9/10/26
+range	en-US	short	2026-09-29/2026-11-02	9/29/26 – 11/2/26
+range	en-US	short	2026-12-28/2027-01-05	12/28/26 – 1/5/27
+range	en-US	short	2025-03-15/2025-03-25	3/15/25 – 3/25/25
+range	en-US	short	2010-10-10/2011-10-11	10/10/10 – 10/11/11
+range	en-US	medium	2026-09-03/2026-09-10	Sep 3 – 10, 2026
+range	en-US	medium	2026-09-29/2026-11-02	Sep 29 – Nov 2, 2026
+range	en-US	medium	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	en-US	medium	2025-03-15/2025-03-25	Mar 15 – 25, 2025
+range	en-US	medium	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	en-US	long	2026-09-03/2026-09-10	September 3 – 10, 2026
+range	en-US	long	2026-09-29/2026-11-02	September 29 – November 2, 2026
+range	en-US	long	2026-12-28/2027-01-05	December 28, 2026 – January 5, 2027
+range	en-US	long	2025-03-15/2025-03-25	March 15 – 25, 2025
+range	en-US	long	2010-10-10/2011-10-11	October 10, 2010 – October 11, 2011
+month	en-US	short	2026-09	Sep 2026
+month	en-US	short	2026-01	Jan 2026
+month	en-US	short	2027-01	Jan 2027
+month	en-US	short	2024-02	Feb 2024
+month	en-US	short	2025-03	Mar 2025
+month	en-US	short	2025-03	Mar 2025
+month	en-US	short	1999-12	Dec 1999
+month	en-US	short	2031-07	Jul 2031
+month	en-US	short	2010-10	Oct 2010
+month	en-US	long	2026-09	September 2026
+month	en-US	long	2026-01	January 2026
+month	en-US	long	2027-01	January 2027
+month	en-US	long	2024-02	February 2024
+month	en-US	long	2025-03	March 2025
+month	en-US	long	2025-03	March 2025
+month	en-US	long	1999-12	December 1999
+month	en-US	long	2031-07	July 2031
+month	en-US	long	2010-10	October 2010
+monthNames	en-US			Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec
+weekdays	en-US	narrow		S|M|T|W|T|F|S
+weekdays	en-US	short		Sun|Mon|Tue|Wed|Thu|Fri|Sat
+weekdays	en-US	long		Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday
+weekStart	en-US			0
+clock	en-US			{hour}:{minute} {dayPeriod}|true|AM|PM
+date	en-TH	day	2026-09-03	Sep 3
+date	en-TH	day	2026-01-01	Jan 1
+date	en-TH	day	2027-01-01	Jan 1
+date	en-TH	day	2024-02-29	Feb 29
+date	en-TH	day	2025-03-20	Mar 20
+date	en-TH	day	2025-03-21	Mar 21
+date	en-TH	day	1999-12-31	Dec 31
+date	en-TH	day	2031-07-14	Jul 14
+date	en-TH	day	2010-10-10	Oct 10
+date	en-TH	short	2026-09-03	9/3/26
+date	en-TH	short	2026-01-01	1/1/26
+date	en-TH	short	2027-01-01	1/1/27
+date	en-TH	short	2024-02-29	2/29/24
+date	en-TH	short	2025-03-20	3/20/25
+date	en-TH	short	2025-03-21	3/21/25
+date	en-TH	short	1999-12-31	12/31/99
+date	en-TH	short	2031-07-14	7/14/31
+date	en-TH	short	2010-10-10	10/10/10
+date	en-TH	medium	2026-09-03	Sep 3, 2026
+date	en-TH	medium	2026-01-01	Jan 1, 2026
+date	en-TH	medium	2027-01-01	Jan 1, 2027
+date	en-TH	medium	2024-02-29	Feb 29, 2024
+date	en-TH	medium	2025-03-20	Mar 20, 2025
+date	en-TH	medium	2025-03-21	Mar 21, 2025
+date	en-TH	medium	1999-12-31	Dec 31, 1999
+date	en-TH	medium	2031-07-14	Jul 14, 2031
+date	en-TH	medium	2010-10-10	Oct 10, 2010
+date	en-TH	long	2026-09-03	September 3, 2026
+date	en-TH	long	2026-01-01	January 1, 2026
+date	en-TH	long	2027-01-01	January 1, 2027
+date	en-TH	long	2024-02-29	February 29, 2024
+date	en-TH	long	2025-03-20	March 20, 2025
+date	en-TH	long	2025-03-21	March 21, 2025
+date	en-TH	long	1999-12-31	December 31, 1999
+date	en-TH	long	2031-07-14	July 14, 2031
+date	en-TH	long	2010-10-10	October 10, 2010
+date	en-TH	full	2026-09-03	Thursday, September 3, 2026
+date	en-TH	full	2026-01-01	Thursday, January 1, 2026
+date	en-TH	full	2027-01-01	Friday, January 1, 2027
+date	en-TH	full	2024-02-29	Thursday, February 29, 2024
+date	en-TH	full	2025-03-20	Thursday, March 20, 2025
+date	en-TH	full	2025-03-21	Friday, March 21, 2025
+date	en-TH	full	1999-12-31	Friday, December 31, 1999
+date	en-TH	full	2031-07-14	Monday, July 14, 2031
+date	en-TH	full	2010-10-10	Sunday, October 10, 2010
+range	en-TH	day	2026-09-03/2026-09-10	Sep 3 – 10
+range	en-TH	day	2026-09-29/2026-11-02	Sep 29 – Nov 2
+range	en-TH	day	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	en-TH	day	2025-03-15/2025-03-25	Mar 15 – 25
+range	en-TH	day	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	en-TH	short	2026-09-03/2026-09-10	9/3/26 – 9/10/26
+range	en-TH	short	2026-09-29/2026-11-02	9/29/26 – 11/2/26
+range	en-TH	short	2026-12-28/2027-01-05	12/28/26 – 1/5/27
+range	en-TH	short	2025-03-15/2025-03-25	3/15/25 – 3/25/25
+range	en-TH	short	2010-10-10/2011-10-11	10/10/10 – 10/11/11
+range	en-TH	medium	2026-09-03/2026-09-10	Sep 3 – 10, 2026
+range	en-TH	medium	2026-09-29/2026-11-02	Sep 29 – Nov 2, 2026
+range	en-TH	medium	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	en-TH	medium	2025-03-15/2025-03-25	Mar 15 – 25, 2025
+range	en-TH	medium	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	en-TH	long	2026-09-03/2026-09-10	September 3 – 10, 2026
+range	en-TH	long	2026-09-29/2026-11-02	September 29 – November 2, 2026
+range	en-TH	long	2026-12-28/2027-01-05	December 28, 2026 – January 5, 2027
+range	en-TH	long	2025-03-15/2025-03-25	March 15 – 25, 2025
+range	en-TH	long	2010-10-10/2011-10-11	October 10, 2010 – October 11, 2011
+month	en-TH	short	2026-09	Sep 2026
+month	en-TH	short	2026-01	Jan 2026
+month	en-TH	short	2027-01	Jan 2027
+month	en-TH	short	2024-02	Feb 2024
+month	en-TH	short	2025-03	Mar 2025
+month	en-TH	short	2025-03	Mar 2025
+month	en-TH	short	1999-12	Dec 1999
+month	en-TH	short	2031-07	Jul 2031
+month	en-TH	short	2010-10	Oct 2010
+month	en-TH	long	2026-09	September 2026
+month	en-TH	long	2026-01	January 2026
+month	en-TH	long	2027-01	January 2027
+month	en-TH	long	2024-02	February 2024
+month	en-TH	long	2025-03	March 2025
+month	en-TH	long	2025-03	March 2025
+month	en-TH	long	1999-12	December 1999
+month	en-TH	long	2031-07	July 2031
+month	en-TH	long	2010-10	October 2010
+monthNames	en-TH			Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec
+weekdays	en-TH	narrow		S|M|T|W|T|F|S
+weekdays	en-TH	short		Sun|Mon|Tue|Wed|Thu|Fri|Sat
+weekdays	en-TH	long		Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday
+weekStart	en-TH			0
+clock	en-TH			{hour}:{minute} {dayPeriod}|true|AM|PM
+date	th	day	2026-09-03	3 ก.ย.
+date	th	day	2026-01-01	1 ม.ค.
+date	th	day	2027-01-01	1 ม.ค.
+date	th	day	2024-02-29	29 ก.พ.
+date	th	day	2025-03-20	20 มี.ค.
+date	th	day	2025-03-21	21 มี.ค.
+date	th	day	1999-12-31	31 ธ.ค.
+date	th	day	2031-07-14	14 ก.ค.
+date	th	day	2010-10-10	10 ต.ค.
+date	th	short	2026-09-03	3/9/69
+date	th	short	2026-01-01	1/1/69
+date	th	short	2027-01-01	1/1/70
+date	th	short	2024-02-29	29/2/67
+date	th	short	2025-03-20	20/3/68
+date	th	short	2025-03-21	21/3/68
+date	th	short	1999-12-31	31/12/42
+date	th	short	2031-07-14	14/7/74
+date	th	short	2010-10-10	10/10/53
+date	th	medium	2026-09-03	3 ก.ย. 2569
+date	th	medium	2026-01-01	1 ม.ค. 2569
+date	th	medium	2027-01-01	1 ม.ค. 2570
+date	th	medium	2024-02-29	29 ก.พ. 2567
+date	th	medium	2025-03-20	20 มี.ค. 2568
+date	th	medium	2025-03-21	21 มี.ค. 2568
+date	th	medium	1999-12-31	31 ธ.ค. 2542
+date	th	medium	2031-07-14	14 ก.ค. 2574
+date	th	medium	2010-10-10	10 ต.ค. 2553
+date	th	long	2026-09-03	3 กันยายน 2569
+date	th	long	2026-01-01	1 มกราคม 2569
+date	th	long	2027-01-01	1 มกราคม 2570
+date	th	long	2024-02-29	29 กุมภาพันธ์ 2567
+date	th	long	2025-03-20	20 มีนาคม 2568
+date	th	long	2025-03-21	21 มีนาคม 2568
+date	th	long	1999-12-31	31 ธันวาคม 2542
+date	th	long	2031-07-14	14 กรกฎาคม 2574
+date	th	long	2010-10-10	10 ตุลาคม 2553
+date	th	full	2026-09-03	วันพฤหัสบดีที่ 3 กันยายน พ.ศ. 2569
+date	th	full	2026-01-01	วันพฤหัสบดีที่ 1 มกราคม พ.ศ. 2569
+date	th	full	2027-01-01	วันศุกร์ที่ 1 มกราคม พ.ศ. 2570
+date	th	full	2024-02-29	วันพฤหัสบดีที่ 29 กุมภาพันธ์ พ.ศ. 2567
+date	th	full	2025-03-20	วันพฤหัสบดีที่ 20 มีนาคม พ.ศ. 2568
+date	th	full	2025-03-21	วันศุกร์ที่ 21 มีนาคม พ.ศ. 2568
+date	th	full	1999-12-31	วันศุกร์ที่ 31 ธันวาคม พ.ศ. 2542
+date	th	full	2031-07-14	วันจันทร์ที่ 14 กรกฎาคม พ.ศ. 2574
+date	th	full	2010-10-10	วันอาทิตย์ที่ 10 ตุลาคม พ.ศ. 2553
+range	th	day	2026-09-03/2026-09-10	3 – 10 ก.ย.
+range	th	day	2026-09-29/2026-11-02	29 ก.ย. – 2 พ.ย.
+range	th	day	2026-12-28/2027-01-05	28 ธ.ค. 2569 – 5 ม.ค. 2570
+range	th	day	2025-03-15/2025-03-25	15 – 25 มี.ค.
+range	th	day	2010-10-10/2011-10-11	10 ต.ค. 2553 – 11 ต.ค. 2554
+range	th	short	2026-09-03/2026-09-10	3–10/9/69
+range	th	short	2026-09-29/2026-11-02	29/9/69 – 2/11/69
+range	th	short	2026-12-28/2027-01-05	28/12/69 – 5/1/70
+range	th	short	2025-03-15/2025-03-25	15–25/3/68
+range	th	short	2010-10-10/2011-10-11	10/10/53 – 11/10/54
+range	th	medium	2026-09-03/2026-09-10	3–10 ก.ย. 2569
+range	th	medium	2026-09-29/2026-11-02	29 ก.ย. – 2 พ.ย. 2569
+range	th	medium	2026-12-28/2027-01-05	28 ธ.ค. 2569 – 5 ม.ค. 2570
+range	th	medium	2025-03-15/2025-03-25	15–25 มี.ค. 2568
+range	th	medium	2010-10-10/2011-10-11	10 ต.ค. 2553 – 11 ต.ค. 2554
+range	th	long	2026-09-03/2026-09-10	3–10 กันยายน 2569
+range	th	long	2026-09-29/2026-11-02	29 กันยายน – 2 พฤศจิกายน 2569
+range	th	long	2026-12-28/2027-01-05	28 ธันวาคม 2569 – 5 มกราคม 2570
+range	th	long	2025-03-15/2025-03-25	15–25 มีนาคม 2568
+range	th	long	2010-10-10/2011-10-11	10 ตุลาคม 2553 – 11 ตุลาคม 2554
+month	th	short	2026-09	ก.ย. 2569
+month	th	short	2026-01	ม.ค. 2569
+month	th	short	2027-01	ม.ค. 2570
+month	th	short	2024-02	ก.พ. 2567
+month	th	short	2025-03	มี.ค. 2568
+month	th	short	2025-03	มี.ค. 2568
+month	th	short	1999-12	ธ.ค. 2542
+month	th	short	2031-07	ก.ค. 2574
+month	th	short	2010-10	ต.ค. 2553
+month	th	long	2026-09	กันยายน 2569
+month	th	long	2026-01	มกราคม 2569
+month	th	long	2027-01	มกราคม 2570
+month	th	long	2024-02	กุมภาพันธ์ 2567
+month	th	long	2025-03	มีนาคม 2568
+month	th	long	2025-03	มีนาคม 2568
+month	th	long	1999-12	ธันวาคม 2542
+month	th	long	2031-07	กรกฎาคม 2574
+month	th	long	2010-10	ตุลาคม 2553
+monthNames	th			ม.ค.|ก.พ.|มี.ค.|เม.ย.|พ.ค.|มิ.ย.|ก.ค.|ส.ค.|ก.ย.|ต.ค.|พ.ย.|ธ.ค.
+weekdays	th	narrow		อา|จ|อ|พ|พฤ|ศ|ส
+weekdays	th	short		อาทิตย์|จันทร์|อังคาร|พุธ|พฤหัส|ศุกร์|เสาร์
+weekdays	th	long		วันอาทิตย์|วันจันทร์|วันอังคาร|วันพุธ|วันพฤหัสบดี|วันศุกร์|วันเสาร์
+weekStart	th			0
+clock	th			{hour}:{minute}|false||
+date	fa	day	2026-09-03	۱۲ شهریور
+date	fa	day	2026-01-01	۱۱ دی
+date	fa	day	2027-01-01	۱۱ دی
+date	fa	day	2024-02-29	۱۰ اسفند
+date	fa	day	2025-03-20	۳۰ اسفند
+date	fa	day	2025-03-21	۱ فروردین
+date	fa	day	1999-12-31	۱۰ دی
+date	fa	day	2031-07-14	۲۳ تیر
+date	fa	day	2010-10-10	۱۸ مهر
+date	fa	short	2026-09-03	۱۴۰۵/۶/۱۲
+date	fa	short	2026-01-01	۱۴۰۴/۱۰/۱۱
+date	fa	short	2027-01-01	۱۴۰۵/۱۰/۱۱
+date	fa	short	2024-02-29	۱۴۰۲/۱۲/۱۰
+date	fa	short	2025-03-20	۱۴۰۳/۱۲/۳۰
+date	fa	short	2025-03-21	۱۴۰۴/۱/۱
+date	fa	short	1999-12-31	۱۳۷۸/۱۰/۱۰
+date	fa	short	2031-07-14	۱۴۱۰/۴/۲۳
+date	fa	short	2010-10-10	۱۳۸۹/۷/۱۸
+date	fa	medium	2026-09-03	۱۲ شهریور ۱۴۰۵
+date	fa	medium	2026-01-01	۱۱ دی ۱۴۰۴
+date	fa	medium	2027-01-01	۱۱ دی ۱۴۰۵
+date	fa	medium	2024-02-29	۱۰ اسفند ۱۴۰۲
+date	fa	medium	2025-03-20	۳۰ اسفند ۱۴۰۳
+date	fa	medium	2025-03-21	۱ فروردین ۱۴۰۴
+date	fa	medium	1999-12-31	۱۰ دی ۱۳۷۸
+date	fa	medium	2031-07-14	۲۳ تیر ۱۴۱۰
+date	fa	medium	2010-10-10	۱۸ مهر ۱۳۸۹
+date	fa	long	2026-09-03	۱۲ شهریور ۱۴۰۵
+date	fa	long	2026-01-01	۱۱ دی ۱۴۰۴
+date	fa	long	2027-01-01	۱۱ دی ۱۴۰۵
+date	fa	long	2024-02-29	۱۰ اسفند ۱۴۰۲
+date	fa	long	2025-03-20	۳۰ اسفند ۱۴۰۳
+date	fa	long	2025-03-21	۱ فروردین ۱۴۰۴
+date	fa	long	1999-12-31	۱۰ دی ۱۳۷۸
+date	fa	long	2031-07-14	۲۳ تیر ۱۴۱۰
+date	fa	long	2010-10-10	۱۸ مهر ۱۳۸۹
+date	fa	full	2026-09-03	۱۴۰۵ شهریور ۱۲, پنجشنبه
+date	fa	full	2026-01-01	۱۴۰۴ دی ۱۱, پنجشنبه
+date	fa	full	2027-01-01	۱۴۰۵ دی ۱۱, جمعه
+date	fa	full	2024-02-29	۱۴۰۲ اسفند ۱۰, پنجشنبه
+date	fa	full	2025-03-20	۱۴۰۳ اسفند ۳۰, پنجشنبه
+date	fa	full	2025-03-21	۱۴۰۴ فروردین ۱, جمعه
+date	fa	full	1999-12-31	۱۳۷۸ دی ۱۰, جمعه
+date	fa	full	2031-07-14	۱۴۱۰ تیر ۲۳, دوشنبه
+date	fa	full	2010-10-10	۱۳۸۹ مهر ۱۸, یکشنبه
+range	fa	day	2026-09-03/2026-09-10	۱۲ شهریور تا ۱۹ شهریور
+range	fa	day	2026-09-29/2026-11-02	۷ مهر تا ۱۱ آبان
+range	fa	day	2026-12-28/2027-01-05	۷ دی تا ۱۵ دی
+range	fa	day	2025-03-15/2025-03-25	۲۵ اسفند تا ۵ فروردین
+range	fa	day	2010-10-10/2011-10-11	۱۸ مهر تا ۱۹ مهر
+range	fa	short	2026-09-03/2026-09-10	۱۴۰۵/۶/۱۲ تا ۱۴۰۵/۶/۱۹
+range	fa	short	2026-09-29/2026-11-02	۱۴۰۵/۷/۷ تا ۱۴۰۵/۸/۱۱
+range	fa	short	2026-12-28/2027-01-05	۱۴۰۵/۱۰/۷ تا ۱۴۰۵/۱۰/۱۵
+range	fa	short	2025-03-15/2025-03-25	۱۴۰۳/۱۲/۲۵ تا ۱۴۰۴/۱/۵
+range	fa	short	2010-10-10/2011-10-11	۱۳۸۹/۷/۱۸ تا ۱۳۹۰/۷/۱۹
+range	fa	medium	2026-09-03/2026-09-10	۱۲ تا ۱۹ شهریور ۱۴۰۵
+range	fa	medium	2026-09-29/2026-11-02	۷ مهر تا ۱۱ آبان ۱۴۰۵
+range	fa	medium	2026-12-28/2027-01-05	۷ تا ۱۵ دی ۱۴۰۵
+range	fa	medium	2025-03-15/2025-03-25	۲۵ اسفند ۱۴۰۳ تا ۵ فروردین ۱۴۰۴
+range	fa	medium	2010-10-10/2011-10-11	۱۸ مهر ۱۳۸۹ تا ۱۹ مهر ۱۳۹۰
+range	fa	long	2026-09-03/2026-09-10	۱۲ تا ۱۹ شهریور ۱۴۰۵
+range	fa	long	2026-09-29/2026-11-02	۷ مهر تا ۱۱ آبان ۱۴۰۵
+range	fa	long	2026-12-28/2027-01-05	۷ تا ۱۵ دی ۱۴۰۵
+range	fa	long	2025-03-15/2025-03-25	۲۵ اسفند ۱۴۰۳ تا ۵ فروردین ۱۴۰۴
+range	fa	long	2010-10-10/2011-10-11	۱۸ مهر ۱۳۸۹ تا ۱۹ مهر ۱۳۹۰
+month	fa	short	2026-09	شهریور ۱۴۰۵
+month	fa	short	2026-01	دی ۱۴۰۴
+month	fa	short	2027-01	دی ۱۴۰۵
+month	fa	short	2024-02	بهمن ۱۴۰۲
+month	fa	short	2025-03	اسفند ۱۴۰۳
+month	fa	short	2025-03	اسفند ۱۴۰۳
+month	fa	short	1999-12	آذر ۱۳۷۸
+month	fa	short	2031-07	تیر ۱۴۱۰
+month	fa	short	2010-10	مهر ۱۳۸۹
+month	fa	long	2026-09	۱۴۰۵ شهریور
+month	fa	long	2026-01	۱۴۰۴ دی
+month	fa	long	2027-01	۱۴۰۵ دی
+month	fa	long	2024-02	۱۴۰۲ بهمن
+month	fa	long	2025-03	۱۴۰۳ اسفند
+month	fa	long	2025-03	۱۴۰۳ اسفند
+month	fa	long	1999-12	۱۳۷۸ آذر
+month	fa	long	2031-07	۱۴۱۰ تیر
+month	fa	long	2010-10	۱۳۸۹ مهر
+monthNames	fa			دی|بهمن|اسفند|فروردین|اردیبهشت|خرداد|تیر|مرداد|شهریور|مهر|آبان|آذر
+weekdays	fa	narrow		ی|د|س|چ|پ|ج|ش
+weekdays	fa	short		یکشنبه|دوشنبه|سه‌شنبه|چهارشنبه|پنجشنبه|جمعه|شنبه
+weekdays	fa	long		یکشنبه|دوشنبه|سه‌شنبه|چهارشنبه|پنجشنبه|جمعه|شنبه
+weekStart	fa			6
+clock	fa			{hour}:{minute}|false||
+date	ps	day	2026-09-03	وږی ۱۲
+date	ps	day	2026-01-01	مرغومی ۱۱
+date	ps	day	2027-01-01	مرغومی ۱۱
+date	ps	day	2024-02-29	کب ۱۰
+date	ps	day	2025-03-20	کب ۳۰
+date	ps	day	2025-03-21	وری ۱
+date	ps	day	1999-12-31	مرغومی ۱۰
+date	ps	day	2031-07-14	چنگاښ ۲۳
+date	ps	day	2010-10-10	تله ۱۸
+date	ps	short	2026-09-03	AP ۱۴۰۵/۶/۱۲
+date	ps	short	2026-01-01	AP ۱۴۰۴/۱۰/۱۱
+date	ps	short	2027-01-01	AP ۱۴۰۵/۱۰/۱۱
+date	ps	short	2024-02-29	AP ۱۴۰۲/۱۲/۱۰
+date	ps	short	2025-03-20	AP ۱۴۰۳/۱۲/۳۰
+date	ps	short	2025-03-21	AP ۱۴۰۴/۱/۱
+date	ps	short	1999-12-31	AP ۱۳۷۸/۱۰/۱۰
+date	ps	short	2031-07-14	AP ۱۴۱۰/۴/۲۳
+date	ps	short	2010-10-10	AP ۱۳۸۹/۷/۱۸
+date	ps	medium	2026-09-03	AP ۱۴۰۵ وږی ۱۲
+date	ps	medium	2026-01-01	AP ۱۴۰۴ مرغومی ۱۱
+date	ps	medium	2027-01-01	AP ۱۴۰۵ مرغومی ۱۱
+date	ps	medium	2024-02-29	AP ۱۴۰۲ کب ۱۰
+date	ps	medium	2025-03-20	AP ۱۴۰۳ کب ۳۰
+date	ps	medium	2025-03-21	AP ۱۴۰۴ وری ۱
+date	ps	medium	1999-12-31	AP ۱۳۷۸ مرغومی ۱۰
+date	ps	medium	2031-07-14	AP ۱۴۱۰ چنگاښ ۲۳
+date	ps	medium	2010-10-10	AP ۱۳۸۹ تله ۱۸
+date	ps	long	2026-09-03	AP ۱۴۰۵ وږی ۱۲
+date	ps	long	2026-01-01	AP ۱۴۰۴ مرغومی ۱۱
+date	ps	long	2027-01-01	AP ۱۴۰۵ مرغومی ۱۱
+date	ps	long	2024-02-29	AP ۱۴۰۲ کب ۱۰
+date	ps	long	2025-03-20	AP ۱۴۰۳ کب ۳۰
+date	ps	long	2025-03-21	AP ۱۴۰۴ وری ۱
+date	ps	long	1999-12-31	AP ۱۳۷۸ مرغومی ۱۰
+date	ps	long	2031-07-14	AP ۱۴۱۰ چنگاښ ۲۳
+date	ps	long	2010-10-10	AP ۱۳۸۹ تله ۱۸
+date	ps	full	2026-09-03	AP ۱۴۰۵ وږی ۱۲, پينځنۍ
+date	ps	full	2026-01-01	AP ۱۴۰۴ مرغومی ۱۱, پينځنۍ
+date	ps	full	2027-01-01	AP ۱۴۰۵ مرغومی ۱۱, جمعه
+date	ps	full	2024-02-29	AP ۱۴۰۲ کب ۱۰, پينځنۍ
+date	ps	full	2025-03-20	AP ۱۴۰۳ کب ۳۰, پينځنۍ
+date	ps	full	2025-03-21	AP ۱۴۰۴ وری ۱, جمعه
+date	ps	full	1999-12-31	AP ۱۳۷۸ مرغومی ۱۰, جمعه
+date	ps	full	2031-07-14	AP ۱۴۱۰ چنگاښ ۲۳, دونۍ
+date	ps	full	2010-10-10	AP ۱۳۸۹ تله ۱۸, يونۍ
+range	ps	day	2026-09-03/2026-09-10	وږی ۱۲–۱۹
+range	ps	day	2026-09-29/2026-11-02	تله ۷ – لړم ۱۱
+range	ps	day	2026-12-28/2027-01-05	مرغومی ۷–۱۵
+range	ps	day	2025-03-15/2025-03-25	AP ۱۴۰۳ کب ۲۵ – ۱۴۰۴ وری ۵
+range	ps	day	2010-10-10/2011-10-11	AP ۱۳۸۹ تله ۱۸ – ۱۳۹۰ تله ۱۹
+range	ps	short	2026-09-03/2026-09-10	۶/۱۲/۱۴۰۵ – ۶/۱۹/۱۴۰۵ AP
+range	ps	short	2026-09-29/2026-11-02	۷/۷/۱۴۰۵ – ۸/۱۱/۱۴۰۵ AP
+range	ps	short	2026-12-28/2027-01-05	۱۰/۷/۱۴۰۵ – ۱۰/۱۵/۱۴۰۵ AP
+range	ps	short	2025-03-15/2025-03-25	۱۲/۲۵/۱۴۰۳ – ۱/۵/۱۴۰۴ AP
+range	ps	short	2010-10-10/2011-10-11	۷/۱۸/۱۳۸۹ – ۷/۱۹/۱۳۹۰ AP
+range	ps	medium	2026-09-03/2026-09-10	وږی ۱۲ – ۱۹, ۱۴۰۵ AP
+range	ps	medium	2026-09-29/2026-11-02	تله ۷ – لړم ۱۱, ۱۴۰۵ AP
+range	ps	medium	2026-12-28/2027-01-05	مرغومی ۷ – ۱۵, ۱۴۰۵ AP
+range	ps	medium	2025-03-15/2025-03-25	کب ۲۵, ۱۴۰۳ – وری ۵, ۱۴۰۴ AP
+range	ps	medium	2010-10-10/2011-10-11	تله ۱۸, ۱۳۸۹ – تله ۱۹, ۱۳۹۰ AP
+range	ps	long	2026-09-03/2026-09-10	وږی ۱۲ – ۱۹, ۱۴۰۵ AP
+range	ps	long	2026-09-29/2026-11-02	تله ۷ – لړم ۱۱, ۱۴۰۵ AP
+range	ps	long	2026-12-28/2027-01-05	مرغومی ۷ – ۱۵, ۱۴۰۵ AP
+range	ps	long	2025-03-15/2025-03-25	کب ۲۵, ۱۴۰۳ – وری ۵, ۱۴۰۴ AP
+range	ps	long	2010-10-10/2011-10-11	تله ۱۸, ۱۳۸۹ – تله ۱۹, ۱۳۹۰ AP
+month	ps	short	2026-09	د AP ۱۴۰۵ د وږی
+month	ps	short	2026-01	د AP ۱۴۰۴ د مرغومی
+month	ps	short	2027-01	د AP ۱۴۰۵ د مرغومی
+month	ps	short	2024-02	د AP ۱۴۰۲ د سلواغه
+month	ps	short	2025-03	د AP ۱۴۰۳ د کب
+month	ps	short	2025-03	د AP ۱۴۰۳ د کب
+month	ps	short	1999-12	د AP ۱۳۷۸ د لیندۍ
+month	ps	short	2031-07	د AP ۱۴۱۰ د چنگاښ
+month	ps	short	2010-10	د AP ۱۳۸۹ د تله
+month	ps	long	2026-09	د AP ۱۴۰۵ د وږی
+month	ps	long	2026-01	د AP ۱۴۰۴ د مرغومی
+month	ps	long	2027-01	د AP ۱۴۰۵ د مرغومی
+month	ps	long	2024-02	د AP ۱۴۰۲ د سلواغه
+month	ps	long	2025-03	د AP ۱۴۰۳ د کب
+month	ps	long	2025-03	د AP ۱۴۰۳ د کب
+month	ps	long	1999-12	د AP ۱۳۷۸ د لیندۍ
+month	ps	long	2031-07	د AP ۱۴۱۰ د چنگاښ
+month	ps	long	2010-10	د AP ۱۳۸۹ د تله
+monthNames	ps			مرغومی|سلواغه|کب|وری|غویی|غبرگولی|چنگاښ|زمری|وږی|تله|لړم|لیندۍ
+weekdays	ps	narrow		S|M|T|W|T|F|S
+weekdays	ps	short		يونۍ|دونۍ|درېنۍ|څلرنۍ|پينځنۍ|جمعه|اونۍ
+weekdays	ps	long		يونۍ|دونۍ|درېنۍ|څلرنۍ|پينځنۍ|جمعه|اونۍ
+weekStart	ps			6
+clock	ps			{hour}:{minute}|false||
+date	uz-Arab	day	2026-09-03	Shahrivar ۱۲
+date	uz-Arab	day	2026-01-01	Dey ۱۱
+date	uz-Arab	day	2027-01-01	Dey ۱۱
+date	uz-Arab	day	2024-02-29	Esfand ۱۰
+date	uz-Arab	day	2025-03-20	Esfand ۳۰
+date	uz-Arab	day	2025-03-21	Farvardin ۱
+date	uz-Arab	day	1999-12-31	Dey ۱۰
+date	uz-Arab	day	2031-07-14	Tir ۲۳
+date	uz-Arab	day	2010-10-10	Mehr ۱۸
+date	uz-Arab	short	2026-09-03	AP ۱۴۰۵-۰۶-۱۲
+date	uz-Arab	short	2026-01-01	AP ۱۴۰۴-۱۰-۱۱
+date	uz-Arab	short	2027-01-01	AP ۱۴۰۵-۱۰-۱۱
+date	uz-Arab	short	2024-02-29	AP ۱۴۰۲-۱۲-۱۰
+date	uz-Arab	short	2025-03-20	AP ۱۴۰۳-۱۲-۳۰
+date	uz-Arab	short	2025-03-21	AP ۱۴۰۴-۰۱-۰۱
+date	uz-Arab	short	1999-12-31	AP ۱۳۷۸-۱۰-۱۰
+date	uz-Arab	short	2031-07-14	AP ۱۴۱۰-۰۴-۲۳
+date	uz-Arab	short	2010-10-10	AP ۱۳۸۹-۰۷-۱۸
+date	uz-Arab	medium	2026-09-03	AP ۱۴۰۵ Shahrivar ۱۲
+date	uz-Arab	medium	2026-01-01	AP ۱۴۰۴ Dey ۱۱
+date	uz-Arab	medium	2027-01-01	AP ۱۴۰۵ Dey ۱۱
+date	uz-Arab	medium	2024-02-29	AP ۱۴۰۲ Esfand ۱۰
+date	uz-Arab	medium	2025-03-20	AP ۱۴۰۳ Esfand ۳۰
+date	uz-Arab	medium	2025-03-21	AP ۱۴۰۴ Farvardin ۱
+date	uz-Arab	medium	1999-12-31	AP ۱۳۷۸ Dey ۱۰
+date	uz-Arab	medium	2031-07-14	AP ۱۴۱۰ Tir ۲۳
+date	uz-Arab	medium	2010-10-10	AP ۱۳۸۹ Mehr ۱۸
+date	uz-Arab	long	2026-09-03	AP ۱۴۰۵ Shahrivar ۱۲
+date	uz-Arab	long	2026-01-01	AP ۱۴۰۴ Dey ۱۱
+date	uz-Arab	long	2027-01-01	AP ۱۴۰۵ Dey ۱۱
+date	uz-Arab	long	2024-02-29	AP ۱۴۰۲ Esfand ۱۰
+date	uz-Arab	long	2025-03-20	AP ۱۴۰۳ Esfand ۳۰
+date	uz-Arab	long	2025-03-21	AP ۱۴۰۴ Farvardin ۱
+date	uz-Arab	long	1999-12-31	AP ۱۳۷۸ Dey ۱۰
+date	uz-Arab	long	2031-07-14	AP ۱۴۱۰ Tir ۲۳
+date	uz-Arab	long	2010-10-10	AP ۱۳۸۹ Mehr ۱۸
+date	uz-Arab	full	2026-09-03	AP ۱۴۰۵ Shahrivar ۱۲, پنجشنبه
+date	uz-Arab	full	2026-01-01	AP ۱۴۰۴ Dey ۱۱, پنجشنبه
+date	uz-Arab	full	2027-01-01	AP ۱۴۰۵ Dey ۱۱, جمعه
+date	uz-Arab	full	2024-02-29	AP ۱۴۰۲ Esfand ۱۰, پنجشنبه
+date	uz-Arab	full	2025-03-20	AP ۱۴۰۳ Esfand ۳۰, پنجشنبه
+date	uz-Arab	full	2025-03-21	AP ۱۴۰۴ Farvardin ۱, جمعه
+date	uz-Arab	full	1999-12-31	AP ۱۳۷۸ Dey ۱۰, جمعه
+date	uz-Arab	full	2031-07-14	AP ۱۴۱۰ Tir ۲۳, دوشنبه
+date	uz-Arab	full	2010-10-10	AP ۱۳۸۹ Mehr ۱۸, یکشنبه
+range	uz-Arab	day	2026-09-03/2026-09-10	Shahrivar ۱۲–۱۹
+range	uz-Arab	day	2026-09-29/2026-11-02	Mehr ۷ – Aban ۱۱
+range	uz-Arab	day	2026-12-28/2027-01-05	Dey ۷–۱۵
+range	uz-Arab	day	2025-03-15/2025-03-25	AP ۱۴۰۳ Esfand ۲۵ – ۱۴۰۴ Farvardin ۵
+range	uz-Arab	day	2010-10-10/2011-10-11	AP ۱۳۸۹ Mehr ۱۸ – ۱۳۹۰ Mehr ۱۹
+range	uz-Arab	short	2026-09-03/2026-09-10	AP ۱۴۰۵-۰۶-۱۲ – ۱۴۰۵-۰۶-۱۹
+range	uz-Arab	short	2026-09-29/2026-11-02	AP ۱۴۰۵-۰۷-۰۷ – ۱۴۰۵-۰۸-۱۱
+range	uz-Arab	short	2026-12-28/2027-01-05	AP ۱۴۰۵-۱۰-۰۷ – ۱۴۰۵-۱۰-۱۵
+range	uz-Arab	short	2025-03-15/2025-03-25	AP ۱۴۰۳-۱۲-۲۵ – ۱۴۰۴-۰۱-۰۵
+range	uz-Arab	short	2010-10-10/2011-10-11	AP ۱۳۸۹-۰۷-۱۸ – ۱۳۹۰-۰۷-۱۹
+range	uz-Arab	medium	2026-09-03/2026-09-10	AP ۱۴۰۵ Shahrivar ۱۲–۱۹
+range	uz-Arab	medium	2026-09-29/2026-11-02	AP ۱۴۰۵ Mehr ۷ – Aban ۱۱
+range	uz-Arab	medium	2026-12-28/2027-01-05	AP ۱۴۰۵ Dey ۷–۱۵
+range	uz-Arab	medium	2025-03-15/2025-03-25	AP ۱۴۰۳ Esfand ۲۵ – ۱۴۰۴ Farvardin ۵
+range	uz-Arab	medium	2010-10-10/2011-10-11	AP ۱۳۸۹ Mehr ۱۸ – ۱۳۹۰ Mehr ۱۹
+range	uz-Arab	long	2026-09-03/2026-09-10	AP ۱۴۰۵ Shahrivar ۱۲–۱۹
+range	uz-Arab	long	2026-09-29/2026-11-02	AP ۱۴۰۵ Mehr ۷ – Aban ۱۱
+range	uz-Arab	long	2026-12-28/2027-01-05	AP ۱۴۰۵ Dey ۷–۱۵
+range	uz-Arab	long	2025-03-15/2025-03-25	AP ۱۴۰۳ Esfand ۲۵ – ۱۴۰۴ Farvardin ۵
+range	uz-Arab	long	2010-10-10/2011-10-11	AP ۱۳۸۹ Mehr ۱۸ – ۱۳۹۰ Mehr ۱۹
+month	uz-Arab	short	2026-09	AP ۱۴۰۵ Shahrivar
+month	uz-Arab	short	2026-01	AP ۱۴۰۴ Dey
+month	uz-Arab	short	2027-01	AP ۱۴۰۵ Dey
+month	uz-Arab	short	2024-02	AP ۱۴۰۲ Bahman
+month	uz-Arab	short	2025-03	AP ۱۴۰۳ Esfand
+month	uz-Arab	short	2025-03	AP ۱۴۰۳ Esfand
+month	uz-Arab	short	1999-12	AP ۱۳۷۸ Azar
+month	uz-Arab	short	2031-07	AP ۱۴۱۰ Tir
+month	uz-Arab	short	2010-10	AP ۱۳۸۹ Mehr
+month	uz-Arab	long	2026-09	AP ۱۴۰۵ Shahrivar
+month	uz-Arab	long	2026-01	AP ۱۴۰۴ Dey
+month	uz-Arab	long	2027-01	AP ۱۴۰۵ Dey
+month	uz-Arab	long	2024-02	AP ۱۴۰۲ Bahman
+month	uz-Arab	long	2025-03	AP ۱۴۰۳ Esfand
+month	uz-Arab	long	2025-03	AP ۱۴۰۳ Esfand
+month	uz-Arab	long	1999-12	AP ۱۳۷۸ Azar
+month	uz-Arab	long	2031-07	AP ۱۴۱۰ Tir
+month	uz-Arab	long	2010-10	AP ۱۳۸۹ Mehr
+monthNames	uz-Arab			Dey|Bahman|Esfand|Farvardin|Ordibehesht|Khordad|Tir|Mordad|Shahrivar|Mehr|Aban|Azar
+weekdays	uz-Arab	narrow		S|M|T|W|T|F|S
+weekdays	uz-Arab	short		ی.|د.|س.|چ.|پ.|ج.|ش.
+weekdays	uz-Arab	long		یکشنبه|دوشنبه|سه‌شنبه|چهارشنبه|پنجشنبه|جمعه|شنبه
+weekStart	uz-Arab			6
+clock	uz-Arab			{hour}:{minute}|false||
+date	ckb-IR	day	2026-09-03	١٢ی خەرمانان
+date	ckb-IR	day	2026-01-01	١١ی بەفرانبار
+date	ckb-IR	day	2027-01-01	١١ی بەفرانبار
+date	ckb-IR	day	2024-02-29	١٠ی ڕەشەمە
+date	ckb-IR	day	2025-03-20	٣٠ی ڕەشەمە
+date	ckb-IR	day	2025-03-21	١ی خاکەلێوە
+date	ckb-IR	day	1999-12-31	١٠ی بەفرانبار
+date	ckb-IR	day	2031-07-14	٢٣ی پووشپەڕ
+date	ckb-IR	day	2010-10-10	١٨ی ڕەزبەر
+date	ckb-IR	short	2026-09-03	AP ١٤٠٥-٠٦-١٢
+date	ckb-IR	short	2026-01-01	AP ١٤٠٤-١٠-١١
+date	ckb-IR	short	2027-01-01	AP ١٤٠٥-١٠-١١
+date	ckb-IR	short	2024-02-29	AP ١٤٠٢-١٢-١٠
+date	ckb-IR	short	2025-03-20	AP ١٤٠٣-١٢-٣٠
+date	ckb-IR	short	2025-03-21	AP ١٤٠٤-٠١-٠١
+date	ckb-IR	short	1999-12-31	AP ١٣٧٨-١٠-١٠
+date	ckb-IR	short	2031-07-14	AP ١٤١٠-٠٤-٢٣
+date	ckb-IR	short	2010-10-10	AP ١٣٨٩-٠٧-١٨
+date	ckb-IR	medium	2026-09-03	AP ١٤٠٥ خەرمانان ١٢
+date	ckb-IR	medium	2026-01-01	AP ١٤٠٤ بەفرانبار ١١
+date	ckb-IR	medium	2027-01-01	AP ١٤٠٥ بەفرانبار ١١
+date	ckb-IR	medium	2024-02-29	AP ١٤٠٢ ڕەشەمە ١٠
+date	ckb-IR	medium	2025-03-20	AP ١٤٠٣ ڕەشەمە ٣٠
+date	ckb-IR	medium	2025-03-21	AP ١٤٠٤ خاکەلێوە ١
+date	ckb-IR	medium	1999-12-31	AP ١٣٧٨ بەفرانبار ١٠
+date	ckb-IR	medium	2031-07-14	AP ١٤١٠ پووشپەڕ ٢٣
+date	ckb-IR	medium	2010-10-10	AP ١٣٨٩ ڕەزبەر ١٨
+date	ckb-IR	long	2026-09-03	١٢ی خەرمانانی ١٤٠٥ AP
+date	ckb-IR	long	2026-01-01	١١ی بەفرانباری ١٤٠٤ AP
+date	ckb-IR	long	2027-01-01	١١ی بەفرانباری ١٤٠٥ AP
+date	ckb-IR	long	2024-02-29	١٠ی ڕەشەمەی ١٤٠٢ AP
+date	ckb-IR	long	2025-03-20	٣٠ی ڕەشەمەی ١٤٠٣ AP
+date	ckb-IR	long	2025-03-21	١ی خاکەلێوەی ١٤٠٤ AP
+date	ckb-IR	long	1999-12-31	١٠ی بەفرانباری ١٣٧٨ AP
+date	ckb-IR	long	2031-07-14	٢٣ی پووشپەڕی ١٤١٠ AP
+date	ckb-IR	long	2010-10-10	١٨ی ڕەزبەری ١٣٨٩ AP
+date	ckb-IR	full	2026-09-03	AP ١٤٠٥ خەرمانان ١٢, پێنجشەممە
+date	ckb-IR	full	2026-01-01	AP ١٤٠٤ بەفرانبار ١١, پێنجشەممە
+date	ckb-IR	full	2027-01-01	AP ١٤٠٥ بەفرانبار ١١, ھەینی
+date	ckb-IR	full	2024-02-29	AP ١٤٠٢ ڕەشەمە ١٠, پێنجشەممە
+date	ckb-IR	full	2025-03-20	AP ١٤٠٣ ڕەشەمە ٣٠, پێنجشەممە
+date	ckb-IR	full	2025-03-21	AP ١٤٠٤ خاکەلێوە ١, ھەینی
+date	ckb-IR	full	1999-12-31	AP ١٣٧٨ بەفرانبار ١٠, ھەینی
+date	ckb-IR	full	2031-07-14	AP ١٤١٠ پووشپەڕ ٢٣, دووشەممە
+date	ckb-IR	full	2010-10-10	AP ١٣٨٩ ڕەزبەر ١٨, یەکشەممە
+range	ckb-IR	day	2026-09-03/2026-09-10	١٢–١٩ی خەرمانان
+range	ckb-IR	day	2026-09-29/2026-11-02	ڕەزبەر ٧ – گەڵاڕێزان ١١
+range	ckb-IR	day	2026-12-28/2027-01-05	٧–١٥ی بەفرانبار
+range	ckb-IR	day	2025-03-15/2025-03-25	٢٥ی ڕەشەمەی ١٤٠٣ – ٥ی خاکەلێوەی ١٤٠٤
+range	ckb-IR	day	2010-10-10/2011-10-11	١٨ی ڕەزبەری ١٣٨٩ – ١٩ی ڕەزبەری ١٣٩٠
+range	ckb-IR	short	2026-09-03/2026-09-10	AP ١٤٠٥-٠٦-١٢ – ١٤٠٥-٠٦-١٩
+range	ckb-IR	short	2026-09-29/2026-11-02	AP ١٤٠٥-٠٧-٠٧ – ١٤٠٥-٠٨-١١
+range	ckb-IR	short	2026-12-28/2027-01-05	AP ١٤٠٥-١٠-٠٧ – ١٤٠٥-١٠-١٥
+range	ckb-IR	short	2025-03-15/2025-03-25	AP ١٤٠٣-١٢-٢٥ – ١٤٠٤-٠١-٠٥
+range	ckb-IR	short	2010-10-10/2011-10-11	AP ١٣٨٩-٠٧-١٨ – ١٣٩٠-٠٧-١٩
+range	ckb-IR	medium	2026-09-03/2026-09-10	AP ١٤٠٥ خەرمانان ١٢–١٩
+range	ckb-IR	medium	2026-09-29/2026-11-02	AP ١٤٠٥ ڕەزبەر ٧ – گەڵاڕێزان ١١
+range	ckb-IR	medium	2026-12-28/2027-01-05	AP ١٤٠٥ بەفرانبار ٧–١٥
+range	ckb-IR	medium	2025-03-15/2025-03-25	AP ١٤٠٣ ڕەشەمە ٢٥ – ١٤٠٤ خاکەلێوە ٥
+range	ckb-IR	medium	2010-10-10/2011-10-11	AP ١٣٨٩ ڕەزبەر ١٨ – ١٣٩٠ ڕەزبەر ١٩
+range	ckb-IR	long	2026-09-03/2026-09-10	AP ١٤٠٥ خەرمانان ١٢–١٩
+range	ckb-IR	long	2026-09-29/2026-11-02	AP ١٤٠٥ ڕەزبەر ٧ – گەڵاڕێزان ١١
+range	ckb-IR	long	2026-12-28/2027-01-05	AP ١٤٠٥ بەفرانبار ٧–١٥
+range	ckb-IR	long	2025-03-15/2025-03-25	AP ١٤٠٣ ڕەشەمە ٢٥ – ١٤٠٤ خاکەلێوە ٥
+range	ckb-IR	long	2010-10-10/2011-10-11	AP ١٣٨٩ ڕەزبەر ١٨ – ١٣٩٠ ڕەزبەر ١٩
+month	ckb-IR	short	2026-09	خەرمانانی ١٤٠٥
+month	ckb-IR	short	2026-01	بەفرانباری ١٤٠٤
+month	ckb-IR	short	2027-01	بەفرانباری ١٤٠٥
+month	ckb-IR	short	2024-02	ڕێبەندانی ١٤٠٢
+month	ckb-IR	short	2025-03	ڕەشەمەی ١٤٠٣
+month	ckb-IR	short	2025-03	ڕەشەمەی ١٤٠٣
+month	ckb-IR	short	1999-12	سەرماوەزی ١٣٧٨
+month	ckb-IR	short	2031-07	پووشپەڕی ١٤١٠
+month	ckb-IR	short	2010-10	ڕەزبەری ١٣٨٩
+month	ckb-IR	long	2026-09	خەرمانانی ١٤٠٥
+month	ckb-IR	long	2026-01	بەفرانباری ١٤٠٤
+month	ckb-IR	long	2027-01	بەفرانباری ١٤٠٥
+month	ckb-IR	long	2024-02	ڕێبەندانی ١٤٠٢
+month	ckb-IR	long	2025-03	ڕەشەمەی ١٤٠٣
+month	ckb-IR	long	2025-03	ڕەشەمەی ١٤٠٣
+month	ckb-IR	long	1999-12	سەرماوەزی ١٣٧٨
+month	ckb-IR	long	2031-07	پووشپەڕی ١٤١٠
+month	ckb-IR	long	2010-10	ڕەزبەری ١٣٨٩
+monthNames	ckb-IR			بەفرانبار|ڕێبەندان|ڕەشەمە|خاکەلێوە|گوڵان|جۆزەردان|پووشپەڕ|گەلاوێژ|خەرمانان|ڕەزبەر|گەڵاڕێزان|سەرماوەز
+weekdays	ckb-IR	narrow		ی|د|س|چ|پ|ھ|ش
+weekdays	ckb-IR	short		یەکشەممە|دووشەممە|سێشەممە|چوارشەممە|پێنجشەممە|ھەینی|شەممە
+weekdays	ckb-IR	long		یەکشەممە|دووشەممە|سێشەممە|چوارشەممە|پێنجشەممە|ھەینی|شەممە
+weekStart	ckb-IR			6
+clock	ckb-IR			{hour}:{minute}|false||
+date	gd	day	2026-09-03	3 Sult
+date	gd	day	2026-01-01	1 Faoi
+date	gd	day	2027-01-01	1 Faoi
+date	gd	day	2024-02-29	29 Gearr
+date	gd	day	2025-03-20	20 Màrt
+date	gd	day	2025-03-21	21 Màrt
+date	gd	day	1999-12-31	31 Dùbh
+date	gd	day	2031-07-14	14 Iuch
+date	gd	day	2010-10-10	10 Dàmh
+date	gd	short	2026-09-03	03/09/2026
+date	gd	short	2026-01-01	01/01/2026
+date	gd	short	2027-01-01	01/01/2027
+date	gd	short	2024-02-29	29/02/2024
+date	gd	short	2025-03-20	20/03/2025
+date	gd	short	2025-03-21	21/03/2025
+date	gd	short	1999-12-31	31/12/1999
+date	gd	short	2031-07-14	14/07/2031
+date	gd	short	2010-10-10	10/10/2010
+date	gd	medium	2026-09-03	3mh Sult 2026
+date	gd	medium	2026-01-01	1mh Faoi 2026
+date	gd	medium	2027-01-01	1mh Faoi 2027
+date	gd	medium	2024-02-29	29mh Gearr 2024
+date	gd	medium	2025-03-20	20mh Màrt 2025
+date	gd	medium	2025-03-21	21mh Màrt 2025
+date	gd	medium	1999-12-31	31mh Dùbh 1999
+date	gd	medium	2031-07-14	14mh Iuch 2031
+date	gd	medium	2010-10-10	10mh Dàmh 2010
+date	gd	long	2026-09-03	3mh dhen t-Sultain 2026
+date	gd	long	2026-01-01	1mh dhen Fhaoilleach 2026
+date	gd	long	2027-01-01	1mh dhen Fhaoilleach 2027
+date	gd	long	2024-02-29	29mh dhen Ghearran 2024
+date	gd	long	2025-03-20	20mh dhen Mhàrt 2025
+date	gd	long	2025-03-21	21mh dhen Mhàrt 2025
+date	gd	long	1999-12-31	31mh dhen Dùbhlachd 1999
+date	gd	long	2031-07-14	14mh dhen Iuchar 2031
+date	gd	long	2010-10-10	10mh dhen Dàmhair 2010
+date	gd	full	2026-09-03	DiarDaoin, 3mh dhen t-Sultain 2026
+date	gd	full	2026-01-01	DiarDaoin, 1mh dhen Fhaoilleach 2026
+date	gd	full	2027-01-01	DihAoine, 1mh dhen Fhaoilleach 2027
+date	gd	full	2024-02-29	DiarDaoin, 29mh dhen Ghearran 2024
+date	gd	full	2025-03-20	DiarDaoin, 20mh dhen Mhàrt 2025
+date	gd	full	2025-03-21	DihAoine, 21mh dhen Mhàrt 2025
+date	gd	full	1999-12-31	DihAoine, 31mh dhen Dùbhlachd 1999
+date	gd	full	2031-07-14	DiLuain, 14mh dhen Iuchar 2031
+date	gd	full	2010-10-10	DiDòmhnaich, 10mh dhen Dàmhair 2010
+range	gd	day	2026-09-03/2026-09-10	3 – 10 Sult
+range	gd	day	2026-09-29/2026-11-02	29 Sult – 2 Samh
+range	gd	day	2026-12-28/2027-01-05	28 Dùbh 2026 – 5 Faoi 2027
+range	gd	day	2025-03-15/2025-03-25	15 – 25 Màrt
+range	gd	day	2010-10-10/2011-10-11	10 Dàmh 2010 – 11 Dàmh 2011
+range	gd	short	2026-09-03/2026-09-10	3/9/2026 – 10/9/2026
+range	gd	short	2026-09-29/2026-11-02	29/9/2026 – 2/11/2026
+range	gd	short	2026-12-28/2027-01-05	28/12/2026 – 5/1/2027
+range	gd	short	2025-03-15/2025-03-25	15/3/2025 – 25/3/2025
+range	gd	short	2010-10-10/2011-10-11	10/10/2010 – 11/10/2011
+range	gd	medium	2026-09-03/2026-09-10	3 – 10 Sult 2026
+range	gd	medium	2026-09-29/2026-11-02	29 Sult – 2 Samh 2026
+range	gd	medium	2026-12-28/2027-01-05	28 Dùbh 2026 – 5 Faoi 2027
+range	gd	medium	2025-03-15/2025-03-25	15 – 25 Màrt 2025
+range	gd	medium	2010-10-10/2011-10-11	10 Dàmh 2010 – 11 Dàmh 2011
+range	gd	long	2026-09-03/2026-09-10	3 – 10 dhen t-Sultain 2026
+range	gd	long	2026-09-29/2026-11-02	29 dhen t-Sultain – 2 dhen t-Samhain 2026
+range	gd	long	2026-12-28/2027-01-05	28 dhen Dùbhlachd 2026 – 5 dhen Fhaoilleach 2027
+range	gd	long	2025-03-15/2025-03-25	15 – 25 dhen Mhàrt 2025
+range	gd	long	2010-10-10/2011-10-11	10 dhen Dàmhair 2010 – 11 dhen Dàmhair 2011
+month	gd	short	2026-09	Sult 2026
+month	gd	short	2026-01	Faoi 2026
+month	gd	short	2027-01	Faoi 2026
+month	gd	short	2024-02	Gearr 2024
+month	gd	short	2025-03	Màrt 2025
+month	gd	short	2025-03	Màrt 2025
+month	gd	short	1999-12	Dùbh 1999
+month	gd	short	2031-07	Iuch 2031
+month	gd	short	2010-10	Dàmh 2010
+month	gd	long	2026-09	An t-Sultain 2026
+month	gd	long	2026-01	Am Faoilleach 2026
+month	gd	long	2027-01	Am Faoilleach 2027
+month	gd	long	2024-02	An Gearran 2024
+month	gd	long	2025-03	Am Màrt 2025
+month	gd	long	2025-03	Am Màrt 2025
+month	gd	long	1999-12	An Dùbhlachd 1999
+month	gd	long	2031-07	An t-Iuchar 2031
+month	gd	long	2010-10	An Dàmhair 2010
+monthNames	gd			Faoi|Gearr|Màrt|Gibl|Cèit|Ògmh|Iuch|Lùna|Sult|Dàmh|Samh|Dùbh
+weekdays	gd	narrow		D|L|M|C|A|H|S
+weekdays	gd	short		DiD|DiL|DiM|DiC|Dia|Dih|DiS
+weekdays	gd	long		DiDòmhnaich|DiLuain|DiMàirt|DiCiadain|DiarDaoin|DihAoine|DiSathairne
+weekStart	gd			1
+clock	gd			{hour}:{minute}|false||
+date	az-Arab	day	2026-09-03	3 sen
+date	az-Arab	day	2026-01-01	1 yan
+date	az-Arab	day	2027-01-01	1 yan
+date	az-Arab	day	2024-02-29	29 fev
+date	az-Arab	day	2025-03-20	20 mar
+date	az-Arab	day	2025-03-21	21 mar
+date	az-Arab	day	1999-12-31	31 dek
+date	az-Arab	day	2031-07-14	14 iyl
+date	az-Arab	day	2010-10-10	10 okt
+date	az-Arab	short	2026-09-03	03.09.26
+date	az-Arab	short	2026-01-01	01.01.26
+date	az-Arab	short	2027-01-01	01.01.27
+date	az-Arab	short	2024-02-29	29.02.24
+date	az-Arab	short	2025-03-20	20.03.25
+date	az-Arab	short	2025-03-21	21.03.25
+date	az-Arab	short	1999-12-31	31.12.99
+date	az-Arab	short	2031-07-14	14.07.31
+date	az-Arab	short	2010-10-10	10.10.10
+date	az-Arab	medium	2026-09-03	3 sen 2026
+date	az-Arab	medium	2026-01-01	1 yan 2026
+date	az-Arab	medium	2027-01-01	1 yan 2027
+date	az-Arab	medium	2024-02-29	29 fev 2024
+date	az-Arab	medium	2025-03-20	20 mar 2025
+date	az-Arab	medium	2025-03-21	21 mar 2025
+date	az-Arab	medium	1999-12-31	31 dek 1999
+date	az-Arab	medium	2031-07-14	14 iyl 2031
+date	az-Arab	medium	2010-10-10	10 okt 2010
+date	az-Arab	long	2026-09-03	3 sentyabr 2026
+date	az-Arab	long	2026-01-01	1 yanvar 2026
+date	az-Arab	long	2027-01-01	1 yanvar 2027
+date	az-Arab	long	2024-02-29	29 fevral 2024
+date	az-Arab	long	2025-03-20	20 mart 2025
+date	az-Arab	long	2025-03-21	21 mart 2025
+date	az-Arab	long	1999-12-31	31 dekabr 1999
+date	az-Arab	long	2031-07-14	14 iyul 2031
+date	az-Arab	long	2010-10-10	10 oktyabr 2010
+date	az-Arab	full	2026-09-03	3 sentyabr 2026, cümə axşamı
+date	az-Arab	full	2026-01-01	1 yanvar 2026, cümə axşamı
+date	az-Arab	full	2027-01-01	1 yanvar 2027, cümə
+date	az-Arab	full	2024-02-29	29 fevral 2024, cümə axşamı
+date	az-Arab	full	2025-03-20	20 mart 2025, cümə axşamı
+date	az-Arab	full	2025-03-21	21 mart 2025, cümə
+date	az-Arab	full	1999-12-31	31 dekabr 1999, cümə
+date	az-Arab	full	2031-07-14	14 iyul 2031, bazar ertəsi
+date	az-Arab	full	2010-10-10	10 oktyabr 2010, bazar
+range	az-Arab	day	2026-09-03/2026-09-10	3–10 sen
+range	az-Arab	day	2026-09-29/2026-11-02	29 sen – 2 noy
+range	az-Arab	day	2026-12-28/2027-01-05	28 dek 2026 – 5 yan 2027
+range	az-Arab	day	2025-03-15/2025-03-25	15–25 mar
+range	az-Arab	day	2010-10-10/2011-10-11	10 okt 2010 – 11 okt 2011
+range	az-Arab	short	2026-09-03/2026-09-10	03.09.26 – 10.09.26
+range	az-Arab	short	2026-09-29/2026-11-02	29.09.26 – 02.11.26
+range	az-Arab	short	2026-12-28/2027-01-05	28.12.26 – 05.01.27
+range	az-Arab	short	2025-03-15/2025-03-25	15.03.25 – 25.03.25
+range	az-Arab	short	2010-10-10/2011-10-11	10.10.10 – 11.10.11
+range	az-Arab	medium	2026-09-03/2026-09-10	3 – 10 sen 2026
+range	az-Arab	medium	2026-09-29/2026-11-02	29 sen – 2 noy 2026
+range	az-Arab	medium	2026-12-28/2027-01-05	28 dek 2026 – 5 yan 2027
+range	az-Arab	medium	2025-03-15/2025-03-25	15 – 25 mar 2025
+range	az-Arab	medium	2010-10-10/2011-10-11	10 okt 2010 – 11 okt 2011
+range	az-Arab	long	2026-09-03/2026-09-10	3 – 10 sentyabr 2026
+range	az-Arab	long	2026-09-29/2026-11-02	29 sentyabr – 2 noyabr 2026
+range	az-Arab	long	2026-12-28/2027-01-05	28 dekabr 2026 – 5 yanvar 2027
+range	az-Arab	long	2025-03-15/2025-03-25	15 – 25 mart 2025
+range	az-Arab	long	2010-10-10/2011-10-11	10 oktyabr 2010 – 11 oktyabr 2011
+month	az-Arab	short	2026-09	sen 2026
+month	az-Arab	short	2026-01	yan 2026
+month	az-Arab	short	2027-01	yan 2027
+month	az-Arab	short	2024-02	fev 2024
+month	az-Arab	short	2025-03	mar 2025
+month	az-Arab	short	2025-03	mar 2025
+month	az-Arab	short	1999-12	dek 1999
+month	az-Arab	short	2031-07	iyl 2031
+month	az-Arab	short	2010-10	okt 2010
+month	az-Arab	long	2026-09	sentyabr 2026
+month	az-Arab	long	2026-01	yanvar 2026
+month	az-Arab	long	2027-01	yanvar 2027
+month	az-Arab	long	2024-02	fevral 2024
+month	az-Arab	long	2025-03	mart 2025
+month	az-Arab	long	2025-03	mart 2025
+month	az-Arab	long	1999-12	dekabr 1999
+month	az-Arab	long	2031-07	iyul 2031
+month	az-Arab	long	2010-10	oktyabr 2010
+monthNames	az-Arab			yan|fev|mar|apr|may|iyn|iyl|avq|sen|okt|noy|dek
+weekdays	az-Arab	narrow		7|1|2|3|4|5|6
+weekdays	az-Arab	short		B.|B.E.|Ç.A.|Ç.|C.A.|C.|Ş.
+weekdays	az-Arab	long		bazar|bazar ertəsi|çərşənbə axşamı|çərşənbə|cümə axşamı|cümə|şənbə
+weekStart	az-Arab			6
+clock	az-Arab			{hour}:{minute}|false||
+date	zh-Hant	day	2026-09-03	9月3日
+date	zh-Hant	day	2026-01-01	1月1日
+date	zh-Hant	day	2027-01-01	1月1日
+date	zh-Hant	day	2024-02-29	2月29日
+date	zh-Hant	day	2025-03-20	3月20日
+date	zh-Hant	day	2025-03-21	3月21日
+date	zh-Hant	day	1999-12-31	12月31日
+date	zh-Hant	day	2031-07-14	7月14日
+date	zh-Hant	day	2010-10-10	10月10日
+date	zh-Hant	short	2026-09-03	2026/9/3
+date	zh-Hant	short	2026-01-01	2026/1/1
+date	zh-Hant	short	2027-01-01	2027/1/1
+date	zh-Hant	short	2024-02-29	2024/2/29
+date	zh-Hant	short	2025-03-20	2025/3/20
+date	zh-Hant	short	2025-03-21	2025/3/21
+date	zh-Hant	short	1999-12-31	1999/12/31
+date	zh-Hant	short	2031-07-14	2031/7/14
+date	zh-Hant	short	2010-10-10	2010/10/10
+date	zh-Hant	medium	2026-09-03	2026年9月3日
+date	zh-Hant	medium	2026-01-01	2026年1月1日
+date	zh-Hant	medium	2027-01-01	2027年1月1日
+date	zh-Hant	medium	2024-02-29	2024年2月29日
+date	zh-Hant	medium	2025-03-20	2025年3月20日
+date	zh-Hant	medium	2025-03-21	2025年3月21日
+date	zh-Hant	medium	1999-12-31	1999年12月31日
+date	zh-Hant	medium	2031-07-14	2031年7月14日
+date	zh-Hant	medium	2010-10-10	2010年10月10日
+date	zh-Hant	long	2026-09-03	2026年9月3日
+date	zh-Hant	long	2026-01-01	2026年1月1日
+date	zh-Hant	long	2027-01-01	2027年1月1日
+date	zh-Hant	long	2024-02-29	2024年2月29日
+date	zh-Hant	long	2025-03-20	2025年3月20日
+date	zh-Hant	long	2025-03-21	2025年3月21日
+date	zh-Hant	long	1999-12-31	1999年12月31日
+date	zh-Hant	long	2031-07-14	2031年7月14日
+date	zh-Hant	long	2010-10-10	2010年10月10日
+date	zh-Hant	full	2026-09-03	2026年9月3日 星期四
+date	zh-Hant	full	2026-01-01	2026年1月1日 星期四
+date	zh-Hant	full	2027-01-01	2027年1月1日 星期五
+date	zh-Hant	full	2024-02-29	2024年2月29日 星期四
+date	zh-Hant	full	2025-03-20	2025年3月20日 星期四
+date	zh-Hant	full	2025-03-21	2025年3月21日 星期五
+date	zh-Hant	full	1999-12-31	1999年12月31日 星期五
+date	zh-Hant	full	2031-07-14	2031年7月14日 星期一
+date	zh-Hant	full	2010-10-10	2010年10月10日 星期日
+range	zh-Hant	day	2026-09-03/2026-09-10	9/3至9/10
+range	zh-Hant	day	2026-09-29/2026-11-02	9/29至11/2
+range	zh-Hant	day	2026-12-28/2027-01-05	2026/12/28至2027/1/5
+range	zh-Hant	day	2025-03-15/2025-03-25	3/15至3/25
+range	zh-Hant	day	2010-10-10/2011-10-11	2010/10/10至2011/10/11
+range	zh-Hant	short	2026-09-03/2026-09-10	2026/9/3至2026/9/10
+range	zh-Hant	short	2026-09-29/2026-11-02	2026/9/29至2026/11/2
+range	zh-Hant	short	2026-12-28/2027-01-05	2026/12/28至2027/1/5
+range	zh-Hant	short	2025-03-15/2025-03-25	2025/3/15至2025/3/25
+range	zh-Hant	short	2010-10-10/2011-10-11	2010/10/10至2011/10/11
+range	zh-Hant	medium	2026-09-03/2026-09-10	2026/9/3至2026/9/10
+range	zh-Hant	medium	2026-09-29/2026-11-02	2026/9/29至2026/11/2
+range	zh-Hant	medium	2026-12-28/2027-01-05	2026/12/28至2027/1/5
+range	zh-Hant	medium	2025-03-15/2025-03-25	2025/3/15至2025/3/25
+range	zh-Hant	medium	2010-10-10/2011-10-11	2010/10/10至2011/10/11
+range	zh-Hant	long	2026-09-03/2026-09-10	2026/9/3至2026/9/10
+range	zh-Hant	long	2026-09-29/2026-11-02	2026/9/29至2026/11/2
+range	zh-Hant	long	2026-12-28/2027-01-05	2026/12/28至2027/1/5
+range	zh-Hant	long	2025-03-15/2025-03-25	2025/3/15至2025/3/25
+range	zh-Hant	long	2010-10-10/2011-10-11	2010/10/10至2011/10/11
+month	zh-Hant	short	2026-09	2026年9月
+month	zh-Hant	short	2026-01	2026年1月
+month	zh-Hant	short	2027-01	2027年1月
+month	zh-Hant	short	2024-02	2024年2月
+month	zh-Hant	short	2025-03	2025年3月
+month	zh-Hant	short	2025-03	2025年3月
+month	zh-Hant	short	1999-12	1999年12月
+month	zh-Hant	short	2031-07	2031年7月
+month	zh-Hant	short	2010-10	2010年10月
+month	zh-Hant	long	2026-09	2026年9月
+month	zh-Hant	long	2026-01	2026年1月
+month	zh-Hant	long	2027-01	2027年1月
+month	zh-Hant	long	2024-02	2024年2月
+month	zh-Hant	long	2025-03	2025年3月
+month	zh-Hant	long	2025-03	2025年3月
+month	zh-Hant	long	1999-12	1999年12月
+month	zh-Hant	long	2031-07	2031年7月
+month	zh-Hant	long	2010-10	2010年10月
+monthNames	zh-Hant			1月|2月|3月|4月|5月|6月|7月|8月|9月|10月|11月|12月
+weekdays	zh-Hant	narrow		日|一|二|三|四|五|六
+weekdays	zh-Hant	short		週日|週一|週二|週三|週四|週五|週六
+weekdays	zh-Hant	long		星期日|星期一|星期二|星期三|星期四|星期五|星期六
+weekStart	zh-Hant			0
+clock	zh-Hant			{dayPeriod}{hour}:{minute}|true|上午|下午
+date	zh-Hans-HK	day	2026-09-03	9月3日
+date	zh-Hans-HK	day	2026-01-01	1月1日
+date	zh-Hans-HK	day	2027-01-01	1月1日
+date	zh-Hans-HK	day	2024-02-29	2月29日
+date	zh-Hans-HK	day	2025-03-20	3月20日
+date	zh-Hans-HK	day	2025-03-21	3月21日
+date	zh-Hans-HK	day	1999-12-31	12月31日
+date	zh-Hans-HK	day	2031-07-14	7月14日
+date	zh-Hans-HK	day	2010-10-10	10月10日
+date	zh-Hans-HK	short	2026-09-03	3/9/26
+date	zh-Hans-HK	short	2026-01-01	1/1/26
+date	zh-Hans-HK	short	2027-01-01	1/1/27
+date	zh-Hans-HK	short	2024-02-29	29/2/24
+date	zh-Hans-HK	short	2025-03-20	20/3/25
+date	zh-Hans-HK	short	2025-03-21	21/3/25
+date	zh-Hans-HK	short	1999-12-31	31/12/99
+date	zh-Hans-HK	short	2031-07-14	14/7/31
+date	zh-Hans-HK	short	2010-10-10	10/10/10
+date	zh-Hans-HK	medium	2026-09-03	2026年9月3日
+date	zh-Hans-HK	medium	2026-01-01	2026年1月1日
+date	zh-Hans-HK	medium	2027-01-01	2027年1月1日
+date	zh-Hans-HK	medium	2024-02-29	2024年2月29日
+date	zh-Hans-HK	medium	2025-03-20	2025年3月20日
+date	zh-Hans-HK	medium	2025-03-21	2025年3月21日
+date	zh-Hans-HK	medium	1999-12-31	1999年12月31日
+date	zh-Hans-HK	medium	2031-07-14	2031年7月14日
+date	zh-Hans-HK	medium	2010-10-10	2010年10月10日
+date	zh-Hans-HK	long	2026-09-03	2026年9月3日
+date	zh-Hans-HK	long	2026-01-01	2026年1月1日
+date	zh-Hans-HK	long	2027-01-01	2027年1月1日
+date	zh-Hans-HK	long	2024-02-29	2024年2月29日
+date	zh-Hans-HK	long	2025-03-20	2025年3月20日
+date	zh-Hans-HK	long	2025-03-21	2025年3月21日
+date	zh-Hans-HK	long	1999-12-31	1999年12月31日
+date	zh-Hans-HK	long	2031-07-14	2031年7月14日
+date	zh-Hans-HK	long	2010-10-10	2010年10月10日
+date	zh-Hans-HK	full	2026-09-03	2026年9月3日星期四
+date	zh-Hans-HK	full	2026-01-01	2026年1月1日星期四
+date	zh-Hans-HK	full	2027-01-01	2027年1月1日星期五
+date	zh-Hans-HK	full	2024-02-29	2024年2月29日星期四
+date	zh-Hans-HK	full	2025-03-20	2025年3月20日星期四
+date	zh-Hans-HK	full	2025-03-21	2025年3月21日星期五
+date	zh-Hans-HK	full	1999-12-31	1999年12月31日星期五
+date	zh-Hans-HK	full	2031-07-14	2031年7月14日星期一
+date	zh-Hans-HK	full	2010-10-10	2010年10月10日星期日
+range	zh-Hans-HK	day	2026-09-03/2026-09-10	9/3 – 9/10
+range	zh-Hans-HK	day	2026-09-29/2026-11-02	9/29 – 11/2
+range	zh-Hans-HK	day	2026-12-28/2027-01-05	28/12/2026至5/1/2027
+range	zh-Hans-HK	day	2025-03-15/2025-03-25	3/15 – 3/25
+range	zh-Hans-HK	day	2010-10-10/2011-10-11	10/10/2010至11/10/2011
+range	zh-Hans-HK	short	2026-09-03/2026-09-10	3/9/26至10/9/26
+range	zh-Hans-HK	short	2026-09-29/2026-11-02	29/9/26至2/11/26
+range	zh-Hans-HK	short	2026-12-28/2027-01-05	28/12/26至5/1/27
+range	zh-Hans-HK	short	2025-03-15/2025-03-25	15/3/25至25/3/25
+range	zh-Hans-HK	short	2010-10-10/2011-10-11	10/10/10至11/10/11
+range	zh-Hans-HK	medium	2026-09-03/2026-09-10	3/9/2026至10/9/2026
+range	zh-Hans-HK	medium	2026-09-29/2026-11-02	29/9/2026至2/11/2026
+range	zh-Hans-HK	medium	2026-12-28/2027-01-05	28/12/2026至5/1/2027
+range	zh-Hans-HK	medium	2025-03-15/2025-03-25	15/3/2025至25/3/2025
+range	zh-Hans-HK	medium	2010-10-10/2011-10-11	10/10/2010至11/10/2011
+range	zh-Hans-HK	long	2026-09-03/2026-09-10	3/9/2026至10/9/2026
+range	zh-Hans-HK	long	2026-09-29/2026-11-02	29/9/2026至2/11/2026
+range	zh-Hans-HK	long	2026-12-28/2027-01-05	28/12/2026至5/1/2027
+range	zh-Hans-HK	long	2025-03-15/2025-03-25	15/3/2025至25/3/2025
+range	zh-Hans-HK	long	2010-10-10/2011-10-11	10/10/2010至11/10/2011
+month	zh-Hans-HK	short	2026-09	2026年9月
+month	zh-Hans-HK	short	2026-01	2026年1月
+month	zh-Hans-HK	short	2027-01	2027年1月
+month	zh-Hans-HK	short	2024-02	2024年2月
+month	zh-Hans-HK	short	2025-03	2025年3月
+month	zh-Hans-HK	short	2025-03	2025年3月
+month	zh-Hans-HK	short	1999-12	1999年12月
+month	zh-Hans-HK	short	2031-07	2031年7月
+month	zh-Hans-HK	short	2010-10	2010年10月
+month	zh-Hans-HK	long	2026-09	2026年9月
+month	zh-Hans-HK	long	2026-01	2026年1月
+month	zh-Hans-HK	long	2027-01	2027年1月
+month	zh-Hans-HK	long	2024-02	2024年2月
+month	zh-Hans-HK	long	2025-03	2025年3月
+month	zh-Hans-HK	long	2025-03	2025年3月
+month	zh-Hans-HK	long	1999-12	1999年12月
+month	zh-Hans-HK	long	2031-07	2031年7月
+month	zh-Hans-HK	long	2010-10	2010年10月
+monthNames	zh-Hans-HK			1月|2月|3月|4月|5月|6月|7月|8月|9月|10月|11月|12月
+weekdays	zh-Hans-HK	narrow		日|一|二|三|四|五|六
+weekdays	zh-Hans-HK	short		周日|周一|周二|周三|周四|周五|周六
+weekdays	zh-Hans-HK	long		星期日|星期一|星期二|星期三|星期四|星期五|星期六
+weekStart	zh-Hans-HK			0
+clock	zh-Hans-HK			{dayPeriod}{hour}:{minute}|true|上午|下午
+date	pa-Arab	day	2026-09-03	ستمبر ۳
+date	pa-Arab	day	2026-01-01	جنوری ۱
+date	pa-Arab	day	2027-01-01	جنوری ۱
+date	pa-Arab	day	2024-02-29	فروری ۲۹
+date	pa-Arab	day	2025-03-20	مارچ ۲۰
+date	pa-Arab	day	2025-03-21	مارچ ۲۱
+date	pa-Arab	day	1999-12-31	دسمبر ۳۱
+date	pa-Arab	day	2031-07-14	جولائی ۱۴
+date	pa-Arab	day	2010-10-10	اکتوبر ۱۰
+date	pa-Arab	short	2026-09-03	۰۳/۰۹/۲۰۲۶
+date	pa-Arab	short	2026-01-01	۰۱/۰۱/۲۰۲۶
+date	pa-Arab	short	2027-01-01	۰۱/۰۱/۲۰۲۷
+date	pa-Arab	short	2024-02-29	۲۹/۰۲/۲۰۲۴
+date	pa-Arab	short	2025-03-20	۲۰/۰۳/۲۰۲۵
+date	pa-Arab	short	2025-03-21	۲۱/۰۳/۲۰۲۵
+date	pa-Arab	short	1999-12-31	۳۱/۱۲/۱۹۹۹
+date	pa-Arab	short	2031-07-14	۱۴/۰۷/۲۰۳۱
+date	pa-Arab	short	2010-10-10	۱۰/۱۰/۲۰۱۰
+date	pa-Arab	medium	2026-09-03	۳ ستمبر ۲۰۲۶
+date	pa-Arab	medium	2026-01-01	۱ جنوری ۲۰۲۶
+date	pa-Arab	medium	2027-01-01	۱ جنوری ۲۰۲۷
+date	pa-Arab	medium	2024-02-29	۲۹ فروری ۲۰۲۴
+date	pa-Arab	medium	2025-03-20	۲۰ مارچ ۲۰۲۵
+date	pa-Arab	medium	2025-03-21	۲۱ مارچ ۲۰۲۵
+date	pa-Arab	medium	1999-12-31	۳۱ دسمبر ۱۹۹۹
+date	pa-Arab	medium	2031-07-14	۱۴ جولائی ۲۰۳۱
+date	pa-Arab	medium	2010-10-10	۱۰ اکتوبر ۲۰۱۰
+date	pa-Arab	long	2026-09-03	۳ ستمبر ۲۰۲۶
+date	pa-Arab	long	2026-01-01	۱ جنوری ۲۰۲۶
+date	pa-Arab	long	2027-01-01	۱ جنوری ۲۰۲۷
+date	pa-Arab	long	2024-02-29	۲۹ فروری ۲۰۲۴
+date	pa-Arab	long	2025-03-20	۲۰ مارچ ۲۰۲۵
+date	pa-Arab	long	2025-03-21	۲۱ مارچ ۲۰۲۵
+date	pa-Arab	long	1999-12-31	۳۱ دسمبر ۱۹۹۹
+date	pa-Arab	long	2031-07-14	۱۴ جولائی ۲۰۳۱
+date	pa-Arab	long	2010-10-10	۱۰ اکتوبر ۲۰۱۰
+date	pa-Arab	full	2026-09-03	جمعرات, ۰۳ ستمبر ۲۰۲۶
+date	pa-Arab	full	2026-01-01	جمعرات, ۰۱ جنوری ۲۰۲۶
+date	pa-Arab	full	2027-01-01	جمعہ, ۰۱ جنوری ۲۰۲۷
+date	pa-Arab	full	2024-02-29	جمعرات, ۲۹ فروری ۲۰۲۴
+date	pa-Arab	full	2025-03-20	جمعرات, ۲۰ مارچ ۲۰۲۵
+date	pa-Arab	full	2025-03-21	جمعہ, ۲۱ مارچ ۲۰۲۵
+date	pa-Arab	full	1999-12-31	جمعہ, ۳۱ دسمبر ۱۹۹۹
+date	pa-Arab	full	2031-07-14	پیر, ۱۴ جولائی ۲۰۳۱
+date	pa-Arab	full	2010-10-10	اتوار, ۱۰ اکتوبر ۲۰۱۰
+range	pa-Arab	day	2026-09-03/2026-09-10	ستمبر ۳–۱۰
+range	pa-Arab	day	2026-09-29/2026-11-02	ستمبر ۲۹ – نومبر ۲
+range	pa-Arab	day	2026-12-28/2027-01-05	۲۰۲۶ دسمبر ۲۸ – ۲۰۲۷ جنوری ۵
+range	pa-Arab	day	2025-03-15/2025-03-25	مارچ ۱۵–۲۵
+range	pa-Arab	day	2010-10-10/2011-10-11	۲۰۱۰ اکتوبر ۱۰ – ۲۰۱۱ اکتوبر ۱۱
+range	pa-Arab	short	2026-09-03/2026-09-10	۲۰۲۶-۰۹-۰۳ – ۲۰۲۶-۰۹-۱۰
+range	pa-Arab	short	2026-09-29/2026-11-02	۲۰۲۶-۰۹-۲۹ – ۲۰۲۶-۱۱-۰۲
+range	pa-Arab	short	2026-12-28/2027-01-05	۲۰۲۶-۱۲-۲۸ – ۲۰۲۷-۰۱-۰۵
+range	pa-Arab	short	2025-03-15/2025-03-25	۲۰۲۵-۰۳-۱۵ – ۲۰۲۵-۰۳-۲۵
+range	pa-Arab	short	2010-10-10/2011-10-11	۲۰۱۰-۱۰-۱۰ – ۲۰۱۱-۱۰-۱۱
+range	pa-Arab	medium	2026-09-03/2026-09-10	۲۰۲۶ ستمبر ۳–۱۰
+range	pa-Arab	medium	2026-09-29/2026-11-02	۲۰۲۶ ستمبر ۲۹ – نومبر ۲
+range	pa-Arab	medium	2026-12-28/2027-01-05	۲۰۲۶ دسمبر ۲۸ – ۲۰۲۷ جنوری ۵
+range	pa-Arab	medium	2025-03-15/2025-03-25	۲۰۲۵ مارچ ۱۵–۲۵
+range	pa-Arab	medium	2010-10-10/2011-10-11	۲۰۱۰ اکتوبر ۱۰ – ۲۰۱۱ اکتوبر ۱۱
+range	pa-Arab	long	2026-09-03/2026-09-10	۲۰۲۶ ستمبر ۳–۱۰
+range	pa-Arab	long	2026-09-29/2026-11-02	۲۰۲۶ ستمبر ۲۹ – نومبر ۲
+range	pa-Arab	long	2026-12-28/2027-01-05	۲۰۲۶ دسمبر ۲۸ – ۲۰۲۷ جنوری ۵
+range	pa-Arab	long	2025-03-15/2025-03-25	۲۰۲۵ مارچ ۱۵–۲۵
+range	pa-Arab	long	2010-10-10/2011-10-11	۲۰۱۰ اکتوبر ۱۰ – ۲۰۱۱ اکتوبر ۱۱
+month	pa-Arab	short	2026-09	ستمبر ۲۰۲۶
+month	pa-Arab	short	2026-01	جنوری ۲۰۲۶
+month	pa-Arab	short	2027-01	جنوری ۲۰۲۷
+month	pa-Arab	short	2024-02	فروری ۲۰۲۴
+month	pa-Arab	short	2025-03	مارچ ۲۰۲۵
+month	pa-Arab	short	2025-03	مارچ ۲۰۲۵
+month	pa-Arab	short	1999-12	دسمبر ۱۹۹۹
+month	pa-Arab	short	2031-07	جولائی ۲۰۳۱
+month	pa-Arab	short	2010-10	اکتوبر ۲۰۱۰
+month	pa-Arab	long	2026-09	۲۰۲۶ ستمبر
+month	pa-Arab	long	2026-01	۲۰۲۶ جنوری
+month	pa-Arab	long	2027-01	۲۰۲۷ جنوری
+month	pa-Arab	long	2024-02	۲۰۲۴ فروری
+month	pa-Arab	long	2025-03	۲۰۲۵ مارچ
+month	pa-Arab	long	2025-03	۲۰۲۵ مارچ
+month	pa-Arab	long	1999-12	۱۹۹۹ دسمبر
+month	pa-Arab	long	2031-07	۲۰۳۱ جولائی
+month	pa-Arab	long	2010-10	۲۰۱۰ اکتوبر
+monthNames	pa-Arab			جنوری|فروری|مارچ|اپریل|مئ|جون|جولائی|اگست|ستمبر|اکتوبر|نومبر|دسمبر
+weekdays	pa-Arab	narrow		S|M|T|W|T|F|S
+weekdays	pa-Arab	short		اتوار|پیر|منگل|بُدھ|جمعرات|جمعہ|ہفتہ
+weekdays	pa-Arab	long		اتوار|پیر|منگل|بُدھ|جمعرات|جمعہ|ہفتہ
+weekStart	pa-Arab			0
+clock	pa-Arab			{hour}:{minute} {dayPeriod}|true|AM|PM
+date	dv	day	2026-09-03	Sep 3
+date	dv	day	2026-01-01	Jan 1
+date	dv	day	2027-01-01	Jan 1
+date	dv	day	2024-02-29	Feb 29
+date	dv	day	2025-03-20	Mar 20
+date	dv	day	2025-03-21	Mar 21
+date	dv	day	1999-12-31	Dec 31
+date	dv	day	2031-07-14	Jul 14
+date	dv	day	2010-10-10	Oct 10
+date	dv	short	2026-09-03	9/3/26
+date	dv	short	2026-01-01	1/1/26
+date	dv	short	2027-01-01	1/1/27
+date	dv	short	2024-02-29	2/29/24
+date	dv	short	2025-03-20	3/20/25
+date	dv	short	2025-03-21	3/21/25
+date	dv	short	1999-12-31	12/31/99
+date	dv	short	2031-07-14	7/14/31
+date	dv	short	2010-10-10	10/10/10
+date	dv	medium	2026-09-03	Sep 3, 2026
+date	dv	medium	2026-01-01	Jan 1, 2026
+date	dv	medium	2027-01-01	Jan 1, 2027
+date	dv	medium	2024-02-29	Feb 29, 2024
+date	dv	medium	2025-03-20	Mar 20, 2025
+date	dv	medium	2025-03-21	Mar 21, 2025
+date	dv	medium	1999-12-31	Dec 31, 1999
+date	dv	medium	2031-07-14	Jul 14, 2031
+date	dv	medium	2010-10-10	Oct 10, 2010
+date	dv	long	2026-09-03	September 3, 2026
+date	dv	long	2026-01-01	January 1, 2026
+date	dv	long	2027-01-01	January 1, 2027
+date	dv	long	2024-02-29	February 29, 2024
+date	dv	long	2025-03-20	March 20, 2025
+date	dv	long	2025-03-21	March 21, 2025
+date	dv	long	1999-12-31	December 31, 1999
+date	dv	long	2031-07-14	July 14, 2031
+date	dv	long	2010-10-10	October 10, 2010
+date	dv	full	2026-09-03	Thursday, September 3, 2026
+date	dv	full	2026-01-01	Thursday, January 1, 2026
+date	dv	full	2027-01-01	Friday, January 1, 2027
+date	dv	full	2024-02-29	Thursday, February 29, 2024
+date	dv	full	2025-03-20	Thursday, March 20, 2025
+date	dv	full	2025-03-21	Friday, March 21, 2025
+date	dv	full	1999-12-31	Friday, December 31, 1999
+date	dv	full	2031-07-14	Monday, July 14, 2031
+date	dv	full	2010-10-10	Sunday, October 10, 2010
+range	dv	day	2026-09-03/2026-09-10	Sep 3 – 10
+range	dv	day	2026-09-29/2026-11-02	Sep 29 – Nov 2
+range	dv	day	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	dv	day	2025-03-15/2025-03-25	Mar 15 – 25
+range	dv	day	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	dv	short	2026-09-03/2026-09-10	9/3/26 – 9/10/26
+range	dv	short	2026-09-29/2026-11-02	9/29/26 – 11/2/26
+range	dv	short	2026-12-28/2027-01-05	12/28/26 – 1/5/27
+range	dv	short	2025-03-15/2025-03-25	3/15/25 – 3/25/25
+range	dv	short	2010-10-10/2011-10-11	10/10/10 – 10/11/11
+range	dv	medium	2026-09-03/2026-09-10	Sep 3 – 10, 2026
+range	dv	medium	2026-09-29/2026-11-02	Sep 29 – Nov 2, 2026
+range	dv	medium	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	dv	medium	2025-03-15/2025-03-25	Mar 15 – 25, 2025
+range	dv	medium	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	dv	long	2026-09-03/2026-09-10	September 3 – 10, 2026
+range	dv	long	2026-09-29/2026-11-02	September 29 – November 2, 2026
+range	dv	long	2026-12-28/2027-01-05	December 28, 2026 – January 5, 2027
+range	dv	long	2025-03-15/2025-03-25	March 15 – 25, 2025
+range	dv	long	2010-10-10/2011-10-11	October 10, 2010 – October 11, 2011
+month	dv	short	2026-09	Sep 2026
+month	dv	short	2026-01	Jan 2026
+month	dv	short	2027-01	Jan 2027
+month	dv	short	2024-02	Feb 2024
+month	dv	short	2025-03	Mar 2025
+month	dv	short	2025-03	Mar 2025
+month	dv	short	1999-12	Dec 1999
+month	dv	short	2031-07	Jul 2031
+month	dv	short	2010-10	Oct 2010
+month	dv	long	2026-09	September 2026
+month	dv	long	2026-01	January 2026
+month	dv	long	2027-01	January 2027
+month	dv	long	2024-02	February 2024
+month	dv	long	2025-03	March 2025
+month	dv	long	2025-03	March 2025
+month	dv	long	1999-12	December 1999
+month	dv	long	2031-07	July 2031
+month	dv	long	2010-10	October 2010
+monthNames	dv			Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec
+weekdays	dv	narrow		S|M|T|W|T|F|S
+weekdays	dv	short		Sun|Mon|Tue|Wed|Thu|Fri|Sat
+weekdays	dv	long		Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday
+weekStart	dv			5
+clock	dv			{hour}:{minute} {dayPeriod}|true|AM|PM
+date	aa	day	2026-09-03	Sep 3
+date	aa	day	2026-01-01	Jan 1
+date	aa	day	2027-01-01	Jan 1
+date	aa	day	2024-02-29	Feb 29
+date	aa	day	2025-03-20	Mar 20
+date	aa	day	2025-03-21	Mar 21
+date	aa	day	1999-12-31	Dec 31
+date	aa	day	2031-07-14	Jul 14
+date	aa	day	2010-10-10	Oct 10
+date	aa	short	2026-09-03	9/3/26
+date	aa	short	2026-01-01	1/1/26
+date	aa	short	2027-01-01	1/1/27
+date	aa	short	2024-02-29	2/29/24
+date	aa	short	2025-03-20	3/20/25
+date	aa	short	2025-03-21	3/21/25
+date	aa	short	1999-12-31	12/31/99
+date	aa	short	2031-07-14	7/14/31
+date	aa	short	2010-10-10	10/10/10
+date	aa	medium	2026-09-03	Sep 3, 2026
+date	aa	medium	2026-01-01	Jan 1, 2026
+date	aa	medium	2027-01-01	Jan 1, 2027
+date	aa	medium	2024-02-29	Feb 29, 2024
+date	aa	medium	2025-03-20	Mar 20, 2025
+date	aa	medium	2025-03-21	Mar 21, 2025
+date	aa	medium	1999-12-31	Dec 31, 1999
+date	aa	medium	2031-07-14	Jul 14, 2031
+date	aa	medium	2010-10-10	Oct 10, 2010
+date	aa	long	2026-09-03	September 3, 2026
+date	aa	long	2026-01-01	January 1, 2026
+date	aa	long	2027-01-01	January 1, 2027
+date	aa	long	2024-02-29	February 29, 2024
+date	aa	long	2025-03-20	March 20, 2025
+date	aa	long	2025-03-21	March 21, 2025
+date	aa	long	1999-12-31	December 31, 1999
+date	aa	long	2031-07-14	July 14, 2031
+date	aa	long	2010-10-10	October 10, 2010
+date	aa	full	2026-09-03	Thursday, September 3, 2026
+date	aa	full	2026-01-01	Thursday, January 1, 2026
+date	aa	full	2027-01-01	Friday, January 1, 2027
+date	aa	full	2024-02-29	Thursday, February 29, 2024
+date	aa	full	2025-03-20	Thursday, March 20, 2025
+date	aa	full	2025-03-21	Friday, March 21, 2025
+date	aa	full	1999-12-31	Friday, December 31, 1999
+date	aa	full	2031-07-14	Monday, July 14, 2031
+date	aa	full	2010-10-10	Sunday, October 10, 2010
+range	aa	day	2026-09-03/2026-09-10	Sep 3 – 10
+range	aa	day	2026-09-29/2026-11-02	Sep 29 – Nov 2
+range	aa	day	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	aa	day	2025-03-15/2025-03-25	Mar 15 – 25
+range	aa	day	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	aa	short	2026-09-03/2026-09-10	9/3/26 – 9/10/26
+range	aa	short	2026-09-29/2026-11-02	9/29/26 – 11/2/26
+range	aa	short	2026-12-28/2027-01-05	12/28/26 – 1/5/27
+range	aa	short	2025-03-15/2025-03-25	3/15/25 – 3/25/25
+range	aa	short	2010-10-10/2011-10-11	10/10/10 – 10/11/11
+range	aa	medium	2026-09-03/2026-09-10	Sep 3 – 10, 2026
+range	aa	medium	2026-09-29/2026-11-02	Sep 29 – Nov 2, 2026
+range	aa	medium	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	aa	medium	2025-03-15/2025-03-25	Mar 15 – 25, 2025
+range	aa	medium	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	aa	long	2026-09-03/2026-09-10	September 3 – 10, 2026
+range	aa	long	2026-09-29/2026-11-02	September 29 – November 2, 2026
+range	aa	long	2026-12-28/2027-01-05	December 28, 2026 – January 5, 2027
+range	aa	long	2025-03-15/2025-03-25	March 15 – 25, 2025
+range	aa	long	2010-10-10/2011-10-11	October 10, 2010 – October 11, 2011
+month	aa	short	2026-09	Sep 2026
+month	aa	short	2026-01	Jan 2026
+month	aa	short	2027-01	Jan 2027
+month	aa	short	2024-02	Feb 2024
+month	aa	short	2025-03	Mar 2025
+month	aa	short	2025-03	Mar 2025
+month	aa	short	1999-12	Dec 1999
+month	aa	short	2031-07	Jul 2031
+month	aa	short	2010-10	Oct 2010
+month	aa	long	2026-09	September 2026
+month	aa	long	2026-01	January 2026
+month	aa	long	2027-01	January 2027
+month	aa	long	2024-02	February 2024
+month	aa	long	2025-03	March 2025
+month	aa	long	2025-03	March 2025
+month	aa	long	1999-12	December 1999
+month	aa	long	2031-07	July 2031
+month	aa	long	2010-10	October 2010
+monthNames	aa			Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec
+weekdays	aa	narrow		S|M|T|W|T|F|S
+weekdays	aa	short		Sun|Mon|Tue|Wed|Thu|Fri|Sat
+weekdays	aa	long		Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday
+weekStart	aa			0
+clock	aa			{hour}:{minute} {dayPeriod}|true|AM|PM
+date	und	day	2026-09-03	Sep 3
+date	und	day	2026-01-01	Jan 1
+date	und	day	2027-01-01	Jan 1
+date	und	day	2024-02-29	Feb 29
+date	und	day	2025-03-20	Mar 20
+date	und	day	2025-03-21	Mar 21
+date	und	day	1999-12-31	Dec 31
+date	und	day	2031-07-14	Jul 14
+date	und	day	2010-10-10	Oct 10
+date	und	short	2026-09-03	9/3/26
+date	und	short	2026-01-01	1/1/26
+date	und	short	2027-01-01	1/1/27
+date	und	short	2024-02-29	2/29/24
+date	und	short	2025-03-20	3/20/25
+date	und	short	2025-03-21	3/21/25
+date	und	short	1999-12-31	12/31/99
+date	und	short	2031-07-14	7/14/31
+date	und	short	2010-10-10	10/10/10
+date	und	medium	2026-09-03	Sep 3, 2026
+date	und	medium	2026-01-01	Jan 1, 2026
+date	und	medium	2027-01-01	Jan 1, 2027
+date	und	medium	2024-02-29	Feb 29, 2024
+date	und	medium	2025-03-20	Mar 20, 2025
+date	und	medium	2025-03-21	Mar 21, 2025
+date	und	medium	1999-12-31	Dec 31, 1999
+date	und	medium	2031-07-14	Jul 14, 2031
+date	und	medium	2010-10-10	Oct 10, 2010
+date	und	long	2026-09-03	September 3, 2026
+date	und	long	2026-01-01	January 1, 2026
+date	und	long	2027-01-01	January 1, 2027
+date	und	long	2024-02-29	February 29, 2024
+date	und	long	2025-03-20	March 20, 2025
+date	und	long	2025-03-21	March 21, 2025
+date	und	long	1999-12-31	December 31, 1999
+date	und	long	2031-07-14	July 14, 2031
+date	und	long	2010-10-10	October 10, 2010
+date	und	full	2026-09-03	Thursday, September 3, 2026
+date	und	full	2026-01-01	Thursday, January 1, 2026
+date	und	full	2027-01-01	Friday, January 1, 2027
+date	und	full	2024-02-29	Thursday, February 29, 2024
+date	und	full	2025-03-20	Thursday, March 20, 2025
+date	und	full	2025-03-21	Friday, March 21, 2025
+date	und	full	1999-12-31	Friday, December 31, 1999
+date	und	full	2031-07-14	Monday, July 14, 2031
+date	und	full	2010-10-10	Sunday, October 10, 2010
+range	und	day	2026-09-03/2026-09-10	Sep 3 – 10
+range	und	day	2026-09-29/2026-11-02	Sep 29 – Nov 2
+range	und	day	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	und	day	2025-03-15/2025-03-25	Mar 15 – 25
+range	und	day	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	und	short	2026-09-03/2026-09-10	9/3/26 – 9/10/26
+range	und	short	2026-09-29/2026-11-02	9/29/26 – 11/2/26
+range	und	short	2026-12-28/2027-01-05	12/28/26 – 1/5/27
+range	und	short	2025-03-15/2025-03-25	3/15/25 – 3/25/25
+range	und	short	2010-10-10/2011-10-11	10/10/10 – 10/11/11
+range	und	medium	2026-09-03/2026-09-10	Sep 3 – 10, 2026
+range	und	medium	2026-09-29/2026-11-02	Sep 29 – Nov 2, 2026
+range	und	medium	2026-12-28/2027-01-05	Dec 28, 2026 – Jan 5, 2027
+range	und	medium	2025-03-15/2025-03-25	Mar 15 – 25, 2025
+range	und	medium	2010-10-10/2011-10-11	Oct 10, 2010 – Oct 11, 2011
+range	und	long	2026-09-03/2026-09-10	September 3 – 10, 2026
+range	und	long	2026-09-29/2026-11-02	September 29 – November 2, 2026
+range	und	long	2026-12-28/2027-01-05	December 28, 2026 – January 5, 2027
+range	und	long	2025-03-15/2025-03-25	March 15 – 25, 2025
+range	und	long	2010-10-10/2011-10-11	October 10, 2010 – October 11, 2011
+month	und	short	2026-09	Sep 2026
+month	und	short	2026-01	Jan 2026
+month	und	short	2027-01	Jan 2027
+month	und	short	2024-02	Feb 2024
+month	und	short	2025-03	Mar 2025
+month	und	short	2025-03	Mar 2025
+month	und	short	1999-12	Dec 1999
+month	und	short	2031-07	Jul 2031
+month	und	short	2010-10	Oct 2010
+month	und	long	2026-09	September 2026
+month	und	long	2026-01	January 2026
+month	und	long	2027-01	January 2027
+month	und	long	2024-02	February 2024
+month	und	long	2025-03	March 2025
+month	und	long	2025-03	March 2025
+month	und	long	1999-12	December 1999
+month	und	long	2031-07	July 2031
+month	und	long	2010-10	October 2010
+monthNames	und			Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec
+weekdays	und	narrow		S|M|T|W|T|F|S
+weekdays	und	short		Sun|Mon|Tue|Wed|Thu|Fri|Sat
+weekdays	und	long		Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday
+weekStart	und			0
+clock	und			{hour}:{minute} {dayPeriod}|true|AM|PM

@@ -1,4 +1,4 @@
-import BudgetApp from '../../../packages/showcase/examples/BudgetApp';
+import BudgetApp from '../../../web/packages/showcase/examples/BudgetApp';
 import { ShowcaseNav } from '../components/showcase-nav';
 import { seo } from '../seo';
 

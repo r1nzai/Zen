@@ -1,7 +1,7 @@
 import { Backdrop, ThemeScript, ToastProvider } from '@rinzai/zen';
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 
-import topo from '../../packages/backdrop/examples/topo.svg';
+import topo from '../../web/packages/backdrop/examples/topo.svg';
 import type { Route } from './+types/root';
 import { NotFound } from './components/not-found';
 import { SiteHeader } from './components/site-header';

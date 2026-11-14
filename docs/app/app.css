@@ -3,11 +3,11 @@
  * theme, and Zen's optional base (page setup, headings, code, scrollbars).
  */
 @import 'tailwindcss';
-@import '../../packages/theme.css';
-@import '../../packages/base.css';
+@import '../../web/packages/theme.css';
+@import '../../web/packages/base.css';
 
 /* Also scan the library: its components and the examples the pages show. */
-@source '../../packages';
+@source '../../web/packages';
 @source '.';
 
 html {

@@ -1,121 +1,21 @@
 {
-    "name": "@rinzai/zen",
-    "version": "0.17.0",
-    "description": "React components in dark glass: translucent surfaces, hairline borders that catch a pointer light, one accent colour. Tailwind v4, no runtime dependencies.",
-    "keywords": [
-        "react",
-        "react-components",
-        "component-library",
-        "ui",
-        "design-system",
-        "tailwind",
-        "tailwindcss",
-        "tailwind-v4",
-        "glassmorphism",
-        "dark-mode",
-        "oklch",
-        "popover-api",
-        "dialog",
-        "table",
-        "virtualized",
-        "typescript"
-    ],
-    "homepage": "https://zen.rinzai.dev",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/r1nzai/Zen.git"
-    },
-    "bugs": {
-        "url": "https://github.com/r1nzai/Zen/issues"
-    },
-    "author": "rinzai (https://github.com/r1nzai)",
-    "license": "MIT",
+    "name": "zen-workspace",
+    "private": true,
+    "description": "Zen, in dark glass, for every platform: tokens/ is the design, web/ (React) and kotlin/ (Compose Multiplatform) build it, docs/ shows both.",
     "type": "module",
-    "types": "./dist/index.d.ts",
-    "module": "./dist/lib.js",
-    "files": [
-        "dist",
-        "CHANGELOG.md"
-    ],
-    "sideEffects": [
-        "**/*.css"
-    ],
-    "exports": {
-        ".": {
-            "types": "./dist/index.d.ts",
-            "import": "./dist/lib.js",
-            "require": "./dist/lib.js"
-        },
-        "./css": {
-            "import": "./dist/zen.css",
-            "require": "./dist/zen.css"
-        },
-        "./tailwind.css": {
-            "style": "./dist/tailwind.css",
-            "default": "./dist/tailwind.css"
-        },
-        "./base.css": {
-            "style": "./dist/base.css",
-            "default": "./dist/base.css"
-        }
-    },
     "scripts": {
-        "test": "vp test run",
-        "test:watch": "vp test",
-        "test:coverage": "vp test run --coverage",
-        "test:e2e": "playwright test",
-        "test:visual": "playwright test e2e/visual.spec.ts",
-        "build": "vp build",
-        "check": "vp check",
-        "lint": "vp lint",
-        "lint:fix": "vp lint --fix",
-        "format": "vp fmt",
-        "dev": "storybook dev -p 6006",
-        "build-storybook": "storybook build",
-        "prepublishOnly": "npm run build",
-        "chromatic": "npx chromatic --project-token $CHROMATIC_PROJECT_TOKEN",
+        "generate": "node scripts/generate.mjs",
+        "generate:check": "node scripts/generate.mjs --check",
         "docs:dev": "pnpm --filter zen-docs dev",
-        "docs:build": "pnpm --filter zen-docs build && cp docs/build/client/404/index.html docs/build/client/404.html && storybook build --output-dir docs/build/client/storybook"
+        "docs:kotlin": "cd kotlin && ./gradlew :webApp:wasmJsBrowserDistribution :zen:dokkaGeneratePublicationHtml",
+        "docs:build": "pnpm docs:kotlin && pnpm --filter zen-docs build && cp docs/build/client/404/index.html docs/build/client/404.html && mkdir -p docs/build/client/kotlin && cp -r kotlin/webApp/build/dist/wasmJs/productionExecutable docs/build/client/kotlin/demo && cp -r kotlin/zen/build/dokka/html docs/build/client/kotlin/api && pnpm --filter @rinzai/zen exec storybook build --output-dir ../docs/build/client/storybook"
     },
     "devDependencies": {
-        "@playwright/test": "1.63.0",
-        "@storybook/addon-a11y": "^10.6.0",
-        "@storybook/addon-docs": "^10.6.0",
-        "@storybook/addon-links": "^10.6.0",
-        "@storybook/addon-themes": "^10.6.0",
-        "@storybook/react-vite": "^10.6.0",
-        "@tailwindcss/vite": "^4.3.3",
-        "@testing-library/jest-dom": "^7.0.1",
-        "@testing-library/react": "^16.3.3",
-        "@testing-library/user-event": "^14.6.7",
-        "@types/react": "^19.3.0",
-        "@types/react-dom": "^19.3.0",
-        "@vitejs/plugin-react": "^6.1.1",
-        "@vitest/coverage-v8": "catalog:",
-        "autoprefixer": "^10.6.1",
-        "axe-core": "4.13.0",
-        "chromatic": "^18.9.5",
-        "esbuild": "^0.28.2",
-        "eslint-plugin-storybook": "^10.6.0",
-        "heroicons": "2.2.0",
-        "jsdom": "^30.1.1",
-        "postcss": "^8.5.28",
-        "react": "^19.3.0",
-        "react-docgen-typescript": "^2.4.0",
-        "react-dom": "^19.3.0",
-        "storybook": "^10.6.0",
-        "sugar-high": "^2.5.0",
-        "tailwindcss": "^4.3.3",
-        "typescript": "^6.0.3",
-        "vite": "catalog:",
-        "vite-plugin-dts": "^5.1.1",
-        "vite-plus": "catalog:",
-        "vite-tsconfig-paths": "^6.1.1",
-        "vitest": "catalog:"
-    },
-    "peerDependencies": {
-        "react": "^19.2.0",
-        "react-dom": "^19.2.0"
+        "cldr-core": "48.0.0",
+        "cldr-misc-full": "48.0.0",
+        "cldr-numbers-full": "48.0.0",
+        "cldr-units-full": "48.0.0",
+        "heroicons": "2.2.0"
     },
     "packageManager": "pnpm@10.28.2"
 }

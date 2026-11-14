@@ -3,18 +3,27 @@ import Bars from '@zen/icons/bars';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 
-import { version } from '../../../package.json';
+import { version } from '../../../web/package.json';
 
-import { COMPONENTS, componentPath } from '../pages';
+import { componentPath, componentsFor, homePath, type Platform, platformOf, showcasePath } from '../pages';
 import { Sidebar } from './sidebar';
 
 const GITHUB = 'https://github.com/r1nzai/Zen';
 
+/** The same page in the other library's docs, where it has one; its home otherwise. */
+function counterpart(pathname: string, to: Platform) {
+    const app = pathname.match(/\/showcase\/(?:(music)\/)?$/);
+    if (app) return showcasePath((app[1] ?? '') as '' | 'music', to);
+    const slug = pathname.match(/\/components\/([^/]+)\/$/)?.[1];
+    return slug && componentsFor(to).some((c) => c.slug === slug) ? componentPath(slug, to) : homePath(to);
+}
+
 export function SiteHeader() {
     const { pathname } = useLocation();
-    const section = pathname.startsWith('/components')
+    const platform = platformOf(pathname);
+    const section = /^(\/kotlin)?\/components\//.test(pathname)
         ? 'components'
-        : pathname.startsWith('/showcase')
+        : /^(\/kotlin)?\/showcase\//.test(pathname)
           ? 'showcase'
           : 'docs';
     return (
@@ -22,9 +31,20 @@ export function SiteHeader() {
             <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                     <MobileMenu />
-                    <Link to="/" className="text-lg font-semibold tracking-tight">
+                    <Link to={homePath(platform)} className="text-lg font-semibold tracking-tight">
                         Zen
                     </Link>
+                    <Pills aria-label="Library">
+                        <PillIndicator />
+                        <Pill asChild active={platform === 'web'}>
+                            <Link to={counterpart(pathname, 'web')}>Web</Link>
+                        </Pill>
+                        <Pill asChild active={platform === 'kotlin'}>
+                            <Link to={counterpart(pathname, 'kotlin')}>Kotlin</Link>
+                        </Pill>
+                    </Pills>
+                    {/* The Kotlin library isn't released yet. */}
+                    {platform === 'web' && (
                     <a
                         href={`https://www.npmjs.com/package/@rinzai/zen/v/${version}`}
                         aria-label={`Version ${version} on npm`}
@@ -32,18 +52,19 @@ export function SiteHeader() {
                     >
                         v{version}
                     </a>
+                    )}
                 </div>
                 <nav aria-label="Main" className="hidden md:block">
                     <Pills>
                         <PillIndicator />
                         <Pill asChild active={section === 'docs'}>
-                            <Link to="/">Docs</Link>
+                            <Link to={homePath(platform)}>Docs</Link>
                         </Pill>
                         <Pill asChild active={section === 'components'}>
-                            <Link to={componentPath(COMPONENTS[0].slug)}>Components</Link>
+                            <Link to={componentPath(componentsFor(platform)[0].slug, platform)}>Components</Link>
                         </Pill>
                         <Pill asChild active={section === 'showcase'}>
-                            <Link to="/showcase/">Showcase</Link>
+                            <Link to={showcasePath('', platform)}>Showcase</Link>
                         </Pill>
                     </Pills>
                 </nav>

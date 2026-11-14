@@ -1,11 +1,24 @@
 import { Card, followSectionLink, Tab, TabList, TabPanel, Tabs } from '@rinzai/zen';
 
 import type { Example } from '../examples';
+import type { KotlinExample } from '../kotlin';
 import { CodeBlock } from './code-block';
 import { DocText } from './doc-text';
+import { KotlinPreview } from './kotlin-preview';
 
-/** One example: the live component, and its source, in a glass card. */
-export function ExampleBlock({ example, heading = true }: { example: Example; heading?: boolean }) {
+/**
+ * One example: the live component, and its source, in a glass card. With `kotlin`, the Kotlin
+ * library's: its source, and its story running in the browser.
+ */
+export function ExampleBlock({
+    example,
+    kotlin,
+    heading = true,
+}: {
+    example: Example;
+    kotlin?: KotlinExample;
+    heading?: boolean;
+}) {
     const { Component } = example;
     const id = example.name.toLowerCase();
     return (
@@ -29,12 +42,21 @@ export function ExampleBlock({ example, heading = true }: { example: Example; he
                         </TabList>
                     </div>
                     <TabPanel value="preview">
-                        <div className="flex min-h-40 items-center justify-center p-6 md:min-h-56 md:p-10">
-                            <Component />
-                        </div>
+                        {kotlin?.story ? (
+                            <KotlinPreview story={kotlin.story} title={example.title} />
+                        ) : (
+                            <div className="flex min-h-40 items-center justify-center p-6 md:min-h-56 md:p-10">
+                                <Component />
+                            </div>
+                        )}
                     </TabPanel>
                     <TabPanel value="code">
-                        <CodeBlock variant="plain" code={example.source} className="max-h-[32rem]" />
+                        <CodeBlock
+                            variant="plain"
+                            lang={kotlin ? 'kotlin' : 'typescript'}
+                            code={kotlin ? kotlin.source : example.source}
+                            className="max-h-[32rem]"
+                        />
                     </TabPanel>
                 </Tabs>
             </Card>

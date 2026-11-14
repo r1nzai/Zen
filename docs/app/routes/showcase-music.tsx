@@ -1,4 +1,4 @@
-import MusicApp from '../../../packages/showcase/examples/MusicApp';
+import MusicApp from '../../../web/packages/showcase/examples/MusicApp';
 import { ShowcaseNav } from '../components/showcase-nav';
 import { seo } from '../seo';
 

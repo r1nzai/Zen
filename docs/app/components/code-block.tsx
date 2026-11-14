@@ -1,7 +1,7 @@
 import { CodeBlock as ZenCodeBlock } from '@rinzai/zen';
 import { highlight } from 'sugar-high';
 
-type Lang = 'typescript' | 'shell' | 'css';
+type Lang = 'typescript' | 'shell' | 'css' | 'kotlin' | 'swift';
 
 /** Zen's CodeBlock, coloured by sugar-high. */
 export function CodeBlock({

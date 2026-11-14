@@ -1,4 +1,4 @@
-/** Reading packages/<folder>/examples/<Name>.tsx, for the docs pages and the markdown docs alike. */
+/** Reading web/packages/<folder>/examples/<Name>.tsx, for the docs pages and the markdown docs alike. */
 
 /** Examples, those named in `order` first, the rest alphabetically. */
 export function orderExamples<T extends { name: string }>(examples: T[], order: string[] = []) {

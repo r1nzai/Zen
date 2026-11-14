@@ -1,0 +1,375 @@
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import { withCustomConfig } from 'react-docgen-typescript';
+import ts from 'typescript';
+import { defineConfig, type Plugin, lazyPlugins } from 'vite-plus';
+import dts from 'vite-plugin-dts';
+
+import { heroiconOf, orderExamples, shown } from '../docs/app/example-source';
+import { apiFor, componentMarkdown, type DocgenInfo, guideFrom, indexMarkdown } from '../docs/app/markdown';
+import { COMPONENTS } from '../docs/app/pages';
+
+/**
+ * Stylesheets beside zen.css in dist/:
+ * - tailwind.css: for Tailwind apps. Zen's theme, plus @source so the app's own
+ *   Tailwind build generates the classes Zen's components use (one Tailwind, no clashes).
+ * - theme.css + variables.css: what tailwind.css imports.
+ * - base.css: the optional app base (page setup, headings, scrollbars), plain CSS.
+ */
+function stylesheets(): Plugin {
+    return {
+        name: 'zen-stylesheets',
+        apply: 'build',
+        closeBundle() {
+            for (const file of ['theme.css', 'variables.css', 'base.css'])
+                copyFileSync(`packages/${file}`, `dist/${file}`);
+            writeFileSync(
+                'dist/tailwind.css',
+                `/*
+ * Zen for Tailwind v4 apps, after Tailwind itself:
+ *     @import 'tailwindcss';
+ *     @import '@rinzai/zen/tailwind.css';
+ */
+@import './theme.css';
+@source './**/*.js';
+`,
+            );
+        },
+    };
+}
+
+/**
+ * Each component's props (types, defaults, JSDoc), by its exported name, as the
+ * docs site's docgen plugin attaches them.
+ */
+function docgen() {
+    const files = readdirSync('packages', { withFileTypes: true })
+        .filter((d) => d.isDirectory())
+        .flatMap((d) =>
+            readdirSync(`packages/${d.name}`)
+                .filter((f) => f.endsWith('.tsx') && !/\.(stories|test)\.tsx$/.test(f))
+                .map((f) => `packages/${d.name}/${f}`),
+        );
+    const parser = withCustomConfig('tsconfig.json', {
+        shouldExtractLiteralValuesFromEnum: true,
+        shouldRemoveUndefinedFromOptional: true,
+        savePropValueAsString: true,
+        propFilter: (prop) => !prop.parent || !/node_modules/.test(prop.parent.fileName),
+        // A default export is named for its file otherwise; index.ts exports it under the function's name.
+        componentNameResolver: (exp) =>
+            exp.getName() === 'default'
+                ? ts.getNameOfDeclaration(exp.valueDeclaration ?? exp.declarations?.[0])?.getText()
+                : undefined,
+    });
+    const byName = new Map<string, DocgenInfo>();
+    // A part re-exported from its package's index.tsx is found twice; the entry with its props wins.
+    for (const info of parser.parse(files) as DocgenInfo[]) {
+        const seen = byName.get(info.displayName);
+        if (!seen || Object.keys(info.props).length > Object.keys(seen.props).length)
+            byName.set(info.displayName, info);
+    }
+    return byName;
+}
+
+/**
+ * dist/docs: every docs page as markdown (description, import, each example's
+ * source, props tables), so an agent working in an app finds them in
+ * node_modules, matching the installed version. README.md lists them, after
+ * how to set Zen up and use it.
+ */
+function markdownDocs(): Plugin {
+    return {
+        name: 'zen-markdown-docs',
+        apply: 'build',
+        closeBundle() {
+            mkdirSync('dist/docs', { recursive: true });
+            const heroicon = (path: string) => heroiconOf(readFileSync(`packages/${path}.tsx`, 'utf8'));
+            const props = docgen();
+            for (const doc of COMPONENTS) {
+                const dir = `packages/${doc.folder ?? doc.slug}/examples`;
+                const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.tsx')) : [];
+                const examples = files.map((f) => ({
+                    name: f.slice(0, -'.tsx'.length),
+                    source: shown(readFileSync(`${dir}/${f}`, 'utf8'), heroicon),
+                }));
+                writeFileSync(
+                    `dist/docs/${doc.slug}.md`,
+                    componentMarkdown(
+                        doc,
+                        orderExamples(examples, doc.examples),
+                        apiFor(doc.parts, (name) => props.get(name)),
+                    ),
+                );
+            }
+            writeFileSync(
+                'dist/docs/README.md',
+                indexMarkdown(COMPONENTS, guideFrom(readFileSync('README.md', 'utf8')), (slug) => `./${slug}.md`, [
+                    'Breaking changes and additions by version are in ../../CHANGELOG.md.',
+                ]),
+            );
+        },
+    };
+}
+
+export default defineConfig({
+    lint: {
+        plugins: ['oxc', 'typescript', 'unicorn', 'react'],
+        categories: {
+            correctness: 'warn',
+        },
+        env: {
+            builtin: true,
+            browser: true,
+        },
+        settings: {
+            react: {
+                version: '19.3',
+            },
+        },
+        // .storybook: Oxlint's type checker doesn't find the tsconfig for files in a dot-folder and
+        // reports false errors there; tsc type-checks it (root tsconfig.json includes it).
+        ignorePatterns: ['node_modules/**/*', 'dist/*', '.storybook/**'],
+        rules: {
+            'constructor-super': 'error',
+            'for-direction': 'error',
+            'getter-return': 'error',
+            'no-async-promise-executor': 'error',
+            'no-case-declarations': 'error',
+            'no-class-assign': 'error',
+            'no-compare-neg-zero': 'error',
+            'no-cond-assign': 'error',
+            'no-const-assign': 'error',
+            'no-constant-binary-expression': 'error',
+            'no-constant-condition': 'error',
+            'no-control-regex': 'error',
+            'no-debugger': 'error',
+            'no-delete-var': 'error',
+            'no-dupe-class-members': 'error',
+            'no-dupe-else-if': 'error',
+            'no-dupe-keys': 'error',
+            'no-duplicate-case': 'error',
+            'no-empty': 'error',
+            'no-empty-character-class': 'error',
+            'no-empty-pattern': 'error',
+            'no-empty-static-block': 'error',
+            'no-ex-assign': 'error',
+            'no-extra-boolean-cast': 'error',
+            'no-fallthrough': 'error',
+            'no-func-assign': 'error',
+            'no-global-assign': 'error',
+            'no-import-assign': 'error',
+            'no-invalid-regexp': 'error',
+            'no-irregular-whitespace': 'error',
+            'no-loss-of-precision': 'error',
+            'no-misleading-character-class': 'error',
+            'no-new-native-nonconstructor': 'error',
+            'no-nonoctal-decimal-escape': 'error',
+            'no-obj-calls': 'error',
+            'no-prototype-builtins': 'error',
+            'no-redeclare': 'error',
+            'no-regex-spaces': 'error',
+            'no-self-assign': 'error',
+            'no-setter-return': 'error',
+            'no-shadow-restricted-names': 'error',
+            'no-sparse-arrays': 'error',
+            'no-this-before-super': 'error',
+            'no-unassigned-vars': 'error',
+            'no-undef': 'error',
+            'no-unexpected-multiline': 'error',
+            'no-unreachable': 'error',
+            'no-unsafe-finally': 'error',
+            'no-unsafe-negation': 'error',
+            'no-unsafe-optional-chaining': 'error',
+            'no-unused-labels': 'error',
+            'no-unused-private-class-members': 'error',
+            'no-unused-vars': 'error',
+            'no-useless-assignment': 'error',
+            'no-useless-backreference': 'error',
+            'no-useless-catch': 'error',
+            'no-useless-escape': 'error',
+            'no-with': 'error',
+            'preserve-caught-error': 'error',
+            'require-yield': 'error',
+            'use-isnan': 'error',
+            'valid-typeof': 'error',
+            'no-array-constructor': 'error',
+            'no-unused-expressions': 'error',
+            'react/display-name': 'error',
+            'react/jsx-key': 'error',
+            'react/jsx-no-comment-textnodes': 'error',
+            'react/jsx-no-duplicate-props': 'error',
+            'react/jsx-no-target-blank': 'error',
+            'react/jsx-no-undef': 'error',
+            'react/no-children-prop': 'error',
+            'react/no-danger-with-children': 'error',
+            'react/no-direct-mutation-state': 'error',
+            'react/no-find-dom-node': 'error',
+            'react/no-is-mounted': 'error',
+            'react/no-render-return-value': 'error',
+            'react/no-string-refs': 'error',
+            // Off: TypeScript already rejects a bare > or } in JSX text, so this rule only flags prose quotes.
+            'react/no-unescaped-entities': 'off',
+            'react/no-unknown-property': 'error',
+            'react/no-unsafe': 'off',
+            'react/require-render-return': 'error',
+            'typescript/ban-ts-comment': 'error',
+            'typescript/no-duplicate-enum-values': 'error',
+            'typescript/no-empty-object-type': 'error',
+            'typescript/no-explicit-any': 'error',
+            'typescript/no-extra-non-null-assertion': 'error',
+            'typescript/no-misused-new': 'error',
+            'typescript/no-namespace': 'error',
+            'typescript/no-non-null-asserted-optional-chain': 'error',
+            'typescript/no-require-imports': 'error',
+            'typescript/no-this-alias': 'error',
+            'typescript/no-unnecessary-type-constraint': 'error',
+            'typescript/no-unsafe-declaration-merging': 'error',
+            'typescript/no-unsafe-function-type': 'error',
+            'typescript/no-wrapper-object-types': 'error',
+            'typescript/prefer-as-const': 'error',
+            'typescript/prefer-namespace-keyword': 'error',
+            'typescript/triple-slash-reference': 'error',
+            'vite-plus/prefer-vite-plus-imports': 'error',
+        },
+        overrides: [
+            {
+                files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+                rules: {
+                    'constructor-super': 'off',
+                    'getter-return': 'off',
+                    'no-class-assign': 'off',
+                    'no-const-assign': 'off',
+                    'no-dupe-class-members': 'off',
+                    'no-dupe-keys': 'off',
+                    'no-func-assign': 'off',
+                    'no-import-assign': 'off',
+                    'no-new-native-nonconstructor': 'off',
+                    'no-obj-calls': 'off',
+                    'no-redeclare': 'off',
+                    'no-setter-return': 'off',
+                    'no-this-before-super': 'off',
+                    'no-undef': 'off',
+                    'no-unreachable': 'off',
+                    'no-unsafe-negation': 'off',
+                    'no-var': 'error',
+                    'no-with': 'off',
+                    'prefer-const': 'error',
+                    'prefer-rest-params': 'error',
+                    'prefer-spread': 'error',
+                },
+            },
+            {
+                files: ['**/*.stories.@(ts|tsx|js|jsx|mjs|cjs)', '**/*.story.@(ts|tsx|js|jsx|mjs|cjs)'],
+                rules: {
+                    'storybook/await-interactions': 'error',
+                    'storybook/context-in-play-function': 'error',
+                    'storybook/default-exports': 'error',
+                    'storybook/hierarchy-separator': 'warn',
+                    'storybook/no-redundant-story-name': 'warn',
+                    'storybook/no-renderer-packages': 'error',
+                    'storybook/prefer-pascal-case': 'warn',
+                    'storybook/story-exports': 'error',
+                    'storybook/use-storybook-expect': 'error',
+                    'storybook/use-storybook-testing-library': 'error',
+                    'import/no-anonymous-default-export': 'off',
+                    'react/rules-of-hooks': 'off',
+                },
+                jsPlugins: ['eslint-plugin-storybook'],
+                plugins: ['import'],
+            },
+            {
+                files: ['.storybook/main.@(js|cjs|mjs|ts)'],
+                rules: {
+                    'storybook/no-uninstalled-addons': 'error',
+                },
+                jsPlugins: ['eslint-plugin-storybook'],
+            },
+        ],
+        options: {
+            typeAware: true,
+            typeCheck: true,
+        },
+        jsPlugins: [
+            {
+                name: 'vite-plus',
+                specifier: 'vite-plus/oxlint-plugin',
+            },
+        ],
+    },
+    fmt: {
+        tabWidth: 4,
+        printWidth: 120,
+        singleQuote: true,
+        trailingComma: 'all',
+        bracketSpacing: true,
+        sortPackageJson: false,
+        sortTailwindcss: {},
+        ignorePatterns: [],
+    },
+    plugins: lazyPlugins(() => [
+        react(),
+        tailwindcss(),
+        stylesheets(),
+        markdownDocs(),
+        dts({
+            insertTypesEntry: true,
+            include: ['packages/'],
+            exclude: [
+                '**/*.stories.tsx',
+                '**/examples/**',
+                '**/*.test.tsx',
+                '**/*.test.ts',
+                '**/*.spec.tsx',
+                '**/*.spec.ts',
+            ],
+        }),
+    ]),
+    resolve: {
+        tsconfigPaths: true,
+    },
+    test: {
+        environment: 'jsdom',
+        globals: true,
+        setupFiles: ['./vitest.setup.ts'],
+        exclude: ['**/node_modules/**', '**/dist/**', '**/*.stories.tsx', 'e2e/**'],
+        coverage: {
+            provider: 'v8',
+            include: ['packages/**/*.{ts,tsx}'],
+            exclude: [
+                'packages/**/*.stories.tsx',
+                'packages/**/examples/**',
+                'packages/**/index.ts',
+                'packages/icons/**',
+            ],
+        },
+    },
+    build: {
+        lib: {
+            entry: './packages/lib.ts',
+            name: 'zen',
+            formats: ['es'],
+            fileName: 'zen',
+            cssFileName: 'zen',
+        },
+
+        rollupOptions: {
+            external: ['react', 'react-dom', 'react/jsx-runtime'],
+            output: {
+                // One file per module, so an app's bundler keeps only what it imports: with
+                // "sideEffects" in package.json, files whose exports go unused are skipped
+                // whole, top-level calls (createContext, class-string constants) included.
+                preserveModules: true,
+                preserveModulesRoot: 'packages',
+                entryFileNames: '[name].js',
+                // Modules that use React (components, hooks, context) are client modules for RSC
+                // frameworks; the rest (money, dates, cx, colours) and the entry stay callable on the server.
+                banner: (chunk) => (chunk.imports.some((i) => /^react(-dom)?($|\/)/.test(i)) ? "'use client';" : ''),
+                globals: {
+                    react: 'React',
+                },
+            },
+        },
+    },
+});
