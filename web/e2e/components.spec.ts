@@ -322,6 +322,7 @@ test('the aurora drifts on, moved 6 times a second rather than restyled every fr
         page.evaluate(() => {
             const aurora = document.querySelector('.zen-aurora')!;
             return {
+                now: performance.now(),
                 anims: aurora.getAnimations().map((a) => ({ state: a.playState, time: Number(a.currentTime) })),
                 dx: getComputedStyle(aurora).getPropertyValue('--zen-a-dx'),
             };
@@ -331,10 +332,12 @@ test('the aurora drifts on, moved 6 times a second rather than restyled every fr
     await page.waitForTimeout(2000);
     const after = await read();
     expect(after.anims).toHaveLength(3);
+    // On by as long as passed in the page (more than the 2s waited where reading it is slow), give or
+    // take where each reading fell between its steps, which a busy engine runs late.
+    const passed = after.now - before.now;
     after.anims.forEach((a, i) => {
         expect(a.state).toBe('paused');
-        expect(a.time - before.anims[i].time).toBeGreaterThan(1600);
-        expect(a.time - before.anims[i].time).toBeLessThan(2600);
+        expect(Math.abs(a.time - before.anims[i].time - passed)).toBeLessThan(1000);
     });
     expect(after.dx).not.toBe(before.dx);
 });
