@@ -7,7 +7,7 @@ Dark glass for every platform: translucent surfaces, hairline borders that catch
 | | Library | Platforms |
 | --- | --- | --- |
 | [`web/`](web) | [`@rinzai/zen`](https://www.npmjs.com/package/@rinzai/zen), React 19 and Tailwind v4 | Browsers |
-| [`kotlin/`](kotlin) | `dev.rinzai.zen`, Compose Multiplatform | Android, iOS, Windows, macOS, Linux |
+| [`kotlin/`](kotlin) | [`dev.rinzai:zen`](https://central.sonatype.com/artifact/dev.rinzai/zen), Compose Multiplatform | Android, iOS, Windows, macOS, Linux |
 
 ## Layout
 

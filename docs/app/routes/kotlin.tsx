@@ -5,6 +5,7 @@ import { CodeCard } from '../components/code-block';
 import { DocsLayout } from '../components/docs-layout';
 import { KOTLIN_API } from '../kotlin';
 import { componentPath, componentsFor, showcasePath } from '../pages';
+import { version } from '../../../web/package.json';
 import { seo } from '../seo';
 
 export const meta = () =>
@@ -53,18 +54,15 @@ export default function Kotlin() {
                 <section className="flex flex-col gap-4">
                     <h2 id="installation">Installation</h2>
                     <p>
-                        Zen for Kotlin isn&rsquo;t on Maven Central yet. Until it is, build it from the repository:
-                        include its build in your settings, and depend on it as you will on the release.
+                        Zen for Kotlin is on Maven Central as <code>dev.rinzai:zen</code>, released with the web
+                        library under the same version. Add it to your shared code:
                     </p>
                     <CodeCard
                         lang="kotlin"
                         code={`
-// settings.gradle.kts
-includeBuild("../Zen/kotlin")
-
 // build.gradle.kts, in commonMain
 dependencies {
-    implementation("dev.rinzai:zen")
+    implementation("dev.rinzai:zen:${version}")
 }`}
                     />
                     <p>
