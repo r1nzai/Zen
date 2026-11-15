@@ -29,8 +29,13 @@ export default function CodeBlock({
         const check = () => setScrolls(el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight);
         const observer = new ResizeObserver(check);
         observer.observe(el);
-        return () => observer.disconnect();
-    }, []);
+        // A font loading widens the code without resizing the box.
+        document.fonts?.addEventListener('loadingdone', check);
+        return () => {
+            observer.disconnect();
+            document.fonts?.removeEventListener('loadingdone', check);
+        };
+    }, [text]);
 
     return (
         <div

@@ -22,6 +22,7 @@
 - **Canvas**: a selection's handles sit on its border and are easier to grab, more so with a finger.
 - **Sparkline** shrinks in a narrow row instead of being cut off.
 - **Toast** keeps its tone's border and glow on the glass.
+- **CodeBlock** can be scrolled from the keyboard when its code overflows only once its font has loaded.
 - **Menu** submenus, and any popup opened from inside a menu or dialog, open at their trigger in Safari on a scrolled page. Before, Safari moved them by the page's scroll, often off screen.
 - **Button** `variant="link"` takes the size of the text around it, as it was meant to (and as in Kotlin). Before, it was always 14px: a link in 16px text is now 16px. Give it `text-sm` to keep it small.
 

@@ -427,6 +427,7 @@ test('hover card: shows once the pointer rests on the link, and for keyboard foc
 test('menu: a submenu opens beside its item on hover and by keyboard, and stays open for its choices', async ({
     page,
 }) => {
+    await page.clock.install();
     errors = await open(page, '/components/menu/');
     const view = example(page, 'Options').getByRole('button', { name: 'View' });
     // With room below for the submenu to open downwards.
@@ -450,11 +451,13 @@ test('menu: a submenu opens beside its item on hover and by keyboard, and stays 
     expect(beside.x).toBeGreaterThanOrEqual(at.x + at.width);
     expect(beside.x).toBeLessThan(at.x + at.width + 16);
     expect(Math.abs(first.y - at.y)).toBeLessThan(2);
-    // Across another item and into it, it stays. One move: in steps, a slow engine (WebKit in CI)
-    // takes longer to render them than the submenu waits for a pointer passing over another item.
+    // Across another item and into it, it stays. The clock stands still while the pointer crosses,
+    // as a slow engine (WebKit in CI) takes longer to render the moves than the submenu waits.
+    await page.clock.pauseAt((await page.evaluate(() => Date.now())) + 1000);
     await page.mouse.move(at.x + at.width - 4, at.y + at.height + 6);
-    await page.mouse.move(first.x + 10, first.y + first.height / 2);
-    await page.waitForTimeout(400);
+    await page.mouse.move(first.x + 10, first.y + first.height / 2, { steps: 4 });
+    await page.clock.runFor(400);
+    await page.clock.resume();
     await expect(sub).toBeVisible();
     // Escape closes only the submenu, and focus goes back to its item.
     await item('PDF').focus();
