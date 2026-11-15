@@ -7,7 +7,7 @@ export default function Range() {
     return (
         <div className="flex flex-col items-center gap-3">
             <Calendar mode="range" months={2} value={range} onValueChange={setRange} locale="en-GB" />
-            <p className="text-muted-foreground mt-0! text-xs">
+            <p className="text-muted-foreground mt-0! text-xs" suppressHydrationWarning>
                 {range?.end
                     ? `${formatDateRange(range.start, range.end, 'en-GB')} · ${daysBetween(range.start, range.end) + 1} days`
                     : 'Pick the last day'}

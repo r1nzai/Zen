@@ -200,7 +200,10 @@ function PickerField({
                     className,
                 )}
             >
-                <span className={cx('truncate', !shown && PLACEHOLDER)}>{shown ?? placeholder}</span>
+                {/* Formatted by the engine's locale data, which the server's can differ from ("5–12 Oct"). */}
+                <span className={cx('truncate', !shown && PLACEHOLDER)} suppressHydrationWarning>
+                    {shown ?? placeholder}
+                </span>
                 <CalendarIcon />
             </button>
             <FormValue name={name} value={formValue} onReset={onReset} />

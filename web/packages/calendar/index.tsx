@@ -281,6 +281,8 @@ export default function Calendar(props: CalendarProps) {
                                                         data-date={d}
                                                         tabIndex={d === tabStop ? 0 : -1}
                                                         aria-label={formatDate(d, locale, 'full')}
+                                                        // The engine's locale data can differ from the server's ("Thursday 1 October").
+                                                        suppressHydrationWarning
                                                         aria-pressed={chosen}
                                                         aria-disabled={off || undefined}
                                                         aria-current={d === today ? 'date' : undefined}

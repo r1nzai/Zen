@@ -174,6 +174,8 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                             textAnchor="end"
                             className="fill-muted-foreground tabular-nums"
                             style={{ fontSize: TICK }}
+                            // Formatted by the engine's locale data, which the server's can differ from (₹92K, ₹92T).
+                            suppressHydrationWarning
                         >
                             {tickLabels[i]}
                         </text>
@@ -194,6 +196,7 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                             }
                             className="fill-muted-foreground"
                             style={{ fontSize: TICK }}
+                            suppressHydrationWarning
                         >
                             {l}
                         </text>
@@ -340,10 +343,16 @@ export default function Chart<T extends Row, X extends keyof T & string = keyof 
                     <tbody>
                         {rows.map((r, i) => (
                             <tr key={i}>
-                                <th scope="row">{(formatTooltipX ?? formatX)(r[x] as never)}</th>
+                                <th scope="row" suppressHydrationWarning>
+                                    {(formatTooltipX ?? formatX)(r[x] as never)}
+                                </th>
                                 {series.map((s) => {
                                     const v = value(r, s.dataKey);
-                                    return <td key={s.dataKey}>{v === null ? '' : formatY(v)}</td>;
+                                    return (
+                                        <td key={s.dataKey} suppressHydrationWarning>
+                                            {v === null ? '' : formatY(v)}
+                                        </td>
+                                    );
                                 })}
                             </tr>
                         ))}
