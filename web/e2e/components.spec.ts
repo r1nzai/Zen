@@ -1,4 +1,4 @@
-import { expect, type Page, test } from '@playwright/test';
+import { expect, type Locator, type Page, test } from '@playwright/test';
 
 import { NOW } from './now';
 
@@ -22,6 +22,12 @@ const example = (page: Page, title: string | null) =>
         ? page.getByRole('tab', { name: 'Preview' }).first()
         : page.getByRole('heading', { name: title, exact: true })
     ).locator('xpath=ancestor::section[1]');
+
+/** Once nothing animates it: one animation can be cancelled for another (a popup placed again as it opens). */
+const settled = (el: Locator) =>
+    el.evaluate(async (e) => {
+        while (e.getAnimations().length) await Promise.allSettled(e.getAnimations().map((a) => a.finished));
+    });
 
 let errors: string[] = [];
 test.afterEach(() => expect(errors, 'console errors').toEqual([]));
@@ -124,12 +130,12 @@ test('without CSS anchor positioning, popups are still placed at their trigger',
     errors = await open(page, '/components/dialog/');
     await page.getByRole('button', { name: 'Add budget' }).click();
     const dialog = page.locator('dialog[open]');
-    const placement = async (trigger: import('@playwright/test').Locator) => {
+    const placement = async (trigger: Locator) => {
         await trigger.click();
         const popup = page.locator('.zen__popover:popover-open');
         await expect(popup).toBeVisible();
         // Measured once it has finished scaling in.
-        await popup.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
+        await settled(popup);
         const t = (await trigger.boundingBox())!;
         const p = (await popup.boundingBox())!;
         await page.keyboard.press('Escape');
@@ -444,9 +450,10 @@ test('menu: a submenu opens beside its item on hover and by keyboard, and stays 
     expect(beside.x).toBeGreaterThanOrEqual(at.x + at.width);
     expect(beside.x).toBeLessThan(at.x + at.width + 16);
     expect(Math.abs(first.y - at.y)).toBeLessThan(2);
-    // Across another item and into it, it stays.
+    // Across another item and into it, it stays. One move: in steps, a slow engine (WebKit in CI)
+    // takes longer to render them than the submenu waits for a pointer passing over another item.
     await page.mouse.move(at.x + at.width - 4, at.y + at.height + 6);
-    await page.mouse.move(first.x + 10, first.y + first.height / 2, { steps: 4 });
+    await page.mouse.move(first.x + 10, first.y + first.height / 2);
     await page.waitForTimeout(400);
     await expect(sub).toBeVisible();
     // Escape closes only the submenu, and focus goes back to its item.
@@ -629,7 +636,7 @@ test('menubar: arrows between menus, hover switches, Escape back to the label', 
     await expect(page.getByRole('menu', { name: 'File' })).toBeHidden();
     // Under its label, lined up with its start, once it has grown in.
     const edit = page.getByRole('menu', { name: 'Edit' });
-    await edit.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
+    await settled(edit);
     const [at, menu] = [(await label('Edit').boundingBox())!, (await edit.boundingBox())!];
     expect(Math.abs(menu.x - at.x)).toBeLessThan(2);
     expect(menu.y).toBeGreaterThan(at.y + at.height);
@@ -646,7 +653,7 @@ test('navigation menu: hover opens a panel under its label, which moves on to th
     await expect(budgets).toBeVisible();
     // Measured once it has grown in from its label.
     const box = budgets.locator('xpath=..');
-    await box.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
+    await settled(box);
     const [at, panel] = [(await plan.boundingBox())!, (await box.boundingBox())!];
     expect(Math.abs(panel.x - at.x)).toBeLessThan(2);
     expect(panel.y).toBeGreaterThan(at.y + at.height);

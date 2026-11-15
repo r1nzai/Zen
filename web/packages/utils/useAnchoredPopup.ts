@@ -137,24 +137,53 @@ interface AnchorOptions {
  * which only had part of it) would leave a popup away from its trigger. There,
  * it's placed from the trigger's box instead, the way the CSS would: below it,
  * or above when there's no room below, aligned and sized as anchoredStyle says,
- * kept on screen, and following scrolls and resizes while open.
+ * kept on screen, and following scrolls and resizes while open. So is a popup
+ * whose trigger is inside a fixed box (a submenu's item, in its open menu) where
+ * the browser misplaces those: WebKit moves it by the page's scroll.
  */
 let native: boolean | undefined;
 const nativeAnchors = () => (native ??= typeof CSS !== 'undefined' && !!CSS.supports?.('position-area: block-end'));
 
-/**
- * Places the popup in `ref` against its trigger while it's open, where the browser can't, and
- * moves it as it opens and shuts (popupMotion), once it's placed.
- */
+// Only measurable while the page is scrolled: until then, nothing is misplaced.
+let fixedBroken: boolean | undefined;
+function fixedAnchorsBroken() {
+    if (fixedBroken !== undefined) return fixedBroken;
+    if (!window.scrollX && !window.scrollY) return false;
+    const box = document.createElement('div');
+    box.style.cssText = 'position:fixed;top:0;left:0;visibility:hidden';
+    const anchor = document.createElement('div');
+    anchor.style.cssText = 'anchor-name:--zen-anchor-probe;width:1px;height:1px';
+    const placed = document.createElement('div');
+    placed.style.cssText =
+        'position:fixed;inset:auto;position-anchor:--zen-anchor-probe;position-area:block-end;visibility:hidden;width:1px;height:1px';
+    box.append(anchor);
+    document.body.append(box, placed);
+    fixedBroken = Math.abs(placed.getBoundingClientRect().top - anchor.getBoundingClientRect().bottom) > 1;
+    box.remove();
+    placed.remove();
+    return fixedBroken;
+}
+
+function triggerOf(popup: HTMLElement) {
+    const id = popup.style.getPropertyValue('--zen-anchor').trim();
+    return id ? document.querySelector(`[data-zen-anchor="${id}"]`) : null;
+}
+
+function inFixedBox(el: Element) {
+    for (let e = el.parentElement; e; e = e.parentElement) if (getComputedStyle(e).position === 'fixed') return true;
+    return false;
+}
+
 export function useAnchorFallback(ref: RefObject<HTMLElement | null>) {
     useEffect(() => {
         const popup = ref.current;
-        if (!popup || nativeAnchors()) return;
+        if (!popup) return;
+        const ours = () => !nativeAnchors() || fixedAnchorsBroken();
         let frame = 0;
         const schedule = () => {
             frame ||= requestAnimationFrame(() => {
                 frame = 0;
-                placeAgainstTrigger(popup);
+                if (ours()) placeAgainstTrigger(popup);
             });
         };
         const resizes = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(schedule);
@@ -168,7 +197,9 @@ export function useAnchorFallback(ref: RefObject<HTMLElement | null>) {
         const onToggle = (e: Event) => {
             stop();
             if ((e as ToggleEvent).newState !== 'open') return;
-            placeAgainstTrigger(popup);
+            const trigger = triggerOf(popup);
+            if (nativeAnchors() && !(trigger && inFixedBox(trigger))) return;
+            if (ours()) placeAgainstTrigger(popup);
             window.addEventListener('scroll', schedule, { capture: true, passive: true });
             window.addEventListener('resize', schedule, { passive: true });
             resizes?.observe(popup);
@@ -189,8 +220,7 @@ export function useAnchorFallback(ref: RefObject<HTMLElement | null>) {
 const EDGE = 8; // kept this far inside the viewport
 
 function placeAgainstTrigger(popup: HTMLElement) {
-    const id = popup.style.getPropertyValue('--zen-anchor').trim();
-    const trigger = id ? document.querySelector(`[data-zen-anchor="${id}"]`) : null;
+    const trigger = triggerOf(popup);
     if (!trigger) return;
     const align = popup.style.getPropertyValue('--zen-anchor-align').trim() || 'start';
     const offset = Number(popup.style.getPropertyValue('--zen-anchor-offset')) || 0;
